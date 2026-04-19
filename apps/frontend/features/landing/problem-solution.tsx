@@ -12,55 +12,73 @@ type ProblemSolutionProps = {
 
 export function ProblemSolutionSection({ copy }: ProblemSolutionProps) {
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-      <motion.h2
-        initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.7 }}
-        transition={{ duration: 0.4 }}
-        className="mb-8 text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
-      >
-        {copy.title}
-      </motion.h2>
+    <section
+      id="solution"
+      className="relative overflow-hidden border-y border-border/50 bg-[hsl(var(--landing-bg))] py-16 sm:py-20 lg:py-24"
+    >
+      <div className="pointer-events-none absolute left-[-120px] top-10 h-56 w-56 rounded-full bg-[hsl(var(--landing-chip-bg-soft))] opacity-60 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-8 right-[-80px] h-44 w-44 rounded-full bg-[hsl(var(--landing-icon-bg))] opacity-70 blur-3xl" />
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card className="border-destructive/30 bg-destructive/5">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-xl">
-              <AlertCircle className="h-5 w-5 text-destructive" />
-              {copy.oldWayTitle}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              {copy.oldWayPoints.map((point) => (
-                <li key={point} className="flex items-start gap-2">
-                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-destructive" />
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+      <div className="relative mx-auto w-full max-w-[1180px] px-4 sm:px-6 lg:px-8">
+        <motion.h2
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.7 }}
+          transition={{ duration: 0.4 }}
+          className="mx-auto mb-12 max-w-2xl text-center text-[40px] font-semibold leading-[1.08] tracking-[-0.03em] text-[hsl(var(--landing-heading))] sm:text-[46px]"
+        >
+          {copy.title}
+        </motion.h2>
 
-        <Card className="border-primary/40 bg-primary/5">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-xl">
-              <CheckCircle2 className="h-5 w-5 text-primary" />
-              {copy.newWayTitle}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              {copy.newWayPoints.map((point) => (
-                <li key={point} className="flex items-start gap-2">
-                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary" />
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+        <div className="grid gap-4 lg:grid-cols-2">
+          <Card className="relative overflow-hidden rounded-2xl border-[hsl(var(--landing-card-border))] bg-[hsl(var(--landing-card-soft-bg))] shadow-none">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-[15px] font-semibold text-[hsl(var(--landing-text-strong))]">
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--landing-chip-bg-soft))] text-[hsl(var(--landing-text-muted))]">
+                  <AlertCircle className="h-4 w-4" />
+                </span>
+                {copy.oldWayTitle}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-1">
+              <ul className="space-y-2.5 text-[13px] leading-6 text-[hsl(var(--landing-text))]">
+                {copy.oldWayPoints.map((point) => (
+                  <li
+                    key={point}
+                    className="flex items-start gap-3 rounded-lg border border-[hsl(var(--landing-card-border))] bg-[hsl(var(--landing-card-bg))] px-3 py-2"
+                  >
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-red-500" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card className="relative overflow-hidden rounded-2xl border-[hsl(var(--landing-card-border))] bg-[hsl(var(--landing-card-bg))] shadow-[0_14px_30px_rgba(var(--landing-shadow-rgb),0.08)]">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-[15px] font-semibold text-[hsl(var(--landing-text-strong))]">
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--landing-chip-bg))] text-primary">
+                  <CheckCircle2 className="h-5 w-5" />
+                </span>
+                {copy.newWayTitle}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-1">
+              <ul className="space-y-2.5 text-[13px] leading-6 text-[hsl(var(--landing-text))]">
+                {copy.newWayPoints.map((point) => (
+                  <li
+                    key={point}
+                    className="flex items-start gap-3 rounded-lg border border-[hsl(var(--landing-card-border))] bg-[hsl(var(--landing-chip-bg-soft))] px-3 py-2"
+                  >
+                    <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-green-500" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </section>
   );

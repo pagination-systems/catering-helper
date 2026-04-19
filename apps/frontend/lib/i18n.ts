@@ -14,7 +14,7 @@ export const siteName = siteNames[defaultLanguage];
 export const landingCopy = {
   en: {
     nav: {
-      features: "Features",
+      solution: "Solution",
       howItWorks: "How It Works",
       pricing: "Pricing",
       login: "Login",
@@ -31,89 +31,97 @@ export const landingCopy = {
     hero: {
       headline: "Automate Your Catering Business. Eliminate the WhatsApp Chaos.",
       subheadline:
-        "The all-in-one ordering portal and automated 'Bazar' list generator built specifically for catering companies.",
+        "Transform manual orders and scattered messages into a beautifully orchestrated, high-end digital experience for both you and your clients.",
       primaryCta: "Start Your 1-Month Free Trial",
       secondaryCta: "View Demo",
       mobileTitle: "Client Mobile Portal",
-      mobileMealTitle: "150 BDT Fish Meal",
-      mobileMealDescription: "Steamed rice, fish curry, lentils, salad",
-      mobileOrderLabel: "Order quantity",
+      mobileMealTitle: "Admin Dashboard",
+      mobileMealDescription: "Generated Bazar List",
+      mobileOrderLabel: "Premium Rice (Miniket)",
       mobileOrderBy: "Order before 10:00 AM",
-      dashboardTitle: "Admin Dashboard",
-      bazarTitle: "Bazar List (Today)",
-      bazarItems: ["15kg Chicken", "3L Oil", "24kg Rice", "8kg Onion"],
-      orderSummary: "Total confirmed meals: 280",
+      dashboardTitle: "Client Portal",
+      bazarTitle: "Daily kitchen control",
+      bazarItems: ["35 Kg", "25 Kg", "8 Liters", "150 portions"],
+      orderSummary: "Export to PDF",
     },
     problemSolution: {
       title: "From WhatsApp Confusion to Operational Clarity",
       oldWayTitle: "The Old Way",
       oldWayPoints: [
-        "Messy WhatsApp threads",
-        "Manual data entry",
-        "Incorrect cooking quantities",
-        "Missed 10 AM deadlines",
+        "Endless scrolling through messy WhatsApp groups to find order changes.",
+        "Manual data entry at midnight to calculate tomorrow's ingredient needs.",
+        "Lost revenue due to missed messages or misunderstood quantity requests.",
       ],
       newWayTitle: "The Catering Helper Way",
       newWayPoints: [
-        "Structured client ordering portal",
-        "Automated order aggregation",
-        "Precise ingredient calculations",
-        "Zero missed orders",
+        "Clients select from a branded, polished digital portal.",
+        "Aggregated Bazar list generates automatically in seconds.",
+        "Perfect accuracy, leading to exact portions and higher profit margins.",
       ],
     },
     features: {
-      title: "Core Features",
+      title: "Architectural Control Over Every Meal.",
       items: [
         {
           title: "Dedicated Client Portal",
           description:
-            "Your clients get a simple web app to browse daily menus (120/150/180 BDT tiers) and place orders before the automated 10:00 AM lock-out.",
+            "Provide your corporate and event clients with a seamless, white-labeled interface to view menus, adjust headcount, and confirm orders without a single phone call.",
         },
         {
           title: "Automated 'Bazar' Estimation",
           description:
-            "Stop guessing. Our engine uses your custom 'Recipe-to-Quantity' mapping to calculate exactly how many kg of meat, rice, and oil you need based on total daily orders.",
+            "Our algorithm reads tomorrow's orders and instantly outputs precise ingredient quantities required for the market run.",
         },
         {
           title: "Financial & Profit Tracking",
           description:
-            "Input your daily market costs against your total revenue to track daily and monthly profit margins effortlessly.",
+            "Monitor daily expenses against revenue totals and your actual profit per meal, per client, effortlessly.",
         },
       ],
     },
     howItWorks: {
-      title: "How It Works (3 Simple Steps)",
+      title: "The Workflow.",
       steps: [
-        "Set your daily menu and price tiers.",
-        "Clients place their orders through your unique branded portal.",
-        "At 10:01 AM, export your automated Bazar list and start cooking.",
+        {
+          title: "Set the Menu",
+          description:
+            "Publish your daily or weekly offerings in the master dashboard. Define recipes and default ratios.",
+        },
+        {
+          title: "Clients Order",
+          description: "Clients log into their clean portal, input their numbers, and submit before your cutoff time.",
+        },
+        {
+          title: "Export at 10:01 AM",
+          description:
+            "The moment the cutoff hits, generate a precise, aggregated Bazar list for your procurement team.",
+        },
       ],
     },
     pricing: {
       title: "Simple Pricing for Growing Caterers",
-      price: "$0",
-      period: "for the first month.",
-      features: [
-        "Unlimited orders",
-        "Automated Bazar lists",
-        "Financial tracking",
-        "Secure multi-tenant data isolation",
-      ],
+      description: "No hidden fees. Full access to all features.",
+      price: "BDT 0",
+      period: "first month",
+      features: ["Unlimited Client Portals", "Automated Bazar Lists", "Profit & Loss Analytics"],
       cta: "Claim Your Free Month",
-      subtext: "No credit card required to start",
+      subtext: "Cancel anytime. No credit card required upfront.",
     },
     footer: {
-      brand: "Catering Helper by HSA Technology.",
+      brand: "Catering Helper",
+      copyright: "© 2026 Catering Helper. All rights reserved.",
       privacy: "Privacy Policy",
       terms: "Terms of Service",
-      contact: "Contact Support",
+      contact: "Contact Us",
+      blog: "Blog",
     },
   },
   bn: {
     nav: {
-      features: "ফিচার",
-      howItWorks: "কাজ করার ধাপ",
+      solution: "সমাধান",
+      howItWorks: "কিভাবে কাজ করে",
       pricing: "মূল্য",
+      company: "কোম্পানি",
       login: "লগইন",
       startFreeTrial: "ফ্রি ট্রায়াল শুরু করুন",
       language: "ভাষা",
@@ -180,14 +188,24 @@ export const landingCopy = {
     howItWorks: {
       title: "কিভাবে কাজ করে (৩টি সহজ ধাপ)",
       steps: [
-        "দৈনিক মেনু এবং প্রাইস টিয়ার সেট করুন।",
-        "ক্লায়েন্টরা আপনার ইউনিক ব্র্যান্ডেড পোর্টালে অর্ডার দেয়।",
-        "সকাল ১০:০১-এ স্বয়ংক্রিয় বাজার লিস্ট এক্সপোর্ট করে রান্না শুরু করুন।",
+        {
+          title: "মেনু সেট করুন",
+          description: "মাস্টার ড্যাশবোর্ডে আপনার দৈনিক বা সাপ্তাহিক মেনু প্রকাশ করুন।",
+        },
+        {
+          title: "ক্লায়েন্ট অর্ডার দেয়",
+          description: "ক্লায়েন্টরা তাদের পোর্টালে সংখ্যা দিয়ে কাট-অফের আগে সাবমিট করে।",
+        },
+        {
+          title: "১০:০১ এ এক্সপোর্ট",
+          description: "কাট-অফের সাথে সাথে সুনির্দিষ্ট সমন্বিত বাজার লিস্ট জেনারেট করুন।",
+        },
       ],
     },
     pricing: {
       title: "বর্ধনশীল ক্যাটারারদের জন্য সহজ মূল্য",
-      price: "$0",
+      description: "কোনো গোপন চার্জ নেই। সব ফিচারে পূর্ণ অ্যাক্সেস।",
+      price: "BDT 0",
       period: "প্রথম মাসের জন্য।",
       features: [
         "আনলিমিটেড অর্ডার",
@@ -199,10 +217,12 @@ export const landingCopy = {
       subtext: "শুরু করতে ক্রেডিট কার্ড লাগবে না",
     },
     footer: {
-      brand: "HSA Technology-এর Catering Helper।",
+      brand: "Catering Helper",
+      copyright: "© ২০২৬ Catering Helper. সর্বস্বত্ব সংরক্ষিত।",
       privacy: "প্রাইভেসি পলিসি",
       terms: "টার্মস অব সার্ভিস",
-      contact: "সাপোর্টে যোগাযোগ",
+      contact: "যোগাযোগ",
+      blog: "ব্লগ",
     },
   },
 } as const;
