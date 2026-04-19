@@ -161,3 +161,39 @@ Each package is linked in apps using workspace:\* and can be imported directly.
 - Frontend Docker image uses Next.js standalone output.
 - Backend Docker image runs compiled TypeScript from dist.
 - If subdomains like tenant.localhost do not resolve on your machine, add host entries or use a local DNS helper.
+
+## Frontend Landing Setup (Theme + i18n + Motion)
+
+The marketing landing page is implemented in:
+
+- `apps/frontend/features/landing/index.tsx`
+
+It uses:
+
+- `next-themes` for Light/Dark/System mode switching
+- client-side EN/BN language switching via `LanguageProvider`
+- `framer-motion` for lightweight reveal animations
+- shadcn-style primitives (`Button`, `Card`, `DropdownMenu`)
+
+Theme wiring is already active in the root layout:
+
+- `apps/frontend/components/theme-provider.tsx`
+- `apps/frontend/app/layout.tsx`
+
+Language state is managed by:
+
+- `apps/frontend/components/language-provider.tsx`
+- `apps/frontend/lib/i18n.ts`
+
+To run and verify the landing page locally:
+
+```bash
+pnpm --filter @catering/frontend dev
+```
+
+Recommended checks:
+
+```bash
+pnpm --filter @catering/frontend lint
+pnpm --filter @catering/frontend build
+```

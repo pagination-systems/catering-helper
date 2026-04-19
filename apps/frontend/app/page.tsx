@@ -1,5 +1,5 @@
-import { HomePreferences } from "@/components/home-preferences";
+import { LandingPage } from "@/features/landing";
 
 export default function HomePage() {
-  return <HomePreferences />;
+  return <LandingPage />;
 }
