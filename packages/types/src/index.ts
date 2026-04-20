@@ -3,3 +3,8 @@ export interface CateringPackage {
   title: string;
   priceCents: number;
 }
+
+export interface ISession {
+  // TODO: UPDATE THIS
+  userId: string;
+}
