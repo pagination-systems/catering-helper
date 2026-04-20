@@ -4,20 +4,42 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc -p tsconfig.json",
-    "start": "node dist/index.js",
+    "dev": "tsx watch src/server.ts",
+    "build": "tsup src/server.ts --format esm --dts --sourcemap",
+    "start": "node dist/server.js",
     "lint": "echo \"No lint configured for @catering/backend\""
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.682.0",
+    "@aws-sdk/s3-request-presigner": "^3.682.0",
     "@catering/authz": "workspace:*",
     "@catering/types": "workspace:*",
     "@catering/utils": "workspace:*",
-    "express": "^4.21.1"
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "morgan": "^1.10.0",
+    "helmet": "^7.1.0",
+    "hpp": "^0.2.3",
+    "express-mongo-sanitize": "^2.2.0",
+    "dotenv": "^17.4.2",
+    "express": "^4.21.1",
+    "mongoose": "^9.4.1",
+    "agenda": "^5.0.0",
+    "http-status-codes": "^2.3.0",
+    "lodash": "^4.17.21",
+    "node-geocoder": "^4.4.0",
+    "uuid": "^9.0.0",
+    "winston": "^3.13.1",
+    "express-rate-limit": "^7.4.0"
   },
   "devDependencies": {
+    "@types/morgan": "^1.9.9",
+    "@types/cors": "^2.8.17",
+    "@types/hpp": "^0.2.6",
+    "@types/cookie-parser": "^1.4.7",
     "@types/express": "^5.0.0",
-    "@types/node": "^22.10.1",
+    "@types/node": "^22.19.17",
+    "tsup": "^8.5.1",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   }
