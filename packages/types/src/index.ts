@@ -8,3 +8,6 @@ export interface ISession {
   // TODO: UPDATE THIS
   userId: string;
 }
+
+export * from "./tenant";
+export * from "./user";
