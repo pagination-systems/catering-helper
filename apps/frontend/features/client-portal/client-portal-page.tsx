@@ -135,13 +135,13 @@ function DayTab({ day, active, onClick }: { day: DayName; active: boolean; onCli
       type="button"
       onClick={onClick}
       className={cn(
-        "group min-w-[78px] rounded-2xl border px-3 py-2 text-left transition-all duration-200",
+        "group min-w-[74px] flex-1 sm:flex-none rounded-2xl border px-2.5 sm:px-3 py-2 text-left transition-all duration-200",
         active
           ? "border-[hsl(var(--cater-primary))] bg-[hsl(var(--cater-primary))/0.14] text-foreground shadow-sm"
           : "border-border/70 bg-background/70 hover:border-[hsl(var(--cater-primary))/0.4] hover:bg-muted",
       )}
     >
-      <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+      <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
         {dayShortLabel[day]}
       </p>
       <p className="mt-0.5 text-sm font-semibold">{day}</p>
@@ -169,7 +169,7 @@ function QuantityStepper({
       >
         <Minus className="h-3.5 w-3.5" />
       </button>
-      <span className="w-8 text-center text-sm font-semibold text-foreground">{value}</span>
+      <span className="min-w-[28px] sm:w-8 text-center text-sm font-semibold text-foreground">{value}</span>
       <button
         type="button"
         disabled={disabled}
@@ -224,8 +224,10 @@ function VariantCard({
       )}
     >
       <div className="flex items-start justify-between gap-3">
-        <div>
-          <h4 className="text-lg font-semibold tracking-tight text-foreground">{variant.name}</h4>
+        <div className="min-w-0 pr-2">
+          <h4 className="text-[17px] sm:text-lg font-semibold tracking-tight text-foreground truncate">
+            {variant.name}
+          </h4>
           <p className="mt-1 text-sm text-muted-foreground">{variant.note}</p>
         </div>
         <span
@@ -749,7 +751,7 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
 
       <header className="border-b border-border/70 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
         <nav className="mx-auto flex h-16 w-full max-w-[1260px] items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-2 text-lg font-semibold tracking-tight">
+          <Link href="/" className="flex items-center gap-2 text-base sm:text-lg font-semibold tracking-tight">
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--cater-primary))/0.12] text-[hsl(var(--cater-primary-strong))]">
               <ChefHat className="h-4 w-4" />
             </span>
@@ -777,10 +779,10 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
               <Clock3 className="h-3.5 w-3.5" />
               {localizedText.heroTag}
             </div>
-            <h1 className="mt-5 max-w-3xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+            <h1 className="mt-5 max-w-3xl text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
               {localizedText.heroTitle}
             </h1>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base md:text-lg">
               {localizedText.heroSubtitle}
             </p>
           </div>
@@ -788,9 +790,7 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
 
         <section className="space-y-7">
           <div>
-            <h2 className="text-2xl font-semibold tracking-tight text-foreground">
-              {localizedText.packageTitle}
-            </h2>
+            <h2 className="text-2xl font-semibold tracking-tight text-foreground">{localizedText.packageTitle}</h2>
             <p className="mt-2 text-sm text-muted-foreground">
               Pick one or more packages, customize each menu, and review everything in one summary.
             </p>
@@ -817,14 +817,16 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
                     </div>
                   ) : null}
 
-                  <CardHeader className="space-y-3 p-5">
-                    <CardTitle className="text-2xl font-semibold leading-tight tracking-tight">{pkg.name}</CardTitle>
-                    <p className="text-sm text-muted-foreground">{pkg.description}</p>
-                    <div className="flex items-end gap-2">
-                      <p className="text-3xl font-bold tracking-tight text-foreground">
+                  <CardHeader className="space-y-3 p-5 sm:p-6">
+                    <CardTitle className="text-xl sm:text-2xl font-semibold leading-tight tracking-tight">
+                      {pkg.name}
+                    </CardTitle>
+                    <p className="text-xs sm:text-sm text-muted-foreground">{pkg.description}</p>
+                    <div className="flex items-end gap-1.5 sm:gap-2 mt-2">
+                      <p className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
                         {bdt.format(pkg.pricePerMeal)}
                       </p>
-                      <span className="pb-1 text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                      <span className="pb-1 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
                         / meal
                       </span>
                     </div>
@@ -868,23 +870,23 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
           <section ref={customizerRef} className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
             <div className="space-y-6">
               <Card className="border-border/70 bg-card/96 shadow-sm">
-                <CardHeader className="space-y-5 border-b border-border/70 bg-muted/40 p-5">
+                <CardHeader className="space-y-5 border-b border-border/70 bg-muted/40 p-4 sm:p-5">
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div>
-                      <CardTitle className="text-3xl font-semibold tracking-tight text-foreground">
+                      <CardTitle className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
                         {localizedText.customizeTitle}
                       </CardTitle>
                       <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
                         {activePackage.name} - {bdt.format(activePackage.pricePerMeal)} per meal.
                       </p>
                     </div>
-                    <div className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--cater-accent))/0.3] bg-[hsl(var(--cater-accent))/0.1] px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-[hsl(var(--cater-accent))]">
+                    <div className="inline-flex self-start sm:self-auto items-center gap-2 rounded-full border border-[hsl(var(--cater-accent))/0.3] bg-[hsl(var(--cater-accent))/0.1] px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-[hsl(var(--cater-accent))]">
                       <Sparkles className="h-3.5 w-3.5" />
                       Real-time pricing
                     </div>
                   </div>
 
-                  <div className="flex gap-2 overflow-x-auto pb-1">
+                  <div className="flex flex-wrap gap-2 pb-2">
                     {activePackage.days.map((day) => (
                       <DayTab
                         key={day.day}
@@ -903,7 +905,7 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
                 </CardHeader>
 
                 {activeDay ? (
-                  <CardContent className="p-5 mt-2">
+                  <CardContent className="p-4 sm:p-5 mt-2 sm:mt-0">
                     <div className="animate-in fade-in-0 slide-in-from-right-2 duration-300" key={activeDay.day}>
                       <div className="rounded-2xl border border-border/70 bg-background/80 p-4">
                         <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
@@ -999,20 +1001,22 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                className="inline-flex h-10 shrink-0 items-center rounded-xl border border-border/80 px-3 text-sm font-semibold"
+                className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-border/80 px-2.5 sm:px-3 text-xs sm:text-sm font-semibold transition-colors hover:bg-muted"
                 onClick={() => setMobileSummaryOpen((prev) => !prev)}
               >
-                {mobileSummaryOpen ? "Hide Summary" : "View Summary"}
+                {mobileSummaryOpen ? "Hide" : "Summary"}
               </button>
 
-              <div className="min-w-0 flex-1 rounded-xl border border-border/80 bg-muted/65 px-3 py-2">
-                <p className="truncate text-xs text-muted-foreground">{totalQuantity} meal selected</p>
-                <p className="text-lg font-semibold tracking-tight text-[hsl(var(--cater-primary-strong))]">
+              <div className="min-w-0 flex-1 rounded-xl border border-border/80 bg-muted/65 px-2.5 py-1 sm:px-3 sm:py-2">
+                <p className="truncate text-[10px] sm:text-xs leading-tight text-muted-foreground">
+                  {totalQuantity} <span className="hidden xs:inline">meal</span> selected
+                </p>
+                <p className="text-sm sm:text-lg font-semibold leading-tight tracking-tight text-[hsl(var(--cater-primary-strong))]">
                   {bdt.format(total)}
                 </p>
               </div>
 
-              <Button className="h-10 rounded-xl bg-[hsl(var(--cater-primary))] px-4 text-white hover:bg-[hsl(var(--cater-primary-strong))]">
+              <Button className="h-10 shrink-0 rounded-xl bg-[hsl(var(--cater-primary))] px-3 sm:px-4 text-xs sm:text-sm text-white hover:bg-[hsl(var(--cater-primary-strong))]">
                 {localizedText.checkout}
               </Button>
             </div>
