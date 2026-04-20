@@ -8,12 +8,14 @@ import {
   CalendarDays,
   ChefHat,
   Clock3,
-  Fish,
   Flame,
   LaptopMinimal,
   Leaf,
+  Mail,
+  MapPin,
   Minus,
   Moon,
+  Phone,
   Plus,
   Sparkles,
   Sun,
@@ -25,7 +27,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-type DayName = "Saturday" | "Sunday" | "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday";
+type DayName = "Sat" | "Sun" | "Mon" | "Tue" | "Wed" | "Thu" | "Fri";
 
 type MenuVariant = {
   id: string;
@@ -66,16 +68,16 @@ type PackageSelectionState = {
   quantities: Record<string, number>;
 };
 
-const dayOrder: DayName[] = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+const dayOrder: DayName[] = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
 
 const dayShortLabel: Record<DayName, string> = {
-  Saturday: "Sat",
-  Sunday: "Sun",
-  Monday: "Mon",
-  Tuesday: "Tue",
-  Wednesday: "Wed",
-  Thursday: "Thu",
-  Friday: "Fri",
+  Sat: "Sat",
+  Sun: "Sun",
+  Mon: "Mon",
+  Tue: "Tue",
+  Wed: "Wed",
+  Thu: "Thu",
+  Fri: "Fri",
 };
 
 const bdt = new Intl.NumberFormat("en-BD", {
@@ -93,8 +95,23 @@ const themeIcons = {
 } as const;
 
 function getTodayDayName(): DayName {
-  const daysByJsIndex: DayName[] = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const daysByJsIndex: DayName[] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   return daysByJsIndex[new Date().getDay()];
+}
+
+function getUpcomingDays(): { day: DayName; dateLabel: string; isToday: boolean }[] {
+  const daysByJsIndex: DayName[] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const today = new Date();
+
+  return Array.from({ length: 7 }).map((_, i) => {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    return {
+      day: daysByJsIndex[d.getDay()],
+      dateLabel: d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }),
+      isToday: i === 0,
+    };
+  });
 }
 
 function createQuantityKey(day: DayName, variantId: string): string {
@@ -111,25 +128,17 @@ function createInitialSelection(menuPackage: CateringPackage): PackageSelectionS
   };
 }
 
-function getMealIcon(itemLabel: string): LucideIcon {
-  const label = itemLabel.toLowerCase();
-
-  if (label.includes("fish") || label.includes("ilish") || label.includes("rui") || label.includes("prawn")) {
-    return Fish;
-  }
-
-  if (label.includes("dal") || label.includes("bhorta") || label.includes("vegetable") || label.includes("salad")) {
-    return Leaf;
-  }
-
-  if (label.includes("roast") || label.includes("kacchi") || label.includes("curry") || label.includes("bhuna")) {
-    return Flame;
-  }
-
-  return UtensilsCrossed;
-}
-
-function DayTab({ day, active, onClick }: { day: DayName; active: boolean; onClick: () => void }) {
+function DayTab({
+  day,
+  dateLabel,
+  active,
+  onClick,
+}: {
+  day: DayName;
+  dateLabel?: string;
+  active: boolean;
+  onClick: () => void;
+}) {
   return (
     <button
       type="button"
@@ -137,59 +146,28 @@ function DayTab({ day, active, onClick }: { day: DayName; active: boolean; onCli
       className={cn(
         "group min-w-[74px] flex-1 sm:flex-none rounded-2xl border px-2.5 sm:px-3 py-2 text-left transition-all duration-200",
         active
-          ? "border-[hsl(var(--cater-primary))] bg-[hsl(var(--cater-primary))/0.14] text-foreground shadow-sm"
+          ? "border-[hsl(var(--cater-primary))] bg-[hsl(var(--cater-primary))] text-white shadow-md ring-1 ring-[hsl(var(--cater-primary))]"
           : "border-border/70 bg-background/70 hover:border-[hsl(var(--cater-primary))/0.4] hover:bg-muted",
       )}
     >
-      <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-        {dayShortLabel[day]}
+      <p
+        className={cn(
+          "text-[8px] sm:text-[10px] font-semibold uppercase tracking-[0.12em]",
+          active ? "text-white/90" : "text-muted-foreground",
+        )}
+      >
+        {dateLabel || dayShortLabel[day]}
       </p>
-      <p className="mt-0.5 text-sm font-semibold">{day}</p>
+      <p className={cn("mt-0.5 text-xs sm:text-sm font-semibold", active ? "text-white" : "")}>{day}</p>
     </button>
   );
 }
 
-function QuantityStepper({
-  value,
-  disabled,
-  onChange,
-}: {
-  value: number;
-  disabled?: boolean;
-  onChange: (next: number) => void;
-}) {
-  return (
-    <div className="inline-flex items-center gap-1 rounded-full border border-border/70 bg-background/90 p-1">
-      <button
-        type="button"
-        disabled={disabled}
-        aria-label="Decrease quantity"
-        className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
-        onClick={() => onChange(Math.max(0, value - 1))}
-      >
-        <Minus className="h-3.5 w-3.5" />
-      </button>
-      <span className="min-w-[28px] sm:w-8 text-center text-sm font-semibold text-foreground">{value}</span>
-      <button
-        type="button"
-        disabled={disabled}
-        aria-label="Increase quantity"
-        className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
-        onClick={() => onChange(value + 1)}
-      >
-        <Plus className="h-3.5 w-3.5" />
-      </button>
-    </div>
-  );
-}
-
 function MealItemPill({ label }: { label: string }) {
-  const Icon = getMealIcon(label);
-
   return (
     <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/80 px-2.5 py-1 text-xs text-foreground/90">
       <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-muted text-[hsl(var(--cater-primary-strong))]">
-        <Icon className="h-3 w-3" />
+        <UtensilsCrossed className="h-3 w-3" />
       </span>
       <span>{label}</span>
     </div>
@@ -199,11 +177,13 @@ function MealItemPill({ label }: { label: string }) {
 function VariantCard({
   variant,
   quantity,
+  price,
   pulse,
   onQuantityChange,
 }: {
   variant: MenuVariant;
   quantity: number;
+  price: number;
   pulse: boolean;
   onQuantityChange: (next: number) => void;
 }) {
@@ -213,48 +193,88 @@ function VariantCard({
   return (
     <article
       className={cn(
-        "relative overflow-hidden rounded-3xl border p-4 transition-all duration-200",
+        "relative overflow-hidden rounded-xl border transition-all duration-200 flex gap-3 p-3 sm:p-4",
         available
-          ? "hover:-translate-y-0.5 hover:shadow-lg"
+          ? "hover:-translate-y-0.5 hover:shadow-md bg-card"
           : "cursor-not-allowed border-dashed bg-muted/25 opacity-70 grayscale",
         active
-          ? "border-[hsl(var(--cater-primary))/0.5] bg-[hsl(var(--cater-primary))/0.08] shadow-[0_8px_26px_-16px_hsl(var(--cater-primary))]"
-          : "border-border/70 bg-card/90",
+          ? "border-[hsl(var(--cater-primary))/0.4] ring-1 ring-[hsl(var(--cater-primary))/0.4]"
+          : "border-border/70",
         pulse && "animate-pulse",
       )}
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0 pr-2">
-          <h4 className="text-[17px] sm:text-lg font-semibold tracking-tight text-foreground truncate">
-            {variant.name}
-          </h4>
-          <p className="mt-1 text-sm text-muted-foreground">{variant.note}</p>
+      <div className="flex flex-1 flex-col min-w-0">
+        <h4 className="text-base sm:text-lg font-bold tracking-tight text-foreground truncate">{variant.name}</h4>
+        <p className="mt-0.5 text-sm font-medium text-muted-foreground">Tk {price}</p>
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {variant.items.map((item, idx) => (
+            <MealItemPill key={idx} label={item} />
+          ))}
         </div>
-        <span
-          className={cn(
-            "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em]",
-            available ? "bg-emerald-500/12 text-emerald-700" : "bg-red-500/12 text-red-700",
-          )}
-        >
-          <Clock3 className="h-3.5 w-3.5" />
-          {available ? "Available" : "Unavailable"}
-        </span>
+
+        {!available && (
+          <span className="inline-flex mt-2 items-center gap-1 rounded-full bg-red-500/12 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-red-700 w-fit">
+            Unavailable
+          </span>
+        )}
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
-        {variant.items.map((item) => (
-          <MealItemPill key={`${variant.id}-${item}`} label={item} />
-        ))}
-      </div>
+      <div className="relative h-24 w-24 sm:h-28 sm:w-28 shrink-0 overflow-hidden rounded-xl bg-muted">
+        <img
+          src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80"
+          alt={variant.name}
+          className="h-full w-full object-cover"
+        />
+        {available && (
+          <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2">
+            {quantity === 0 ? (
+              <button
+                type="button"
+                onClick={() => onQuantityChange(1)}
+                className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full 
+      bg-white text-zinc-900 
+      dark:bg-zinc-800 dark:text-zinc-100 
+      shadow-md shadow-black/10 dark:shadow-black/40 
+      ring-1 ring-zinc-200 dark:ring-zinc-700
+      hover:bg-zinc-100 dark:hover:bg-zinc-700 
+      transition"
+              >
+                <Plus className="h-4 w-4" />
+              </button>
+            ) : (
+              <div
+                className="flex h-7 sm:h-8 items-center gap-1 sm:gap-2 rounded-full px-1 
+      bg-white text-zinc-900 
+      dark:bg-zinc-800 dark:text-zinc-100
+      shadow-md shadow-black/10 dark:shadow-black/40
+      ring-1 ring-zinc-200 dark:ring-zinc-700"
+              >
+                <button
+                  type="button"
+                  onClick={() => onQuantityChange(quantity - 1)}
+                  className="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full 
+        hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
+                >
+                  <Minus className="h-3.5 w-3.5" />
+                </button>
 
-      <div className="mt-4 flex items-center justify-between border-t border-border/60 pt-4">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">Quantity</p>
-        <QuantityStepper value={quantity} disabled={!available} onChange={onQuantityChange} />
-      </div>
+                <span className="min-w-[12px] sm:min-w-[16px] text-center text-xs sm:text-sm font-semibold">
+                  {quantity}
+                </span>
 
-      {!available ? (
-        <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-transparent via-transparent to-muted/30" />
-      ) : null}
+                <button
+                  type="button"
+                  onClick={() => onQuantityChange(quantity + 1)}
+                  className="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full 
+        hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </article>
   );
 }
@@ -272,7 +292,7 @@ const packages: CateringPackage[] = [
     ],
     days: [
       {
-        day: "Saturday",
+        day: "Sat",
         title: "Saturday Kickoff",
         description: "A familiar opener for teams getting back into rhythm.",
         variants: [
@@ -297,7 +317,7 @@ const packages: CateringPackage[] = [
         ],
       },
       {
-        day: "Sunday",
+        day: "Sun",
         title: "Sunday Team Fuel",
         description: "Fast moving weekday service with quick quantity controls.",
         variants: [
@@ -322,7 +342,7 @@ const packages: CateringPackage[] = [
         ],
       },
       {
-        day: "Monday",
+        day: "Mon",
         title: "Monday Reset",
         description: "Keep Monday simple and highly predictable.",
         variants: [
@@ -348,7 +368,7 @@ const packages: CateringPackage[] = [
         ],
       },
       {
-        day: "Tuesday",
+        day: "Tue",
         title: "Tuesday Balance",
         description: "Choose from bold, light, or vegetarian rhythms.",
         variants: [
@@ -373,7 +393,7 @@ const packages: CateringPackage[] = [
         ],
       },
       {
-        day: "Wednesday",
+        day: "Wed",
         title: "Midweek Energy",
         description: "A little richer for busy project days.",
         variants: [
@@ -398,7 +418,7 @@ const packages: CateringPackage[] = [
         ],
       },
       {
-        day: "Thursday",
+        day: "Thu",
         title: "Thursday Comfort",
         description: "Familiar combinations before Friday events.",
         variants: [
@@ -423,7 +443,7 @@ const packages: CateringPackage[] = [
         ],
       },
       {
-        day: "Friday",
+        day: "Fri",
         title: "Friday Signature",
         description: "Close the week with celebration-friendly choices.",
         variants: [
@@ -610,6 +630,8 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
     [activePackage, activeSelection.activeDay],
   );
 
+  const upcomingDays = useMemo(() => getUpcomingDays(), []);
+
   const packageSelectionTotals = useMemo(() => {
     return Object.fromEntries(
       packages.map((pkg) => {
@@ -623,6 +645,8 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
   const orderRows = useMemo(() => {
     const rows: Array<{
       key: string;
+      pkgId: string;
+      variantId: string;
       packageName: string;
       day: DayName;
       label: string;
@@ -642,6 +666,8 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
           if (qty > 0) {
             rows.push({
               key: `${pkg.id}::${quantityKey}`,
+              pkgId: pkg.id,
+              variantId: variant.id,
               packageName: pkg.name,
               day: day.day,
               label: variant.name,
@@ -721,11 +747,27 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
     }));
   };
 
-  const resetSelection = () => {
-    setPackageSelections((prev) => ({
-      ...prev,
-      [activePackage.id]: createInitialSelection(activePackage),
-    }));
+  const updateQuantityGlobal = (pkgId: string, day: DayName, variantId: string, next: number) => {
+    const safe = Math.max(0, Math.min(500, next));
+    const key = createQuantityKey(day, variantId);
+
+    setPackageSelections((prev) => {
+      const pkgDefinition = packages.find((p) => p.id === pkgId);
+      if (!pkgDefinition) return prev;
+      const currentPkgSelection = prev[pkgId] ?? createInitialSelection(pkgDefinition);
+      return {
+        ...prev,
+        [pkgId]: {
+          ...currentPkgSelection,
+          quantities: {
+            ...currentPkgSelection.quantities,
+            [key]: safe,
+          },
+        },
+      };
+    });
+
+    setRecentlyUpdatedKey(`${pkgId}::${key}`);
   };
 
   return (
@@ -773,18 +815,29 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
       </header>
 
       <main className="mx-auto w-full max-w-[1260px] px-4 pb-28 pt-8 sm:px-6 lg:px-8 lg:pb-10">
-        <section className="mb-10">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--cater-primary))/0.3] bg-[hsl(var(--cater-primary))/0.08] px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-[hsl(var(--cater-primary-strong))]">
-              <Clock3 className="h-3.5 w-3.5" />
-              {localizedText.heroTag}
+        <section className="mb-10 lg:mb-16">
+          <div className="grid gap-8 lg:grid-cols-2 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--cater-primary))/0.3] bg-[hsl(var(--cater-primary))/0.08] px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-[hsl(var(--cater-primary-strong))]">
+                <Clock3 className="h-3.5 w-3.5" />
+                {localizedText.heroTag}
+              </div>
+              <h1 className="mt-5 max-w-3xl text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+                {localizedText.heroTitle}
+              </h1>
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base md:text-lg">
+                {localizedText.heroSubtitle}
+              </p>
             </div>
-            <h1 className="mt-5 max-w-3xl text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
-              {localizedText.heroTitle}
-            </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base md:text-lg">
-              {localizedText.heroSubtitle}
-            </p>
+
+            <div className="relative h-[240px] sm:h-[320px] lg:h-[400px] w-full overflow-hidden rounded-3xl shadow-xl ring-1 ring-border/50 bg-muted/30">
+              <img
+                src="https://images.unsplash.com/photo-1555244162-803834f70033?w=800&q=80"
+                alt="Corporate Catering Display"
+                className="h-full w-full object-cover transition duration-700 hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent" />
+            </div>
           </div>
         </section>
 
@@ -804,10 +857,10 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
                 <Card
                   key={pkg.id}
                   className={cn(
-                    "relative overflow-hidden border-border/70 bg-card/95 transition duration-200",
+                    "relative overflow-hidden transition duration-200",
                     active
-                      ? "border-[hsl(var(--cater-primary))/0.45] shadow-[0_16px_30px_-24px_hsl(var(--cater-primary))]"
-                      : "hover:-translate-y-0.5 hover:shadow-lg",
+                      ? "border-[hsl(var(--cater-primary))] ring-1 ring-[hsl(var(--cater-primary))] bg-[hsl(var(--cater-primary))/0.03] shadow-[0_16px_30px_-24px_hsl(var(--cater-primary))]"
+                      : "border-border/70 bg-card/95 hover:-translate-y-0.5 hover:shadow-lg",
                   )}
                 >
                   {/* top center the badge */}
@@ -833,25 +886,11 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
                   </CardHeader>
 
                   <CardContent className="space-y-4 p-5 pt-0">
-                    <div className="space-y-2">
-                      {pkg.features.map((feature) => {
-                        const Icon = feature.icon;
-                        return (
-                          <div key={feature.label} className="flex items-center gap-2 text-sm text-foreground/90">
-                            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-muted text-[hsl(var(--cater-primary-strong))]">
-                              <Icon className="h-3.5 w-3.5" />
-                            </span>
-                            {feature.label}
-                          </div>
-                        );
-                      })}
-                    </div>
-
                     <Button
                       className="h-11 w-full rounded-xl bg-[hsl(var(--cater-primary))] text-white hover:bg-[hsl(var(--cater-primary-strong))]"
                       onClick={() => pickPackage(pkg.id)}
                     >
-                      {active ? "Customize This Package" : "View Menu & Customize"}
+                      {active ? "Selected Package" : "View Package"}
                     </Button>
 
                     {packageSelectionTotals[pkg.id] > 0 ? (
@@ -887,20 +926,15 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
                   </div>
 
                   <div className="flex flex-wrap gap-2 pb-2">
-                    {activePackage.days.map((day) => (
+                    {upcomingDays.map(({ day, dateLabel }) => (
                       <DayTab
-                        key={day.day}
-                        day={day.day}
-                        active={activeSelection.activeDay === day.day}
-                        onClick={() => setActiveDay(day.day)}
+                        key={day}
+                        day={day}
+                        dateLabel={dateLabel}
+                        active={activeSelection.activeDay === day}
+                        onClick={() => setActiveDay(day)}
                       />
                     ))}
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    <Button variant="ghost" size="sm" onClick={resetSelection}>
-                      Reset
-                    </Button>
                   </div>
                 </CardHeader>
 
@@ -927,6 +961,7 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
                               key={variant.id}
                               variant={variant}
                               quantity={quantity}
+                              price={activePackage.pricePerMeal}
                               pulse={recentlyUpdatedKey === `${activePackage.id}::${key}`}
                               onQuantityChange={(next) => updateQuantity(activeDay.day, variant.id, next)}
                             />
@@ -965,10 +1000,32 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
                           <p className="text-sm font-semibold text-foreground">
                             {row.packageName} - {row.day} - {row.label}
                           </p>
-                          <p className="mt-1 text-xs text-muted-foreground">{row.items.join(", ")}</p>
-                          <div className="mt-1 flex items-center justify-between text-xs text-muted-foreground">
-                            <span>{row.quantity} meal</span>
-                            <span className="font-semibold text-foreground">{bdt.format(row.subtotal)}</span>
+                          <p className="mt-1 text-[11px] leading-tight text-muted-foreground line-clamp-2">
+                            {row.items.join(", ")}
+                          </p>
+                          <div className="mt-3 flex items-center justify-between">
+                            <div className="flex items-center gap-2 rounded-full border border-border/70 bg-background px-1.5 py-1">
+                              <button
+                                onClick={() =>
+                                  updateQuantityGlobal(row.pkgId, row.day, row.variantId, row.quantity - 1)
+                                }
+                                className="flex h-5 w-5 items-center justify-center rounded-full text-muted-foreground hover:bg-muted transition"
+                              >
+                                <Minus className="h-3 w-3" />
+                              </button>
+                              <span className="min-w-[16px] text-center text-xs font-semibold text-foreground">
+                                {row.quantity}
+                              </span>
+                              <button
+                                onClick={() =>
+                                  updateQuantityGlobal(row.pkgId, row.day, row.variantId, row.quantity + 1)
+                                }
+                                className="flex h-5 w-5 items-center justify-center rounded-full text-muted-foreground hover:bg-muted transition"
+                              >
+                                <Plus className="h-3 w-3" />
+                              </button>
+                            </div>
+                            <span className="font-medium text-sm text-foreground">{bdt.format(row.subtotal)}</span>
                           </div>
                         </div>
                       ))
@@ -993,6 +1050,129 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
             </aside>
           </section>
         ) : null}
+
+        <footer className="mt-28 border-t border-border/70 pt-16 pb-8">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="space-y-4">
+              <h4 className="flex items-center gap-2 text-lg font-bold text-foreground">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--cater-primary))/0.12] text-[hsl(var(--cater-primary-strong))]">
+                  <ChefHat className="h-4 w-4" />
+                </span>
+                Bengal Serve Cloud
+              </h4>
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
+                Premium corporate catering platform. Healthy, balanced, and perfectly on time for your team's success.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">Contact</h4>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                <li className="flex items-center gap-3">
+                  <Phone className="h-4 w-4 shrink-0 text-[hsl(var(--cater-primary-strong))]" />
+                  +880 1711-000000
+                </li>
+                <li className="flex items-center gap-3">
+                  <svg
+                    className="h-5 w-5 -mr-1 shrink-0 text-emerald-500"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 3.4L3 21" />
+                    <path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v.5a5 5 0 0 0 5 5h.5a.5.5 0 0 0 0-1h-.5a.5.5 0 0 0 0 1" />
+                  </svg>
+                  +880 1711-000000
+                </li>
+                <li className="flex items-center gap-3">
+                  <Mail className="h-4 w-4 shrink-0 text-[hsl(var(--cater-primary-strong))]" />
+                  contact@bengalserve.com
+                </li>
+              </ul>
+            </div>
+
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">Location</h4>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                <li className="flex items-start gap-3">
+                  <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-[hsl(var(--cater-primary-strong))]" />
+                  <span className="leading-relaxed">
+                    123 Corporate Area, Gulshan 1<br />
+                    Dhaka 1212, Bangladesh
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">Follow Us</h4>
+              <div className="flex items-center gap-4">
+                <a href="#" className="text-muted-foreground transition hover:text-[hsl(var(--cater-primary-strong))]">
+                  <span className="sr-only">Facebook</span>
+                  <svg
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                  </svg>
+                </a>
+                <a href="#" className="text-muted-foreground transition hover:opacity-80">
+                  <span className="sr-only">Instagram</span>
+                  <svg
+                    className="h-5 w-5 text-pink-600"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                  </svg>
+                </a>
+                <a href="#" className="text-muted-foreground transition hover:text-red-500">
+                  <span className="sr-only">YouTube</span>
+                  <svg
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M2.5 7.1c.1-1.2 1-2.1 2.2-2.2C7 4.7 12 4.7 12 4.7s5 0 7.3.2c1.2.1 2.1 1 2.2 2.2.2 2.3.2 4.9.2 4.9s0 2.6-.2 4.9c-.1 1.2-1 2.1-2.2 2.2-2.3.2-7.3.2-7.3.2s-5 0-7.3-.2c-1.2-.1-2.1-1-2.2-2.2-.2-2.3-.2-4.9-.2-4.9s0-2.6.2-4.9z" />
+                    <path d="M10 15l5-3-5-3v6z" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-14 border-t border-border/40 pt-8 text-center sm:flex sm:items-center sm:justify-between">
+            <p className="text-xs text-muted-foreground">
+              &copy; {new Date().getFullYear()} Bengal Serve Cloud. All rights reserved.
+            </p>
+            <div className="mt-4 flex justify-center gap-4 text-xs font-medium text-muted-foreground sm:mt-0">
+              <Link href="#" className="hover:text-foreground transition">
+                Privacy Policy
+              </Link>
+              <Link href="#" className="hover:text-foreground transition">
+                Terms of Service
+              </Link>
+            </div>
+          </div>
+        </footer>
       </main>
 
       {customizerOpen ? (
@@ -1031,10 +1211,28 @@ export function ClientPortalPage({ tenant: _tenant }: ClientPortalPageProps) {
                       <p className="text-sm font-semibold">
                         {row.packageName} - {row.day} - {row.label}
                       </p>
-                      <p className="mt-1 text-xs text-muted-foreground">{row.items.join(", ")}</p>
-                      <div className="mt-1 flex items-center justify-between text-xs text-muted-foreground">
-                        <span>{row.quantity} meal</span>
-                        <span className="font-semibold text-foreground">{bdt.format(row.subtotal)}</span>
+                      <p className="mt-1 text-[11px] leading-tight text-muted-foreground line-clamp-2">
+                        {row.items.join(", ")}
+                      </p>
+                      <div className="mt-2.5 flex items-center justify-between">
+                        <div className="flex items-center gap-2 rounded-full border border-border/70 bg-muted/30 px-1.5 py-1">
+                          <button
+                            onClick={() => updateQuantityGlobal(row.pkgId, row.day, row.variantId, row.quantity - 1)}
+                            className="flex h-5 w-5 items-center justify-center rounded-full text-muted-foreground hover:bg-muted transition"
+                          >
+                            <Minus className="h-3 w-3" />
+                          </button>
+                          <span className="min-w-[16px] text-center text-xs font-semibold text-foreground">
+                            {row.quantity}
+                          </span>
+                          <button
+                            onClick={() => updateQuantityGlobal(row.pkgId, row.day, row.variantId, row.quantity + 1)}
+                            className="flex h-5 w-5 items-center justify-center rounded-full text-muted-foreground hover:bg-muted transition"
+                          >
+                            <Plus className="h-3 w-3" />
+                          </button>
+                        </div>
+                        <span className="font-medium text-sm text-foreground">{bdt.format(row.subtotal)}</span>
                       </div>
                     </div>
                   ))
