@@ -5,6 +5,7 @@ import { Clock3, Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/components/language-provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { clientPortalContent, type ClientPortalContent } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
@@ -261,54 +262,58 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                       <div className="p-4 text-sm text-muted-foreground">{content.noItemsSelected}</div>
                     ) : (
                       groupedOrders.map((group) => (
-                        <div
+                        <Collapsible
                           key={group.day}
-                          className="rounded-xl border border-border/70 overflow-hidden bg-background"
+                          defaultOpen
+                          className="overflow-hidden rounded-xl border border-border/70 bg-background"
                         >
-                          {/* Group Header (Day & Date) */}
-                          <div className="bg-muted/40 px-3 py-2 border-b border-border/70 flex items-center justify-between text-sm font-semibold text-foreground">
-                            <p className="text-sm font-semibold text-foreground">
+                          <CollapsibleTrigger className="rounded-none border-b border-border/70 bg-muted/40">
+                            <span className="text-sm font-semibold text-foreground">
                               {content.dayShortLabel[group.day as keyof typeof content.dayShortLabel] || group.day},{" "}
                               {group.dateLabel}
-                            </p>
+                            </span>
                             <b>BDT {group.subTotal.toFixed(2)}</b>
-                          </div>
-
-                          {/* Group Items */}
-                          <div className="p-3 space-y-4">
-                            {group.items.map((r) => (
-                              <div
-                                key={r.key}
-                                className={cn(
-                                  "flex flex-col gap-1 transition-all",
-                                  recentlyUpdatedKey === r.key &&
-                                    "ring-1 ring-[hsl(var(--cater-primary))/0.4] rounded-md p-1.5 -m-1.5",
-                                )}
-                              >
-                                <p className="text-sm font-medium">
-                                  {r.packageName} - {r.label}
-                                </p>
-                                <p className="text-[11px] text-muted-foreground">{r.items.join(", ")}</p>
-                                <div className="mt-2 flex items-center justify-between">
-                                  <div className="flex items-center gap-2 bg-background px-1.5 py-1 rounded-full border">
-                                    <button
-                                      onClick={() => updateQuantity(r.pkgId, r.day as any, r.variantId, r.quantity - 1)}
-                                    >
-                                      <Minus className="w-3 h-3 text-muted-foreground hover:text-foreground" />
-                                    </button>
-                                    <span className="text-xs font-semibold w-3 text-center">{r.quantity}</span>
-                                    <button
-                                      onClick={() => updateQuantity(r.pkgId, r.day as any, r.variantId, r.quantity + 1)}
-                                    >
-                                      <Plus className="w-3 h-3 text-muted-foreground hover:text-foreground" />
-                                    </button>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <div className="p-3 space-y-4">
+                              {group.items.map((r) => (
+                                <div
+                                  key={r.key}
+                                  className={cn(
+                                    "flex flex-col gap-1 transition-all",
+                                    recentlyUpdatedKey === r.key &&
+                                      "ring-1 ring-[hsl(var(--cater-primary))/0.4] rounded-md p-1.5 -m-1.5",
+                                  )}
+                                >
+                                  <p className="text-sm font-medium">
+                                    {r.packageName} - {r.label}
+                                  </p>
+                                  <p className="text-[11px] text-muted-foreground">{r.items.join(", ")}</p>
+                                  <div className="mt-2 flex items-center justify-between">
+                                    <div className="flex items-center gap-2 rounded-full border bg-background px-1.5 py-1">
+                                      <button
+                                        onClick={() =>
+                                          updateQuantity(r.pkgId, r.day as any, r.variantId, r.quantity - 1)
+                                        }
+                                      >
+                                        <Minus className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+                                      </button>
+                                      <span className="w-3 text-center text-xs font-semibold">{r.quantity}</span>
+                                      <button
+                                        onClick={() =>
+                                          updateQuantity(r.pkgId, r.day as any, r.variantId, r.quantity + 1)
+                                        }
+                                      >
+                                        <Plus className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+                                      </button>
+                                    </div>
+                                    <span className="text-sm font-medium">{bdt.format(r.subtotal)}</span>
                                   </div>
-                                  <span className="font-medium text-sm">{bdt.format(r.subtotal)}</span>
                                 </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
+                              ))}
+                            </div>
+                          </CollapsibleContent>
+                        </Collapsible>
                       ))
                     )}
                   </div>
@@ -349,33 +354,47 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
               </div>
               <Button>{content.checkout}</Button>
             </div>
-            {mobileSummaryOpen && (
-              <div className="mt-3 max-h-[50vh] overflow-auto rounded-2xl border bg-background/98 p-3 dark:bg-[hsl(var(--landing-card-bg))]">
-                {groupedOrders.map((group) => (
-                  <div key={group.day} className="border mb-3 rounded-xl overflow-hidden last:mb-0">
-                    <div className="bg-muted/40 px-3 py-2 border-b font-semibold text-xs text-foreground">
-                      {content.dayShortLabel[group.day as keyof typeof content.dayShortLabel] || group.day},{" "}
-                      {group.dateLabel}
-                    </div>
-                    <div className="p-3 space-y-3">
-                      {group.items.map((r) => (
-                        <div key={r.key} className="flex justify-between items-start text-sm">
-                          <div className="pr-2">
-                            <div className="font-semibold text-[13px]">
-                              {r.packageName} - {r.label}
+            <Collapsible open={mobileSummaryOpen} onOpenChange={setMobileSummaryOpen}>
+              <CollapsibleContent>
+                <div className="mt-3 max-h-[60vh] overflow-auto rounded-2xl border bg-background/98 p-3 dark:bg-[hsl(var(--landing-card-bg))]">
+                  {groupedOrders.map((group) => (
+                    <Collapsible
+                      key={group.day}
+                      defaultOpen
+                      className="mb-3 overflow-hidden rounded-xl border last:mb-0"
+                    >
+                      <CollapsibleTrigger className="rounded-none border-b bg-muted/40 px-3 py-2 text-xs font-semibold text-foreground">
+                        <span>
+                          {content.dayShortLabel[group.day as keyof typeof content.dayShortLabel] || group.day},{" "}
+                          {group.dateLabel}
+                        </span>
+                        <span className="text-[11px] font-bold text-[hsl(var(--cater-primary-strong))]">
+                          {bdt.format(group.subTotal)}
+                        </span>
+                      </CollapsibleTrigger>
+
+                      <CollapsibleContent>
+                        <div className="space-y-3 p-3">
+                          {group.items.map((r) => (
+                            <div key={r.key} className="flex items-start justify-between text-sm">
+                              <div className="pr-2">
+                                <div className="text-[13px] font-semibold">
+                                  {r.packageName} - {r.label}
+                                </div>
+                                <div className="mt-0.5 text-[11px] text-muted-foreground">{bdt.format(r.subtotal)}</div>
+                              </div>
+                              <div className="whitespace-nowrap rounded bg-muted px-2 py-1 text-xs font-semibold">
+                                {r.quantity}x
+                              </div>
                             </div>
-                            <div className="text-muted-foreground text-[11px] mt-0.5">{bdt.format(r.subtotal)}</div>
-                          </div>
-                          <div className="font-semibold bg-muted px-2 py-1 rounded text-xs whitespace-nowrap">
-                            {r.quantity}x
-                          </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                      </CollapsibleContent>
+                    </Collapsible>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
           </div>
         )}
       </div>
