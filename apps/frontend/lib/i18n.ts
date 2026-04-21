@@ -238,9 +238,6 @@ export const clientPortalContent = {
       },
     },
     badge: "Corporate Catering Platform",
-    title: "Premium Menus, Frictionless Customization",
-    description:
-      "Built for office admins and HR teams to select packages, customize meals day-by-day, and manage orders in real time.",
     packageLabel: "Choose a Catering Package",
     packageDescription: "Pick one or more packages, customize each menu, and review everything in one summary.",
     mostPopular: "Most popular",
@@ -288,9 +285,6 @@ export const clientPortalContent = {
       },
     },
     badge: "কর্পোরেট ক্যাটারিং প্ল্যাটফর্ম",
-    title: "প্রিমিয়াম মেনু, ঝামেলামুক্ত কাস্টমাইজেশন",
-    description:
-      "অফিস অ্যাডমিন এবং এইচআর টিমের জন্য তৈরি, যারা প্যাকেজ নির্বাচন করতে, প্রতিদিনের খাবার কাস্টমাইজ করতে এবং রিয়েল টাইমে অর্ডার পরিচালনা করতে চান।",
     packageLabel: "একটি ক্যাটারিং প্যাকেজ নির্বাচন করুন",
     packageDescription:
       "একটি বা একাধিক প্যাকেজ নির্বাচন করুন, প্রতিটি মেনু কাস্টমাইজ করুন, এবং সবকিছু একসাথে একটি সারাংশে পর্যালোচনা করুন।",

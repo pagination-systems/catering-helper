@@ -101,10 +101,10 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
               {content.badge}
             </div>
             <h1 className="mt-5 max-w-3xl text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
-              {content.title}
+              {tenant.title}
             </h1>
             <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base md:text-lg">
-              {content.description}
+              {tenant.description}
             </p>
           </div>
           <div className="relative h-[240px] sm:h-[320px] lg:h-[350px] w-full overflow-hidden rounded-3xl shadow-xl ring-1 ring-border/50 bg-muted/30">

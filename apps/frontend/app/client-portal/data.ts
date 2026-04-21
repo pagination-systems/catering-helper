@@ -1,5 +1,6 @@
 export type TenantData = {
   name: string;
+  title: string;
   logoUrl: string;
   menuUrl: string;
   description: string;
@@ -16,6 +17,7 @@ export type TenantData = {
 
 const defaultTenantData: TenantData = {
   name: "Uttara Catering",
+  title: "Premium Menus, Frictionless Customization",
   logoUrl:
     "https://images.unsplash.com/photo-1575395311793-ad870d50fbd1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmVzdGF1cmFudCUyMGxvZ298ZW58MHx8MHx8fDA%3D",
   menuUrl: "https://plus.unsplash.com/premium_photo-1673108852141-e8c3c22a4a22",
