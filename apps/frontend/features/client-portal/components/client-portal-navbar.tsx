@@ -1,10 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { ChefHat, LaptopMinimal, Sun, Moon } from "lucide-react";
+import { ChefHat, Globe, LaptopMinimal, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/components/language-provider";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { clientPortalContent, type ClientPortalContent } from "@/lib/i18n";
 
 const themeOrder = ["system", "light", "dark"] as const;
 
@@ -15,8 +25,10 @@ const themeIcons = {
 } as const;
 
 export function ClientPortalNavbar() {
+  const { language, setLanguage } = useLanguage();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const content = clientPortalContent[language] as ClientPortalContent;
 
   useEffect(() => {
     setMounted(true);
@@ -42,15 +54,32 @@ export function ClientPortalNavbar() {
           <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--cater-primary))/0.12] text-[hsl(var(--cater-primary-strong))]">
             <ChefHat className="h-4 w-4" />
           </span>
-          Bengal Serve Cloud
+          Uttara Catering
         </Link>
 
         <div className="flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" aria-label={content.nav.language} className="h-9 w-9 rounded-full">
+                <Globe className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              className="w-40 border-border bg-background/98 text-foreground shadow-xl backdrop-blur"
+            >
+              <DropdownMenuLabel>{content.nav.language}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setLanguage("en")}>EN</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLanguage("bn")}>BN</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <Button
             variant="ghost"
             size="icon"
             className="h-9 w-9 rounded-full"
-            aria-label="Toggle theme"
+            aria-label={content.nav.theme}
             onClick={toggleTheme}
           >
             <ThemeIcon className="h-4 w-4" />

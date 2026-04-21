@@ -3,7 +3,9 @@
 import { useEffect, useMemo, useRef } from "react";
 import { Clock3, Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/components/language-provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { clientPortalContent, type ClientPortalContent } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 import { useClientPortalStore, createQuantityKey } from "./store";
@@ -11,9 +13,12 @@ import { packages, dayOrder, bdt } from "./data";
 import { getUpcomingDays } from "./components/utils";
 import { DayTab } from "./components/day-tab";
 import { VariantCard } from "./components/variant-card";
+import { TenantData } from "@/app/client-portal/data";
 
-export function ClientPortalPage({ tenant: _tenant }: { tenant?: string }) {
+export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
   const customizerRef = useRef<HTMLElement | null>(null);
+  const { language } = useLanguage();
+  const content = clientPortalContent[language] as ClientPortalContent;
 
   const {
     activePackageId,
@@ -38,7 +43,7 @@ export function ClientPortalPage({ tenant: _tenant }: { tenant?: string }) {
   const activeSelection = packageSelections[activePackage.id];
   const activeDayName = activeSelection?.activeDay || activePackage.days[0]?.day;
   const activeDay = activePackage.days.find((d) => d.day === activeDayName) ?? activePackage.days[0];
-  const upcomingDays = useMemo(() => getUpcomingDays(), []);
+  const upcomingDays = useMemo(() => getUpcomingDays(language), [language]);
 
   const packageSelectionTotals = useMemo(() => {
     return Object.fromEntries(
@@ -93,14 +98,13 @@ export function ClientPortalPage({ tenant: _tenant }: { tenant?: string }) {
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--cater-primary))/0.3] bg-[hsl(var(--cater-primary))/0.08] px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-[hsl(var(--cater-primary-strong))]">
               <Clock3 className="h-3.5 w-3.5" />
-              Corporate Catering Platform
+              {content.badge}
             </div>
             <h1 className="mt-5 max-w-3xl text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
-              Premium Menus, Frictionless Customization
+              {content.title}
             </h1>
             <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base md:text-lg">
-              Built for office admins and HR teams to select packages, customize meals day-by-day, and manage orders in
-              real time.
+              {content.description}
             </p>
           </div>
           <div className="relative h-[240px] sm:h-[320px] lg:h-[400px] w-full overflow-hidden rounded-3xl shadow-xl ring-1 ring-border/50 bg-muted/30">
@@ -116,10 +120,8 @@ export function ClientPortalPage({ tenant: _tenant }: { tenant?: string }) {
 
       <section className="space-y-7">
         <div>
-          <h2 className="text-2xl font-semibold tracking-tight text-foreground">Choose a Catering Package</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Pick one or more packages, customize each menu, and review everything in one summary.
-          </p>
+          <h2 className="text-2xl font-semibold tracking-tight text-foreground">{content.packageLabel}</h2>
+          <p className="mt-2 text-sm text-muted-foreground">{content.packageDescription}</p>
         </div>
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -137,7 +139,7 @@ export function ClientPortalPage({ tenant: _tenant }: { tenant?: string }) {
               >
                 {pkg.popular && (
                   <div className="absolute top-2 left-1/2 transform -translate-x-1/2 rounded-full bg-[hsl(var(--cater-primary))] px-3 py-1 text-[8px] font-semibold text-white uppercase tracking-[0.12em]">
-                    Most popular
+                    {content.mostPopular}
                   </div>
                 )}
                 <CardHeader className="space-y-3 p-5 sm:p-6">
@@ -148,7 +150,7 @@ export function ClientPortalPage({ tenant: _tenant }: { tenant?: string }) {
                       {bdt.format(pkg.pricePerMeal)}
                     </p>
                     <span className="pb-1 text-[10px] sm:text-xs font-semibold uppercase text-muted-foreground">
-                      / meal
+                      {content.mealSuffix}
                     </span>
                   </div>
                 </CardHeader>
@@ -157,11 +159,11 @@ export function ClientPortalPage({ tenant: _tenant }: { tenant?: string }) {
                     className="h-11 w-full rounded-xl bg-[hsl(var(--cater-primary))] text-white hover:bg-[hsl(var(--cater-primary-strong))]"
                     onClick={() => handlePickPackage(pkg.id)}
                   >
-                    {active ? "Selected Package" : "View Package"}
+                    {active ? content.selectedPackage : content.viewPackage}
                   </Button>
                   {packageSelectionTotals[pkg.id] > 0 && (
                     <p className="text-xs font-medium text-[hsl(var(--cater-primary-strong))]">
-                      {packageSelectionTotals[pkg.id]} meal selected
+                      {packageSelectionTotals[pkg.id]} {content.mealSelected}
                     </p>
                   )}
                 </CardContent>
@@ -173,16 +175,16 @@ export function ClientPortalPage({ tenant: _tenant }: { tenant?: string }) {
 
       {customizerOpen && (
         <section ref={customizerRef} className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <div className="space-y-6">
+          <div className="space-y-3">
             <Card className="border-border/70 bg-card/96 shadow-sm">
               <CardHeader className="space-y-5 border-b border-border/70 bg-muted/40 p-4 sm:p-5">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <CardTitle className="text-2xl sm:text-3xl font-semibold tracking-tight">
-                      Customize Day-by-Day
+                      {content.customizeTitle}
                     </CardTitle>
                     <p className="mt-2 text-sm text-muted-foreground">
-                      {activePackage.name} - {bdt.format(activePackage.pricePerMeal)} per meal.
+                      {activePackage.name} - <b>{bdt.format(activePackage.pricePerMeal)}</b> {content.perMealSuffix}
                     </p>
                   </div>
                 </div>
@@ -191,7 +193,7 @@ export function ClientPortalPage({ tenant: _tenant }: { tenant?: string }) {
                   {upcomingDays.map(({ day, dateLabel }) => (
                     <DayTab
                       key={day}
-                      day={day}
+                      dayLabel={content.dayShortLabel[day]}
                       dateLabel={dateLabel}
                       active={activeDay?.day === day}
                       onClick={() => setActiveDay(activePackage.id, day)}
@@ -201,14 +203,8 @@ export function ClientPortalPage({ tenant: _tenant }: { tenant?: string }) {
               </CardHeader>
 
               {activeDay && (
-                <CardContent className="p-4 sm:p-5 mt-2 sm:mt-0">
+                <CardContent className="p-4 sm:p-5">
                   <div className="animate-in fade-in-0 duration-300">
-                    <div className="rounded-2xl border bg-background/80 p-4">
-                      <p className="text-[11px] font-semibold text-muted-foreground uppercase">{activeDay.day}</p>
-                      <h3 className="mt-1 text-2xl font-semibold tracking-tight">{activeDay.title}</h3>
-                      <p className="mt-2 text-sm text-muted-foreground">{activeDay.description}</p>
-                    </div>
-
                     <div className="mt-4 grid gap-4 md:grid-cols-2">
                       {activeDay.variants.map((v) => (
                         <VariantCard
@@ -216,6 +212,8 @@ export function ClientPortalPage({ tenant: _tenant }: { tenant?: string }) {
                           variant={v}
                           quantity={activeSelection?.quantities?.[createQuantityKey(activeDay.day, v.id)] || 0}
                           price={activePackage.pricePerMeal}
+                          mealSuffix={content.mealSuffix}
+                          unavailableLabel={content.unavailable}
                           pulse={
                             recentlyUpdatedKey === `${activePackage.id}::${createQuantityKey(activeDay.day, v.id)}`
                           }
@@ -232,12 +230,12 @@ export function ClientPortalPage({ tenant: _tenant }: { tenant?: string }) {
           <aside className="hidden h-fit lg:sticky lg:top-6 lg:block">
             <Card className="border-border/70 shadow-sm">
               <CardHeader className="p-5 pb-3">
-                <CardTitle className="text-2xl font-semibold tracking-tight">Order Summary</CardTitle>
+                <CardTitle className="text-2xl font-semibold tracking-tight">{content.orderSummaryTitle}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 p-5 pt-0">
                 <div className="max-h-[360px] space-y-2 overflow-auto pr-1">
                   {orderRows.length === 0 ? (
-                    <div className="p-4 text-sm text-muted-foreground">No items selected yet</div>
+                    <div className="p-4 text-sm text-muted-foreground">{content.noItemsSelected}</div>
                   ) : (
                     orderRows.map((r) => (
                       <div
@@ -270,14 +268,16 @@ export function ClientPortalPage({ tenant: _tenant }: { tenant?: string }) {
 
                 <div className="rounded-2xl border p-4 bg-muted/65">
                   <div className="flex justify-between">
-                    <p className="text-sm font-semibold">Total</p>
+                    <p className="text-sm font-semibold">{content.total}</p>
                     <p className="text-2xl font-bold tracking-tight text-[hsl(var(--cater-primary-strong))]">
                       {bdt.format(total)}
                     </p>
                   </div>
-                  <p className="text-xs text-muted-foreground">{totalQuantity} meals</p>
+                  <p className="text-xs text-muted-foreground">
+                    {totalQuantity} {content.meals}
+                  </p>
                 </div>
-                <Button className="w-full">Checkout</Button>
+                <Button className="w-full">{content.checkout}</Button>
               </CardContent>
             </Card>
           </aside>
@@ -291,13 +291,15 @@ export function ClientPortalPage({ tenant: _tenant }: { tenant?: string }) {
               onClick={() => setMobileSummaryOpen(!mobileSummaryOpen)}
               className="border px-3 py-1 rounded-xl text-sm font-semibold"
             >
-              {mobileSummaryOpen ? "Hide" : "Summary"}
+              {mobileSummaryOpen ? content.hide : content.summary}
             </button>
             <div className="flex-1 text-right min-w-0 bg-muted/65 px-3 py-1 rounded-xl">
-              <p className="text-[10px] text-muted-foreground">{totalQuantity} meals</p>
+              <p className="text-[10px] text-muted-foreground">
+                {totalQuantity} {content.meals}
+              </p>
               <p className="text-lg font-semibold">{bdt.format(total)}</p>
             </div>
-            <Button>Checkout</Button>
+            <Button>{content.checkout}</Button>
           </div>
           {mobileSummaryOpen && (
             <div className="mt-3 max-h-64 overflow-auto border p-3 rounded-2xl bg-background/98">

@@ -7,12 +7,16 @@ export function VariantCard({
   variant,
   quantity,
   price,
+  mealSuffix,
+  unavailableLabel,
   pulse,
   onQuantityChange,
 }: {
   variant: MenuVariant;
   quantity: number;
   price: number;
+  mealSuffix: string;
+  unavailableLabel: string;
   pulse: boolean;
   onQuantityChange: (next: number) => void;
 }) {
@@ -34,7 +38,9 @@ export function VariantCard({
     >
       <div className="flex flex-1 flex-col min-w-0">
         <h4 className="text-base sm:text-lg font-bold tracking-tight text-foreground truncate">{variant.name}</h4>
-        <p className="mt-0.5 text-sm font-medium text-muted-foreground">Tk {price}</p>
+        <p className="mt-0.5 text-sm font-medium text-muted-foreground">
+          <b>BDT {price}</b> {mealSuffix}
+        </p>
         <div className="mt-2 flex flex-wrap gap-1.5">
           {variant.items.map((item, idx) => (
             <MealItemPill key={idx} label={item} />
@@ -43,7 +49,7 @@ export function VariantCard({
 
         {!available && (
           <span className="inline-flex mt-2 items-center gap-1 rounded-full bg-red-500/12 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-red-700 w-fit">
-            Unavailable
+            {unavailableLabel}
           </span>
         )}
       </div>

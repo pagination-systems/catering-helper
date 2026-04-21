@@ -1,15 +1,13 @@
 import { cn } from "@/lib/utils";
-import type { DayName } from "../data";
-import { dayShortLabel } from "../data";
 
 export function DayTab({
-  day,
+  dayLabel,
   dateLabel,
   active,
   onClick,
 }: {
-  day: DayName;
-  dateLabel?: string;
+  dayLabel: string;
+  dateLabel: string;
   active: boolean;
   onClick: () => void;
 }) {
@@ -30,9 +28,9 @@ export function DayTab({
           active ? "text-white/90" : "text-muted-foreground",
         )}
       >
-        {dateLabel || dayShortLabel[day]}
+        {dateLabel}
       </p>
-      <p className={cn("mt-0.5 text-xs sm:text-sm font-semibold", active ? "text-white" : "")}>{day}</p>
+      <p className={cn("mt-0.5 text-xs sm:text-sm font-semibold", active ? "text-white" : "")}>{dayLabel}</p>
     </button>
   );
 }

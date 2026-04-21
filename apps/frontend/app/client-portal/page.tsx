@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 
 import { ClientPortalPage } from "@/features/client-portal";
+import { tenantData } from "./data";
 
 function getTenantFromHost(host: string): string | undefined {
   const hostWithoutPort = host.split(":")[0].toLowerCase();
@@ -30,5 +31,5 @@ export default async function ClientPortalRoute({ searchParams }: { searchParams
   const host = incomingHeaders.get("x-forwarded-host") ?? incomingHeaders.get("host") ?? "";
   const tenant = params.tenant ?? getTenantFromHost(host);
 
-  return <ClientPortalPage tenant={tenant} />;
+  return <ClientPortalPage tenant={tenantData} />;
 }
