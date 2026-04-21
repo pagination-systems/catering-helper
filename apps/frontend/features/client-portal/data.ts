@@ -46,6 +46,7 @@ export const packages: CateringPackage[] = [
     name: "ডেইলি বেসিক প্যাকেজ",
     pricePerMeal: 120,
     description: "সাশ্রয়ী দৈনন্দিন অফিস মিল, সহজ ও পরিচিত খাবার।",
+    popular: true,
     days: dayOrder.map((day) => ({
       day,
       variants: [

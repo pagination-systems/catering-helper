@@ -12,7 +12,7 @@ export function ClientPortalFooter({ tenant }: { tenant: TenantData }) {
   const [addressLineOne, ...addressRemainder] = tenant.address.split(",").map((part) => part.trim());
 
   return (
-    <footer className="mt-28 border-t border-border/70 pt-16 pb-8">
+    <footer className="border-t border-border/70 pt-16 pb-8">
       <div className="mx-auto w-full max-w-[1260px] px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
