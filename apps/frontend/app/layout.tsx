@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { LanguageProvider } from "@/components/language-provider";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Navbar } from "@/components/shared/navbar";
-import { Footer } from "@/components/shared/footer";
 import { siteName } from "@/lib/i18n";
 import { Noto_Sans_Bengali } from "next/font/google";
 import "./globals.css";
@@ -28,11 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={`${notoSansBengali.className} flex min-h-screen flex-col bg-background text-foreground antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <LanguageProvider>
-            <Navbar />
-            <main className="flex-1 w-full">{children}</main>
-            <Footer />
-          </LanguageProvider>
+          <LanguageProvider>{children}</LanguageProvider>
         </ThemeProvider>
       </body>
     </html>
