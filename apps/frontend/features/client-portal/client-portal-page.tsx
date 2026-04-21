@@ -9,7 +9,7 @@ import { clientPortalContent, type ClientPortalContent } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 import { useClientPortalStore, createQuantityKey } from "./store";
-import { packages, dayOrder, bdt } from "./data";
+import { packages, dayOrder, bdt, DayName } from "./data";
 import { getUpcomingDays } from "./components/utils";
 import { DayTab } from "./components/day-tab";
 import { VariantCard } from "./components/variant-card";
@@ -82,6 +82,28 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
       (a, b) => a.packageName.localeCompare(b.packageName) || dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day),
     );
   }, [packageSelections]);
+
+  const groupedOrders = useMemo(() => {
+    const grouped: Record<string, { day: string; dateLabel: string; items: typeof orderRows; subTotal: number }> = {};
+
+    orderRows.forEach((row) => {
+      if (!grouped[row.day]) {
+        const dayInfo = upcomingDays.find((d) => d.day === row.day);
+        grouped[row.day] = {
+          day: row.day,
+          dateLabel: dayInfo?.dateLabel || "",
+          items: [],
+          subTotal: 0,
+        };
+      }
+      grouped[row.day].items.push(row);
+      grouped[row.day].subTotal += row.subtotal;
+    });
+
+    return Object.values(grouped).sort(
+      (a, b) => dayOrder.indexOf(a.day as DayName) - dayOrder.indexOf(b.day as DayName),
+    );
+  }, [orderRows, upcomingDays]);
 
   const total = orderRows.reduce((a, b) => a + b.subtotal, 0);
   const totalQuantity = orderRows.reduce((a, b) => a + b.quantity, 0);
@@ -194,10 +216,10 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                     {upcomingDays.map(({ day, dateLabel }) => (
                       <DayTab
                         key={day}
-                        dayLabel={content.dayShortLabel[day]}
+                        dayLabel={content.dayShortLabel[day as keyof typeof content.dayShortLabel] || day}
                         dateLabel={dateLabel}
                         active={activeDay?.day === day}
-                        onClick={() => setActiveDay(activePackage.id, day)}
+                        onClick={() => setActiveDay(activePackage.id, day as any)}
                       />
                     ))}
                   </div>
@@ -234,33 +256,57 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                   <CardTitle className="text-2xl font-semibold tracking-tight">{content.orderSummaryTitle}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4 p-5 pt-0">
-                  <div className="max-h-[360px] space-y-2 overflow-auto pr-1">
-                    {orderRows.length === 0 ? (
+                  <div className="max-h-[420px] space-y-3 overflow-auto pr-2">
+                    {groupedOrders.length === 0 ? (
                       <div className="p-4 text-sm text-muted-foreground">{content.noItemsSelected}</div>
                     ) : (
-                      orderRows.map((r) => (
+                      groupedOrders.map((group) => (
                         <div
-                          key={r.key}
-                          className={cn(
-                            "rounded-xl border border-border/70 p-3",
-                            recentlyUpdatedKey === r.key && "ring-1 ring-[hsl(var(--cater-primary))/0.4]",
-                          )}
+                          key={group.day}
+                          className="rounded-xl border border-border/70 overflow-hidden bg-background"
                         >
-                          <p className="text-sm font-semibold">
-                            {r.packageName} - {r.day} - {r.label}
-                          </p>
-                          <p className="mt-1 text-[11px] text-muted-foreground">{r.items.join(", ")}</p>
-                          <div className="mt-3 flex items-center justify-between">
-                            <div className="flex items-center gap-2 bg-background px-1.5 py-1 rounded-full border">
-                              <button onClick={() => updateQuantity(r.pkgId, r.day, r.variantId, r.quantity - 1)}>
-                                <Minus className="w-3 h-3 text-muted-foreground" />
-                              </button>
-                              <span className="text-xs font-semibold">{r.quantity}</span>
-                              <button onClick={() => updateQuantity(r.pkgId, r.day, r.variantId, r.quantity + 1)}>
-                                <Plus className="w-3 h-3 text-muted-foreground" />
-                              </button>
-                            </div>
-                            <span className="font-medium text-sm">{bdt.format(r.subtotal)}</span>
+                          {/* Group Header (Day & Date) */}
+                          <div className="bg-muted/40 px-3 py-2 border-b border-border/70 flex items-center justify-between text-sm font-semibold text-foreground">
+                            <p className="text-sm font-semibold text-foreground">
+                              {content.dayShortLabel[group.day as keyof typeof content.dayShortLabel] || group.day},{" "}
+                              {group.dateLabel}
+                            </p>
+                            <b>BDT {group.subTotal.toFixed(2)}</b>
+                          </div>
+
+                          {/* Group Items */}
+                          <div className="p-3 space-y-4">
+                            {group.items.map((r) => (
+                              <div
+                                key={r.key}
+                                className={cn(
+                                  "flex flex-col gap-1 transition-all",
+                                  recentlyUpdatedKey === r.key &&
+                                    "ring-1 ring-[hsl(var(--cater-primary))/0.4] rounded-md p-1.5 -m-1.5",
+                                )}
+                              >
+                                <p className="text-sm font-medium">
+                                  {r.packageName} - {r.label}
+                                </p>
+                                <p className="text-[11px] text-muted-foreground">{r.items.join(", ")}</p>
+                                <div className="mt-2 flex items-center justify-between">
+                                  <div className="flex items-center gap-2 bg-background px-1.5 py-1 rounded-full border">
+                                    <button
+                                      onClick={() => updateQuantity(r.pkgId, r.day as any, r.variantId, r.quantity - 1)}
+                                    >
+                                      <Minus className="w-3 h-3 text-muted-foreground hover:text-foreground" />
+                                    </button>
+                                    <span className="text-xs font-semibold w-3 text-center">{r.quantity}</span>
+                                    <button
+                                      onClick={() => updateQuantity(r.pkgId, r.day as any, r.variantId, r.quantity + 1)}
+                                    >
+                                      <Plus className="w-3 h-3 text-muted-foreground hover:text-foreground" />
+                                    </button>
+                                  </div>
+                                  <span className="font-medium text-sm">{bdt.format(r.subtotal)}</span>
+                                </div>
+                              </div>
+                            ))}
                           </div>
                         </div>
                       ))
@@ -285,34 +331,47 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
           </section>
         )}
 
+        {/* Mobile Summary Section */}
         {customizerOpen && (
-          <div className="fixed inset-x-0 bottom-0 z-30 border-t bg-background/95 px-4 py-3 dark:bg-[hsl(var(--landing-card-bg))] lg:hidden">
+          <div className="fixed inset-x-0 bottom-0 z-30 border-t bg-background/95 px-4 py-3 dark:bg-[hsl(var(--landing-card-bg))] lg:hidden shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setMobileSummaryOpen(!mobileSummaryOpen)}
-                className="border px-3 py-1 rounded-xl text-sm font-semibold"
+                className="border px-3 py-2 rounded-xl text-sm font-semibold bg-background"
               >
                 {mobileSummaryOpen ? content.hide : content.summary}
               </button>
-              <div className="min-w-0 flex-1 rounded-xl bg-muted/65 px-3 py-1 text-right dark:bg-[hsl(var(--landing-chip-bg-soft))]">
+              <div className="min-w-0 flex-1 rounded-xl bg-muted/65 px-3 py-1.5 text-right dark:bg-[hsl(var(--landing-chip-bg-soft))]">
                 <p className="text-[10px] text-muted-foreground">
                   {totalQuantity} {content.meals}
                 </p>
-                <p className="text-lg font-semibold">{bdt.format(total)}</p>
+                <p className="text-lg font-semibold leading-tight">{bdt.format(total)}</p>
               </div>
               <Button>{content.checkout}</Button>
             </div>
             {mobileSummaryOpen && (
-              <div className="mt-3 max-h-64 overflow-auto rounded-2xl border bg-background/98 p-3 dark:bg-[hsl(var(--landing-card-bg))]">
-                {orderRows.map((r) => (
-                  <div key={r.key} className="border p-2 mb-2 rounded-xl">
-                    <div className="flex justify-between font-semibold text-sm">
-                      <span>
-                        {r.day} - {r.label}
-                      </span>
-                      <span>{r.quantity}x</span>
+              <div className="mt-3 max-h-[50vh] overflow-auto rounded-2xl border bg-background/98 p-3 dark:bg-[hsl(var(--landing-card-bg))]">
+                {groupedOrders.map((group) => (
+                  <div key={group.day} className="border mb-3 rounded-xl overflow-hidden last:mb-0">
+                    <div className="bg-muted/40 px-3 py-2 border-b font-semibold text-xs text-foreground">
+                      {content.dayShortLabel[group.day as keyof typeof content.dayShortLabel] || group.day},{" "}
+                      {group.dateLabel}
                     </div>
-                    <div className="text-muted-foreground text-xs">{bdt.format(r.subtotal)}</div>
+                    <div className="p-3 space-y-3">
+                      {group.items.map((r) => (
+                        <div key={r.key} className="flex justify-between items-start text-sm">
+                          <div className="pr-2">
+                            <div className="font-semibold text-[13px]">
+                              {r.packageName} - {r.label}
+                            </div>
+                            <div className="text-muted-foreground text-[11px] mt-0.5">{bdt.format(r.subtotal)}</div>
+                          </div>
+                          <div className="font-semibold bg-muted px-2 py-1 rounded text-xs whitespace-nowrap">
+                            {r.quantity}x
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </div>
