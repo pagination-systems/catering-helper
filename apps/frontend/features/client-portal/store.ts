@@ -45,7 +45,7 @@ function createInitialSelection(menuPackage: CateringPackage): PackageSelectionS
 
 export const useClientPortalStore = create<ClientPortalState>((set, get) => ({
   activePackageId: packages.find((pkg) => pkg.popular)?.id ?? packages[0]?.id ?? "",
-  customizerOpen: false,
+  customizerOpen: true,
   mobileSummaryOpen: false,
   recentlyUpdatedKey: null,
   packageSelections: Object.fromEntries(packages.map((pkg) => [pkg.id, createInitialSelection(pkg)])),

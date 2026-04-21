@@ -4,10 +4,12 @@ import Link from "next/link";
 import { ChefHat, Mail, MapPin, Phone } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import { clientPortalContent, type ClientPortalContent } from "@/lib/i18n";
+import type { TenantData } from "@/app/client-portal/data";
 
-export function ClientPortalFooter() {
+export function ClientPortalFooter({ tenant }: { tenant: TenantData }) {
   const { language } = useLanguage();
   const content = clientPortalContent[language] as ClientPortalContent;
+  const [addressLineOne, ...addressRemainder] = tenant.address.split(",").map((part) => part.trim());
 
   return (
     <footer className="mt-28 border-t border-border/70 pt-16 pb-8">
@@ -18,11 +20,9 @@ export function ClientPortalFooter() {
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--cater-primary))/0.12] text-[hsl(var(--cater-primary-strong))]">
                 <ChefHat className="h-4 w-4" />
               </span>
-              Uttara Catering
+              {tenant.name}
             </h4>
-            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-              Premium corporate catering platform. Healthy, balanced, and perfectly on time for your team's success.
-            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">{tenant.description}</p>
           </div>
 
           <div className="space-y-4">
@@ -30,15 +30,15 @@ export function ClientPortalFooter() {
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li className="flex items-center gap-3">
                 <Phone className="h-4 w-4 shrink-0 text-[hsl(var(--cater-primary-strong))]" />
-                +880 1711-000000
+                {tenant.contactPhone}
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-4 w-4 shrink-0 text-emerald-500" />
-                +880 1711-000000
+                {tenant.contactWhatsapp}
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-4 w-4 shrink-0 text-[hsl(var(--cater-primary-strong))]" />
-                contact@bengalserve.com
+                {tenant.contactEmail}
               </li>
             </ul>
           </div>
@@ -49,8 +49,9 @@ export function ClientPortalFooter() {
               <li className="flex items-start gap-3">
                 <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-[hsl(var(--cater-primary-strong))]" />
                 <span className="leading-relaxed">
-                  123 Corporate Area, Gulshan 1<br />
-                  Dhaka 1212, Bangladesh
+                  {addressLineOne}
+                  {addressRemainder.length > 0 && <br />}
+                  {addressRemainder.join(", ")}
                 </span>
               </li>
             </ul>
@@ -59,7 +60,12 @@ export function ClientPortalFooter() {
           <div className="space-y-4">
             <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">{content.footer.followUs}</h4>
             <div className="flex items-center gap-4">
-              <a href="#" className="text-muted-foreground transition hover:text-[hsl(var(--cater-primary-strong))]">
+              <a
+                href={tenant.social.facebook}
+                target="_blank"
+                rel="noreferrer"
+                className="text-muted-foreground transition hover:text-[hsl(var(--cater-primary-strong))]"
+              >
                 <span className="sr-only">Facebook</span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
                   <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073c0 6.017 4.388 11.006 10.125 11.927v-8.437H7.078v-3.49h3.047V9.413c0-3.007 1.792-4.669 4.533-4.669 1.313 0 2.686.235 2.686.235v2.953h-1.513c-1.492 0-1.956.926-1.956 1.875v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.079 24 18.09 24 12.073z" />
@@ -82,9 +88,11 @@ export function ClientPortalFooter() {
         </div>
 
         <div className="mt-14 border-t border-border/40 pt-8 text-center sm:flex sm:items-center sm:justify-between">
-          <p className="text-xs text-muted-foreground">
-            &copy; {new Date().getFullYear()} Uttara Catering. {content.footer.rights}
-          </p>
+          <div>
+            <p className="text-xs text-muted-foreground">
+              &copy; {new Date().getFullYear()} {tenant.name}. {content.footer.rights}
+            </p>
+          </div>
           <div className="mt-4 flex justify-center gap-4 text-xs font-medium text-muted-foreground sm:mt-0">
             <Link href="#" className="hover:text-foreground transition">
               {content.footer.privacy}

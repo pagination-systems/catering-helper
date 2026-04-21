@@ -13,7 +13,7 @@ import { packages, dayOrder, bdt } from "./data";
 import { getUpcomingDays } from "./components/utils";
 import { DayTab } from "./components/day-tab";
 import { VariantCard } from "./components/variant-card";
-import { TenantData } from "@/app/client-portal/data";
+import type { TenantData } from "@/app/client-portal/data";
 
 export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
   const customizerRef = useRef<HTMLElement | null>(null);
@@ -93,7 +93,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
 
   return (
     <main className="mx-auto w-full max-w-[1260px] px-4 pb-28 pt-8 sm:px-6 lg:px-8 lg:pb-10">
-      <section className="mb-10 lg:mb-16">
+      <section className="mb-10 lg:mb-16 mt-12">
         <div className="grid gap-8 lg:grid-cols-2 items-center">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--cater-primary))/0.3] bg-[hsl(var(--cater-primary))/0.08] px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-[hsl(var(--cater-primary-strong))]">
@@ -107,9 +107,9 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
               {content.description}
             </p>
           </div>
-          <div className="relative h-[240px] sm:h-[320px] lg:h-[400px] w-full overflow-hidden rounded-3xl shadow-xl ring-1 ring-border/50 bg-muted/30">
+          <div className="relative h-[240px] sm:h-[320px] lg:h-[350px] w-full overflow-hidden rounded-3xl shadow-xl ring-1 ring-border/50 bg-muted/30">
             <img
-              src="https://images.unsplash.com/photo-1555244162-803834f70033?w=800&q=80"
+              src={tenant.menuUrl}
               alt="Display"
               className="h-full w-full object-cover transition duration-700 hover:scale-105"
             />

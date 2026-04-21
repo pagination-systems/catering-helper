@@ -1,7 +1,6 @@
 import { headers } from "next/headers";
-
 import { ClientPortalPage } from "@/features/client-portal";
-import { tenantData } from "./data";
+import { resolveTenantData } from "./data";
 
 function getTenantFromHost(host: string): string | undefined {
   const hostWithoutPort = host.split(":")[0].toLowerCase();
@@ -25,11 +24,10 @@ function getTenantFromHost(host: string): string | undefined {
   return undefined;
 }
 
-export default async function ClientPortalRoute({ searchParams }: { searchParams: Promise<{ tenant?: string }> }) {
-  const params = await searchParams;
+export default async function ClientPortalRoute() {
   const incomingHeaders = await headers();
   const host = incomingHeaders.get("x-forwarded-host") ?? incomingHeaders.get("host") ?? "";
-  const tenant = params.tenant ?? getTenantFromHost(host);
+  const tenant = resolveTenantData(getTenantFromHost(host));
 
-  return <ClientPortalPage tenant={tenantData} />;
+  return <ClientPortalPage tenant={tenant} />;
 }

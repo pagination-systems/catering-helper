@@ -15,6 +15,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { clientPortalContent, type ClientPortalContent } from "@/lib/i18n";
+import type { TenantData } from "@/app/client-portal/data";
+import Image from "next/image";
 
 const themeOrder = ["system", "light", "dark"] as const;
 
@@ -24,11 +26,17 @@ const themeIcons = {
   dark: Moon,
 } as const;
 
-export function ClientPortalNavbar() {
+export function ClientPortalNavbar({ tenant }: { tenant: TenantData }) {
   const { language, setLanguage } = useLanguage();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const content = clientPortalContent[language] as ClientPortalContent;
+  const currentDate = new Intl.DateTimeFormat(language === "bn" ? "bn-BD" : "en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date());
 
   useEffect(() => {
     setMounted(true);
@@ -52,12 +60,22 @@ export function ClientPortalNavbar() {
       <nav className="mx-auto flex h-16 w-full max-w-[1260px] items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2 text-base sm:text-lg font-semibold tracking-tight">
           <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--cater-primary))/0.12] text-[hsl(var(--cater-primary-strong))]">
-            <ChefHat className="h-4 w-4" />
+            <Image
+              src={tenant.logoUrl}
+              alt={`${tenant.name} logo`}
+              width={40}
+              height={40}
+              className="h-8 w-8 rounded-full object-cover"
+            />
           </span>
-          Uttara Catering
+          {tenant.name}
         </Link>
 
         <div className="flex items-center gap-2">
+          <p className="hidden text-xs font-medium text-muted-foreground sm:block">
+            {language === "bn" ? `আজ: ${currentDate}` : `Today: ${currentDate}`}
+          </p>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" aria-label={content.nav.language} className="h-9 w-9 rounded-full">
