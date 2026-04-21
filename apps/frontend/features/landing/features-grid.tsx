@@ -4,20 +4,20 @@ import { motion } from "framer-motion";
 import { Calculator, Coins, Store } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { LandingCopy } from "@/lib/i18n";
+import type { LandingContent } from "@/lib/i18n";
 
 type FeaturesGridProps = {
-  copy: LandingCopy["features"];
+  content: LandingContent["features"];
 };
 
-export function FeaturesGridSection({ copy }: FeaturesGridProps) {
-  const [portalFeature, bazarFeature, financeFeature] = copy.items;
+export function FeaturesGridSection({ content }: FeaturesGridProps) {
+  const [portalFeature, bazarFeature, financeFeature] = content.items;
 
   return (
     <section id="features" className="border-y border-border/50 bg-[hsl(var(--landing-bg))] py-16 sm:py-20">
       <div className="mx-auto w-full max-w-[1180px] px-4 sm:px-6 lg:px-8">
         <h2 className="mb-12 max-w-[420px] text-[50px] font-semibold leading-[1.08] tracking-[-0.03em] text-[hsl(var(--landing-heading))]">
-          {copy.title}
+          {content.title}
         </h2>
 
         <div className="grid gap-4 md:grid-cols-3 md:grid-rows-[1.25fr_0.85fr]">

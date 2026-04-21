@@ -4,13 +4,13 @@ import { motion } from "framer-motion";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { LandingCopy } from "@/lib/i18n";
+import type { LandingContent } from "@/lib/i18n";
 
 type ProblemSolutionProps = {
-  copy: LandingCopy["problemSolution"];
+  content: LandingContent["problemSolution"];
 };
 
-export function ProblemSolutionSection({ copy }: ProblemSolutionProps) {
+export function ProblemSolutionSection({ content }: ProblemSolutionProps) {
   return (
     <section
       id="solution"
@@ -27,7 +27,7 @@ export function ProblemSolutionSection({ copy }: ProblemSolutionProps) {
           transition={{ duration: 0.4 }}
           className="mx-auto mb-12 max-w-2xl text-center text-[40px] font-semibold leading-[1.08] tracking-[-0.03em] text-[hsl(var(--landing-heading))] sm:text-[46px]"
         >
-          {copy.title}
+          {content.title}
         </motion.h2>
 
         <div className="grid gap-4 lg:grid-cols-2">
@@ -37,12 +37,12 @@ export function ProblemSolutionSection({ copy }: ProblemSolutionProps) {
                 <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--landing-chip-bg-soft))] text-[hsl(var(--landing-text-muted))]">
                   <AlertCircle className="h-4 w-4" />
                 </span>
-                {copy.oldWayTitle}
+                {content.oldWayTitle}
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-1">
               <ul className="space-y-2.5 text-[13px] leading-6 text-[hsl(var(--landing-text))]">
-                {copy.oldWayPoints.map((point) => (
+                {content.oldWayPoints.map((point) => (
                   <li
                     key={point}
                     className="flex items-start gap-3 rounded-lg border border-[hsl(var(--landing-card-border))] bg-[hsl(var(--landing-card-bg))] px-3 py-2"
@@ -61,12 +61,12 @@ export function ProblemSolutionSection({ copy }: ProblemSolutionProps) {
                 <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--landing-chip-bg))] text-primary">
                   <CheckCircle2 className="h-5 w-5" />
                 </span>
-                {copy.newWayTitle}
+                {content.newWayTitle}
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-1">
               <ul className="space-y-2.5 text-[13px] leading-6 text-[hsl(var(--landing-text))]">
-                {copy.newWayPoints.map((point) => (
+                {content.newWayPoints.map((point) => (
                   <li
                     key={point}
                     className="flex items-start gap-3 rounded-lg border border-[hsl(var(--landing-card-border))] bg-[hsl(var(--landing-chip-bg-soft))] px-3 py-2"

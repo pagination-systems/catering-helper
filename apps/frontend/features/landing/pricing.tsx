@@ -2,13 +2,13 @@ import { Check } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import type { LandingCopy } from "@/lib/i18n";
+import type { LandingContent } from "@/lib/i18n";
 
 type PricingProps = {
-  copy: LandingCopy["pricing"];
+  content: LandingContent["pricing"];
 };
 
-export function PricingSection({ copy }: PricingProps) {
+export function PricingSection({ content }: PricingProps) {
   return (
     <section
       id="pricing"
@@ -22,22 +22,22 @@ export function PricingSection({ copy }: PricingProps) {
         <Card className="mx-auto flex w-full max-w-[480px] flex-col overflow-hidden rounded-[24px] border border-[hsl(var(--landing-card-border))] bg-[hsl(var(--landing-card-bg))] shadow-xl sm:max-w-[520px]">
           <CardHeader className="items-center px-8 pb-8 pt-10 text-center">
             <span className="inline-flex rounded-full bg-primary/10 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-primary">
-              1 Month Launch Offer
+              {content.badge}
             </span>
 
             <h2 className="mt-6 text-3xl font-bold tracking-tight text-[hsl(var(--landing-heading))] sm:text-4xl">
-              {copy.title}
+              {content.title}
             </h2>
 
             <p className="mt-3 max-w-[85%] text-sm leading-relaxed text-[hsl(var(--landing-text-muted))]">
-              {copy.description}
+              {content.description}
             </p>
 
             <div className="mt-8 flex items-baseline gap-1.5">
               <CardTitle className="text-5xl font-extrabold tracking-tight text-[hsl(var(--landing-heading))] sm:text-6xl">
-                {copy.price}
+                {content.price}
               </CardTitle>
-              <p className="text-sm font-medium text-[hsl(var(--landing-text-muted))]">/ {copy.period}</p>
+              <p className="text-sm font-medium text-[hsl(var(--landing-text-muted))]">/ {content.period}</p>
             </div>
           </CardHeader>
 
@@ -48,7 +48,7 @@ export function PricingSection({ copy }: PricingProps) {
 
             {/* Vertical Line-by-Line Features */}
             <ul className="flex flex-col space-y-4">
-              {copy.features.map((feature) => (
+              {content.features.map((feature) => (
                 <li
                   key={feature}
                   className="flex items-start gap-3 text-sm text-[hsl(var(--landing-text-strong))] transition-colors hover:text-[hsl(var(--landing-heading))]"
@@ -66,10 +66,10 @@ export function PricingSection({ copy }: PricingProps) {
           {/* Delineated Footer Area */}
           <CardFooter className="flex-col items-center gap-4 bg-[hsl(var(--landing-chip-bg-soft))]/40 px-8 pb-10 pt-8 sm:px-10">
             <Button className="h-12 w-full rounded-xl bg-primary text-[13px] font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/30 dark:bg-white dark:text-zinc-950 dark:shadow-none dark:hover:bg-zinc-200">
-              {copy.cta}
+              {content.cta}
             </Button>
             <p className="text-center text-[11px] font-medium uppercase tracking-wider text-[hsl(var(--landing-text-muted))]">
-              {copy.subtext}
+              {content.subtext}
             </p>
           </CardFooter>
         </Card>
