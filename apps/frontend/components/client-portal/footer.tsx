@@ -4,9 +4,9 @@ import Link from "next/link";
 import { ChefHat, Mail, MapPin, Phone } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import { clientPortalContent, type ClientPortalContent } from "@/lib/i18n";
-import type { TenantData } from "@/app/client-portal/data";
+import type { TenantData } from "@/app/(client-portal)/data";
 
-export function ClientPortalFooter({ tenant }: { tenant: TenantData }) {
+export function Footer({ tenant }: { tenant: TenantData }) {
   const { language } = useLanguage();
   const content = clientPortalContent[language] as ClientPortalContent;
   const [addressLineOne, ...addressRemainder] = tenant.address.split(",").map((part) => part.trim());

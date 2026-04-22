@@ -1,7 +1,7 @@
 import React from "react";
 import { headers } from "next/headers";
-import { ClientPortalFooter } from "@/features/client-portal/components/client-portal-footer";
-import { ClientPortalNavbar } from "@/features/client-portal/components/client-portal-navbar";
+import { Footer } from "@/components/client-portal/footer";
+import { Navbar } from "@/components/client-portal/navbar";
 import { resolveTenantData } from "./data";
 
 function getTenantFromHost(host: string): string | undefined {
@@ -52,9 +52,9 @@ export default async function ClientPortalLayout({ children }: { children: React
         <div className="absolute bottom-0 left-1/3 h-56 w-56 rounded-full bg-amber-200/50 blur-3xl" />
       </div>
 
-      <ClientPortalNavbar tenant={tenant} />
+      <Navbar tenant={tenant} />
       {children}
-      <ClientPortalFooter tenant={tenant} />
+      <Footer tenant={tenant} />
     </div>
   );
 }

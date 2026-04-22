@@ -2,6 +2,7 @@ import { Plus, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { MenuVariant } from "../data";
 import { MealItemPill } from "./meal-item-pill";
+import { If } from "@/components/if";
 
 export function VariantCard({
   variant,
@@ -47,11 +48,11 @@ export function VariantCard({
           ))}
         </div>
 
-        {!available && (
+        <If expression={!available}>
           <span className="inline-flex mt-2 items-center gap-1 rounded-full bg-red-500/12 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-red-700 w-fit">
             {unavailableLabel}
           </span>
-        )}
+        </If>
       </div>
 
       <div className="relative h-24 w-24 sm:h-28 sm:w-28 shrink-0 overflow-hidden rounded-xl bg-muted">
@@ -60,9 +61,34 @@ export function VariantCard({
           alt={variant.name}
           className="h-full w-full object-cover"
         />
-        {available && (
+        <If expression={available}>
           <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2">
-            {quantity === 0 ? (
+            <If
+              expression={quantity === 0}
+              fallback={
+                <div className="flex h-7 sm:h-8 items-center gap-1 sm:gap-2 rounded-full px-1 bg-zinc-900 shadow-md shadow-black/10">
+                  <button
+                    type="button"
+                    onClick={() => onQuantityChange(quantity - 1)}
+                    className="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-white text-black hover:bg-zinc-100 transition"
+                  >
+                    <Minus className="h-3.5 w-3.5" />
+                  </button>
+
+                  <span className="min-w-[12px] sm:min-w-[16px] text-center text-xs sm:text-sm font-semibold text-white">
+                    {quantity}
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={() => onQuantityChange(quantity + 1)}
+                    className="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-white text-black hover:bg-zinc-100 transition"
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              }
+            >
               <button
                 type="button"
                 onClick={() => onQuantityChange(1)}
@@ -70,31 +96,9 @@ export function VariantCard({
               >
                 <Plus className="h-4 w-4" />
               </button>
-            ) : (
-              <div className="flex h-7 sm:h-8 items-center gap-1 sm:gap-2 rounded-full px-1 bg-zinc-900 shadow-md shadow-black/10">
-                <button
-                  type="button"
-                  onClick={() => onQuantityChange(quantity - 1)}
-                  className="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-white text-black hover:bg-zinc-100 transition"
-                >
-                  <Minus className="h-3.5 w-3.5" />
-                </button>
-
-                <span className="min-w-[12px] sm:min-w-[16px] text-center text-xs sm:text-sm font-semibold text-white">
-                  {quantity}
-                </span>
-
-                <button
-                  type="button"
-                  onClick={() => onQuantityChange(quantity + 1)}
-                  className="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-white text-black hover:bg-zinc-100 transition"
-                >
-                  <Plus className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            )}
+            </If>
           </div>
-        )}
+        </If>
       </div>
     </article>
   );

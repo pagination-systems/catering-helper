@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 import { ClientPortalPage } from "@/features/client-portal";
-import { resolveTenantData } from "./data";
+import { resolveTenantData } from "../data";
 
 function getTenantFromHost(host: string): string | undefined {
   const hostWithoutPort = host.split(":")[0].toLowerCase();

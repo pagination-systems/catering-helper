@@ -14,7 +14,8 @@ import { packages, dayOrder, bdt, DayName } from "./data";
 import { getUpcomingDays } from "./components/utils";
 import { DayTab } from "./components/day-tab";
 import { VariantCard } from "./components/variant-card";
-import type { TenantData } from "@/app/client-portal/data";
+import type { TenantData } from "@/app/(client-portal)/data";
+import { If } from "@/components/if";
 
 export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
   const customizerRef = useRef<HTMLElement | null>(null);
@@ -161,11 +162,12 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                       : "hover:-translate-y-0.5 hover:shadow-lg",
                   )}
                 >
-                  {pkg.popular && (
+                  <If expression={pkg.popular}>
                     <div className="absolute top-0 left-1/2 transform -translate-x-1/2 rounded-full bg-[hsl(var(--cater-primary))] px-3 py-1 b-4 text-[8px] font-semibold text-white uppercase tracking-[0.12em]">
                       {content.mostPopular}
                     </div>
-                  )}
+                  </If>
+
                   <CardHeader className="space-y-3 p-5 sm:p-6">
                     <CardTitle className="text-xl sm:text-2xl font-semibold">{pkg.name}</CardTitle>
                     <p className="text-xs sm:text-sm text-muted-foreground h-12">{pkg.description}</p>
@@ -185,11 +187,11 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                     >
                       {active ? content.selectedPackage : content.viewPackage}
                     </Button>
-                    {packageSelectionTotals[pkg.id] > 0 && (
+                    <If expression={packageSelectionTotals[pkg.id] > 0}>
                       <p className="text-xs font-medium text-[hsl(var(--cater-primary-strong))]">
                         {packageSelectionTotals[pkg.id]} {content.mealSelected}
                       </p>
-                    )}
+                    </If>
                   </CardContent>
                 </Card>
               );
@@ -197,7 +199,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
           </div>
         </section>
 
-        {customizerOpen && (
+        <If expression={customizerOpen}>
           <section ref={customizerRef} className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
             <div className="space-y-3">
               <Card className="border-border/70 bg-card/96 shadow-sm dark:bg-[hsl(var(--landing-card-bg))]">
@@ -226,7 +228,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                   </div>
                 </CardHeader>
 
-                {activeDay && (
+                <If expression={activeDay}>
                   <CardContent className="p-4 sm:p-5">
                     <div className="animate-in fade-in-0 duration-300">
                       <div className="mt-4 grid gap-4 md:grid-cols-2">
@@ -247,7 +249,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                       </div>
                     </div>
                   </CardContent>
-                )}
+                </If>
               </Card>
             </div>
 
@@ -334,10 +336,10 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
               </Card>
             </aside>
           </section>
-        )}
+        </If>
 
         {/* Mobile Summary Section */}
-        {customizerOpen && (
+        <If expression={customizerOpen}>
           <div className="fixed inset-x-0 bottom-0 z-30 border-t bg-background/95 px-4 py-3 dark:bg-[hsl(var(--landing-card-bg))] lg:hidden shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
             <div className="flex items-center gap-2">
               <button
@@ -396,7 +398,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
               </CollapsibleContent>
             </Collapsible>
           </div>
-        )}
+        </If>
       </div>
     </main>
   );

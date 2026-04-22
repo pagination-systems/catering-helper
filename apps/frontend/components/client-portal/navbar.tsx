@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ChefHat, Globe, LaptopMinimal, Sun, Moon } from "lucide-react";
+import { Globe, LaptopMinimal, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { clientPortalContent, type ClientPortalContent } from "@/lib/i18n";
-import type { TenantData } from "@/app/client-portal/data";
+import type { TenantData } from "@/app/(client-portal)/data";
 import Image from "next/image";
 
 const themeOrder = ["system", "light", "dark"] as const;
@@ -26,7 +26,7 @@ const themeIcons = {
   dark: Moon,
 } as const;
 
-export function ClientPortalNavbar({ tenant }: { tenant: TenantData }) {
+export function Navbar({ tenant }: { tenant: TenantData }) {
   const { language, setLanguage } = useLanguage();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
