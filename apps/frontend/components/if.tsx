@@ -1,8 +1,8 @@
 import React from "react";
 
 interface IfProps {
-  expression: any;
-  fallback?: any;
+  expression: unknown;
+  fallback?: React.ReactNode;
   children: React.ReactNode;
 }
 
