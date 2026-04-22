@@ -16,6 +16,7 @@ export enum USER_ROLE_ENUMS {
 }
 
 export enum ACCOUNT_TYPE_ENUMS {
-  STANDARD = "standard",
-  PREMIUM = "premium",
+  PLATFORM_ADMIN = "platform_admin",
+  CATERING_COMPANY = "catering_company",
+  CUSTOMER = "customer",
 }
