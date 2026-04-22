@@ -1,3 +1,5 @@
+import { Checkout } from "@/features/client-portal/checkout";
+
 export default function CheckoutPage() {
-  return <div>Checkout page</div>;
+  return <Checkout />;
 }

@@ -1,21 +1,24 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { Clock3, Plus, Minus } from "lucide-react";
+import Link from "next/link";
+import { Clock3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/components/language-provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { clientPortalContent, type ClientPortalContent } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { OrderSummary } from "@/features/client-portal/components/OrderSummary";
 
 import { useClientPortalStore, createQuantityKey } from "./store";
-import { packages, dayOrder, bdt, DayName } from "./data";
+import { packages, bdt } from "./data";
 import { getUpcomingDays } from "./components/utils";
 import { DayTab } from "./components/day-tab";
 import { VariantCard } from "./components/variant-card";
 import type { TenantData } from "@/app/(client-portal)/data";
 import { If } from "@/components/if";
+import { useOrderSummaryData } from "./order-summary-data";
 
 export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
   const customizerRef = useRef<HTMLElement | null>(null);
@@ -56,59 +59,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
       }),
     );
   }, [packageSelections]);
-
-  const orderRows = useMemo(() => {
-    const rows: any[] = [];
-    packages.forEach((pkg) => {
-      const selection = packageSelections[pkg.id] || { quantities: {} };
-      pkg.days.forEach((d) => {
-        d.variants.forEach((v) => {
-          const qty = selection.quantities[createQuantityKey(d.day, v.id)] ?? 0;
-          if (qty > 0) {
-            rows.push({
-              key: `${pkg.id}::${d.day}::${v.id}`,
-              pkgId: pkg.id,
-              variantId: v.id,
-              packageName: pkg.name,
-              day: d.day,
-              label: v.name,
-              items: v.items,
-              quantity: qty,
-              subtotal: qty * pkg.pricePerMeal,
-            });
-          }
-        });
-      });
-    });
-    return rows.sort(
-      (a, b) => a.packageName.localeCompare(b.packageName) || dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day),
-    );
-  }, [packageSelections]);
-
-  const groupedOrders = useMemo(() => {
-    const grouped: Record<string, { day: string; dateLabel: string; items: typeof orderRows; subTotal: number }> = {};
-
-    orderRows.forEach((row) => {
-      if (!grouped[row.day]) {
-        const dayInfo = upcomingDays.find((d) => d.day === row.day);
-        grouped[row.day] = {
-          day: row.day,
-          dateLabel: dayInfo?.dateLabel || "",
-          items: [],
-          subTotal: 0,
-        };
-      }
-      grouped[row.day].items.push(row);
-      grouped[row.day].subTotal += row.subtotal;
-    });
-
-    return Object.values(grouped).sort(
-      (a, b) => dayOrder.indexOf(a.day as DayName) - dayOrder.indexOf(b.day as DayName),
-    );
-  }, [orderRows, upcomingDays]);
-
-  const total = orderRows.reduce((a, b) => a + b.subtotal, 0);
-  const totalQuantity = orderRows.reduce((a, b) => a + b.quantity, 0);
+  const { groupedOrders, subtotal, totalQuantity } = useOrderSummaryData(language);
 
   const handlePickPackage = (id: string) => {
     pickPackage(id);
@@ -188,7 +139,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                       {active ? content.selectedPackage : content.viewPackage}
                     </Button>
                     <If expression={packageSelectionTotals[pkg.id] > 0}>
-                      <p className="text-xs font-medium text-[hsl(var(--cater-primary-strong))]">
+                      <p className="text-xs font-bold">
                         {packageSelectionTotals[pkg.id]} {content.mealSelected}
                       </p>
                     </If>
@@ -254,93 +205,14 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
             </div>
 
             <aside className="hidden h-fit lg:sticky lg:top-6 lg:block">
-              <Card className="border-border/70 shadow-sm">
-                <CardHeader className="p-5 pb-3">
-                  <CardTitle className="text-2xl font-semibold tracking-tight">{content.orderSummaryTitle}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 p-5 pt-0">
-                  <div className="max-h-[420px] space-y-3 overflow-auto pr-2">
-                    {groupedOrders.length === 0 ? (
-                      <div className="p-4 text-sm text-muted-foreground">{content.noItemsSelected}</div>
-                    ) : (
-                      groupedOrders.map((group) => (
-                        <Collapsible
-                          key={group.day}
-                          defaultOpen
-                          className="overflow-hidden rounded-xl border border-border/70 bg-background"
-                        >
-                          <CollapsibleTrigger className="rounded-none border-b border-border/70 bg-muted/40">
-                            <span className="text-sm font-semibold text-foreground">
-                              {content.dayShortLabel[group.day as keyof typeof content.dayShortLabel] || group.day},{" "}
-                              {group.dateLabel}
-                            </span>
-                            <b>BDT {group.subTotal.toFixed(2)}</b>
-                          </CollapsibleTrigger>
-                          <CollapsibleContent>
-                            <div className="p-3 space-y-4">
-                              {group.items.map((r) => (
-                                <div
-                                  key={r.key}
-                                  className={cn(
-                                    "flex flex-col gap-1 transition-all",
-                                    recentlyUpdatedKey === r.key &&
-                                      "ring-1 ring-[hsl(var(--cater-primary))/0.4] rounded-md p-1.5 -m-1.5",
-                                  )}
-                                >
-                                  <p className="text-sm font-medium">
-                                    {r.packageName} - {r.label}
-                                  </p>
-                                  <p className="text-[11px] text-muted-foreground">{r.items.join(", ")}</p>
-                                  <div className="mt-2 flex items-center justify-between">
-                                    <div className="flex items-center gap-2 rounded-full border bg-background px-1.5 py-1">
-                                      <button
-                                        onClick={() =>
-                                          updateQuantity(r.pkgId, r.day as any, r.variantId, r.quantity - 1)
-                                        }
-                                      >
-                                        <Minus className="h-3 w-3 text-muted-foreground hover:text-foreground" />
-                                      </button>
-                                      <span className="w-3 text-center text-xs font-semibold">{r.quantity}</span>
-                                      <button
-                                        onClick={() =>
-                                          updateQuantity(r.pkgId, r.day as any, r.variantId, r.quantity + 1)
-                                        }
-                                      >
-                                        <Plus className="h-3 w-3 text-muted-foreground hover:text-foreground" />
-                                      </button>
-                                    </div>
-                                    <span className="text-sm font-medium">{bdt.format(r.subtotal)}</span>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </CollapsibleContent>
-                        </Collapsible>
-                      ))
-                    )}
-                  </div>
-
-                  <div className="rounded-2xl border bg-muted/65 p-4 dark:bg-[hsl(var(--landing-chip-bg-soft))]">
-                    <div className="flex justify-between">
-                      <p className="text-sm font-semibold">{content.total}</p>
-                      <p className="text-2xl font-bold tracking-tight text-[hsl(var(--cater-primary-strong))]">
-                        {bdt.format(total)}
-                      </p>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      {totalQuantity} {content.meals}
-                    </p>
-                  </div>
-                  <Button className="w-full">{content.checkout}</Button>
-                </CardContent>
-              </Card>
+              <OrderSummary />
             </aside>
           </section>
         </If>
 
         {/* Mobile Summary Section */}
         <If expression={customizerOpen}>
-          <div className="fixed inset-x-0 bottom-0 z-30 border-t bg-background/95 px-4 py-3 dark:bg-[hsl(var(--landing-card-bg))] lg:hidden shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+          <div className="fixed inset-x-0 bottom-0 z-30 border-t bg-background px-4 py-3 lg:hidden shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setMobileSummaryOpen(!mobileSummaryOpen)}
@@ -352,9 +224,11 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                 <p className="text-[10px] text-muted-foreground">
                   {totalQuantity} {content.meals}
                 </p>
-                <p className="text-lg font-semibold leading-tight">{bdt.format(total)}</p>
+                <p className="text-lg font-semibold leading-tight">{bdt.format(subtotal)}</p>
               </div>
-              <Button>{content.checkout}</Button>
+              <Link href="/checkout">
+                <Button>{content.checkout}</Button>
+              </Link>
             </div>
             <Collapsible open={mobileSummaryOpen} onOpenChange={setMobileSummaryOpen}>
               <CollapsibleContent>
