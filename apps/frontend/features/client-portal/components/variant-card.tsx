@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import type { MenuVariant } from "../data";
 import { MealItemPill } from "./meal-item-pill";
 import { If } from "@/components/if";
+import { Button } from "@/components/ui/button";
 
 export function VariantCard({
   variant,
@@ -67,35 +68,41 @@ export function VariantCard({
               expression={quantity === 0}
               fallback={
                 <div className="flex h-7 sm:h-8 items-center gap-1 sm:gap-2 rounded-full px-1 bg-zinc-900 shadow-md shadow-black/10">
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     onClick={() => onQuantityChange(quantity - 1)}
-                    className="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-white text-black hover:bg-zinc-100 transition"
+                    className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white text-black hover:bg-zinc-100 transition"
                   >
                     <Minus className="h-3.5 w-3.5" />
-                  </button>
+                  </Button>
 
                   <span className="min-w-[12px] sm:min-w-[16px] text-center text-xs sm:text-sm font-semibold text-white">
                     {quantity}
                   </span>
 
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     onClick={() => onQuantityChange(quantity + 1)}
-                    className="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-white text-black hover:bg-zinc-100 transition"
+                    className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white text-black hover:bg-zinc-100 transition"
                   >
                     <Plus className="h-3.5 w-3.5" />
-                  </button>
+                  </Button>
                 </div>
               }
             >
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon"
                 onClick={() => onQuantityChange(1)}
-                className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-white text-black shadow-md shadow-black/10 transition hover:bg-zinc-100"
+                className="h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-white text-black shadow-md shadow-black/10 transition hover:bg-zinc-100"
               >
                 <Plus className="h-4 w-4" />
-              </button>
+              </Button>
             </If>
           </div>
         </If>

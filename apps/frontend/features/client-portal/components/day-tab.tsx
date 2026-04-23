@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export function DayTab({
   dayLabel,
@@ -12,8 +13,9 @@ export function DayTab({
   onClick: () => void;
 }) {
   return (
-    <button
+    <Button
       type="button"
+      variant="ghost"
       onClick={onClick}
       className={cn(
         "group min-w-[74px] flex-1 sm:flex-none rounded-2xl border px-2.5 sm:px-3 py-2 text-left transition-all duration-200",
@@ -31,6 +33,6 @@ export function DayTab({
         {dateLabel}
       </p>
       <p className={cn("mt-0.5 text-xs sm:text-sm font-semibold", active ? "text-white" : "")}>{dayLabel}</p>
-    </button>
+    </Button>
   );
 }

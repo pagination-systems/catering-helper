@@ -4,11 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Form } from "@/components/form/Form";
-import { FormField } from "@/components/form/FormField";
-import { Input } from "@/components/form/Input";
-import { Textarea } from "@/components/form/Textarea";
 import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 const bdPhoneRegex = /^01[3-9]\d{8}$/;
 
@@ -22,11 +21,7 @@ const checkoutSchema = z.object({
 type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
 export function CheckoutForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<CheckoutFormValues>({
+  const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
       name: "",
@@ -41,26 +36,68 @@ export function CheckoutForm() {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormField label="Name" error={errors.name?.message}>
-        <Input type="text" placeholder="Enter your full name" {...register("name")} />
-      </FormField>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" noValidate>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input type="text" placeholder="Enter your full name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <FormField label="Phone Number" error={errors.phone?.message}>
-        <Input type="tel" placeholder="01XXXXXXXXX" inputMode="numeric" {...register("phone")} />
-      </FormField>
+        <FormField
+          control={form.control}
+          name="phone"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Phone Number</FormLabel>
+              <FormControl>
+                <Input type="tel" placeholder="01XXXXXXXXX" inputMode="numeric" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <FormField label="Address" error={errors.address?.message}>
-        <Textarea placeholder="Building, road, area, and delivery instructions" {...register("address")} />
-      </FormField>
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Address</FormLabel>
+              <FormControl>
+                <Textarea placeholder="Building, road, area, and delivery instructions" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <FormField label="Notes" error={errors.notes?.message}>
-        <Textarea placeholder="Optional notes for delivery" {...register("notes")} />
-      </FormField>
+        <FormField
+          control={form.control}
+          name="notes"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Notes</FormLabel>
+              <FormControl>
+                <Textarea placeholder="Optional notes for delivery" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <Button type="submit" className="h-11 w-full" disabled={isSubmitting}>
-        Place Order
-      </Button>
+        <Button type="submit" className="h-11 w-full" disabled={form.formState.isSubmitting}>
+          Place Order
+        </Button>
+      </form>
     </Form>
   );
 }

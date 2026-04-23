@@ -67,7 +67,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
   };
 
   return (
-    <main className="dark:bg-[hsl(var(--landing-bg))] pb-28">
+    <main className="dark:bg-landing-bg pb-28">
       <div className="mx-auto w-full max-w-[1260px] px-4 pb-28 pt-8 sm:px-6 lg:px-8 lg:pb-10">
         <section className="mb-10 lg:mb-16 mt-12">
           <div className="grid gap-8 lg:grid-cols-2 items-center">
@@ -214,12 +214,13 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
         <If expression={customizerOpen}>
           <div className="fixed inset-x-0 bottom-0 z-30 border-t bg-background px-4 py-3 lg:hidden shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
             <div className="flex items-center gap-2">
-              <button
+              <Button
                 onClick={() => setMobileSummaryOpen(!mobileSummaryOpen)}
-                className="border px-3 py-2 rounded-xl text-sm font-semibold bg-background"
+                variant="outline"
+                className="h-auto rounded-xl px-3 py-2 text-sm font-semibold"
               >
                 {mobileSummaryOpen ? content.hide : content.summary}
-              </button>
+              </Button>
               <div className="min-w-0 flex-1 rounded-xl bg-muted/65 px-3 py-1.5 text-right dark:bg-[hsl(var(--landing-chip-bg-soft))]">
                 <p className="text-[10px] text-muted-foreground">
                   {totalQuantity} {content.meals}
