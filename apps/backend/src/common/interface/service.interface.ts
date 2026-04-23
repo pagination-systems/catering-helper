@@ -1,5 +1,5 @@
-import { FilterQuery, ClientSession } from "mongoose";
-import { IOptions } from "@rl/types";
+import { FilterQuery, ClientSession } from 'mongoose';
+import { IOptions } from '@rl/types';
 
 // 1. Create a Mongoose-specific query type
 export type IMongooseQueryParams<T> = FilterQuery<T> & {

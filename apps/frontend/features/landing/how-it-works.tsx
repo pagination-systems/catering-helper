@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 
-import type { LandingContent } from "@/lib/i18n";
+import type { LandingContent } from '@/lib/i18n';
 
 type HowItWorksProps = {
-  content: LandingContent["howItWorks"];
+  content: LandingContent['howItWorks'];
 };
 
 export function HowItWorksSection({ content }: HowItWorksProps) {

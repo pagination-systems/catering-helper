@@ -1,9 +1,9 @@
-import { useMemo } from "react";
-import type { Language } from "@/lib/i18n";
+import { useMemo } from 'react';
+import type { Language } from '@/lib/i18n';
 
-import { getUpcomingDays } from "./components/utils";
-import { createQuantityKey, useClientPortalStore } from "./store";
-import { dayOrder, packages, type DayName } from "./data";
+import { getUpcomingDays } from './components/utils';
+import { createQuantityKey, useClientPortalStore } from './store';
+import { dayOrder, packages, type DayName } from './data';
 
 export type OrderRow = {
   key: string;
@@ -69,7 +69,7 @@ export function useOrderSummaryData(language: Language) {
         const dayInfo = upcomingDays.find((d) => d.day === row.day);
         grouped[row.day] = {
           day: row.day,
-          dateLabel: dayInfo?.dateLabel || "",
+          dateLabel: dayInfo?.dateLabel || '',
           items: [],
           subTotal: 0,
         };

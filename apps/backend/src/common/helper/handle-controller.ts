@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction, CookieOptions } from "express";
-import { ISession } from "@catering/types";
-import "../../types";
+import { Request, Response, NextFunction, CookieOptions } from 'express';
+import { ISession } from '@catering/types';
+import '../../types';
 
 interface RequestObject {
   body: any;
@@ -28,9 +28,7 @@ export type ControllerParams = {
   req: RequestObject;
 };
 
-export function handleController(
-  controller: ({ req }: ControllerParams) => Promise<ResponseObject>,
-) {
+export function handleController(controller: ({ req }: ControllerParams) => Promise<ResponseObject>) {
   return (req: Request, res: Response, next: NextFunction) => {
     // prepare all the necessary request object that the controller needs
     const requestObject: RequestObject = {
@@ -40,7 +38,7 @@ export function handleController(
       cookies: req.cookies,
       session: req.session,
       file: null,
-      ip: req.ip ?? "",
+      ip: req.ip ?? '',
       method: req.method,
       url: req.originalUrl,
       path: req.path,

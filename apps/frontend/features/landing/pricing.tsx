@@ -1,11 +1,11 @@
-import { Check } from "lucide-react";
+import { Check } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import type { LandingContent } from "@/lib/i18n";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import type { LandingContent } from '@/lib/i18n';
 
 type PricingProps = {
-  content: LandingContent["pricing"];
+  content: LandingContent['pricing'];
 };
 
 export function PricingSection({ content }: PricingProps) {

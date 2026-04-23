@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { CheckCircle2, ArrowRight } from "lucide-react";
+import Link from 'next/link';
+import { CheckCircle2, ArrowRight } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export function OrderSuccess() {
   return (

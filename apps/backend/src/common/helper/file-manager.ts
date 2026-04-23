@@ -1,9 +1,9 @@
-import { PutObjectCommand, DeleteObjectCommand, GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { v4 as uuidv4 } from "uuid";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { Readable } from "stream";
-import { logger } from "./logger";
-import * as fs from "fs";
+import { PutObjectCommand, DeleteObjectCommand, GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { v4 as uuidv4 } from 'uuid';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { Readable } from 'stream';
+import { logger } from './logger';
+import * as fs from 'fs';
 export interface FileInformation {
   Bucket: string;
   Key: string;
@@ -54,12 +54,12 @@ class FileManager {
 
   async getSignedUrlForUpload(filename: string, bucket: string): Promise<UploadUrlResponse> {
     if (!this._isValidFile(filename)) {
-      throw new Error("A valid file name is required.");
+      throw new Error('A valid file name is required.');
     }
 
-    const filenameSplited = filename.split("/");
+    const filenameSplited = filename.split('/');
     const originalFilename = filenameSplited[filenameSplited.length - 1];
-    const originalFilenameSplited = originalFilename.split(".");
+    const originalFilenameSplited = originalFilename.split('.');
     const fileName = `${uuidv4()}.${originalFilenameSplited[originalFilenameSplited.length - 1]}`;
 
     const params = {
@@ -101,7 +101,7 @@ class FileManager {
 
       return fileInformation;
     } catch (error) {
-      logger.error("Error deleting file from S3:", error);
+      logger.error('Error deleting file from S3:', error);
     }
   }
 
@@ -116,7 +116,7 @@ class FileManager {
       const response = await this.s3Client.send(command);
 
       if (!response.Body) {
-        throw new Error("No file content received from S3");
+        throw new Error('No file content received from S3');
       }
 
       // Convert the readable stream to a buffer
@@ -124,9 +124,9 @@ class FileManager {
       const chunks: Buffer[] = [];
 
       return new Promise((resolve, reject) => {
-        stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
-        stream.on("error", (err) => reject(err));
-        stream.on("end", () => {
+        stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
+        stream.on('error', (err) => reject(err));
+        stream.on('end', () => {
           const buffer = Buffer.concat(chunks);
           // Write the buffer to the destination file
           fs.writeFileSync(destinationPath, buffer);
@@ -139,7 +139,7 @@ class FileManager {
   }
 
   async uploadFileToS3(params: UploadFileParams): Promise<UploadResponse> {
-    const { file, bucket, key, contentType = "application/octet-stream", metadata = {} } = params;
+    const { file, bucket, key, contentType = 'application/octet-stream', metadata = {} } = params;
 
     // Generate a unique key if not provided
     const fileKey = key || `${uuidv4()}-${Date.now()}`;
@@ -159,14 +159,14 @@ class FileManager {
       return {
         Key: fileKey,
         Bucket: bucket,
-        Name: fileKey.split("/").pop() || fileKey,
+        Name: fileKey.split('/').pop() || fileKey,
       };
     } catch (error) {
       throw new Error(`Failed to upload file to S3: ${error.message}`);
     }
   }
 
-  async uploadFileFromPathToS3(filePath: string, params: Omit<UploadFileParams, "file">): Promise<UploadResponse> {
+  async uploadFileFromPathToS3(filePath: string, params: Omit<UploadFileParams, 'file'>): Promise<UploadResponse> {
     const fileStream = fs.createReadStream(filePath);
     return this.uploadFileToS3({ ...params, file: fileStream });
   }

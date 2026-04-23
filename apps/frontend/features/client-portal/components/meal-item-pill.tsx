@@ -1,4 +1,4 @@
-import { UtensilsCrossed } from "lucide-react";
+import { UtensilsCrossed } from 'lucide-react';
 
 export function MealItemPill({ label }: { label: string }) {
   return (

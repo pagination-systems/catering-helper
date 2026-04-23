@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { motion } from 'framer-motion';
+import { AlertCircle, CheckCircle2 } from 'lucide-react';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { LandingContent } from "@/lib/i18n";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { LandingContent } from '@/lib/i18n';
 
 type ProblemSolutionProps = {
-  content: LandingContent["problemSolution"];
+  content: LandingContent['problemSolution'];
 };
 
 export function ProblemSolutionSection({ content }: ProblemSolutionProps) {

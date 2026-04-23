@@ -1,6 +1,6 @@
-import NodeGeocoder, { Options } from "node-geocoder";
-import { pick } from "./pick";
-import { logger } from "./logger";
+import NodeGeocoder, { Options } from 'node-geocoder';
+import { pick } from './pick';
+import { logger } from './logger';
 
 interface IResults {
   docs: any[];
@@ -18,15 +18,15 @@ interface IResults {
 export const formatListResponse = (results: IResults) => {
   const { docs: data, ...paginationOption } = results;
   const pagination = pick(paginationOption, [
-    "totalDocs",
-    "limit",
-    "totalPages",
-    "page",
-    "pagingCounter",
-    "hasPrevPage",
-    "hasNextPage",
-    "prevPage",
-    "nextPage",
+    'totalDocs',
+    'limit',
+    'totalPages',
+    'page',
+    'pagingCounter',
+    'hasPrevPage',
+    'hasNextPage',
+    'prevPage',
+    'nextPage',
   ]);
 
   return {
@@ -52,7 +52,7 @@ export const trimQuery = (queryData: QueryData): QueryData => {
   if (pageSize < 1) limit = 1;
   if (pageSize > 100) limit = 100;
 
-  const isObject = (object: any): boolean => object !== null && typeof object === "object";
+  const isObject = (object: any): boolean => object !== null && typeof object === 'object';
 
   function deepTrim(obj: any): any {
     const keys = Object.keys(obj);
@@ -60,8 +60,8 @@ export const trimQuery = (queryData: QueryData): QueryData => {
       if (isObject(obj[key])) {
         deepTrim(obj[key]);
       } else {
-        obj[key] = obj[key] === "null" ? null : obj[key];
-        obj[key] = obj[key] === "undefined" ? undefined : obj[key];
+        obj[key] = obj[key] === 'null' ? null : obj[key];
+        obj[key] = obj[key] === 'undefined' ? undefined : obj[key];
       }
     }
     return obj;
@@ -75,7 +75,7 @@ export const trimQuery = (queryData: QueryData): QueryData => {
 };
 
 const options: Options = {
-  provider: "google",
+  provider: 'google',
   apiKey: process.env.GOOGLE_API_KEY,
   formatter: null,
 };
@@ -87,7 +87,7 @@ export const getGeoLocationFromAddress = async (address: string) => {
     const res = await geocoder.geocode(address);
     return res;
   } catch (err) {
-    logger.error("geocode error: ", err);
+    logger.error('geocode error: ', err);
     return [];
   }
 };

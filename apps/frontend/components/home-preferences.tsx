@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { Languages } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/components/language-provider";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { siteNames } from "@/lib/i18n";
+import { Languages } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/components/language-provider';
+import { ThemeToggle } from '@/components/theme-toggle';
+import { siteNames } from '@/lib/i18n';
 
 export function HomePreferences() {
   const { language, setLanguage } = useLanguage();
@@ -19,16 +19,16 @@ export function HomePreferences() {
 
         <div className="flex flex-wrap items-center justify-center gap-3">
           <Button
-            variant={language === "en" ? "default" : "outline"}
-            onClick={() => setLanguage("en")}
+            variant={language === 'en' ? 'default' : 'outline'}
+            onClick={() => setLanguage('en')}
             aria-label="Select English"
           >
             <Languages className="h-4 w-4" />
             English
           </Button>
           <Button
-            variant={language === "bn" ? "default" : "outline"}
-            onClick={() => setLanguage("bn")}
+            variant={language === 'bn' ? 'default' : 'outline'}
+            onClick={() => setLanguage('bn')}
             aria-label="Select Bangla"
           >
             <Languages className="h-4 w-4" />

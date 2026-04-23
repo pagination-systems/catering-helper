@@ -1,9 +1,9 @@
-import { Plus, Minus } from "lucide-react";
-import { cn } from "@/lib/utils";
-import type { MenuVariant } from "../data";
-import { MealItemPill } from "./meal-item-pill";
-import { If } from "@/components/if";
-import { Button } from "@/components/ui/button";
+import { Plus, Minus } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import type { MenuVariant } from '../data';
+import { MealItemPill } from './meal-item-pill';
+import { If } from '@/components/if';
+import { Button } from '@/components/ui/button';
 
 export function VariantCard({
   variant,
@@ -28,12 +28,12 @@ export function VariantCard({
   return (
     <article
       className={cn(
-        "relative overflow-hidden rounded-xl border transition-all duration-200 flex gap-3 p-3 sm:p-4",
+        'relative overflow-hidden rounded-xl border transition-all duration-200 flex gap-3 p-3 sm:p-4',
         available
-          ? "hover:-translate-y-0.5 hover:shadow-md bg-card"
-          : "cursor-not-allowed border-dashed bg-muted/25 opacity-70 grayscale",
-        active ? "border-primary/40 ring-1 ring-primary/40" : "border-border/70",
-        pulse && "animate-pulse",
+          ? 'hover:-translate-y-0.5 hover:shadow-md bg-card'
+          : 'cursor-not-allowed border-dashed bg-muted/25 opacity-70 grayscale',
+        active ? 'border-primary/40 ring-1 ring-primary/40' : 'border-border/70',
+        pulse && 'animate-pulse',
       )}
     >
       <div className="flex flex-1 flex-col min-w-0">

@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 const bdPhoneRegex = /^01[3-9]\d{8}$/;
 
 const checkoutSchema = z.object({
-  name: z.string().trim().min(2, "Name must be at least 2 characters."),
-  phone: z.string().trim().regex(bdPhoneRegex, "Enter a valid Bangladesh phone number."),
-  address: z.string().trim().min(10, "Address must be at least 10 characters."),
+  name: z.string().trim().min(2, 'Name must be at least 2 characters.'),
+  phone: z.string().trim().regex(bdPhoneRegex, 'Enter a valid Bangladesh phone number.'),
+  address: z.string().trim().min(10, 'Address must be at least 10 characters.'),
   notes: z.string().trim().optional(),
 });
 
@@ -27,17 +27,17 @@ export function CheckoutForm() {
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
-      name: "",
-      phone: "",
-      address: "",
-      notes: "",
+      name: '',
+      phone: '',
+      address: '',
+      notes: '',
     },
   });
 
   const onSubmit = async (values: CheckoutFormValues) => {
-    console.log("Checkout payload", values);
+    console.log('Checkout payload', values);
 
-    router.push("/order-success");
+    router.push('/order-success');
   };
 
   return (

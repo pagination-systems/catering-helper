@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { ArrowRight, Dot } from "lucide-react";
+import { motion } from 'framer-motion';
+import { ArrowRight, Dot } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import type { LandingContent } from "@/lib/i18n";
+import { Button } from '@/components/ui/button';
+import type { LandingContent } from '@/lib/i18n';
 
 type HeroProps = {
-  content: LandingContent["hero"];
+  content: LandingContent['hero'];
 };
 
 export function HeroSection({ content }: HeroProps) {
-  const accentIndex = content.headline.indexOf("Eliminate");
+  const accentIndex = content.headline.indexOf('Eliminate');
   const primaryLine = accentIndex > -1 ? content.headline.slice(0, accentIndex).trim() : content.headline;
-  const accentLine = accentIndex > -1 ? content.headline.slice(accentIndex).trim() : "";
+  const accentLine = accentIndex > -1 ? content.headline.slice(accentIndex).trim() : '';
 
   return (
     <section className="relative overflow-hidden border-b border-border/50 bg-background">

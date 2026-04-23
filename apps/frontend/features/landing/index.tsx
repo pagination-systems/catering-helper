@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useLanguage } from "@/components/language-provider";
-import { landingContent, type LandingContent } from "@/lib/i18n";
+import { useLanguage } from '@/components/language-provider';
+import { landingContent, type LandingContent } from '@/lib/i18n';
 
-import { FeaturesGridSection } from "./features-grid";
-import { HeroSection } from "./hero";
-import { HowItWorksSection } from "./how-it-works";
-import { PricingSection } from "./pricing";
-import { ProblemSolutionSection } from "./problem-solution";
+import { FeaturesGridSection } from './features-grid';
+import { HeroSection } from './hero';
+import { HowItWorksSection } from './how-it-works';
+import { PricingSection } from './pricing';
+import { ProblemSolutionSection } from './problem-solution';
 
 export const LandingPage = () => {
   const { language } = useLanguage();

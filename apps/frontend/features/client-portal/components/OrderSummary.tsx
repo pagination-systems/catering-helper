@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { Minus, Plus } from "lucide-react";
+import { useRouter } from 'next/navigation';
+import { Minus, Plus } from 'lucide-react';
 
-import { useLanguage } from "@/components/language-provider";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Button } from "@/components/ui/button";
-import { If } from "@/components/if";
-import { clientPortalContent, type ClientPortalContent } from "@/lib/i18n";
-import { cn } from "@/lib/utils";
+import { useLanguage } from '@/components/language-provider';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Button } from '@/components/ui/button';
+import { If } from '@/components/if';
+import { clientPortalContent, type ClientPortalContent } from '@/lib/i18n';
+import { cn } from '@/lib/utils';
 
-import { bdt } from "@/features/client-portal/data";
-import { useOrderSummaryData } from "@/features/client-portal/order-summary-data";
-import { useClientPortalStore } from "@/features/client-portal/store";
+import { bdt } from '@/features/client-portal/data';
+import { useOrderSummaryData } from '@/features/client-portal/order-summary-data';
+import { useClientPortalStore } from '@/features/client-portal/store';
 
 export const DELIVERY_FEE = 60;
 
@@ -50,7 +50,7 @@ export function OrderSummary({ readonly = false, showDeliveryFee = false }: Orde
                 {/* FIXED: Added flex, w-full, justify-between, and padding for proper layout */}
                 <CollapsibleTrigger className="flex w-full items-center justify-between border-b bg-muted/40 p-3 text-sm transition-colors hover:bg-muted/60">
                   <span className="font-semibold">
-                    {content.dayShortLabel[group.day as keyof typeof content.dayShortLabel] || group.day},{" "}
+                    {content.dayShortLabel[group.day as keyof typeof content.dayShortLabel] || group.day},{' '}
                     {group.dateLabel}
                   </span>
                   <span className="font-bold">{bdt.format(group.subTotal)}</span>
@@ -61,14 +61,14 @@ export function OrderSummary({ readonly = false, showDeliveryFee = false }: Orde
                     <div
                       key={row.key}
                       className={cn(
-                        "flex flex-col gap-1 transition-all",
-                        recentlyUpdatedKey === row.key && "rounded-md p-2 ring-1 ring-primary/40 bg-primary/5",
+                        'flex flex-col gap-1 transition-all',
+                        recentlyUpdatedKey === row.key && 'rounded-md p-2 ring-1 ring-primary/40 bg-primary/5',
                       )}
                     >
                       <p className="text-sm font-medium">
                         {row.packageName} - {row.label}
                       </p>
-                      <p className="text-xs text-muted-foreground">{row.items.join(", ")}</p>
+                      <p className="text-xs text-muted-foreground">{row.items.join(', ')}</p>
 
                       <div className="mt-1 flex items-center justify-between">
                         {readonly ? (
@@ -136,7 +136,7 @@ export function OrderSummary({ readonly = false, showDeliveryFee = false }: Orde
             size="lg"
             className="w-full font-semibold"
             disabled={groupedOrders.length === 0}
-            onClick={() => router.push("/checkout")}
+            onClick={() => router.push('/checkout')}
           >
             {content.checkout}
           </Button>

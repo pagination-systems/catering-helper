@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { Globe, LaptopMinimal, Sun, Moon } from "lucide-react";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/components/language-provider";
+import Link from 'next/link';
+import { Globe, LaptopMinimal, Sun, Moon } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/components/language-provider';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,12 +13,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { clientPortalContent, type ClientPortalContent } from "@/lib/i18n";
-import type { TenantData } from "@/app/(client-portal)/data";
-import Image from "next/image";
+} from '@/components/ui/dropdown-menu';
+import { clientPortalContent, type ClientPortalContent } from '@/lib/i18n';
+import type { TenantData } from '@/app/(client-portal)/data';
+import Image from 'next/image';
 
-const themeOrder = ["system", "light", "dark"] as const;
+const themeOrder = ['system', 'light', 'dark'] as const;
 
 const themeIcons = {
   system: LaptopMinimal,
@@ -31,11 +31,11 @@ export function Navbar({ tenant }: { tenant: TenantData }) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const content = clientPortalContent[language] as ClientPortalContent;
-  const currentDate = new Intl.DateTimeFormat(language === "bn" ? "bn-BD" : "en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
+  const currentDate = new Intl.DateTimeFormat(language === 'bn' ? 'bn-BD' : 'en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
   }).format(new Date());
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export function Navbar({ tenant }: { tenant: TenantData }) {
   const activeTheme =
     mounted && theme && themeOrder.includes(theme as (typeof themeOrder)[number])
       ? (theme as (typeof themeOrder)[number])
-      : "system";
+      : 'system';
 
   const ThemeIcon = themeIcons[activeTheme];
 
@@ -73,7 +73,7 @@ export function Navbar({ tenant }: { tenant: TenantData }) {
 
         <div className="flex items-center gap-2">
           <p className="hidden text-xs font-medium text-muted-foreground sm:block">
-            {language === "bn" ? `আজ: ${currentDate}` : `Today: ${currentDate}`}
+            {language === 'bn' ? `আজ: ${currentDate}` : `Today: ${currentDate}`}
           </p>
 
           <DropdownMenu>
@@ -88,8 +88,8 @@ export function Navbar({ tenant }: { tenant: TenantData }) {
             >
               <DropdownMenuLabel>{content.nav.language}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setLanguage("en")}>EN</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setLanguage("bn")}>BN</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLanguage('en')}>EN</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLanguage('bn')}>BN</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 

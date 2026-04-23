@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { CheckoutForm } from "./checkout-form";
-import { OrderSummary } from "@/features/client-portal/components/OrderSummary";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckoutForm } from './checkout-form';
+import { OrderSummary } from '@/features/client-portal/components/OrderSummary';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const Checkout = () => {
   return (

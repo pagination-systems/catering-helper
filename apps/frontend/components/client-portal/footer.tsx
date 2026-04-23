@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { ChefHat, Mail, MapPin, Phone } from "lucide-react";
-import { useLanguage } from "@/components/language-provider";
-import { clientPortalContent, type ClientPortalContent } from "@/lib/i18n";
-import type { TenantData } from "@/app/(client-portal)/data";
-import Image from "next/image";
+import Link from 'next/link';
+import { ChefHat, Mail, MapPin, Phone } from 'lucide-react';
+import { useLanguage } from '@/components/language-provider';
+import { clientPortalContent, type ClientPortalContent } from '@/lib/i18n';
+import type { TenantData } from '@/app/(client-portal)/data';
+import Image from 'next/image';
 
 export function Footer({ tenant }: { tenant: TenantData }) {
   const { language } = useLanguage();
   const content = clientPortalContent[language] as ClientPortalContent;
-  const [addressLineOne, ...addressRemainder] = tenant.address.split(",").map((part) => part.trim());
+  const [addressLineOne, ...addressRemainder] = tenant.address.split(',').map((part) => part.trim());
 
   return (
     <footer className="border-t border-border/70 pt-16 pb-8">
@@ -58,7 +58,7 @@ export function Footer({ tenant }: { tenant: TenantData }) {
                 <span className="leading-relaxed">
                   {addressLineOne}
                   {addressRemainder.length > 0 && <br />}
-                  {addressRemainder.join(", ")}
+                  {addressRemainder.join(', ')}
                 </span>
               </li>
             </ul>

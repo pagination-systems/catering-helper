@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Globe, LaptopMinimal, Menu, Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { Globe, LaptopMinimal, Menu, Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
-import { useLanguage } from "@/components/language-provider";
-import { Button } from "@/components/ui/button";
+import { useLanguage } from '@/components/language-provider';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,10 +15,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { landingContent, type LandingContent } from "@/lib/i18n";
+} from '@/components/ui/dropdown-menu';
+import { landingContent, type LandingContent } from '@/lib/i18n';
 
-const themeOrder = ["system", "light", "dark"] as const;
+const themeOrder = ['system', 'light', 'dark'] as const;
 
 const themeIcons = {
   system: LaptopMinimal,
@@ -40,7 +40,7 @@ export function Navbar() {
   const activeTheme =
     mounted && theme && themeOrder.includes(theme as (typeof themeOrder)[number])
       ? (theme as (typeof themeOrder)[number])
-      : "system";
+      : 'system';
 
   const ThemeIcon = themeIcons[activeTheme];
 
@@ -83,8 +83,8 @@ export function Navbar() {
             >
               <DropdownMenuLabel>{content.language}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setLanguage("en")}>EN</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setLanguage("bn")}>BN</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLanguage('en')}>EN</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLanguage('bn')}>BN</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -132,12 +132,12 @@ export function Navbar() {
                 <Link href="/#how-it-works">{content.howItWorks}</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setTheme("light")}>{content.modes.light}</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("dark")}>{content.modes.dark}</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("system")}>{content.modes.system}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme('light')}>{content.modes.light}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme('dark')}>{content.modes.dark}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme('system')}>{content.modes.system}</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setLanguage("en")}>EN</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setLanguage("bn")}>BN</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLanguage('en')}>EN</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLanguage('bn')}>BN</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>{content.login}</DropdownMenuItem>
               <DropdownMenuItem>{content.startFreeTrial}</DropdownMenuItem>

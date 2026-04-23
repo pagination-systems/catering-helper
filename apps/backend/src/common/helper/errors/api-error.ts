@@ -1,4 +1,4 @@
-import { StatusCodes, ReasonPhrases } from "http-status-codes";
+import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 
 interface ApiErrorOptions {
   details?: string;
@@ -16,13 +16,13 @@ export class ApiError extends Error {
   public isOperational: boolean;
 
   constructor(
-    message = "",
+    message = '',
     options: ApiErrorOptions = {
-      details: "",
+      details: '',
       appCode: null,
       httpReasonPhrase: ReasonPhrases.INTERNAL_SERVER_ERROR,
       httpStatusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-    }
+    },
   ) {
     super(message);
     this.details = options?.details;
@@ -36,14 +36,14 @@ export class ApiError extends Error {
   }
 
   get name() {
-    return "ApiError";
+    return 'ApiError';
   }
 }
 
 export class AuditCompletedError extends ApiError {
   constructor() {
-    super("Audit is already completed.", {
-      details: "A completed audit cannot be deleted or modified. Please change the audit status to modify or delete.",
+    super('Audit is already completed.', {
+      details: 'A completed audit cannot be deleted or modified. Please change the audit status to modify or delete.',
       httpReasonPhrase: ReasonPhrases.BAD_REQUEST,
       httpStatusCode: StatusCodes.BAD_REQUEST,
       appCode: 1,
@@ -52,7 +52,7 @@ export class AuditCompletedError extends ApiError {
 }
 
 export class NotFoundException extends ApiError {
-  constructor(message = "Not Found.") {
+  constructor(message = 'Not Found.') {
     super(message, {
       httpStatusCode: StatusCodes.NOT_FOUND,
       httpReasonPhrase: ReasonPhrases.NOT_FOUND,
@@ -61,7 +61,7 @@ export class NotFoundException extends ApiError {
 }
 
 export class BadRequestException extends ApiError {
-  constructor(message = "Bad Request.") {
+  constructor(message = 'Bad Request.') {
     super(message, {
       httpStatusCode: StatusCodes.BAD_REQUEST,
       httpReasonPhrase: ReasonPhrases.BAD_REQUEST,
@@ -70,7 +70,7 @@ export class BadRequestException extends ApiError {
 }
 
 export class UnauthorizedException extends ApiError {
-  constructor(message = "Unauthorized.") {
+  constructor(message = 'Unauthorized.') {
     super(message, {
       httpStatusCode: StatusCodes.UNAUTHORIZED,
       httpReasonPhrase: ReasonPhrases.UNAUTHORIZED,
@@ -78,7 +78,7 @@ export class UnauthorizedException extends ApiError {
   }
 }
 export class ForbiddenException extends ApiError {
-  constructor(message = "Forbidden.") {
+  constructor(message = 'Forbidden.') {
     super(message, {
       httpStatusCode: StatusCodes.FORBIDDEN,
       httpReasonPhrase: ReasonPhrases.FORBIDDEN,
@@ -87,7 +87,7 @@ export class ForbiddenException extends ApiError {
 }
 
 export class TooManyRequestsException extends ApiError {
-  constructor(message = "Too many requests.") {
+  constructor(message = 'Too many requests.') {
     super(message, {
       httpStatusCode: StatusCodes.TOO_MANY_REQUESTS,
       httpReasonPhrase: ReasonPhrases.TOO_MANY_REQUESTS,
@@ -95,7 +95,7 @@ export class TooManyRequestsException extends ApiError {
   }
 }
 export class EmailMissConfigException extends ApiError {
-  constructor(message = "Invalid email contents, email can not be sent.") {
+  constructor(message = 'Invalid email contents, email can not be sent.') {
     super(message, {
       httpStatusCode: StatusCodes.BAD_REQUEST,
       httpReasonPhrase: ReasonPhrases.BAD_REQUEST,
@@ -104,7 +104,7 @@ export class EmailMissConfigException extends ApiError {
 }
 
 export class SessionExpiredException extends ApiError {
-  constructor(message = "Session expired.") {
+  constructor(message = 'Session expired.') {
     super(message, {
       httpStatusCode: StatusCodes.FORBIDDEN,
       httpReasonPhrase: ReasonPhrases.FORBIDDEN,
@@ -114,27 +114,27 @@ export class SessionExpiredException extends ApiError {
 
 export class NonconformityAlreadyResolvedException extends BadRequestException {
   constructor() {
-    super("Nonconformity is already resolved.");
+    super('Nonconformity is already resolved.');
   }
 }
 
 export class OFIAlreadyResolvedException extends BadRequestException {
   constructor() {
-    super("OFI is already resolved.");
+    super('OFI is already resolved.');
   }
 }
 
 export class AlreadyHaveMembershipException extends BadRequestException {
   constructor() {
-    super("Already a member of the team.");
+    super('Already a member of the team.');
   }
 }
 
 export class AuditUpdateError extends ApiError {
-  constructor(message = "Can not update the audit.") {
+  constructor(message = 'Can not update the audit.') {
     super(message, {
       details:
-        "Audit details are only allowed to update when the audit is the following status: scheduled, in-progress.",
+        'Audit details are only allowed to update when the audit is the following status: scheduled, in-progress.',
       httpReasonPhrase: ReasonPhrases.BAD_REQUEST,
       httpStatusCode: StatusCodes.BAD_REQUEST,
       appCode: 1,
@@ -144,12 +144,12 @@ export class AuditUpdateError extends ApiError {
 
 export class CocMediaAlreadyApprovedException extends BadRequestException {
   constructor() {
-    super("Coc Media is already approved.");
+    super('Coc Media is already approved.');
   }
 }
 
 export class CocRequestCompletedException extends BadRequestException {
   constructor() {
-    super("Coc Request is already completed.");
+    super('Coc Request is already completed.');
   }
 }

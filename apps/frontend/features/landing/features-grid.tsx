@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { Calculator, Coins, Store } from "lucide-react";
+import { motion } from 'framer-motion';
+import { Calculator, Coins, Store } from 'lucide-react';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { LandingContent } from "@/lib/i18n";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { LandingContent } from '@/lib/i18n';
 
 type FeaturesGridProps = {
-  content: LandingContent["features"];
+  content: LandingContent['features'];
 };
 
 export function FeaturesGridSection({ content }: FeaturesGridProps) {

@@ -1,7 +1,7 @@
-import { PipelineStage } from "mongoose";
-import { accessibleBy } from "@casl/mongoose";
-import { AnyMongoAbility } from "@casl/ability";
-import { AbilityAction } from "../../types/ability";
+import { PipelineStage } from 'mongoose';
+import { accessibleBy } from '@casl/mongoose';
+import { AnyMongoAbility } from '@casl/ability';
+import { AbilityAction } from '../../types/ability';
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -27,7 +27,7 @@ export const excludeDeletedQuery = (): PipelineStage[] => {
   return [
     {
       $match: {
-        "deleteMarker.status": {
+        'deleteMarker.status': {
           $ne: true,
         },
       },
@@ -39,7 +39,7 @@ export const onlyDeletedQuery = (): PipelineStage[] => {
   return [
     {
       $match: {
-        "deleteMarker.status": true,
+        'deleteMarker.status': true,
       },
     },
   ];
@@ -49,21 +49,21 @@ export const populateStatusQuery = (): PipelineStage[] => {
   return [
     {
       $lookup: {
-        from: "statuses",
-        localField: "statusId",
-        foreignField: "_id",
-        as: "status",
+        from: 'statuses',
+        localField: 'statusId',
+        foreignField: '_id',
+        as: 'status',
       },
     },
     {
       $unwind: {
-        path: "$status",
+        path: '$status',
         preserveNullAndEmptyArrays: true,
       },
     },
     {
       $addFields: {
-        status: { $ifNull: ["$status.label", "unknown"] },
+        status: { $ifNull: ['$status.label', 'unknown'] },
       },
     },
     {

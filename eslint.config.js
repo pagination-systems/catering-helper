@@ -37,6 +37,7 @@ export default [
       // Otherwise, ESLint will falsely flag TypeScript types/interfaces as "unused variables".
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
 

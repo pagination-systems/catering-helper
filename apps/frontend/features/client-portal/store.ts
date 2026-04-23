@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { packages, type CateringPackage, type DayName } from "./data";
+import { create } from 'zustand';
+import { packages, type CateringPackage, type DayName } from './data';
 
 export type PackageSelectionState = {
   activeDay: DayName;
@@ -25,7 +25,7 @@ type ClientPortalState = {
 };
 
 function getTodayDayName(): DayName {
-  const daysByJsIndex: DayName[] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const daysByJsIndex: DayName[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   return daysByJsIndex[new Date().getDay()];
 }
 
@@ -35,7 +35,7 @@ export function createQuantityKey(day: DayName, variantId: string): string {
 
 function createInitialSelection(menuPackage: CateringPackage): PackageSelectionState {
   const today = getTodayDayName();
-  const fallbackDay = menuPackage.days[0]?.day ?? "Saturday";
+  const fallbackDay = menuPackage.days[0]?.day ?? 'Saturday';
 
   return {
     activeDay: menuPackage.days.some((day) => day.day === today) ? today : fallbackDay,
@@ -44,7 +44,7 @@ function createInitialSelection(menuPackage: CateringPackage): PackageSelectionS
 }
 
 export const useClientPortalStore = create<ClientPortalState>((set, get) => ({
-  activePackageId: packages.find((pkg) => pkg.popular)?.id ?? packages[0]?.id ?? "",
+  activePackageId: packages.find((pkg) => pkg.popular)?.id ?? packages[0]?.id ?? '',
   customizerOpen: true,
   mobileSummaryOpen: false,
   recentlyUpdatedKey: null,

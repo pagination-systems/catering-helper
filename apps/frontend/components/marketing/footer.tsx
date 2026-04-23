@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useLanguage } from "@/components/language-provider";
-import { landingContent, type LandingContent } from "@/lib/i18n";
+import Link from 'next/link';
+import { useLanguage } from '@/components/language-provider';
+import { landingContent, type LandingContent } from '@/lib/i18n';
 
 export function Footer() {
   const { language } = useLanguage();

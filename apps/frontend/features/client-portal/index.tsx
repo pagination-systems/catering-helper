@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { useEffect, useMemo, useRef } from "react";
-import { useRouter } from "next/navigation";
-import { Clock3 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/components/language-provider";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { clientPortalContent, type ClientPortalContent } from "@/lib/i18n";
-import { cn } from "@/lib/utils";
-import { OrderSummary } from "@/features/client-portal/components/OrderSummary";
+import { useEffect, useMemo, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { Clock3 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/components/language-provider';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { clientPortalContent, type ClientPortalContent } from '@/lib/i18n';
+import { cn } from '@/lib/utils';
+import { OrderSummary } from '@/features/client-portal/components/OrderSummary';
 
-import { useClientPortalStore, createQuantityKey } from "./store";
-import { packages, bdt } from "./data";
-import { getUpcomingDays } from "./components/utils";
-import { DayTab } from "./components/day-tab";
-import { VariantCard } from "./components/variant-card";
-import type { TenantData } from "@/app/(client-portal)/data";
-import { If } from "@/components/if";
-import { useOrderSummaryData } from "./order-summary-data";
+import { useClientPortalStore, createQuantityKey } from './store';
+import { packages, bdt } from './data';
+import { getUpcomingDays } from './components/utils';
+import { DayTab } from './components/day-tab';
+import { VariantCard } from './components/variant-card';
+import type { TenantData } from '@/app/(client-portal)/data';
+import { If } from '@/components/if';
+import { useOrderSummaryData } from './order-summary-data';
 
 export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
   const router = useRouter();
@@ -64,7 +64,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
 
   const handlePickPackage = (id: string) => {
     pickPackage(id);
-    requestAnimationFrame(() => customizerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    requestAnimationFrame(() => customizerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
   };
 
   return (
@@ -108,10 +108,10 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                 <Card
                   key={pkg.id}
                   className={cn(
-                    "relative overflow-hidden transition duration-200",
+                    'relative overflow-hidden transition duration-200',
                     active
-                      ? "border-primary ring-1 ring-primary shadow-[0_16px_30px_-24px_hsl(var(--primary))]"
-                      : "hover:-translate-y-0.5 hover:shadow-lg",
+                      ? 'border-primary ring-1 ring-primary shadow-[0_16px_30px_-24px_hsl(var(--primary))]'
+                      : 'hover:-translate-y-0.5 hover:shadow-lg',
                   )}
                 >
                   <If expression={pkg.popular}>
@@ -228,7 +228,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                 </p>
                 <p className="text-lg font-semibold leading-tight">{bdt.format(subtotal)}</p>
               </div>
-              <Button disabled={groupedOrders.length === 0} onClick={() => router.push("/checkout")}>
+              <Button disabled={groupedOrders.length === 0} onClick={() => router.push('/checkout')}>
                 {content.checkout}
               </Button>
             </div>
@@ -243,7 +243,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                     >
                       <CollapsibleTrigger className="rounded-none border-b bg-muted/40 px-3 py-2 text-xs font-semibold text-foreground">
                         <span>
-                          {content.dayShortLabel[group.day as keyof typeof content.dayShortLabel] || group.day},{" "}
+                          {content.dayShortLabel[group.day as keyof typeof content.dayShortLabel] || group.day},{' '}
                           {group.dateLabel}
                         </span>
                         <span className="text-[11px] font-bold text-primary">{bdt.format(group.subTotal)}</span>
