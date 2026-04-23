@@ -16,13 +16,18 @@
     "indentWidth": 2,
     "lineWidth": 100
   },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
   "files": {
     "includes": [
       "**",
       "!dist",
       "!node_modules",
-      "!.turbo",
-      "!.next",
+      "!**.turbo",
+      "!**.next",
       "!pnpm-workspace.yaml",
       "!**/tsconfig.json"
     ]
