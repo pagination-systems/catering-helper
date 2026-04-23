@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -21,6 +22,8 @@ const checkoutSchema = z.object({
 type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
 export function CheckoutForm() {
+  const router = useRouter();
+
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
@@ -31,8 +34,10 @@ export function CheckoutForm() {
     },
   });
 
-  const onSubmit = (values: CheckoutFormValues) => {
+  const onSubmit = async (values: CheckoutFormValues) => {
     console.log("Checkout payload", values);
+
+    router.push("/order-success");
   };
 
   return (
