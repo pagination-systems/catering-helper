@@ -34,7 +34,7 @@ export function OrderSummary({ readonly = false, showDeliveryFee = false }: Orde
   const total = subtotal + (showDeliveryFee ? DELIVERY_FEE : 0);
 
   return (
-    <Card className="shadow-sm border border-primary">
+    <Card className="shadow-sm border">
       <CardHeader className="pb-4">
         <CardTitle className="text-2xl">{content.orderSummaryTitle}</CardTitle>
       </CardHeader>

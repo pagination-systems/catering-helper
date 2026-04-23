@@ -40,6 +40,131 @@ export const bdt = new Intl.NumberFormat("en-BD", {
   maximumFractionDigits: 0,
 });
 
+export const dailyBasicVariants: Record<DayName, MenuVariant[]> = {
+  Sat: [
+    {
+      id: "sat-fish",
+      name: "মাছ ভাত সেট",
+      note: "ক্লাসিক বাঙালি খাবার।",
+      items: ["ভাত", "তেলাপিয়া মাছ", "ডাল", "ভর্তা"],
+    },
+    {
+      id: "sat-chicken",
+      name: "মুরগি ঝোল সেট",
+      note: "অফিস স্পেশাল।",
+      items: ["ভাত", "মুরগির ঝোল", "সবজি"],
+    },
+    {
+      id: "sat-veg",
+      name: "সবজি সেট",
+      note: "হালকা নিরামিষ।",
+      items: ["খিচুড়ি", "মিক্স সবজি", "ডাল"],
+    },
+  ],
+
+  Sun: [
+    {
+      id: "sun-khichuri",
+      name: "খিচুড়ি সেট",
+      note: "হালকা খাবার।",
+      items: ["খিচুড়ি", "ডিম ভাজি"],
+    },
+    {
+      id: "sun-fish",
+      name: "মাছ সেট",
+      note: "ঘরোয়া স্বাদ।",
+      items: ["ভাত", "মাছ", "ডাল"],
+    },
+  ],
+
+  Mon: [
+    {
+      id: "mon-chicken",
+      name: "চিকেন ভুনা",
+      note: "স্ট্যান্ডার্ড মিল।",
+      items: ["ভাত", "চিকেন ভুনা", "সবজি"],
+    },
+    {
+      id: "mon-egg",
+      name: "ডিম কারি",
+      note: "সাশ্রয়ী প্রোটিন।",
+      items: ["ভাত", "ডিম কারি", "ডাল"],
+    },
+  ],
+
+  Tue: [
+    {
+      id: "tue-fish",
+      name: "রুই মাছ সেট",
+      note: "ক্লাসিক অপশন।",
+      items: ["ভাত", "রুই মাছ", "ডাল"],
+    },
+    {
+      id: "tue-veg",
+      name: "সবজি প্লেট",
+      note: "নিরামিষ।",
+      items: ["ভাত", "সবজি", "আচার"],
+    },
+    {
+      id: "tue-chicken",
+      name: "চিকেন সেট",
+      note: "মাঝারি স্পাইসি।",
+      items: ["ভাত", "চিকেন কারি"],
+    },
+  ],
+
+  Wed: [
+    {
+      id: "wed-egg",
+      name: "ডিম ভাজি সেট",
+      note: "সহজ ও দ্রুত।",
+      items: ["ভাত", "ডিম ভাজি", "ডাল"],
+    },
+    {
+      id: "wed-fish",
+      name: "ফিশ কারি",
+      note: "হালকা স্বাদ।",
+      items: ["ভাত", "ফিশ কারি"],
+    },
+  ],
+
+  Thu: [
+    {
+      id: "thu-chicken",
+      name: "চিকেন ঝোল",
+      note: "ঘরোয়া খাবার।",
+      items: ["ভাত", "চিকেন ঝোল"],
+    },
+    {
+      id: "thu-veg",
+      name: "সবজি সেট",
+      note: "হেলদি অপশন।",
+      items: ["ভাত", "সবজি", "ডাল"],
+    },
+  ],
+
+  Fri: [
+    {
+      id: "fri-special",
+      name: "স্পেশাল জুমা মিল",
+      note: "সপ্তাহ শেষ স্পেশাল।",
+      items: ["বিরিয়ানি", "চিকেন", "ডেজার্ট"],
+    },
+    {
+      id: "fri-fish",
+      name: "ফিশ প্লেট",
+      note: "হালকা ফ্রাইডে মিল।",
+      items: ["ভাত", "মাছ", "ডাল"],
+    },
+    {
+      id: "fri-veg",
+      name: "ভেজিটেরিয়ান সেট",
+      note: "নিরামিষ স্পেশাল।",
+      items: ["খিচুড়ি", "সবজি", "আচার"],
+    },
+  ],
+};
+
 export const packages: CateringPackage[] = [
   {
     id: "daily-basic",
@@ -49,26 +174,7 @@ export const packages: CateringPackage[] = [
     popular: true,
     days: dayOrder.map((day) => ({
       day,
-      variants: [
-        {
-          id: `${day}-fish-basic`,
-          name: "মাছ ভাত সেট",
-          note: "বাংলাদেশি ক্লাসিক খাবার।",
-          items: ["ভাত", "মাছের ঝোল", "ডাল", "ভর্তা"],
-        },
-        {
-          id: `${day}-chicken-basic`,
-          name: "মুরগি ভাত সেট",
-          note: "অফিসের জনপ্রিয় খাবার।",
-          items: ["ভাত", "মুরগির ঝোল", "সবজি", "সালাদ"],
-        },
-        {
-          id: `${day}-veg-basic`,
-          name: "সবজি সেট",
-          note: "হালকা নিরামিষ খাবার।",
-          items: ["খিচুড়ি", "মিশ্র সবজি", "ডাল", "আচার"],
-        },
-      ],
+      variants: dailyBasicVariants[day],
     })),
   },
 

@@ -5,6 +5,7 @@ import { ChefHat, Mail, MapPin, Phone } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import { clientPortalContent, type ClientPortalContent } from "@/lib/i18n";
 import type { TenantData } from "@/app/(client-portal)/data";
+import Image from "next/image";
 
 export function Footer({ tenant }: { tenant: TenantData }) {
   const { language } = useLanguage();
@@ -17,8 +18,14 @@ export function Footer({ tenant }: { tenant: TenantData }) {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
             <h4 className="flex items-center gap-2 text-lg font-bold text-foreground">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--cater-primary))/0.12] text-[hsl(var(--cater-primary-strong))]">
-                <ChefHat className="h-4 w-4" />
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/15 text-primary">
+                <Image
+                  src={tenant.logoUrl}
+                  alt={`${tenant.name} logo`}
+                  width={40}
+                  height={40}
+                  className="h-8 w-8 rounded-full object-cover"
+                />
               </span>
               {tenant.name}
             </h4>
@@ -29,7 +36,7 @@ export function Footer({ tenant }: { tenant: TenantData }) {
             <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">{content.footer.contact}</h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li className="flex items-center gap-3">
-                <Phone className="h-4 w-4 shrink-0 text-[hsl(var(--cater-primary-strong))]" />
+                <Phone className="h-4 w-4 shrink-0 text-primary" />
                 {tenant.contactPhone}
               </li>
               <li className="flex items-center gap-3">
@@ -37,7 +44,7 @@ export function Footer({ tenant }: { tenant: TenantData }) {
                 {tenant.contactWhatsapp}
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="h-4 w-4 shrink-0 text-[hsl(var(--cater-primary-strong))]" />
+                <Mail className="h-4 w-4 shrink-0 text-primary" />
                 {tenant.contactEmail}
               </li>
             </ul>
@@ -47,7 +54,7 @@ export function Footer({ tenant }: { tenant: TenantData }) {
             <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">{content.footer.location}</h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li className="flex items-start gap-3">
-                <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-[hsl(var(--cater-primary-strong))]" />
+                <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-primary" />
                 <span className="leading-relaxed">
                   {addressLineOne}
                   {addressRemainder.length > 0 && <br />}
@@ -64,7 +71,7 @@ export function Footer({ tenant }: { tenant: TenantData }) {
                 href={tenant.social.facebook}
                 target="_blank"
                 rel="noreferrer"
-                className="text-muted-foreground transition hover:text-[hsl(var(--cater-primary-strong))]"
+                className="text-muted-foreground transition hover:text-primary"
               >
                 <span className="sr-only">Facebook</span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">

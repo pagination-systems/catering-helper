@@ -6,11 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const Checkout = () => {
   return (
-    <main className="dark:bg-[hsl(var(--landing-bg))]">
+    <main className="bg-background">
       <div className="mx-auto w-full max-w-[1260px] px-4 py-10 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <section>
-            <Card className="border-border/70 shadow-sm dark:bg-[hsl(var(--landing-card-bg))]">
+            <Card className="border-border/70 shadow-sm dark:bg-card">
               <CardHeader>
                 <CardTitle className="text-3xl font-semibold tracking-tight">Checkout</CardTitle>
               </CardHeader>

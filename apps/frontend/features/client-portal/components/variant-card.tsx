@@ -32,9 +32,7 @@ export function VariantCard({
         available
           ? "hover:-translate-y-0.5 hover:shadow-md bg-card"
           : "cursor-not-allowed border-dashed bg-muted/25 opacity-70 grayscale",
-        active
-          ? "border-[hsl(var(--cater-primary))/0.4] ring-1 ring-[hsl(var(--cater-primary))/0.4]"
-          : "border-border/70",
+        active ? "border-primary/40 ring-1 ring-primary/40" : "border-border/70",
         pulse && "animate-pulse",
       )}
     >

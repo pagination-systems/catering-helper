@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Clock3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/components/language-provider";
@@ -21,6 +21,7 @@ import { If } from "@/components/if";
 import { useOrderSummaryData } from "./order-summary-data";
 
 export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
+  const router = useRouter();
   const customizerRef = useRef<HTMLElement | null>(null);
   const { language } = useLanguage();
   const content = clientPortalContent[language] as ClientPortalContent;
@@ -67,12 +68,12 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
   };
 
   return (
-    <main className="dark:bg-landing-bg pb-28">
+    <main className="bg-background pb-28">
       <div className="mx-auto w-full max-w-[1260px] px-4 pb-28 pt-8 sm:px-6 lg:px-8 lg:pb-10">
         <section className="mb-10 lg:mb-16 mt-12">
           <div className="grid gap-8 lg:grid-cols-2 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--cater-primary))/0.3] bg-[hsl(var(--cater-primary))/0.08] px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-[hsl(var(--cater-primary-strong))]">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-primary">
                 <Clock3 className="h-3.5 w-3.5" />
                 {content.badge}
               </div>
@@ -83,7 +84,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                 {tenant.description}
               </p>
             </div>
-            <div className="relative h-[240px] sm:h-[320px] lg:h-[350px] w-full overflow-hidden rounded-3xl bg-muted/30 shadow-xl ring-1 ring-border/50 dark:bg-[hsl(var(--landing-card-soft-bg))]">
+            <div className="relative h-[240px] sm:h-[320px] lg:h-[350px] w-full overflow-hidden rounded-3xl bg-muted/30 shadow-xl ring-1 ring-border/50 dark:bg-card">
               <img
                 src={tenant.menuUrl}
                 alt="Display"
@@ -109,12 +110,12 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                   className={cn(
                     "relative overflow-hidden transition duration-200",
                     active
-                      ? "border-[hsl(var(--cater-primary))] ring-1 ring-[hsl(var(--cater-primary))] shadow-[0_16px_30px_-24px_hsl(var(--cater-primary))]"
+                      ? "border-primary ring-1 ring-primary shadow-[0_16px_30px_-24px_hsl(var(--primary))]"
                       : "hover:-translate-y-0.5 hover:shadow-lg",
                   )}
                 >
                   <If expression={pkg.popular}>
-                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 rounded-full bg-[hsl(var(--cater-primary))] px-3 py-1 b-4 text-[8px] font-semibold text-white uppercase tracking-[0.12em]">
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 rounded-full bg-primary px-3 py-1 b-4 text-[8px] font-semibold text-primary-foreground uppercase tracking-[0.12em]">
                       {content.mostPopular}
                     </div>
                   </If>
@@ -133,7 +134,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                   </CardHeader>
                   <CardContent className="space-y-4 p-5 pt-0">
                     <Button
-                      className="h-11 w-full rounded-xl bg-[hsl(var(--cater-primary))] text-white hover:bg-[hsl(var(--cater-primary-strong))]"
+                      className="h-11 w-full rounded-xl bg-primary text-primary-foreground hover:bg-primary/90"
                       onClick={() => handlePickPackage(pkg.id)}
                     >
                       {active ? content.selectedPackage : content.viewPackage}
@@ -153,8 +154,8 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
         <If expression={customizerOpen}>
           <section ref={customizerRef} className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
             <div className="space-y-3">
-              <Card className="border-border/70 bg-card/96 shadow-sm dark:bg-[hsl(var(--landing-card-bg))]">
-                <CardHeader className="space-y-5 border-b border-border/70 bg-muted/40 p-4 dark:bg-[hsl(var(--landing-chip-bg-soft))] sm:p-5">
+              <Card className="border-border/70 bg-card/96 shadow-sm dark:bg-card">
+                <CardHeader className="space-y-5 border-b border-border/70 bg-muted/40 p-4 dark:bg-muted/40 sm:p-5">
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div>
                       <CardTitle className="text-2xl sm:text-3xl font-semibold tracking-tight">
@@ -221,19 +222,19 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
               >
                 {mobileSummaryOpen ? content.hide : content.summary}
               </Button>
-              <div className="min-w-0 flex-1 rounded-xl bg-muted/65 px-3 py-1.5 text-right dark:bg-[hsl(var(--landing-chip-bg-soft))]">
+              <div className="min-w-0 flex-1 rounded-xl bg-muted/65 px-3 py-1.5 text-right dark:bg-muted/65">
                 <p className="text-[10px] text-muted-foreground">
                   {totalQuantity} {content.meals}
                 </p>
                 <p className="text-lg font-semibold leading-tight">{bdt.format(subtotal)}</p>
               </div>
-              <Link href="/checkout">
-                <Button>{content.checkout}</Button>
-              </Link>
+              <Button disabled={groupedOrders.length === 0} onClick={() => router.push("/checkout")}>
+                {content.checkout}
+              </Button>
             </div>
             <Collapsible open={mobileSummaryOpen} onOpenChange={setMobileSummaryOpen}>
               <CollapsibleContent>
-                <div className="mt-3 max-h-[60vh] overflow-auto rounded-2xl border bg-background/98 p-3 dark:bg-[hsl(var(--landing-card-bg))]">
+                <div className="mt-3 max-h-[60vh] overflow-auto rounded-2xl border bg-background/98 p-3 dark:bg-card">
                   {groupedOrders.map((group) => (
                     <Collapsible
                       key={group.day}
@@ -245,9 +246,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                           {content.dayShortLabel[group.day as keyof typeof content.dayShortLabel] || group.day},{" "}
                           {group.dateLabel}
                         </span>
-                        <span className="text-[11px] font-bold text-[hsl(var(--cater-primary-strong))]">
-                          {bdt.format(group.subTotal)}
-                        </span>
+                        <span className="text-[11px] font-bold text-primary">{bdt.format(group.subTotal)}</span>
                       </CollapsibleTrigger>
 
                       <CollapsibleContent>
