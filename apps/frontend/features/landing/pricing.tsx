@@ -1,11 +1,17 @@
-import { Check } from "lucide-react";
+import { Check } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import type { LandingCopy } from "@/lib/i18n";
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import type { LandingCopy } from '@/lib/i18n';
 
 type PricingProps = {
-  copy: LandingCopy["pricing"];
+  copy: LandingCopy['pricing'];
 };
 
 export function PricingSection({ copy }: PricingProps) {
@@ -37,7 +43,9 @@ export function PricingSection({ copy }: PricingProps) {
               <CardTitle className="text-5xl font-extrabold tracking-tight text-[hsl(var(--landing-heading))] sm:text-6xl">
                 {copy.price}
               </CardTitle>
-              <p className="text-sm font-medium text-[hsl(var(--landing-text-muted))]">/ {copy.period}</p>
+              <p className="text-sm font-medium text-[hsl(var(--landing-text-muted))]">
+                / {copy.period}
+              </p>
             </div>
           </CardHeader>
 
@@ -55,7 +63,10 @@ export function PricingSection({ copy }: PricingProps) {
                 >
                   {/* Green Badge Tick */}
                   <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/15">
-                    <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" strokeWidth={3} />
+                    <Check
+                      className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400"
+                      strokeWidth={3}
+                    />
                   </div>
                   <span className="leading-tight">{feature}</span>
                 </li>

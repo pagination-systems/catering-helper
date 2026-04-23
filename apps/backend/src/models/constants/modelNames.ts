@@ -1,5 +1,5 @@
 export const modelNames = {
-  USER: "users",
+  USER: 'users',
 };
 
 export type ModelNames = (typeof modelNames)[keyof typeof modelNames];

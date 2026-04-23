@@ -1,3 +1,6 @@
-export function canAccessTenant(requestedTenantId: string, allowedTenantIds: string[]): boolean {
+export function canAccessTenant(
+  requestedTenantId: string,
+  allowedTenantIds: string[],
+): boolean {
   return allowedTenantIds.includes(requestedTenantId);
 }

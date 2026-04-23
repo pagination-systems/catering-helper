@@ -1,19 +1,23 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { ArrowRight, Dot } from "lucide-react";
+import { motion } from 'framer-motion';
+import { ArrowRight, Dot } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import type { LandingCopy } from "@/lib/i18n";
+import { Button } from '@/components/ui/button';
+import type { LandingCopy } from '@/lib/i18n';
 
 type HeroProps = {
-  copy: LandingCopy["hero"];
+  copy: LandingCopy['hero'];
 };
 
 export function HeroSection({ copy }: HeroProps) {
-  const accentIndex = copy.headline.indexOf("Eliminate");
-  const primaryLine = accentIndex > -1 ? copy.headline.slice(0, accentIndex).trim() : copy.headline;
-  const accentLine = accentIndex > -1 ? copy.headline.slice(accentIndex).trim() : "";
+  const accentIndex = copy.headline.indexOf('Eliminate');
+  const primaryLine =
+    accentIndex > -1
+      ? copy.headline.slice(0, accentIndex).trim()
+      : copy.headline;
+  const accentLine =
+    accentIndex > -1 ? copy.headline.slice(accentIndex).trim() : '';
 
   return (
     <section className="relative overflow-hidden border-b border-border/50 bg-[hsl(var(--landing-bg))]">
@@ -29,7 +33,9 @@ export function HeroSection({ copy }: HeroProps) {
         >
           <h1 className="max-w-xl text-balance text-5xl font-extrabold leading-[0.98] tracking-[-0.02em] text-[hsl(var(--landing-heading))] sm:text-6xl">
             {primaryLine}
-            {accentLine ? <span className="mt-2 block text-primary">{accentLine}</span> : null}
+            {accentLine ? (
+              <span className="mt-2 block text-primary">{accentLine}</span>
+            ) : null}
           </h1>
           <p className="max-w-md text-pretty text-[15px] leading-7 text-[hsl(var(--landing-subheading))]">
             {copy.subheadline}
@@ -63,7 +69,9 @@ export function HeroSection({ copy }: HeroProps) {
           className="relative flex min-h-[280px] items-center justify-center lg:min-h-[340px]"
         >
           <div className="absolute right-2 top-0 hidden w-[210px] rounded-2xl border border-[hsl(var(--landing-card-border))] bg-[hsl(var(--landing-card-bg))] p-4 shadow-[0_18px_42px_rgba(var(--landing-shadow-rgb),0.12)] md:block">
-            <p className="text-[12px] font-medium text-[hsl(var(--landing-text-strong))]">{copy.dashboardTitle}</p>
+            <p className="text-[12px] font-medium text-[hsl(var(--landing-text-strong))]">
+              {copy.dashboardTitle}
+            </p>
             <div className="mt-3 space-y-2 text-[11px] text-[hsl(var(--landing-text-muted))]">
               <div className="h-8 rounded-md bg-[hsl(var(--landing-chip-bg-soft))]" />
               <div className="h-8 rounded-md bg-[hsl(var(--landing-chip-bg-soft))]" />
@@ -71,33 +79,51 @@ export function HeroSection({ copy }: HeroProps) {
           </div>
 
           <div className="relative z-10 w-full max-w-[360px] rounded-2xl border border-[hsl(var(--landing-card-border))] bg-[hsl(var(--landing-card-bg))] p-5 shadow-[0_24px_50px_rgba(var(--landing-shadow-rgb),0.14)]">
-            <p className="text-[12px] font-medium text-[hsl(var(--landing-text-strong))]">{copy.mobileMealTitle}</p>
+            <p className="text-[12px] font-medium text-[hsl(var(--landing-text-strong))]">
+              {copy.mobileMealTitle}
+            </p>
             <p className="mt-2 text-[10px] uppercase tracking-[0.08em] text-[hsl(var(--landing-text-soft))]">
               {copy.mobileMealDescription}
             </p>
 
             <div className="mt-4 space-y-3 text-[12px]">
               <div className="flex items-center justify-between border-b border-[hsl(var(--landing-rule))] pb-2">
-                <span className="text-[hsl(var(--landing-text))]">{copy.mobileOrderLabel}</span>
-                <span className="font-medium text-[hsl(var(--landing-text-strong))]">{copy.bazarItems[0]}</span>
+                <span className="text-[hsl(var(--landing-text))]">
+                  {copy.mobileOrderLabel}
+                </span>
+                <span className="font-medium text-[hsl(var(--landing-text-strong))]">
+                  {copy.bazarItems[0]}
+                </span>
               </div>
               <div className="flex items-center justify-between border-b border-[hsl(var(--landing-rule))] pb-2">
-                <span className="text-[hsl(var(--landing-text))]">Whole Chicken</span>
-                <span className="font-medium text-[hsl(var(--landing-text-strong))]">{copy.bazarItems[1]}</span>
+                <span className="text-[hsl(var(--landing-text))]">
+                  Whole Chicken
+                </span>
+                <span className="font-medium text-[hsl(var(--landing-text-strong))]">
+                  {copy.bazarItems[1]}
+                </span>
               </div>
               <div className="flex items-center justify-between border-b border-[hsl(var(--landing-rule))] pb-2">
-                <span className="text-[hsl(var(--landing-text))]">Cooking Oil (Soybean)</span>
-                <span className="font-medium text-[hsl(var(--landing-text-strong))]">{copy.bazarItems[2]}</span>
+                <span className="text-[hsl(var(--landing-text))]">
+                  Cooking Oil (Soybean)
+                </span>
+                <span className="font-medium text-[hsl(var(--landing-text-strong))]">
+                  {copy.bazarItems[2]}
+                </span>
               </div>
               <button className="mt-1 w-full rounded-md bg-[hsl(var(--landing-chip-bg))] py-2 text-[11px] font-medium text-[hsl(var(--landing-text-strong))]">
                 {copy.orderSummary}
               </button>
-              <div className="text-center text-[10px] text-[hsl(var(--landing-text-soft))]">{copy.mobileOrderBy}</div>
+              <div className="text-center text-[10px] text-[hsl(var(--landing-text-soft))]">
+                {copy.mobileOrderBy}
+              </div>
             </div>
           </div>
 
           <div className="absolute -right-2 bottom-8 hidden w-[145px] rounded-xl border border-[hsl(var(--landing-card-border))] bg-[hsl(var(--landing-card-bg))] p-3 shadow-[0_16px_36px_rgba(var(--landing-shadow-rgb),0.12)] md:block">
-            <p className="text-[11px] font-medium text-[hsl(var(--landing-text-strong))]">{copy.mobileTitle}</p>
+            <p className="text-[11px] font-medium text-[hsl(var(--landing-text-strong))]">
+              {copy.mobileTitle}
+            </p>
             <div className="mt-2 space-y-2">
               <div className="h-3 rounded bg-[hsl(var(--landing-chip-bg-soft))]" />
               <div className="h-3 rounded bg-[hsl(var(--landing-chip-bg-soft))]" />

@@ -1,9 +1,9 @@
-import { ACCOUNT_TYPE_ENUMS, USER_ROLE_ENUMS } from "./tenant";
+import { ACCOUNT_TYPE_ENUMS, USER_ROLE_ENUMS } from './tenant';
 
 export interface IOptions {
   page?: number;
   limit?: number;
-  sort?: Record<string, 1 | -1 | "asc" | "desc"> | string;
+  sort?: Record<string, 1 | -1 | 'asc' | 'desc'> | string;
 }
 
 export type ListQueryParams<T> = Partial<T> & {

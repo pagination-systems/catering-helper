@@ -6,31 +6,31 @@ import {
   PaginateModel,
   AggregatePaginateModel,
   Types,
-} from "mongoose";
-import mongoosePaginate from "mongoose-paginate-v2";
-import aggregatePaginate from "mongoose-aggregate-paginate-v2";
+} from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
+import aggregatePaginate from 'mongoose-aggregate-paginate-v2';
 import {
   passwordHashPlugin,
   PasswordHashInput,
   IPasswordHashDoc,
-} from "./plugins/password-hash.plugin";
+} from './plugins/password-hash.plugin';
 import {
   softDeletePlugin,
   ISoftDeleteDoc,
   ISoftDeleteModel,
-} from "./plugins/soft-delete.plugin";
+} from './plugins/soft-delete.plugin';
 import {
   tenantDataPlugin,
   TenantInput,
   ITenantDoc,
   ITenantModel,
-} from "./plugins/tenant-data.plugin";
-import { modelNames } from "./constants";
+} from './plugins/tenant-data.plugin';
+import { modelNames } from './constants';
 import {
   USER_ROLE_ENUMS,
   ACCOUNT_TYPE_ENUMS,
   EMAIL_VERIFICATION_STATUS_ENUMS,
-} from "@catering/types";
+} from '@catering/types';
 
 /*
   @description UserInput interface
@@ -110,7 +110,7 @@ const userSchema = new Schema<IUserDoc>(
 );
 
 // Define a virtual property for full name
-userSchema.virtual("fullName").get(function (this: IUserDoc) {
+userSchema.virtual('fullName').get(function (this: IUserDoc) {
   return `${this.firstName} ${this.lastName}`;
 });
 

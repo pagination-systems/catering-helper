@@ -7,7 +7,7 @@ import {
   buildMongoQueryMatcher,
   MongoQuery,
   fieldPatternMatcher,
-} from "@casl/ability";
+} from '@casl/ability';
 
 import {
   ACCOUNT_TYPE_ENUMS,
@@ -15,7 +15,7 @@ import {
   ISession,
   IAbilityBuilder,
   AbilityAction,
-} from "@catering/types";
+} from '@catering/types';
 
 // --- 2. AUTHZ ENTITY ---
 export class UserAuthZEntity {

@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction, CookieOptions } from "express";
-import { ISession } from "@catering/types";
-import "../../types";
+import { Request, Response, NextFunction, CookieOptions } from 'express';
+import { ISession } from '@catering/types';
+import '../../types';
 
 interface RequestObject {
   body: any;
@@ -40,7 +40,7 @@ export function handleController(
       cookies: req.cookies,
       session: req.session,
       file: null,
-      ip: req.ip ?? "",
+      ip: req.ip ?? '',
       method: req.method,
       url: req.originalUrl,
       path: req.path,

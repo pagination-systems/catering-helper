@@ -1,20 +1,23 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { Calculator, Coins, Store } from "lucide-react";
+import { motion } from 'framer-motion';
+import { Calculator, Coins, Store } from 'lucide-react';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { LandingCopy } from "@/lib/i18n";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { LandingCopy } from '@/lib/i18n';
 
 type FeaturesGridProps = {
-  copy: LandingCopy["features"];
+  copy: LandingCopy['features'];
 };
 
 export function FeaturesGridSection({ copy }: FeaturesGridProps) {
   const [portalFeature, bazarFeature, financeFeature] = copy.items;
 
   return (
-    <section id="features" className="border-y border-border/50 bg-[hsl(var(--landing-bg))] py-16 sm:py-20">
+    <section
+      id="features"
+      className="border-y border-border/50 bg-[hsl(var(--landing-bg))] py-16 sm:py-20"
+    >
       <div className="mx-auto w-full max-w-[1180px] px-4 sm:px-6 lg:px-8">
         <h2 className="mb-12 max-w-[420px] text-[50px] font-semibold leading-[1.08] tracking-[-0.03em] text-[hsl(var(--landing-heading))]">
           {copy.title}
@@ -67,7 +70,9 @@ export function FeaturesGridSection({ copy }: FeaturesGridProps) {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-[13px] leading-6 text-[hsl(var(--landing-text))]">{bazarFeature.description}</p>
+                <p className="text-[13px] leading-6 text-[hsl(var(--landing-text))]">
+                  {bazarFeature.description}
+                </p>
               </CardContent>
             </Card>
           </motion.div>
@@ -88,7 +93,9 @@ export function FeaturesGridSection({ copy }: FeaturesGridProps) {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-[13px] leading-6 text-[hsl(var(--landing-text))]">{financeFeature.description}</p>
+                <p className="text-[13px] leading-6 text-[hsl(var(--landing-text))]">
+                  {financeFeature.description}
+                </p>
               </CardContent>
             </Card>
           </motion.div>
@@ -101,7 +108,7 @@ export function FeaturesGridSection({ copy }: FeaturesGridProps) {
           >
             <div
               className="relative h-full min-h-[170px] overflow-hidden rounded-2xl border border-[hsl(var(--landing-media-border))]"
-              style={{ background: "var(--landing-media-gradient)" }}
+              style={{ background: 'var(--landing-media-gradient)' }}
             >
               <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,0.55)_100%)]" />
               <p className="absolute bottom-5 left-5 text-[20px] font-semibold text-white">

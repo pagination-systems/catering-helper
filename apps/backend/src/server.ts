@@ -1,9 +1,9 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
 
-import { app } from "./app";
-import { logger, actionOnUnhandled } from "./common/helper";
-import { connectDB } from "./.config/database";
+import { app } from './app';
+import { logger, actionOnUnhandled } from './common/helper';
+import { connectDB } from './.config/database';
 // import { initiate } from "./automation/database-plugins";
 
 // initiate database plugins

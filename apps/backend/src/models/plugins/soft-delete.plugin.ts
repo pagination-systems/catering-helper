@@ -6,8 +6,8 @@ import {
   PaginateResult,
   UpdateWriteOpResult,
   QueryWithHelpers,
-} from "mongoose";
-import mongoosePaginate from "mongoose-paginate-v2";
+} from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 // Define an interface for soft delete document
 export interface ISoftDeleteDoc extends Document {
@@ -19,11 +19,23 @@ export interface ISoftDeleteDoc extends Document {
 }
 
 // Define the interface for the model with soft delete methods
-export interface ISoftDeleteModel<T extends ISoftDeleteDoc> extends Model<T>, PaginateModel<T> {
-  softDelete(query: Record<string, any>, options?: any): Promise<{ deleted: number }>;
-  restore(query: Record<string, any>, options?: any): Promise<{ restored: number }>;
-  paginateAndExcludeDeleted(query: Record<string, any>, options?: any): QueryWithHelpers<PaginateResult<T>, T>;
-  findOneWithExcludeDeleted(query: Record<string, any>): QueryWithHelpers<T | null, T>;
+export interface ISoftDeleteModel<T extends ISoftDeleteDoc>
+  extends Model<T>, PaginateModel<T> {
+  softDelete(
+    query: Record<string, any>,
+    options?: any,
+  ): Promise<{ deleted: number }>;
+  restore(
+    query: Record<string, any>,
+    options?: any,
+  ): Promise<{ restored: number }>;
+  paginateAndExcludeDeleted(
+    query: Record<string, any>,
+    options?: any,
+  ): QueryWithHelpers<PaginateResult<T>, T>;
+  findOneWithExcludeDeleted(
+    query: Record<string, any>,
+  ): QueryWithHelpers<T | null, T>;
 }
 
 /**
@@ -43,8 +55,11 @@ export interface ISoftDeleteModel<T extends ISoftDeleteDoc> extends Model<T>, Pa
  * // Find one document with out soft deleted documents
  * Model.findOneWithExcludeDeleted(query);
  */
-export const softDeletePlugin = <T extends ISoftDeleteDoc>(schema: Schema<T>): void => {
-  if (!(schema instanceof Schema)) throw new Error("The schema must be an instance of mongoose schema");
+export const softDeletePlugin = <T extends ISoftDeleteDoc>(
+  schema: Schema<T>,
+): void => {
+  if (!(schema instanceof Schema))
+    throw new Error('The schema must be an instance of mongoose schema');
 
   const softDeleteSchema = new Schema<ISoftDeleteDoc>({
     deleteMarker: {
@@ -66,62 +81,74 @@ export const softDeletePlugin = <T extends ISoftDeleteDoc>(schema: Schema<T>): v
   schema.plugin(mongoosePaginate);
 
   // Static method to soft delete documents
-  schema.static("softDelete", async function (query: Record<string, any>, options: any = {}) {
-    try {
-      const result = (await this.updateMany(
-        {
-          ...query,
-          "deleteMarker.status": false,
-        },
-        {
-          $set: {
-            "deleteMarker.status": true,
-            "deleteMarker.deletedAt": new Date(),
-            "deleteMarker.dateScheduled": new Date(),
+  schema.static(
+    'softDelete',
+    async function (query: Record<string, any>, options: any = {}) {
+      try {
+        const result = (await this.updateMany(
+          {
+            ...query,
+            'deleteMarker.status': false,
           },
-        },
-        options
-      )) as UpdateWriteOpResult;
+          {
+            $set: {
+              'deleteMarker.status': true,
+              'deleteMarker.deletedAt': new Date(),
+              'deleteMarker.dateScheduled': new Date(),
+            },
+          },
+          options,
+        )) as UpdateWriteOpResult;
 
-      return { deleted: result.modifiedCount || 0 };
-    } catch (err: any) {
-      throw new Error(err.name + ": " + err.message);
-    }
-  });
+        return { deleted: result.modifiedCount || 0 };
+      } catch (err: any) {
+        throw new Error(err.name + ': ' + err.message);
+      }
+    },
+  );
 
   // Static method to restore soft deleted documents
-  schema.static("restore", async function (query: Record<string, any>, options: any = {}) {
-    try {
-      const result = (await this.updateMany(
-        {
-          ...query,
-          "deleteMarker.status": true,
-        },
-        {
-          $set: {
-            "deleteMarker.status": false,
-            "deleteMarker.deletedAt": null,
-            "deleteMarker.dateScheduled": null,
+  schema.static(
+    'restore',
+    async function (query: Record<string, any>, options: any = {}) {
+      try {
+        const result = (await this.updateMany(
+          {
+            ...query,
+            'deleteMarker.status': true,
           },
-        },
-        options
-      )) as UpdateWriteOpResult;
+          {
+            $set: {
+              'deleteMarker.status': false,
+              'deleteMarker.deletedAt': null,
+              'deleteMarker.dateScheduled': null,
+            },
+          },
+          options,
+        )) as UpdateWriteOpResult;
 
-      return { restored: result.modifiedCount || 0 };
-    } catch (err: any) {
-      throw new Error(err.name + ": " + err.message);
-    }
-  });
+        return { restored: result.modifiedCount || 0 };
+      } catch (err: any) {
+        throw new Error(err.name + ': ' + err.message);
+      }
+    },
+  );
 
   // Static method to find with out soft deleted documents
-  schema.static("paginateAndExcludeDeleted", function (query: Record<string, any>, options: any) {
-    const self = this as ISoftDeleteModel<T>;
-    return self.paginate({ ...query, "deleteMarker.status": false }, options);
-  });
+  schema.static(
+    'paginateAndExcludeDeleted',
+    function (query: Record<string, any>, options: any) {
+      const self = this as ISoftDeleteModel<T>;
+      return self.paginate({ ...query, 'deleteMarker.status': false }, options);
+    },
+  );
 
   // Static method to find not deleted document
-  schema.static("findOneWithExcludeDeleted", function (query: Record<string, any>) {
-    const self = this as ISoftDeleteModel<T>;
-    return self.findOne({ ...query, "deleteMarker.status": false });
-  });
+  schema.static(
+    'findOneWithExcludeDeleted',
+    function (query: Record<string, any>) {
+      const self = this as ISoftDeleteModel<T>;
+      return self.findOne({ ...query, 'deleteMarker.status': false });
+    },
+  );
 };

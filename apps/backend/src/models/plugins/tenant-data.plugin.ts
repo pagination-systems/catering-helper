@@ -1,5 +1,5 @@
-import { Schema, Document, Model } from "mongoose";
-import { Tenant } from "../tenant";
+import { Schema, Document, Model } from 'mongoose';
+import { Tenant } from '../tenant';
 
 export type TenantInput = {
   tenantId?: Schema.Types.ObjectId | null;
@@ -27,7 +27,7 @@ export const tenantDataPlugin = <T extends ITenantDoc>(
   schema: Schema<T>,
 ): void => {
   if (!(schema instanceof Schema))
-    throw new Error("The schema must be an instance of mongoose schema");
+    throw new Error('The schema must be an instance of mongoose schema');
 
   const tenantDataSchema = new Schema<ITenantDoc>({
     tenantId: {
@@ -40,7 +40,7 @@ export const tenantDataPlugin = <T extends ITenantDoc>(
   schema.add(tenantDataSchema);
 
   // Add a static method to find documents by tenantId
-  schema.static("findByTenantId", function (tenantId: Schema.Types.ObjectId) {
+  schema.static('findByTenantId', function (tenantId: Schema.Types.ObjectId) {
     return this.find({ tenantId });
   });
 };

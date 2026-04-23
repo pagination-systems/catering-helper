@@ -1,16 +1,19 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 
-import type { LandingCopy } from "@/lib/i18n";
+import type { LandingCopy } from '@/lib/i18n';
 
 type HowItWorksProps = {
-  copy: LandingCopy["howItWorks"];
+  copy: LandingCopy['howItWorks'];
 };
 
 export function HowItWorksSection({ copy }: HowItWorksProps) {
   return (
-    <section id="how-it-works" className="mx-auto w-full max-w-[1180px] px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+    <section
+      id="how-it-works"
+      className="mx-auto w-full max-w-[1180px] px-4 py-16 sm:px-6 lg:px-8 lg:py-24"
+    >
       <h2 className="mb-14 text-center text-[14px] font-medium tracking-[-0.01em] text-[hsl(var(--landing-text-strong))]">
         {copy.title}
       </h2>

@@ -5,18 +5,18 @@ import {
   Model,
   PaginateModel,
   AggregatePaginateModel,
-} from "mongoose";
-import mongoosePaginate from "mongoose-paginate-v2";
-import aggregatePaginate from "mongoose-aggregate-paginate-v2";
-import { awsStorageTemplateMongooseDefinition } from "./templates/aws-storage.template";
-import { AwsStorageTemplate } from "./templates/aws-storage.template";
+} from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
+import aggregatePaginate from 'mongoose-aggregate-paginate-v2';
+import { awsStorageTemplateMongooseDefinition } from './templates/aws-storage.template';
+import { AwsStorageTemplate } from './templates/aws-storage.template';
 import {
   softDeletePlugin,
   ISoftDeleteDoc,
   ISoftDeleteModel,
-} from "./plugins/soft-delete.plugin";
-import { TENANT_STATUS_ENUMS, TENANT_TYPE } from "@catering/types";
-import { modelNames } from "./constants";
+} from './plugins/soft-delete.plugin';
+import { TENANT_STATUS_ENUMS, TENANT_TYPE } from '@catering/types';
+import { modelNames } from './constants';
 
 export interface TenantInput {
   name: string;

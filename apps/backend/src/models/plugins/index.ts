@@ -1,1 +1,1 @@
-export * from "./tenant-data.plugin";
+export * from './tenant-data.plugin';

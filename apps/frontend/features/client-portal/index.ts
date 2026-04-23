@@ -1,1 +1,1 @@
-export { ClientPortalPage } from "./client-portal-page";
+export { ClientPortalPage } from './client-portal-page';

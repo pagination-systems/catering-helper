@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   color-scheme: light;
@@ -43,7 +43,12 @@
   --landing-old-dot: 223 14% 78%;
   --landing-shadow-rgb: 56 72 117;
   --landing-media-border: 221 24% 86%;
-  --landing-media-gradient: radial-gradient(circle at 10% 20%, #6d7b87 0%, #2f3740 45%, #161c24 100%);
+  --landing-media-gradient: radial-gradient(
+    circle at 10% 20%,
+    #6d7b87 0%,
+    #2f3740 45%,
+    #161c24 100%
+  );
 }
 
 .dark {
@@ -88,7 +93,12 @@
   --landing-old-dot: 223 17% 45%;
   --landing-shadow-rgb: 17 24 40;
   --landing-media-border: 221 20% 30%;
-  --landing-media-gradient: radial-gradient(circle at 10% 20%, #51606b 0%, #242c36 45%, #0f141c 100%);
+  --landing-media-gradient: radial-gradient(
+    circle at 10% 20%,
+    #51606b 0%,
+    #242c36 45%,
+    #0f141c 100%
+  );
 }
 
 * {

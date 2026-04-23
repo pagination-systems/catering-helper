@@ -1,5 +1,5 @@
-import { Schema, Document } from "mongoose";
-import bcrypt from "bcryptjs";
+import { Schema, Document } from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 export type PasswordHashInput = {
   password: string;
@@ -26,13 +26,13 @@ const passwordHashPlugin = <T extends IPasswordHashDoc>(
   });
   schema.add(passwordHashSchema);
 
-  schema.pre("save", async function (this: T) {
-    if (!this.isModified("password")) return;
+  schema.pre('save', async function (this: T) {
+    if (!this.isModified('password')) return;
     this.password = await bcrypt.hash(this.password, 12);
   });
 
-  schema.pre("save", function (this: T) {
-    if (!this.isModified("password") || this.isNew) return;
+  schema.pre('save', function (this: T) {
+    if (!this.isModified('password') || this.isNew) return;
     this.passwordChangeAt = new Date();
   });
 
