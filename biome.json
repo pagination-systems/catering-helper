@@ -6,7 +6,13 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "suspicious": {
+        "noExplicitAny": "off"
+      },
+      "style": {
+        "noNonNullAssertion": "off"
+      }
     }
   },
   "formatter": {
@@ -24,10 +30,10 @@
   "files": {
     "includes": [
       "**",
-      "!dist",
+      "!**/dist",
       "!node_modules",
-      "!**.turbo",
-      "!**.next",
+      "!**/.turbo",
+      "!**/.next",
       "!pnpm-workspace.yaml",
       "!**/tsconfig.json"
     ]

@@ -26,9 +26,12 @@ export function ThemeToggle() {
     return null;
   }
 
-  const activeTheme = theme && themeOrder.includes(theme as (typeof themeOrder)[number]) ? theme : "system";
+  const activeTheme =
+    theme && themeOrder.includes(theme as (typeof themeOrder)[number]) ? theme : "system";
   const nextTheme =
-    themeOrder[(themeOrder.indexOf(activeTheme as (typeof themeOrder)[number]) + 1) % themeOrder.length];
+    themeOrder[
+      (themeOrder.indexOf(activeTheme as (typeof themeOrder)[number]) + 1) % themeOrder.length
+    ];
   const Icon = themeIcons[activeTheme as keyof typeof themeIcons];
 
   return (

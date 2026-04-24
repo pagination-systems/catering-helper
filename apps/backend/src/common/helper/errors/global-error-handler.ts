@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { MongooseError } from "mongoose";
 import { logger } from "../logger";
 import { BadRequestException } from "./api-error";
@@ -16,7 +16,7 @@ const handleDatabaseError = (error: MongooseError) => {
   }
 };
 
-const sendErrorDev = (err: ErrorWithStatus, req: Request, res: Response): void => {
+const sendErrorDev = (err: ErrorWithStatus, _req: Request, res: Response): void => {
   logger.error(err.message);
 
   res.status(err.httpStatusCode || 500).json({
@@ -27,7 +27,7 @@ const sendErrorDev = (err: ErrorWithStatus, req: Request, res: Response): void =
   });
 };
 
-const sendErrorProd = (err: ErrorWithStatus, req: Request, res: Response): void => {
+const sendErrorProd = (err: ErrorWithStatus, _req: Request, res: Response): void => {
   if (err.isOperational) {
     res.status(err.httpStatusCode || 500).json({
       status: err.status || "error",
@@ -44,7 +44,12 @@ const sendErrorProd = (err: ErrorWithStatus, req: Request, res: Response): void 
   }
 };
 
-const globalErrorHandler = (err: ErrorWithStatus, req: Request, res: Response, next: NextFunction): void => {
+const globalErrorHandler = (
+  err: ErrorWithStatus,
+  req: Request,
+  res: Response,
+  _next: NextFunction,
+): void => {
   err.httpStatusCode = err.httpStatusCode || 500;
   err.status = err.status || "error";
 
@@ -55,7 +60,7 @@ const globalErrorHandler = (err: ErrorWithStatus, req: Request, res: Response, n
   if (process.env.NODE_ENV === "development") {
     sendErrorDev(err, req, res);
   } else {
-    let error = { ...err, message: err.message, name: err.name };
+    const error = { ...err, message: err.message, name: err.name };
     sendErrorProd(error, req, res);
   }
 };

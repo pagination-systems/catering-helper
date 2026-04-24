@@ -89,7 +89,8 @@ export const landingContent = {
         },
         {
           title: "Clients Order",
-          description: "Clients log into their clean portal, input their numbers, and submit before your cutoff time.",
+          description:
+            "Clients log into their clean portal, input their numbers, and submit before your cutoff time.",
         },
         {
           title: "Export at 10:01 AM",
@@ -239,7 +240,8 @@ export const clientPortalContent = {
     },
     badge: "Corporate Catering Platform",
     packageLabel: "Choose a Catering Package",
-    packageDescription: "Pick one or more packages, customize each menu, and review everything in one summary.",
+    packageDescription:
+      "Pick one or more packages, customize each menu, and review everything in one summary.",
     mostPopular: "Most popular",
     selectedPackage: "Selected Package",
     viewPackage: "View Package",

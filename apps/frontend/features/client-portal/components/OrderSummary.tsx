@@ -43,15 +43,22 @@ export function OrderSummary({ readonly = false, showDeliveryFee = false }: Orde
         <div className="max-h-[420px] space-y-3 overflow-y-auto pr-2">
           <If
             expression={groupedOrders.length > 0}
-            fallback={<p className="p-4 text-sm text-muted-foreground">{content.noItemsSelected}</p>}
+            fallback={
+              <p className="p-4 text-sm text-muted-foreground">{content.noItemsSelected}</p>
+            }
           >
             {groupedOrders.map((group) => (
-              <Collapsible key={group.day} defaultOpen className="overflow-hidden rounded-lg border bg-background">
+              <Collapsible
+                key={group.day}
+                defaultOpen
+                className="overflow-hidden rounded-lg border bg-background"
+              >
                 {/* FIXED: Added flex, w-full, justify-between, and padding for proper layout */}
                 <CollapsibleTrigger className="flex w-full items-center justify-between border-b bg-muted/40 p-3 text-sm transition-colors hover:bg-muted/60">
                   <span className="font-semibold">
-                    {content.dayShortLabel[group.day as keyof typeof content.dayShortLabel] || group.day},{" "}
-                    {group.dateLabel}
+                    {content.dayShortLabel[group.day as keyof typeof content.dayShortLabel] ||
+                      group.day}
+                    , {group.dateLabel}
                   </span>
                   <span className="font-bold">{bdt.format(group.subTotal)}</span>
                 </CollapsibleTrigger>
@@ -62,7 +69,8 @@ export function OrderSummary({ readonly = false, showDeliveryFee = false }: Orde
                       key={row.key}
                       className={cn(
                         "flex flex-col gap-1 transition-all",
-                        recentlyUpdatedKey === row.key && "rounded-md p-2 ring-1 ring-primary/40 bg-primary/5",
+                        recentlyUpdatedKey === row.key &&
+                          "rounded-md p-2 ring-1 ring-primary/40 bg-primary/5",
                       )}
                     >
                       <p className="text-sm font-medium">
@@ -81,16 +89,22 @@ export function OrderSummary({ readonly = false, showDeliveryFee = false }: Orde
                               variant="ghost"
                               size="icon"
                               className="h-6 w-6 rounded-full"
-                              onClick={() => updateQuantity(row.pkgId, row.day, row.variantId, row.quantity - 1)}
+                              onClick={() =>
+                                updateQuantity(row.pkgId, row.day, row.variantId, row.quantity - 1)
+                              }
                             >
                               <Minus className="h-3 w-3" />
                             </Button>
-                            <span className="w-4 text-center text-xs font-semibold">{row.quantity}</span>
+                            <span className="w-4 text-center text-xs font-semibold">
+                              {row.quantity}
+                            </span>
                             <Button
                               variant="ghost"
                               size="icon"
                               className="h-6 w-6 rounded-full"
-                              onClick={() => updateQuantity(row.pkgId, row.day, row.variantId, row.quantity + 1)}
+                              onClick={() =>
+                                updateQuantity(row.pkgId, row.day, row.variantId, row.quantity + 1)
+                              }
                             >
                               <Plus className="h-3 w-3" />
                             </Button>
@@ -122,7 +136,9 @@ export function OrderSummary({ readonly = false, showDeliveryFee = false }: Orde
 
           <div className="flex items-end justify-between border-t pt-3">
             <div className="space-y-1">
-              <p className="text-sm font-semibold">{showDeliveryFee ? content.finalTotal : content.total}</p>
+              <p className="text-sm font-semibold">
+                {showDeliveryFee ? content.finalTotal : content.total}
+              </p>
               <p className="text-xs text-muted-foreground">
                 {totalQuantity} {content.meals}
               </p>

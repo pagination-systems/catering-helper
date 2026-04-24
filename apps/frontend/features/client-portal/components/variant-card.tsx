@@ -37,7 +37,9 @@ export function VariantCard({
       )}
     >
       <div className="flex flex-1 flex-col min-w-0">
-        <h4 className="text-base sm:text-lg font-bold tracking-tight text-foreground truncate">{variant.name}</h4>
+        <h4 className="text-base sm:text-lg font-bold tracking-tight text-foreground truncate">
+          {variant.name}
+        </h4>
         <p className="mt-0.5 text-sm font-medium text-muted-foreground">
           <b>BDT {price}</b> {mealSuffix}
         </p>

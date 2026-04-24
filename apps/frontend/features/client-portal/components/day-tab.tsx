@@ -32,7 +32,12 @@ export function DayTab({
       >
         {dateLabel}
       </p>
-      <p className={cn("mt-0.5 text-xs sm:text-sm font-semibold", active ? "text-primary-foreground" : "")}>
+      <p
+        className={cn(
+          "mt-0.5 text-xs sm:text-sm font-semibold",
+          active ? "text-primary-foreground" : "",
+        )}
+      >
         {dayLabel}
       </p>
     </Button>

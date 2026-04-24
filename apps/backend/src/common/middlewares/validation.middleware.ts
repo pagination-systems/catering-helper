@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from "express";
-import { Schema } from "joi";
+import type { NextFunction, Request, Response } from "express";
+import type { Schema } from "joi";
 import { validate as _validate, BadRequestException } from "../helper";
 
 const validate = (validationObjectName: string) => {
   return (schema: Schema) => {
-    return async (req: Request, res: Response, next: NextFunction) => {
+    return async (req: Request, _res: Response, next: NextFunction) => {
       try {
         const errors = _validate(schema, req[validationObjectName]);
         if (!errors) return next();
