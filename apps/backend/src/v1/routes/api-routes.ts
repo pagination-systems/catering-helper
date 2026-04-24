@@ -1,9 +1,9 @@
-import express, { Express } from "express";
+import express, { type Express } from "express";
 
 const router = express.Router();
 
 const getApiRoutes = () => {
-  router.use("/health", (req, res) => {
+  router.use("/health", (_req, res) => {
     res.status(200).json({ message: "V1:Healthy" });
   });
   return router;

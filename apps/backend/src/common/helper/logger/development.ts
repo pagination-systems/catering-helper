@@ -8,7 +8,11 @@ const developmentLogger = createLogger({
   format: format.json(),
   transports: [
     new transports.Console({
-      format: format.combine(format.colorize(), format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), customFormat),
+      format: format.combine(
+        format.colorize(),
+        format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+        customFormat,
+      ),
       handleExceptions: true,
       handleRejections: true,
     }),

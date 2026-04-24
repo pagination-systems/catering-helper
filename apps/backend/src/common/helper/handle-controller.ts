@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction, CookieOptions } from "express";
-import { ISession } from "@catering/types";
+import type { Request, Response, NextFunction, CookieOptions } from "express";
+import type { ISession } from "@catering/types";
 import "../../types";
 
 interface RequestObject {

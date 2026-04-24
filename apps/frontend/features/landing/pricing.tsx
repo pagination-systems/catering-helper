@@ -10,7 +10,10 @@ type PricingProps = {
 
 export function PricingSection({ content }: PricingProps) {
   return (
-    <section id="pricing" className="relative overflow-hidden border-t border-border/50 bg-background py-20 sm:py-24">
+    <section
+      id="pricing"
+      className="relative overflow-hidden border-t border-border/50 bg-background py-20 sm:py-24"
+    >
       {/* Soft background */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-muted/40 to-transparent" />
       <div className="pointer-events-none absolute left-1/2 top-20 h-[260px] w-[420px] -translate-x-1/2 rounded-full bg-primary/5 blur-[100px]" />
@@ -24,20 +27,26 @@ export function PricingSection({ content }: PricingProps) {
               {content.badge}
             </span>
 
-            <h2 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">{content.title}</h2>
+            <h2 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">
+              {content.title}
+            </h2>
 
             <p className="mt-2 text-sm text-muted-foreground">{content.description}</p>
 
             {/* PRICE */}
             <div className="mt-6 flex items-end gap-1">
-              <span className="text-4xl font-semibold tracking-tight text-foreground">{content.price}</span>
+              <span className="text-4xl font-semibold tracking-tight text-foreground">
+                {content.price}
+              </span>
               <span className="pb-1 text-sm text-muted-foreground">/ {content.period}</span>
             </div>
           </CardHeader>
 
           {/* FEATURES */}
           <CardContent className="px-6 py-4">
-            <p className="mb-4 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Included</p>
+            <p className="mb-4 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+              Included
+            </p>
 
             <ul className="space-y-3">
               {content.features.map((feature) => (

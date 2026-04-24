@@ -26,7 +26,9 @@ export const sanitizeQueryIds = <T = unknown>(query: T): T => {
           if (Array.isArray(opValue)) {
             // Handle array operators like $in, $nin, $all
             newQuery[key][opKey] = opValue.map((id) =>
-              typeof id === "string" && mongoose.Types.ObjectId.isValid(id) ? new mongoose.Types.ObjectId(id) : id
+              typeof id === "string" && mongoose.Types.ObjectId.isValid(id)
+                ? new mongoose.Types.ObjectId(id)
+                : id,
             );
           } else if (typeof opValue === "string" && mongoose.Types.ObjectId.isValid(opValue)) {
             // Handle direct operators like $ne, $eq

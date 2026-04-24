@@ -2,12 +2,8 @@ import mongoose from "mongoose";
 import { env } from "./env";
 
 const constructDatabaseUrl = (mongoUrl: string, dbName: string): string => {
-  if (!mongoUrl)
-    throw new Error("MONGO_URL is not defined in the environment variables");
-  if (!dbName)
-    throw new Error(
-      "DATABASE_NAME is not defined in the environment variables",
-    );
+  if (!mongoUrl) throw new Error("MONGO_URL is not defined in the environment variables");
+  if (!dbName) throw new Error("DATABASE_NAME is not defined in the environment variables");
   const url = new URL(mongoUrl);
   url.pathname = `/${dbName}`;
 

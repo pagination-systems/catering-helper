@@ -1,9 +1,14 @@
-import { PutObjectCommand, DeleteObjectCommand, GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { v4 as uuidv4 } from "uuid";
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  PutObjectCommand,
+  type S3Client,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { Readable } from "stream";
-import { logger } from "./logger";
 import * as fs from "fs";
+import type { Readable } from "stream";
+import { v4 as uuidv4 } from "uuid";
+import { logger } from "./logger";
 export interface FileInformation {
   Bucket: string;
   Key: string;
@@ -46,7 +51,7 @@ class FileManager {
     this.s3Client = s3Client;
   }
 
-  private _isValidFile(filename: string): boolean {
+  private _isValidFile(_filename: string): boolean {
     return true;
     // const validExtensions = [".jpg", ".png", ".jpeg"];
     // return validExtensions.some((ext) => filename.endsWith(ext));
@@ -67,7 +72,9 @@ class FileManager {
       Key: fileName,
     };
 
-    const signedUrl = await getSignedUrl(this.s3Client, new PutObjectCommand(params), { expiresIn: 3 * 3600 });
+    const signedUrl = await getSignedUrl(this.s3Client, new PutObjectCommand(params), {
+      expiresIn: 3 * 3600,
+    });
 
     return {
       signedUrl,
@@ -84,7 +91,9 @@ class FileManager {
       Key: fileInformation.Key,
     };
 
-    const signedLink = await getSignedUrl(this.s3Client, new GetObjectCommand(params), { expiresIn: 12 * 3600 });
+    const signedLink = await getSignedUrl(this.s3Client, new GetObjectCommand(params), {
+      expiresIn: 12 * 3600,
+    });
 
     return { signedUrl: signedLink };
   }
@@ -105,7 +114,10 @@ class FileManager {
     }
   }
 
-  async downloadFileFromS3(destinationPath: string, fileInformation: FileInformation): Promise<void> {
+  async downloadFileFromS3(
+    destinationPath: string,
+    fileInformation: FileInformation,
+  ): Promise<void> {
     const params = {
       Bucket: fileInformation.Bucket,
       Key: fileInformation.Key,
@@ -166,7 +178,10 @@ class FileManager {
     }
   }
 
-  async uploadFileFromPathToS3(filePath: string, params: Omit<UploadFileParams, "file">): Promise<UploadResponse> {
+  async uploadFileFromPathToS3(
+    filePath: string,
+    params: Omit<UploadFileParams, "file">,
+  ): Promise<UploadResponse> {
     const fileStream = fs.createReadStream(filePath);
     return this.uploadFileToS3({ ...params, file: fileStream });
   }

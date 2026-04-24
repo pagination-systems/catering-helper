@@ -1,4 +1,4 @@
-import { CustomHelpers, Schema } from "joi";
+import type { CustomHelpers, Schema } from "joi";
 import mongoose from "mongoose";
 
 export function validate(schema: Schema, data: any) {
@@ -7,7 +7,7 @@ export function validate(schema: Schema, data: any) {
   if (!error) return null;
 
   const errors: { [key: string]: string } = {};
-  for (let item of error.details) {
+  for (const item of error.details) {
     errors[item.path[0]] = item.message;
   }
 
@@ -16,7 +16,9 @@ export function validate(schema: Schema, data: any) {
 
 export const objectIdValidation = (value: string, helpers: CustomHelpers) => {
   if (!mongoose.Types.ObjectId.isValid(value)) {
-    return helpers.message({ custom: `"${helpers.state.path.join(".")}" must be a valid ObjectId` });
+    return helpers.message({
+      custom: `"${helpers.state.path.join(".")}" must be a valid ObjectId`,
+    });
   }
   return value;
 };

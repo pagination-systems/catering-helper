@@ -11,17 +11,13 @@ import { connectDB } from "./.config/database";
 
 // Connect to database
 connectDB().then((connectionInstance) => {
-  logger.info(
-    `DB host [${connectionInstance.connection.host}] connection successful!`,
-  );
+  logger.info(`DB host [${connectionInstance.connection.host}] connection successful!`);
 });
 
 const PORT = process.env.PORT || 9027;
 
 const server = app.listen(PORT, () => {
-  logger.info(
-    `API is listening in [${process.env.NODE_ENV}]. port ${PORT}, pid ${process.pid}`,
-  );
+  logger.info(`API is listening in [${process.env.NODE_ENV}]. port ${PORT}, pid ${process.pid}`);
 });
 
 // Handle unhandled exceptions and rejections
