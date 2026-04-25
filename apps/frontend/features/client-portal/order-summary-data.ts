@@ -57,7 +57,9 @@ export function useOrderSummaryData(language: Language) {
     });
 
     return rows.sort(
-      (a, b) => a.packageName.localeCompare(b.packageName) || dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day),
+      (a, b) =>
+        a.packageName.localeCompare(b.packageName) ||
+        dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day),
     );
   }, [packageSelections]);
 
@@ -82,8 +84,14 @@ export function useOrderSummaryData(language: Language) {
     return Object.values(grouped).sort((a, b) => dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day));
   }, [orderRows, upcomingDays]);
 
-  const subtotal = useMemo(() => orderRows.reduce((sum, row) => sum + row.subtotal, 0), [orderRows]);
-  const totalQuantity = useMemo(() => orderRows.reduce((sum, row) => sum + row.quantity, 0), [orderRows]);
+  const subtotal = useMemo(
+    () => orderRows.reduce((sum, row) => sum + row.subtotal, 0),
+    [orderRows],
+  );
+  const totalQuantity = useMemo(
+    () => orderRows.reduce((sum, row) => sum + row.quantity, 0),
+    [orderRows],
+  );
 
   return {
     orderRows,

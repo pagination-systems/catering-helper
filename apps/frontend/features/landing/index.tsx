@@ -11,7 +11,9 @@ import { ProblemSolutionSection } from "./problem-solution";
 
 export const LandingPage = () => {
   const { language } = useLanguage();
-  const { hero, problemSolution, features, howItWorks, pricing } = landingContent[language] as LandingContent;
+  const { hero, problemSolution, features, howItWorks, pricing } = landingContent[
+    language
+  ] as LandingContent;
 
   return (
     <>

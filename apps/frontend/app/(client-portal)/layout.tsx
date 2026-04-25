@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import { headers } from "next/headers";
 import { Footer } from "@/components/layouts/client-portal/footer";
 import { Navbar } from "@/components/layouts/client-portal/navbar";

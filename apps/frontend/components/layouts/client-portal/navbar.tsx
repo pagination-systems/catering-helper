@@ -58,7 +58,10 @@ export function Navbar({ tenant }: { tenant: TenantData }) {
   return (
     <header className="border-b border-border/70 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
       <nav className="mx-auto flex h-16 w-full max-w-[1260px] items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2 text-base sm:text-lg font-semibold tracking-tight">
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-base sm:text-lg font-semibold tracking-tight"
+        >
           <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/15 text-primary">
             <Image
               src={tenant.logoUrl}
@@ -78,7 +81,12 @@ export function Navbar({ tenant }: { tenant: TenantData }) {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label={content.nav.language} className="h-9 w-9 rounded-full">
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={content.nav.language}
+                className="h-9 w-9 rounded-full"
+              >
                 <Globe className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>

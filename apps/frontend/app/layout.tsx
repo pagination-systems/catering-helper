@@ -6,7 +6,7 @@ import { Noto_Sans_Bengali, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const notoSansBengali = Noto_Sans_Bengali({
   subsets: ["latin", "bengali"],
@@ -28,7 +28,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={`${notoSansBengali.className} flex min-h-screen flex-col bg-background text-foreground antialiased`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           <LanguageProvider>{children}</LanguageProvider>
         </ThemeProvider>
       </body>

@@ -10,7 +10,10 @@ type HowItWorksProps = {
 
 export function HowItWorksSection({ content }: HowItWorksProps) {
   return (
-    <section id="how-it-works" className="mx-auto w-full max-w-[1180px] px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+    <section
+      id="how-it-works"
+      className="mx-auto w-full max-w-[1180px] px-4 py-16 sm:px-6 lg:px-8 lg:py-24"
+    >
       <h2 className="mb-14 text-center text-[14px] font-medium tracking-[-0.01em] text-muted-foreground">
         {content.title}
       </h2>
@@ -31,10 +34,14 @@ export function HowItWorksSection({ content }: HowItWorksProps) {
             </div>
 
             {/* TITLE */}
-            <h3 className="text-[31px] font-medium tracking-[-0.02em] text-foreground">{step.title}</h3>
+            <h3 className="text-[31px] font-medium tracking-[-0.02em] text-foreground">
+              {step.title}
+            </h3>
 
             {/* DESCRIPTION */}
-            <p className="mx-auto mt-2 max-w-[270px] text-[12px] leading-6 text-muted-foreground">{step.description}</p>
+            <p className="mx-auto mt-2 max-w-[270px] text-[12px] leading-6 text-muted-foreground">
+              {step.description}
+            </p>
           </motion.div>
         ))}
       </div>

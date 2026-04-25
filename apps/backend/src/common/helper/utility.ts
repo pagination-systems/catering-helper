@@ -1,6 +1,6 @@
-import NodeGeocoder, { Options } from "node-geocoder";
-import { pick } from "./pick";
+import NodeGeocoder, { type Options } from "node-geocoder";
 import { logger } from "./logger";
+import { pick } from "./pick";
 
 interface IResults {
   docs: any[];
@@ -44,8 +44,8 @@ type QueryData = {
 export const trimQuery = (queryData: QueryData): QueryData => {
   let { page, limit } = queryData;
 
-  const pageNumber = parseInt(String(page));
-  const pageSize = parseInt(String(limit));
+  const pageNumber = parseInt(String(page), 10);
+  const pageSize = parseInt(String(limit), 10);
 
   page = !pageNumber || pageNumber < 1 ? 1 : pageNumber;
   if (!pageSize) limit = 30;

@@ -1,16 +1,16 @@
-import express, { type Express } from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import morgan from "morgan";
-import helmet from "helmet";
+import express, { type Express } from "express";
 import mongoSanitize from "express-mongo-sanitize";
+import helmet from "helmet";
 import hpp from "hpp";
-import { globalRateLimiter, customQueryParser } from "./common/middlewares";
-import { globalErrorHandler, NotFoundException } from "./common/helper";
-import { CORS_ORIGIN } from "./common/constants";
-import { setupApiRoutes } from "./v1/routes/api-routes";
-import { setupAgenda } from "./agenda";
+import morgan from "morgan";
 import { env } from "./.config/env";
+import { setupAgenda } from "./agenda";
+import { CORS_ORIGIN } from "./common/constants";
+import { globalErrorHandler, NotFoundException } from "./common/helper";
+import { customQueryParser, globalRateLimiter } from "./common/middlewares";
+import { setupApiRoutes } from "./v1/routes/api-routes";
 
 export const app: Express = express();
 
@@ -54,7 +54,7 @@ app.use(hpp());
 // Custom query parser
 app.use(customQueryParser);
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.status(200).json({ message: "Active" });
 });
 
@@ -63,12 +63,8 @@ setupApiRoutes(app);
 setupAgenda(app);
 
 // Global error handler
-app.all("*", (req, res, next) => {
-  next(
-    new NotFoundException(
-      `Can't find ${req.method} ${req.originalUrl} on this server.`,
-    ),
-  );
+app.all("*", (req, _res, next) => {
+  next(new NotFoundException(`Can't find ${req.method} ${req.originalUrl} on this server.`));
 });
 
 app.use(globalErrorHandler);
