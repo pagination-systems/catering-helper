@@ -1,7 +1,19 @@
 "use client";
 
-import { LogOut, Menu, PanelLeftClose, PanelLeftOpen, Search, Settings, UserCircle2 } from "lucide-react";
+import {
+  LaptopMinimal,
+  LogOut,
+  Menu,
+  Moon,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Search,
+  Settings,
+  Sun,
+  UserCircle2,
+} from "lucide-react";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -17,13 +29,40 @@ import { Input } from "@/components/ui/input";
 
 import { useAdminLayout } from "./admin-layout-context";
 
+const themeOrder = ["system", "light", "dark"] as const;
+
+const themeIcons = {
+  system: LaptopMinimal,
+  light: Sun,
+  dark: Moon,
+} as const;
+
 type NavbarProps = {
   onSearch?: (query: string) => void;
 };
 
 export function Navbar({ onSearch }: NavbarProps) {
   const { isSidebarCollapsed, toggleSidebarCollapsed, toggleMobileSidebar } = useAdminLayout();
+  const { theme, setTheme } = useTheme();
   const [query, setQuery] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const activeTheme =
+    mounted && theme && themeOrder.includes(theme as (typeof themeOrder)[number])
+      ? (theme as (typeof themeOrder)[number])
+      : "system";
+
+  const ThemeIcon = themeIcons[activeTheme];
+
+  const toggleTheme = () => {
+    const currentIndex = themeOrder.indexOf(activeTheme);
+    const nextTheme = themeOrder[(currentIndex + 1) % themeOrder.length];
+    setTheme(nextTheme);
+  };
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
@@ -70,7 +109,18 @@ export function Navbar({ onSearch }: NavbarProps) {
           />
         </div>
 
-        <div className="ml-auto">
+        <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            aria-label="Toggle theme"
+            onClick={toggleTheme}
+            className="h-9 w-9 rounded-full"
+          >
+            <ThemeIcon className="h-4 w-4" />
+          </Button>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button

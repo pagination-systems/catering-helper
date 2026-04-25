@@ -53,22 +53,6 @@
   /* Layout spacing tokens */
   --layout-space-inline: clamp(0.75rem, 0.6rem + 0.6vw, 1.5rem);
   --layout-space-block: clamp(0.75rem, 0.65rem + 0.5vw, 1.25rem);
-
-  /* Admin shell tokens */
-  --admin-sidebar-width: 16.5rem;
-  --admin-sidebar-collapsed-width: 4.75rem;
-  --admin-navbar-height: 4rem;
-  --admin-footer-height: 3.25rem;
-
-  /* Sidebar (for dashboard) */
-  --sidebar-background: 0 0% 100%;
-  --sidebar-foreground: 222 47% 11%;
-  --sidebar-primary: 24 95% 53%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 210 20% 96%;
-  --sidebar-accent-foreground: 222 47% 11%;
-  --sidebar-border: 214 32% 91%;
-  --sidebar-ring: 24 95% 53%;
 }
 
 /* =========================
@@ -106,20 +90,91 @@
   /* Keep layout sizing stable in dark mode as well */
   --layout-space-inline: clamp(0.75rem, 0.6rem + 0.6vw, 1.5rem);
   --layout-space-block: clamp(0.75rem, 0.65rem + 0.5vw, 1.25rem);
+}
+
+/* Admin panel theme (route-level) */
+body[data-app-theme="admin"] {
+  /* Main canvas and text */
+  --background: 214 20% 96%;
+  --foreground: 215 28% 17%;
+
+  /* Surfaces */
+  --card: 0 0% 100%;
+  --card-foreground: 215 28% 17%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 215 28% 17%;
+
+  /* Brand and interactions */
+  --primary: 193 64% 23%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 20% 95%;
+  --secondary-foreground: 215 28% 17%;
+  --accent: 115 52% 78%;
+  --accent-foreground: 193 64% 20%;
+  --muted: 210 20% 94%;
+  --muted-foreground: 215 16% 45%;
+
+  /* Utility */
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 215 22% 87%;
+  --input: 215 22% 87%;
+  --ring: 193 64% 32%;
+
+  /* Admin shell sizing */
   --admin-sidebar-width: 16.5rem;
   --admin-sidebar-collapsed-width: 4.75rem;
   --admin-navbar-height: 4rem;
   --admin-footer-height: 3.25rem;
 
-  /* Sidebar */
-  --sidebar-background: 222 47% 7%;
-  --sidebar-foreground: 210 20% 98%;
-  --sidebar-primary: 24 90% 60%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 217 19% 15%;
-  --sidebar-accent-foreground: 210 20% 98%;
-  --sidebar-border: 217 19% 18%;
-  --sidebar-ring: 24 90% 60%;
+  /* Sidebar tokens moved here for admin scope */
+  --sidebar-background: 199 59% 21%;
+  --sidebar-foreground: 210 40% 96%;
+  --sidebar-primary: 115 52% 78%;
+  --sidebar-primary-foreground: 193 64% 20%;
+  --sidebar-accent: 198 52% 29%;
+  --sidebar-accent-foreground: 210 40% 98%;
+  --sidebar-border: 198 46% 31%;
+  --sidebar-ring: 115 52% 78%;
+}
+
+.dark body[data-app-theme="admin"] {
+  /* Main canvas and text */
+  --background: 220 16% 12%;
+  --foreground: 210 33% 96%;
+
+  /* Surfaces */
+  --card: 218 16% 16%;
+  --card-foreground: 210 33% 96%;
+  --popover: 218 16% 16%;
+  --popover-foreground: 210 33% 96%;
+
+  /* Brand and interactions */
+  --primary: 191 63% 56%;
+  --primary-foreground: 214 36% 12%;
+  --secondary: 218 15% 19%;
+  --secondary-foreground: 210 33% 96%;
+  --accent: 145 45% 42%;
+  --accent-foreground: 210 33% 96%;
+  --muted: 219 14% 22%;
+  --muted-foreground: 214 20% 72%;
+
+  /* Utility */
+  --destructive: 0 70% 52%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 218 13% 26%;
+  --input: 218 13% 26%;
+  --ring: 191 63% 56%;
+
+  /* Sidebar tokens */
+  --sidebar-background: 201 55% 14%;
+  --sidebar-foreground: 210 33% 96%;
+  --sidebar-primary: 145 45% 52%;
+  --sidebar-primary-foreground: 201 55% 12%;
+  --sidebar-accent: 201 44% 20%;
+  --sidebar-accent-foreground: 210 33% 96%;
+  --sidebar-border: 202 34% 24%;
+  --sidebar-ring: 145 45% 52%;
 }
 
 /* =========================
