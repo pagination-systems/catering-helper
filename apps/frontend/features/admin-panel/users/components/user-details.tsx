@@ -23,7 +23,7 @@ export const UserDetails = ({ user }: UserDetailsProps) => {
   return (
     <div className="grid gap-4">
       {viewDetails.map((item) => (
-        <div key={item.label} className="rounded-lg border border-border/70 bg-muted/20 p-4">
+        <div key={item.label} className="rounded-sm border border-border/70 bg-muted/20 p-4">
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{item.label}</p>
           <p className="mt-1 break-words text-sm font-medium text-foreground">{item.value}</p>
         </div>
