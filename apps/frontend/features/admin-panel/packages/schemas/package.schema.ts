@@ -26,6 +26,7 @@ export interface IMenuVariant {
   name: string;
   note: string;
   items: string[];
+  available?: boolean;
 }
 
 export interface IDayPlan {
@@ -58,6 +59,7 @@ const menuVariantSchema = z.object({
   name: z.string().trim().min(2, "Variant name must be at least 2 characters.").max(80),
   note: z.string().trim().max(160),
   items: z.array(foodItemSchema).min(1, "Add at least one food item."),
+  available: z.boolean().optional(),
 });
 
 const dayPlanSchema = z.object({

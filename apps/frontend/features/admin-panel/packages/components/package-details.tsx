@@ -125,7 +125,18 @@ export const PackageDetails = ({ item }: PackageDetailsProps) => {
               <div className="mt-3 grid gap-2.5 md:grid-cols-2">
                 {day.variants.map((variant) => (
                   <div key={variant.id} className="rounded-md border border-border/60 bg-muted/15 p-3">
-                    <p className="text-sm font-medium text-foreground">{variant.name}</p>
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-sm font-medium text-foreground">{variant.name}</p>
+                      <span
+                        className={`inline-flex rounded-full px-2 py-0.5 text-[8px] font-medium ${
+                          (variant.available ?? true)
+                            ? "bg-emerald-100 text-emerald-700"
+                            : "bg-amber-100 text-amber-700"
+                        }`}
+                      >
+                        {(variant.available ?? true) ? "Available" : "Unavailable"}
+                      </span>
+                    </div>
                     <p className="mt-0.5 line-clamp-2 text-xs leading-5 text-muted-foreground">
                       {variant.note || "No note"}
                     </p>

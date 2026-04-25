@@ -70,6 +70,7 @@ const packageSeed: ICateringPackage[] = [
             name: "সবজি সেট",
             note: "হালকা নিরামিষ।",
             items: ["খিচুড়ি", "মিক্স সবজি", "ডাল"],
+            available: false,
           },
         ],
       },
@@ -266,6 +267,7 @@ const initialData: ICateringPackage[] = packageSeed.map((item) => ({
       name: variant.name,
       note: variant.note,
       items: [...variant.items],
+      available: variant.available ?? true,
     })),
   })),
 }));
@@ -392,6 +394,7 @@ export const usePackagesStore = create<PackagesStoreState>((set) => ({
                     name: variant.name,
                     note: variant.note,
                     items: [...variant.items],
+                    available: variant.available ?? true,
                   })),
                 })),
                 updatedAt: new Date(),
