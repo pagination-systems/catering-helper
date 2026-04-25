@@ -1,4 +1,4 @@
-import { LayoutDashboard, type LucideIcon, Settings, Users } from "lucide-react";
+import { LayoutDashboard, type LucideIcon, Package2, Settings, Users } from "lucide-react";
 
 export type NavigationItem = {
   label: string;
@@ -18,6 +18,11 @@ export const navigationItems: NavigationItem[] = [
     label: "Users",
     href: "/users",
     icon: Users,
+  },
+  {
+    label: "Packages",
+    href: "/packages",
+    icon: Package2,
   },
   {
     label: "Settings",
