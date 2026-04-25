@@ -51,7 +51,7 @@ export function Select<T extends string | number = string>({
         container: () => "w-full",
         control: ({ isFocused }) =>
           cn(
-            "h-8 w-full rounded-lg border border-input bg-transparent px-2 text-sm shadow-none outline-none transition-colors",
+            "h-8 w-full rounded-sm border border-input bg-transparent px-2 text-sm shadow-none outline-none transition-colors",
             "focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50",
             isFocused && "border-ring ring-3 ring-ring/50",
             className,
@@ -64,7 +64,7 @@ export function Select<T extends string | number = string>({
         indicatorSeparator: () => "bg-border",
         dropdownIndicator: () => "px-1 text-muted-foreground",
         clearIndicator: () => "px-1 text-muted-foreground",
-        menu: () => "z-50 mt-1 rounded-lg border border-border bg-popover shadow-md",
+        menu: () => "z-50 mt-1 rounded-sm border border-border bg-popover shadow-md",
         menuList: () => "max-h-56 p-1",
         option: ({ isFocused, isSelected }) =>
           cn(

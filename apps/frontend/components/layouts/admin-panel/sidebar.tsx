@@ -86,7 +86,7 @@ function SidebarContent() {
         )}
       >
         <Link href="/dashboard" className="flex items-center gap-2 overflow-hidden">
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-sidebar-primary text-sm font-bold text-sidebar-primary-foreground">
+          <span className="inline-flex h-8 w-8 items-center justify-center rounded-sm bg-sidebar-primary text-sm font-bold text-sidebar-primary-foreground">
             CH
           </span>
           <span

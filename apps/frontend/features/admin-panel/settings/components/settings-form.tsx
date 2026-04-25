@@ -38,7 +38,7 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
             <CardTitle>Branding</CardTitle>
             <CardDescription>Core identity and presentation details for your tenant.</CardDescription>
           </CardHeader>
-          <CardContent className="grid gap-4 md:grid-cols-2">
+          <CardContent className="grid gap-4 md:grid-cols-2 mt-2">
             <FormField
               control={form.control}
               name="name"
@@ -116,7 +116,7 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
             <CardTitle>Contact</CardTitle>
             <CardDescription>How clients can reach you for support and orders.</CardDescription>
           </CardHeader>
-          <CardContent className="grid gap-4 md:grid-cols-2">
+          <CardContent className="grid gap-4 md:grid-cols-2 mt-2">
             <FormField
               control={form.control}
               name="contactEmail"
@@ -180,7 +180,7 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
             <CardTitle>Social Links</CardTitle>
             <CardDescription>Public channels for brand awareness and communication.</CardDescription>
           </CardHeader>
-          <CardContent className="grid gap-4 md:grid-cols-3">
+          <CardContent className="grid gap-4 md:grid-cols-3 mt-2">
             <FormField
               control={form.control}
               name="social.facebook"

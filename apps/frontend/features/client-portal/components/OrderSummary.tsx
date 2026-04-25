@@ -44,7 +44,7 @@ export function OrderSummary({ readonly = false, showDeliveryFee = false }: Orde
             fallback={<p className="p-4 text-sm text-muted-foreground">{content.noItemsSelected}</p>}
           >
             {groupedOrders.map((group) => (
-              <Collapsible key={group.day} defaultOpen className="overflow-hidden rounded-lg border bg-background">
+              <Collapsible key={group.day} defaultOpen className="overflow-hidden rounded-sm border bg-background">
                 {/* FIXED: Added flex, w-full, justify-between, and padding for proper layout */}
                 <CollapsibleTrigger className="flex w-full items-center justify-between border-b bg-muted/40 p-3 text-sm transition-colors hover:bg-muted/60">
                   <span className="font-semibold">
