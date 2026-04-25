@@ -1,3 +1,5 @@
+import { FilterIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -6,9 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { FilterIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { UserRole } from "../schemas/user.schema";
 import { useUsersStore } from "../store/useStore";
 

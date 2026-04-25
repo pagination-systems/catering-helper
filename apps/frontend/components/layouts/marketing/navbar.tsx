@@ -1,10 +1,10 @@
 "use client";
 
+import { Globe, LaptopMinimal, Menu, Moon, Sun } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Globe, LaptopMinimal, Menu, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 import { useLanguage } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { landingContent, type LandingContent } from "@/lib/i18n";
+import { type LandingContent, landingContent } from "@/lib/i18n";
 
 const themeOrder = ["system", "light", "dark"] as const;
 
@@ -53,17 +53,8 @@ export function Navbar() {
   return (
     <header className="border-b border-border/70 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
       <nav className="mx-auto flex h-16 w-full max-w-[1180px] items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-[14px] font-medium tracking-tight text-foreground"
-        >
-          <Image
-            src="/logo.svg"
-            alt="Catering Helper Logo"
-            width={32}
-            height={32}
-            className="h-10 w-auto"
-          />
+        <Link href="/" className="flex items-center gap-2 text-[14px] font-medium tracking-tight text-foreground">
+          <Image src="/logo.svg" alt="Catering Helper Logo" width={32} height={32} className="h-10 w-auto" />
           Catering Helper
         </Link>
 
@@ -71,10 +62,7 @@ export function Navbar() {
           <Link href="/#solution" className="text-primary underline-offset-4 hover:underline">
             {content.solution}
           </Link>
-          <Link
-            href="/#how-it-works"
-            className="text-muted-foreground transition hover:text-foreground"
-          >
+          <Link href="/#how-it-works" className="text-muted-foreground transition hover:text-foreground">
             {content.howItWorks}
           </Link>
           <Link href="/#pricing" className="text-muted-foreground transition hover:text-foreground">
@@ -85,12 +73,7 @@ export function Navbar() {
         <div className="hidden items-center gap-2 md:flex">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label={content.language}
-                className="h-8 w-8 rounded-full"
-              >
+              <Button variant="ghost" size="icon" aria-label={content.language} className="h-8 w-8 rounded-full">
                 <Globe className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -115,11 +98,7 @@ export function Navbar() {
             <ThemeIcon className="h-4 w-4" />
           </Button>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 px-2 text-[11px] font-medium text-foreground"
-          >
+          <Button variant="ghost" size="sm" className="h-8 px-2 text-[11px] font-medium text-foreground">
             {content.login}
           </Button>
           <Button
@@ -133,12 +112,7 @@ export function Navbar() {
         <div className="md:hidden">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                aria-label={content.menu}
-                className="bg-background"
-              >
+              <Button variant="outline" size="icon" aria-label={content.menu} className="bg-background">
                 <Menu className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -158,15 +132,9 @@ export function Navbar() {
                 <Link href="/#how-it-works">{content.howItWorks}</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setTheme("light")}>
-                {content.modes.light}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("dark")}>
-                {content.modes.dark}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("system")}>
-                {content.modes.system}
-              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("light")}>{content.modes.light}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("dark")}>{content.modes.dark}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("system")}>{content.modes.system}</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => setLanguage("en")}>EN</DropdownMenuItem>
               <DropdownMenuItem onClick={() => setLanguage("bn")}>BN</DropdownMenuItem>

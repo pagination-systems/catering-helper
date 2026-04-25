@@ -140,8 +140,6 @@ export const validateUpdatePayload = (
   const invalidFields = fields.filter((field) => !ability.can(action, authZEntity, field));
 
   if (invalidFields.length > 0) {
-    throw new ForbiddenException(
-      `You are not authorized to update the following fields: ${invalidFields.join(", ")}`,
-    );
+    throw new ForbiddenException(`You are not authorized to update the following fields: ${invalidFields.join(", ")}`);
   }
 };

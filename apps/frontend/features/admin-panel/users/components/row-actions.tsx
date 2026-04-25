@@ -7,7 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { IUser } from "../schemas/user.schema";
+import type { IUser } from "../schemas/user.schema";
 import { useUsersStore } from "../store/useStore";
 
 interface RowActionsProps {

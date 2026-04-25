@@ -1,19 +1,17 @@
 "use client";
 
+import { ChevronDown, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronDown, X } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-
 import { useAdminLayout } from "@/components/layouts/admin-panel/admin-layout-context";
 import {
   filterNavigationByRole,
   isItemActive,
-  navigationItems,
   type NavigationItem,
+  navigationItems,
 } from "@/components/layouts/admin-panel/navigation";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 function NavItem({ item, depth = 0 }: { item: NavigationItem; depth?: number }) {
   const pathname = usePathname();

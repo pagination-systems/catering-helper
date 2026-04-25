@@ -1,16 +1,16 @@
 "use client";
 
+import { If } from "@/components/if";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { UserForm } from "./components/user-form";
-import { CreateUserValues, IUser } from "./schemas/user.schema";
 import { SectionHeader } from "../components/section-header";
-import { UserTable } from "./components/user-table";
-import { TableToolbar } from "./components/table-toolbar";
 import { DeleteConfirmation } from "./components/delete-confirmation";
-import { useUsersStore } from "./store/useStore";
+import { TableToolbar } from "./components/table-toolbar";
 import { UserDetails } from "./components/user-details";
-import { If } from "@/components/if";
+import { UserForm } from "./components/user-form";
+import { UserTable } from "./components/user-table";
+import type { CreateUserValues, IUser } from "./schemas/user.schema";
+import { useUsersStore } from "./store/useStore";
 
 export const Users = () => {
   const data = useUsersStore((state) => state.list);
@@ -48,21 +48,6 @@ export const Users = () => {
     updateUser(selectedItem.id, values);
     closeEditSheet();
   };
-
-  const viewDetails = [
-    { label: "ID", value: selectedViewItem?.id ?? "-" },
-    { label: "Full Name", value: selectedViewItem?.name ?? "-" },
-    { label: "Email", value: selectedViewItem?.email ?? "-" },
-    { label: "Role", value: selectedViewItem?.role ?? "-" },
-    {
-      label: "Created At",
-      value: selectedViewItem ? selectedViewItem.createdAt.toLocaleString() : "-",
-    },
-    {
-      label: "Updated At",
-      value: selectedViewItem ? selectedViewItem.updatedAt.toLocaleString() : "-",
-    },
-  ] as const;
 
   return (
     <section className="space-y-4" aria-labelledby="users-title">

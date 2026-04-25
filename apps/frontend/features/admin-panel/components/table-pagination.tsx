@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import {
   Pagination,
   PaginationContent,
@@ -9,7 +10,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useEffect, useMemo, useState } from "react";
 
 type PageItem = number | "ellipsis";
 
@@ -121,9 +121,9 @@ export const TablePagination = ({
             <PaginationPrevious onClick={() => goToPage(page - 1)} disabled={page === 1} />
           </PaginationItem>
 
-          {pageItems.map((item, index) =>
+          {pageItems.map((item) =>
             item === "ellipsis" ? (
-              <PaginationItem key={`ellipsis-${index}`}>
+              <PaginationItem key={`ellipsis-${item}`}>
                 <PaginationEllipsis />
               </PaginationItem>
             ) : (

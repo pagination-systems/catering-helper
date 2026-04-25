@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
 import { LogOut, Menu, PanelLeftClose, PanelLeftOpen, Search, Settings, UserCircle2 } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {

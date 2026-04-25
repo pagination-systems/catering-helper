@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { packages, type CateringPackage, type DayName } from "./data";
+import { type CateringPackage, type DayName, packages } from "./data";
 
 export type PackageSelectionState = {
   activeDay: DayName;
@@ -43,14 +43,12 @@ function createInitialSelection(menuPackage: CateringPackage): PackageSelectionS
   };
 }
 
-export const useClientPortalStore = create<ClientPortalState>((set, get) => ({
+export const useClientPortalStore = create<ClientPortalState>((set) => ({
   activePackageId: packages.find((pkg) => pkg.popular)?.id ?? packages[0]?.id ?? "",
   customizerOpen: true,
   mobileSummaryOpen: false,
   recentlyUpdatedKey: null,
-  packageSelections: Object.fromEntries(
-    packages.map((pkg) => [pkg.id, createInitialSelection(pkg)]),
-  ),
+  packageSelections: Object.fromEntries(packages.map((pkg) => [pkg.id, createInitialSelection(pkg)])),
 
   setActivePackageId: (id) => set({ activePackageId: id }),
   setCustomizerOpen: (open) => set({ customizerOpen: open }),
@@ -64,8 +62,7 @@ export const useClientPortalStore = create<ClientPortalState>((set, get) => ({
   setActiveDay: (pkgId, day) => {
     set((state) => {
       const currentSelection =
-        state.packageSelections[pkgId] ||
-        createInitialSelection(packages.find((p) => p.id === pkgId)!);
+        state.packageSelections[pkgId] || createInitialSelection(packages.find((p) => p.id === pkgId)!);
       return {
         packageSelections: {
           ...state.packageSelections,
@@ -86,8 +83,7 @@ export const useClientPortalStore = create<ClientPortalState>((set, get) => ({
       const pkgDefinition = packages.find((p) => p.id === pkgId);
       if (!pkgDefinition) return state;
 
-      const currentPkgSelection =
-        state.packageSelections[pkgId] ?? createInitialSelection(pkgDefinition);
+      const currentPkgSelection = state.packageSelections[pkgId] ?? createInitialSelection(pkgDefinition);
 
       return {
         recentlyUpdatedKey: `${pkgId}::${key}`,

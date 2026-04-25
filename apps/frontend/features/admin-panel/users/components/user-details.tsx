@@ -1,4 +1,4 @@
-import { IUser } from "../schemas/user.schema";
+import type { IUser } from "../schemas/user.schema";
 
 interface UserDetailsProps {
   user: IUser;

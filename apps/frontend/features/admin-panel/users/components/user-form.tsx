@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectOption } from "@/components/ui/select";
-import { createUserSchema, CreateUserValues, UserRole } from "../schemas/user.schema";
+import { Select, type SelectOption } from "@/components/ui/select";
+import { type CreateUserValues, createUserSchema, UserRole } from "../schemas/user.schema";
 
 interface UserFormProps {
   onSubmit: (data: CreateUserValues) => void;

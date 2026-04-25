@@ -1,12 +1,11 @@
 "use client";
 
 import { UsersIcon } from "lucide-react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-
 import { If } from "@/components/if";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TablePagination } from "../../components/table-pagination";
+import type { GetUsersResponse } from "../schemas/user.schema";
 import { RowActions } from "./row-actions";
-import { GetUsersResponse } from "../schemas/user.schema";
 
 interface UserTableProps {
   data: GetUsersResponse;

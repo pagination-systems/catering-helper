@@ -1,5 +1,5 @@
-import type React from "react";
 import { headers } from "next/headers";
+import type React from "react";
 import { Footer } from "@/components/layouts/client-portal/footer";
 import { Navbar } from "@/components/layouts/client-portal/navbar";
 import { resolveTenantData } from "./data";

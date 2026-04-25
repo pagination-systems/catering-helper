@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { CreateUserValues, GetUsersResponse, IUser, UserRole } from "../schemas/user.schema";
+import { type CreateUserValues, type GetUsersResponse, type IUser, UserRole } from "../schemas/user.schema";
 
 type UsersStoreState = {
   list: GetUsersResponse;

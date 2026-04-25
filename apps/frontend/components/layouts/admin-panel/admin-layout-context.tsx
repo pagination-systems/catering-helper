@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 type AdminLayoutContextValue = {
   isSidebarCollapsed: boolean;
@@ -19,8 +19,11 @@ const AdminLayoutContext = createContext<AdminLayoutContextValue | null>(null);
 
 export function AdminLayoutProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+  const prevPathnameRef = useRef(pathname);
 
   useEffect(() => {
     try {
@@ -35,12 +38,15 @@ export function AdminLayoutProvider({ children }: { children: ReactNode }) {
     try {
       window.localStorage.setItem(SIDEBAR_STORAGE_KEY, String(isSidebarCollapsed));
     } catch {
-      // Ignore write errors in private mode or restricted environments.
+      // Ignore write errors
     }
   }, [isSidebarCollapsed]);
 
   useEffect(() => {
-    setIsMobileSidebarOpen(false);
+    if (prevPathnameRef.current !== pathname) {
+      setIsMobileSidebarOpen(false);
+      prevPathnameRef.current = pathname;
+    }
   }, [pathname]);
 
   const toggleSidebarCollapsed = useCallback(() => {

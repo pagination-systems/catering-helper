@@ -1,4 +1,4 @@
-import { LayoutDashboard, Settings, Users, type LucideIcon } from "lucide-react";
+import { LayoutDashboard, type LucideIcon, Settings, Users } from "lucide-react";
 
 export type NavigationItem = {
   label: string;
