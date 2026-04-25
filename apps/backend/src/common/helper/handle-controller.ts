@@ -1,5 +1,5 @@
-import type { Request, Response, NextFunction, CookieOptions } from "express";
 import type { ISession } from "@catering/types";
+import type { CookieOptions, NextFunction, Request, Response } from "express";
 import "../../types";
 
 interface RequestObject {
@@ -28,9 +28,7 @@ export type ControllerParams = {
   req: RequestObject;
 };
 
-export function handleController(
-  controller: ({ req }: ControllerParams) => Promise<ResponseObject>,
-) {
+export function handleController(controller: ({ req }: ControllerParams) => Promise<ResponseObject>) {
   return (req: Request, res: Response, next: NextFunction) => {
     // prepare all the necessary request object that the controller needs
     const requestObject: RequestObject = {

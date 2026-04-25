@@ -1,5 +1,5 @@
-import { Navbar } from "@/components/marketing/navbar";
-import { Footer } from "@/components/marketing/footer";
+import { Footer } from "@/components/layouts/marketing/footer";
+import { Navbar } from "@/components/layouts/marketing/navbar";
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (

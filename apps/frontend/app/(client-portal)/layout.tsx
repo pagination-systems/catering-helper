@@ -1,7 +1,7 @@
-import type React from "react";
 import { headers } from "next/headers";
-import { Footer } from "@/components/client-portal/footer";
-import { Navbar } from "@/components/client-portal/navbar";
+import type React from "react";
+import { Footer } from "@/components/layouts/client-portal/footer";
+import { Navbar } from "@/components/layouts/client-portal/navbar";
 import { resolveTenantData } from "./data";
 
 function getTenantFromHost(host: string): string | undefined {

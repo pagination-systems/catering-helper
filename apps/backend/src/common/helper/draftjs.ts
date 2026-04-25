@@ -13,9 +13,7 @@ export function draftJSToText(draftJSContent: string | DraftJSContent): string {
     // If the content is already an object, use it directly
     // Otherwise, try to parse it as JSON
     const content =
-      typeof draftJSContent === "string"
-        ? (JSON.parse(draftJSContent) as DraftJSContent)
-        : draftJSContent;
+      typeof draftJSContent === "string" ? (JSON.parse(draftJSContent) as DraftJSContent) : draftJSContent;
 
     // Extract text from each block and join with newlines
     return content.blocks.map((block) => block.text).join("\n");

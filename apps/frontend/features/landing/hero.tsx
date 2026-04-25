@@ -12,8 +12,7 @@ type HeroProps = {
 
 export function HeroSection({ content }: HeroProps) {
   const accentIndex = content.headline.indexOf("Eliminate");
-  const primaryLine =
-    accentIndex > -1 ? content.headline.slice(0, accentIndex).trim() : content.headline;
+  const primaryLine = accentIndex > -1 ? content.headline.slice(0, accentIndex).trim() : content.headline;
   const accentLine = accentIndex > -1 ? content.headline.slice(accentIndex).trim() : "";
 
   return (
@@ -35,9 +34,7 @@ export function HeroSection({ content }: HeroProps) {
             {accentLine ? <span className="mt-2 block text-primary">{accentLine}</span> : null}
           </h1>
 
-          <p className="max-w-md text-pretty text-[15px] leading-7 text-muted-foreground">
-            {content.subheadline}
-          </p>
+          <p className="max-w-md text-pretty text-[15px] leading-7 text-muted-foreground">{content.subheadline}</p>
 
           <div className="flex flex-wrap gap-3">
             <Button
@@ -107,9 +104,7 @@ export function HeroSection({ content }: HeroProps) {
                 {content.orderSummary}
               </Button>
 
-              <div className="text-center text-[10px] text-muted-foreground">
-                {content.mobileOrderBy}
-              </div>
+              <div className="text-center text-[10px] text-muted-foreground">{content.mobileOrderBy}</div>
             </div>
           </div>
 

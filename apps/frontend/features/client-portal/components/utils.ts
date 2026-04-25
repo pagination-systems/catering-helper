@@ -1,9 +1,7 @@
-import type { DayName } from "../data";
 import type { Language } from "@/lib/i18n";
+import type { DayName } from "../data";
 
-export function getUpcomingDays(
-  language: Language,
-): { day: DayName; dateLabel: string; isToday: boolean }[] {
+export function getUpcomingDays(language: Language): { day: DayName; dateLabel: string; isToday: boolean }[] {
   const daysByJsIndex: DayName[] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const today = new Date();
   const locale = language === "bn" ? "bn-BD" : "en-GB";

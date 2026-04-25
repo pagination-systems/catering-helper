@@ -38,9 +38,7 @@ export function FeaturesGridSection({ content }: FeaturesGridProps) {
               </CardHeader>
 
               <CardContent className="space-y-6">
-                <p className="max-w-[620px] text-[13px] leading-6 text-muted-foreground">
-                  {portalFeature.description}
-                </p>
+                <p className="max-w-[620px] text-[13px] leading-6 text-muted-foreground">{portalFeature.description}</p>
 
                 <div className="grid max-w-[280px] grid-cols-3 gap-2">
                   <div className="h-10 rounded-md bg-muted" />
@@ -64,15 +62,11 @@ export function FeaturesGridSection({ content }: FeaturesGridProps) {
                 <div className="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-md bg-muted text-primary">
                   <Calculator className="h-4 w-4" />
                 </div>
-                <CardTitle className="text-[16px] leading-6 text-foreground">
-                  {bazarFeature.title}
-                </CardTitle>
+                <CardTitle className="text-[16px] leading-6 text-foreground">{bazarFeature.title}</CardTitle>
               </CardHeader>
 
               <CardContent>
-                <p className="text-[13px] leading-6 text-muted-foreground">
-                  {bazarFeature.description}
-                </p>
+                <p className="text-[13px] leading-6 text-muted-foreground">{bazarFeature.description}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -89,15 +83,11 @@ export function FeaturesGridSection({ content }: FeaturesGridProps) {
                 <div className="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-md bg-muted text-primary">
                   <Coins className="h-4 w-4" />
                 </div>
-                <CardTitle className="text-[16px] leading-6 text-foreground">
-                  {financeFeature.title}
-                </CardTitle>
+                <CardTitle className="text-[16px] leading-6 text-foreground">{financeFeature.title}</CardTitle>
               </CardHeader>
 
               <CardContent>
-                <p className="text-[13px] leading-6 text-muted-foreground">
-                  {financeFeature.description}
-                </p>
+                <p className="text-[13px] leading-6 text-muted-foreground">{financeFeature.description}</p>
               </CardContent>
             </Card>
           </motion.div>

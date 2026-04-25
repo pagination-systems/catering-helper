@@ -1,9 +1,10 @@
-import { Plus, Minus } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
+import Image from "next/image";
+import { If } from "@/components/if";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { MenuVariant } from "../data";
 import { MealItemPill } from "./meal-item-pill";
-import { If } from "@/components/if";
-import { Button } from "@/components/ui/button";
 
 export function VariantCard({
   variant,
@@ -37,15 +38,13 @@ export function VariantCard({
       )}
     >
       <div className="flex flex-1 flex-col min-w-0">
-        <h4 className="text-base sm:text-lg font-bold tracking-tight text-foreground truncate">
-          {variant.name}
-        </h4>
+        <h4 className="text-base sm:text-lg font-bold tracking-tight text-foreground truncate">{variant.name}</h4>
         <p className="mt-0.5 text-sm font-medium text-muted-foreground">
           <b>BDT {price}</b> {mealSuffix}
         </p>
         <div className="mt-2 flex flex-wrap gap-1.5">
-          {variant.items.map((item, idx) => (
-            <MealItemPill key={idx} label={item} />
+          {variant.items.map((item) => (
+            <MealItemPill key={item} label={item} />
           ))}
         </div>
 
@@ -57,10 +56,12 @@ export function VariantCard({
       </div>
 
       <div className="relative h-24 w-24 sm:h-28 sm:w-28 shrink-0 overflow-hidden rounded-xl bg-muted">
-        <img
+        <Image
           src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80"
           alt={variant.name}
           className="h-full w-full object-cover"
+          width={100}
+          height={100}
         />
         <If expression={available}>
           <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2">

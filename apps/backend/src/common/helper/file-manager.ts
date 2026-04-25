@@ -1,9 +1,4 @@
-import {
-  DeleteObjectCommand,
-  GetObjectCommand,
-  PutObjectCommand,
-  type S3Client,
-} from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand, type S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import * as fs from "fs";
 import type { Readable } from "stream";
@@ -114,10 +109,7 @@ class FileManager {
     }
   }
 
-  async downloadFileFromS3(
-    destinationPath: string,
-    fileInformation: FileInformation,
-  ): Promise<void> {
+  async downloadFileFromS3(destinationPath: string, fileInformation: FileInformation): Promise<void> {
     const params = {
       Bucket: fileInformation.Bucket,
       Key: fileInformation.Key,
@@ -178,10 +170,7 @@ class FileManager {
     }
   }
 
-  async uploadFileFromPathToS3(
-    filePath: string,
-    params: Omit<UploadFileParams, "file">,
-  ): Promise<UploadResponse> {
+  async uploadFileFromPathToS3(filePath: string, params: Omit<UploadFileParams, "file">): Promise<UploadResponse> {
     const fileStream = fs.createReadStream(filePath);
     return this.uploadFileToS3({ ...params, file: fileStream });
   }

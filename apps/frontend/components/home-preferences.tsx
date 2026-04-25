@@ -1,9 +1,9 @@
 "use client";
 
 import { Languages } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/components/language-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
 import { siteNames } from "@/lib/i18n";
 
 export function HomePreferences() {
@@ -14,9 +14,7 @@ export function HomePreferences() {
       <section className="w-full max-w-xl space-y-8 rounded-2xl border border-border bg-card p-8 text-center shadow-sm">
         <div className="space-y-3">
           <h1 className="text-4xl font-semibold tracking-tight">{siteNames[language]}</h1>
-          <p className="text-sm text-muted-foreground">
-            Choose language and theme. Your selections are saved.
-          </p>
+          <p className="text-sm text-muted-foreground">Choose language and theme. Your selections are saved.</p>
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-3">

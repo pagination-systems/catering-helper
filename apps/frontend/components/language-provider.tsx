@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { defaultLanguage, type Language, languageStorageKey } from "@/lib/i18n";
 
 type LanguageContextValue = {
@@ -29,20 +29,16 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.lang = defaultLanguage;
   }, []);
 
-  const setLanguage = (nextLanguage: Language) => {
+  const setLanguage = useCallback((nextLanguage: Language) => {
     setLanguageState(nextLanguage);
     window.localStorage.setItem(languageStorageKey, nextLanguage);
     document.documentElement.lang = nextLanguage;
-  };
+  }, []);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  const value = useMemo(
-    () => ({
-      language,
-      setLanguage,
-    }),
-    [language],
-  );
+  const value = {
+    language,
+    setLanguage,
+  };
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }

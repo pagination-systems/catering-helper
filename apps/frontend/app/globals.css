@@ -50,6 +50,16 @@
   /* Radius */
   --radius: 0.75rem;
 
+  /* Layout spacing tokens */
+  --layout-space-inline: clamp(0.75rem, 0.6rem + 0.6vw, 1.5rem);
+  --layout-space-block: clamp(0.75rem, 0.65rem + 0.5vw, 1.25rem);
+
+  /* Admin shell tokens */
+  --admin-sidebar-width: 16.5rem;
+  --admin-sidebar-collapsed-width: 4.75rem;
+  --admin-navbar-height: 4rem;
+  --admin-footer-height: 3.25rem;
+
   /* Sidebar (for dashboard) */
   --sidebar-background: 0 0% 100%;
   --sidebar-foreground: 222 47% 11%;
@@ -92,6 +102,14 @@
   --border: 217 19% 18%;
   --input: 217 19% 18%;
   --ring: 24 90% 60%;
+
+  /* Keep layout sizing stable in dark mode as well */
+  --layout-space-inline: clamp(0.75rem, 0.6rem + 0.6vw, 1.5rem);
+  --layout-space-block: clamp(0.75rem, 0.65rem + 0.5vw, 1.25rem);
+  --admin-sidebar-width: 16.5rem;
+  --admin-sidebar-collapsed-width: 4.75rem;
+  --admin-navbar-height: 4rem;
+  --admin-footer-height: 3.25rem;
 
   /* Sidebar */
   --sidebar-background: 222 47% 7%;

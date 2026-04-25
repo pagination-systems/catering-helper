@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { LaptopMinimal, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -26,12 +26,9 @@ export function ThemeToggle() {
     return null;
   }
 
-  const activeTheme =
-    theme && themeOrder.includes(theme as (typeof themeOrder)[number]) ? theme : "system";
+  const activeTheme = theme && themeOrder.includes(theme as (typeof themeOrder)[number]) ? theme : "system";
   const nextTheme =
-    themeOrder[
-      (themeOrder.indexOf(activeTheme as (typeof themeOrder)[number]) + 1) % themeOrder.length
-    ];
+    themeOrder[(themeOrder.indexOf(activeTheme as (typeof themeOrder)[number]) + 1) % themeOrder.length];
   const Icon = themeIcons[activeTheme as keyof typeof themeIcons];
 
   return (

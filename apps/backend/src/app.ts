@@ -14,8 +14,7 @@ import { setupApiRoutes } from "./v1/routes/api-routes";
 
 export const app: Express = express();
 
-const corsEnv: keyof typeof CORS_ORIGIN =
-  env.NODE_ENV === "production" ? "production" : "development";
+const corsEnv: keyof typeof CORS_ORIGIN = env.NODE_ENV === "production" ? "production" : "development";
 
 const corsOptions = {
   origin: CORS_ORIGIN[corsEnv],

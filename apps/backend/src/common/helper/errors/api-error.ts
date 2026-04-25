@@ -1,4 +1,4 @@
-import { StatusCodes, ReasonPhrases } from "http-status-codes";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
 
 interface ApiErrorOptions {
   details?: string;
@@ -43,8 +43,7 @@ export class ApiError extends Error {
 export class AuditCompletedError extends ApiError {
   constructor() {
     super("Audit is already completed.", {
-      details:
-        "A completed audit cannot be deleted or modified. Please change the audit status to modify or delete.",
+      details: "A completed audit cannot be deleted or modified. Please change the audit status to modify or delete.",
       httpReasonPhrase: ReasonPhrases.BAD_REQUEST,
       httpStatusCode: StatusCodes.BAD_REQUEST,
       appCode: 1,
