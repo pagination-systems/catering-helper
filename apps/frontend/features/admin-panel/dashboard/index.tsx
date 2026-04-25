@@ -1,33 +1,22 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { SectionHeader } from "../components/section-header";
+import { CardItem } from "./components/card-item";
 
 const overviewCards = [
-  { title: "Total Revenue", value: "$42,560", meta: "+8.2% from last month" },
-  { title: "Active Users", value: "1,204", meta: "+3.1% from last week" },
-  { title: "Pending Orders", value: "38", meta: "6 high priority" },
-  { title: "Avg. Fulfillment", value: "2.8h", meta: "Improved by 14m" },
+  { title: "Total Revenue", value: "$42,560", link: "#" },
+  { title: "Active Users", value: "1,204", link: "#" },
+  { title: "Pending Orders", value: "38", link: "#" },
+  { title: "Avg. Fulfillment", value: "2.8h", link: "#" },
 ];
 
-export function DashboardPage() {
+export const Dashboard = () => {
   return (
     <section className="space-y-6" aria-labelledby="dashboard-title">
-      <header className="space-y-1">
-        <h1 id="dashboard-title" className="text-2xl font-semibold tracking-tight text-foreground">
-          Dashboard
-        </h1>
-        <p className="text-sm text-muted-foreground">Track operations, users, and performance in one place.</p>
-      </header>
+      <SectionHeader title="Dashboard" description="Track operations, users, and performance in one place." />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {overviewCards.map((card) => (
-          <Card key={card.title} className="border-border/70">
-            <CardHeader className="pb-2">
-              <CardDescription>{card.title}</CardDescription>
-              <CardTitle className="text-2xl">{card.value}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-xs text-muted-foreground">{card.meta}</p>
-            </CardContent>
-          </Card>
+          <CardItem key={card.title} title={card.title} value={card.value} link={card.link} />
         ))}
       </div>
 
@@ -71,6 +60,4 @@ export function DashboardPage() {
       </div>
     </section>
   );
-}
-
-export { DashboardPage as default };
+};

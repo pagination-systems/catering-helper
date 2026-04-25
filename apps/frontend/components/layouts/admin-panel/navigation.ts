@@ -37,7 +37,7 @@ export function filterNavigationByRole(items: NavigationItem[], role: string): N
     );
 }
 
-export function isItemActive(item: NavigationItem, pathname: string) {
+export function isItemActive(item: NavigationItem, pathname: string): boolean {
   if (item.href === "/dashboard") {
     return pathname === "/dashboard";
   }

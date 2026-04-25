@@ -1,7 +1,24 @@
 import type { ReactNode } from "react";
 
-import { AdminShell } from "@/components/layouts/admin-panel/shell";
+import { AdminLayoutProvider } from "@/components/layouts/admin-panel/admin-layout-context";
+import { Sidebar } from "@/components/layouts/admin-panel/sidebar";
+import { Navbar } from "@/components/layouts/admin-panel/navbar";
+import { Footer } from "@/components/layouts/admin-panel/footer";
 
 export default function AdminPanelLayout({ children }: { children: ReactNode }) {
-  return <AdminShell>{children}</AdminShell>;
+  return (
+    <AdminLayoutProvider>
+      <div className="flex min-h-screen overflow-x-clip bg-background text-foreground">
+        <Sidebar />
+
+        <div className="flex min-h-screen min-w-0 flex-1 flex-col">
+          <Navbar />
+          <main className="min-w-0 flex-1 px-[var(--layout-space-inline)] py-[var(--layout-space-block)]">
+            {children}
+          </main>
+          <Footer />
+        </div>
+      </div>
+    </AdminLayoutProvider>
+  );
 }
