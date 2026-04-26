@@ -1,9 +1,11 @@
+import type { ReactNode } from "react";
+
 interface IfProps {
   expression: unknown;
-  fallback?: React.ReactNode;
-  children: React.ReactNode;
+  fallback?: ReactNode;
+  children: ReactNode;
 }
 
-export const If: React.FC<IfProps> = ({ expression = null, fallback = null, children }) => {
+export const If = ({ expression, fallback = null, children }: IfProps) => {
   return expression ? children : fallback;
 };
