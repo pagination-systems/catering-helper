@@ -2,25 +2,11 @@ import { Clock, Fingerprint, Mail, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import type { IUser } from "../schemas/user.schema";
+import { getRoleBadgeVariant } from "../utils/badge";
 
 interface UserDetailsProps {
   user: IUser;
 }
-
-const getRoleColor = (role: string): "default" | "secondary" | "destructive" | "outline" => {
-  switch (role?.toLowerCase()) {
-    case "owner":
-      return "default";
-    case "admin":
-      return "destructive";
-    case "manager":
-      return "secondary";
-    case "support":
-      return "outline";
-    default:
-      return "default";
-  }
-};
 
 const getInitials = (name: string): string => {
   return name
@@ -85,7 +71,7 @@ export const UserDetails = ({ user }: UserDetailsProps) => {
                 <p className="mt-1 truncate text-sm text-muted-foreground">{user.email}</p>
               </div>
               <div className="flex-shrink-0">
-                <Badge variant={getRoleColor(user.role)} className="px-3 py-1 text-xs font-semibold">
+                <Badge variant={getRoleBadgeVariant(user.role)} className="px-3 py-1 text-xs font-semibold">
                   {user.role}
                 </Badge>
               </div>

@@ -3,6 +3,8 @@
 import { PackageIcon } from "lucide-react";
 import { DataTable, type DataTableColumn } from "../../components/data-table";
 import type { GetPackagesResponse, ICateringPackage } from "../schemas/package.schema";
+import { usePackagesStore } from "../store/useStore";
+import { getPackageStatusBadgeClassName } from "../utils/badge";
 import { RowActions } from "./row-actions";
 
 interface PackageTableProps {
@@ -16,56 +18,60 @@ const bdt = new Intl.NumberFormat("en-BD", {
   maximumFractionDigits: 0,
 });
 
-const columns: DataTableColumn<ICateringPackage>[] = [
-  {
-    accessorKey: "name",
-    header: "Package",
-    cell: (item) => (
-      <>
-        <div className="font-medium text-foreground">{item.name}</div>
-        <div className="text-xs text-muted-foreground line-clamp-1">{item.description}</div>
-        <div className="text-xs text-muted-foreground">ID: {item.id}</div>
-      </>
-    ),
-  },
-  {
-    accessorKey: "pricePerMeal",
-    header: "Price / Meal",
-    cell: (item) => bdt.format(item.pricePerMeal),
-  },
-  {
-    id: "variants",
-    header: "Variants / Week",
-    cell: (item) => item.days.reduce((sum, day) => sum + day.variants.length, 0),
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: (item) => (
-      <span
-        className={
-          item.status === "Active"
-            ? "inline-flex rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700"
-            : "inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700"
-        }
-      >
-        {item.status}
-      </span>
-    ),
-  },
-  {
-    accessorKey: "updatedAt",
-    header: "Updated At",
-    cell: (item) => item.updatedAt.toLocaleDateString(),
-  },
-  {
-    id: "actions",
-    header: "Actions",
-    cell: (item) => <RowActions item={item} />,
-  },
-];
-
 export const PackageTable = ({ data, handlePaginate }: PackageTableProps) => {
+  const openView = usePackagesStore((state) => state.openView);
+
+  const columns: DataTableColumn<ICateringPackage>[] = [
+    {
+      accessorKey: "name",
+      header: "Package",
+      cell: (item) => (
+        <>
+          <button
+            type="button"
+            onClick={() => openView(item)}
+            className="w-fit text-left font-medium text-foreground transition-colors hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            {item.name}
+          </button>
+          <div className="text-xs text-muted-foreground line-clamp-1">{item.description}</div>
+          <div className="text-xs text-muted-foreground">ID: {item.id}</div>
+        </>
+      ),
+    },
+    {
+      accessorKey: "pricePerMeal",
+      header: "Price / Meal",
+      cell: (item) => bdt.format(item.pricePerMeal),
+    },
+    {
+      id: "variants",
+      header: "Variants / Week",
+      cell: (item) => item.days.reduce((sum, day) => sum + day.variants.length, 0),
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: (item) => (
+        <span
+          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${getPackageStatusBadgeClassName(item.status)}`}
+        >
+          {item.status}
+        </span>
+      ),
+    },
+    {
+      accessorKey: "updatedAt",
+      header: "Updated At",
+      cell: (item) => item.updatedAt.toLocaleDateString(),
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      cell: (item) => <RowActions item={item} />,
+    },
+  ];
+
   return (
     <DataTable
       data={data.data}

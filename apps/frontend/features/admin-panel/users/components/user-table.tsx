@@ -1,8 +1,11 @@
 "use client";
 
 import { UsersIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { DataTable, type DataTableColumn } from "../../components/data-table";
 import type { GetUsersResponse, IUser } from "../schemas/user.schema";
+import { useUsersStore } from "../store/useStore";
+import { getRoleBadgeVariant } from "../utils/badge";
 import { RowActions } from "./row-actions";
 
 interface UserTableProps {
@@ -10,38 +13,47 @@ interface UserTableProps {
   handlePaginate?: (payload: { page: number; limit: number }) => void;
 }
 
-const columns: DataTableColumn<IUser>[] = [
-  {
-    accessorKey: "name",
-    header: "Name",
-    cell: (user) => (
-      <div className="flex flex-col">
-        <span className="font-medium text-foreground">{user.name}</span>
-        <span className="text-xs text-muted-foreground">ID: {user.id}</span>
-      </div>
-    ),
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-  },
-  {
-    accessorKey: "role",
-    header: "Role",
-  },
-  {
-    accessorKey: "createdAt",
-    header: "Created At",
-    cell: (user) => user.createdAt.toLocaleDateString(),
-  },
-  {
-    id: "actions",
-    header: "Actions",
-    cell: (user) => <RowActions user={user} />,
-  },
-];
-
 export const UserTable = ({ data, handlePaginate }: UserTableProps) => {
+  const openView = useUsersStore((state) => state.openView);
+
+  const columns: DataTableColumn<IUser>[] = [
+    {
+      accessorKey: "name",
+      header: "Name",
+      cell: (user) => (
+        <div className="flex flex-col">
+          <button
+            type="button"
+            onClick={() => openView(user)}
+            className="w-fit text-left font-medium text-foreground transition-colors hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            {user.name}
+          </button>
+          <span className="text-xs text-muted-foreground">ID: {user.id}</span>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "email",
+      header: "Email",
+    },
+    {
+      accessorKey: "role",
+      header: "Role",
+      cell: (user) => <Badge variant={getRoleBadgeVariant(user.role)}>{user.role}</Badge>,
+    },
+    {
+      accessorKey: "createdAt",
+      header: "Created At",
+      cell: (user) => user.createdAt.toLocaleDateString(),
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      cell: (user) => <RowActions user={user} />,
+    },
+  ];
+
   return (
     <DataTable
       data={data.data}

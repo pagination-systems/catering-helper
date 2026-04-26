@@ -1,5 +1,6 @@
 import { CalendarDaysIcon, CircleDollarSignIcon, PackageIcon, UtensilsCrossedIcon } from "lucide-react";
 import type { ICateringPackage } from "../schemas/package.schema";
+import { getPackageStatusBadgeClassName } from "../utils/badge";
 
 interface PackageDetailsProps {
   item: ICateringPackage;
@@ -56,7 +57,7 @@ export const PackageDetails = ({ item }: PackageDetailsProps) => {
     },
   ] as const;
 
-  const statusClassName = item.status === "Active" ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-700";
+  const statusClassName = getPackageStatusBadgeClassName(item.status);
 
   return (
     <div className="space-y-5">
