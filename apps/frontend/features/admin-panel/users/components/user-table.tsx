@@ -1,63 +1,72 @@
 "use client";
 
 import { UsersIcon } from "lucide-react";
-import { If } from "@/components/if";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { TablePagination } from "../../components/table-pagination";
-import type { GetUsersResponse } from "../schemas/user.schema";
+import { Badge } from "@/components/ui/badge";
+import { DataTable, type DataTableColumn } from "../../components/data-table";
+import type { GetUsersResponse, IUser } from "../schemas/user.schema";
+import { useUsersStore } from "../store/useStore";
+import { getRoleBadgeVariant } from "../utils/badge";
 import { RowActions } from "./row-actions";
 
 interface UserTableProps {
   data: GetUsersResponse;
+  handlePaginate?: (payload: { page: number; limit: number }) => void;
 }
 
-export const UserTable = ({ data }: UserTableProps) => {
-  return (
-    <>
-      <Table className="border-b">
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead className="text-right">Created At</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <If
-            expression={data.data.length > 0}
-            fallback={
-              <TableRow>
-                <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
-                  <div className="flex flex-col items-center gap-2">
-                    <UsersIcon className="size-5" />
-                    No users found for your current query and filters.
-                  </div>
-                </TableCell>
-              </TableRow>
-            }
-          >
-            {data.data.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>
-                  <div className="font-medium text-foreground">{user.name}</div>
-                </TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.role}</TableCell>
-                <TableCell className="text-right text-muted-foreground">
-                  {user.createdAt.toLocaleDateString()}
-                </TableCell>
-                <TableCell>
-                  <RowActions user={user} />
-                </TableCell>
-              </TableRow>
-            ))}
-          </If>
-        </TableBody>
-      </Table>
+export const UserTable = ({ data, handlePaginate }: UserTableProps) => {
+  const openView = useUsersStore((state) => state.openView);
 
-      <TablePagination pagination={data.meta.pagination} />
-    </>
+  const columns: DataTableColumn<IUser>[] = [
+    {
+      accessorKey: "name",
+      header: "Name",
+      cell: (user) => (
+        <div className="flex flex-col">
+          <button
+            type="button"
+            onClick={() => openView(user)}
+            className="w-fit text-left font-medium text-foreground transition-colors hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            {user.name}
+          </button>
+          <span className="text-xs text-muted-foreground">ID: {user.id}</span>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "email",
+      header: "Email",
+    },
+    {
+      accessorKey: "role",
+      header: "Role",
+      cell: (user) => <Badge variant={getRoleBadgeVariant(user.role)}>{user.role}</Badge>,
+    },
+    {
+      accessorKey: "createdAt",
+      header: "Created At",
+      cell: (user) => user.createdAt.toLocaleDateString(),
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      cell: (user) => <RowActions user={user} />,
+    },
+  ];
+
+  return (
+    <DataTable
+      data={data.data}
+      columns={columns}
+      pagination={data.meta.pagination}
+      handlePaginate={handlePaginate}
+      getRowId={(user) => user.id}
+      emptyState={
+        <div className="flex flex-col items-center gap-2">
+          <UsersIcon className="size-5" />
+          No users found for your current query and filters.
+        </div>
+      }
+    />
   );
 };
