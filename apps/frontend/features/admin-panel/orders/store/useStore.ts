@@ -178,9 +178,8 @@ const buildSeedOrder = (input: SeedOrderInput): IOrder => {
   });
 };
 
-const initialOrders: IOrder[] = [
-  buildSeedOrder({
-    seed: 1,
+const seedOrderBlueprints: Omit<SeedOrderInput, "seed">[] = [
+  {
     customerName: "Rahim Uddin",
     customerPhone: "01711000001",
     address: "House 14, Road 7, Dhanmondi, Dhaka",
@@ -203,9 +202,8 @@ const initialOrders: IOrder[] = [
         items: ["Polao", "Chicken", "Salad"],
       },
     ],
-  }),
-  buildSeedOrder({
-    seed: 2,
+  },
+  {
     customerName: "Nafisa Karim",
     customerPhone: "01822000002",
     address: "House 22, Gulshan 1, Dhaka",
@@ -222,9 +220,8 @@ const initialOrders: IOrder[] = [
         items: ["Polao", "Chicken roast", "Raita"],
       },
     ],
-  }),
-  buildSeedOrder({
-    seed: 3,
+  },
+  {
     customerName: "Aman Group Ltd",
     customerPhone: "01933000003",
     address: "Tejgaon Industrial Area, Dhaka",
@@ -240,9 +237,8 @@ const initialOrders: IOrder[] = [
         items: ["Rice", "Fish curry", "Dal"],
       },
     ],
-  }),
-  buildSeedOrder({
-    seed: 4,
+  },
+  {
     customerName: "Mehedi Hasan",
     customerPhone: "01644000004",
     address: "Mirpur DOHS, Dhaka",
@@ -258,9 +254,8 @@ const initialOrders: IOrder[] = [
         items: ["Rice", "Tilapia fish", "Dal"],
       },
     ],
-  }),
-  buildSeedOrder({
-    seed: 5,
+  },
+  {
     customerName: "Shamim Enterprise",
     customerPhone: "01555000005",
     address: "Banani, Dhaka",
@@ -276,9 +271,8 @@ const initialOrders: IOrder[] = [
         items: ["Polao", "Beef bhuna", "Borhani"],
       },
     ],
-  }),
-  buildSeedOrder({
-    seed: 6,
+  },
+  {
     customerName: "Arifa Sultana",
     customerPhone: "01366000006",
     address: "Uttara Sector 11, Dhaka",
@@ -294,9 +288,8 @@ const initialOrders: IOrder[] = [
         items: ["Rice", "Chicken jhol", "Vegetable"],
       },
     ],
-  }),
-  buildSeedOrder({
-    seed: 7,
+  },
+  {
     customerName: "Zaman Trading",
     customerPhone: "01777000007",
     address: "Moghbazar, Dhaka",
@@ -312,9 +305,8 @@ const initialOrders: IOrder[] = [
         items: ["Rice", "Egg curry", "Dal"],
       },
     ],
-  }),
-  buildSeedOrder({
-    seed: 8,
+  },
+  {
     customerName: "Rifat Chowdhury",
     customerPhone: "01488000008",
     address: "Badda, Dhaka",
@@ -330,8 +322,17 @@ const initialOrders: IOrder[] = [
         items: ["Lebu rice", "Ilish", "Dal"],
       },
     ],
-  }),
+  },
 ];
+
+const initialOrders: IOrder[] = Array.from({ length: 50 }, (_, index) => {
+  const blueprint = seedOrderBlueprints[index % seedOrderBlueprints.length];
+
+  return buildSeedOrder({
+    seed: index + 1,
+    ...blueprint,
+  });
+});
 
 export const useOrdersStore = create<OrdersStoreState>((set) => ({
   list: {

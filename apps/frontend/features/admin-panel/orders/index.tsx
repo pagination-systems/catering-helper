@@ -208,7 +208,7 @@ export const Orders = () => {
 
       <Card>
         <CardHeader className="space-y-3">
-          <TableToolbar />
+          <TableToolbar filteredOrders={filteredOrders} activeDay={dayFilter} />
         </CardHeader>
 
         <CardContent className="space-y-4">

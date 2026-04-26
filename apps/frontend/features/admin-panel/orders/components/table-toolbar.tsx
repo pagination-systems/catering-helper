@@ -1,4 +1,5 @@
-import { FilterIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { DownloadIcon, FilterIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,15 +10,34 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { downloadOrdersPdf } from "@/features/admin-panel/orders/components/orders-pdf";
+import type { IOrder } from "../schemas/order.schema";
 import { OrderStatus } from "../schemas/order.schema";
 import { useOrdersStore } from "../store/useStore";
 
-export const TableToolbar = () => {
+interface TableToolbarProps {
+  filteredOrders: IOrder[];
+  activeDay: string;
+}
+
+export const TableToolbar = ({ filteredOrders, activeDay }: TableToolbarProps) => {
+  const [isDownloading, setIsDownloading] = useState(false);
   const query = useOrdersStore((state) => state.query);
   const statusFilter = useOrdersStore((state) => state.statusFilter);
   const setQuery = useOrdersStore((state) => state.setQuery);
   const setStatusFilter = useOrdersStore((state) => state.setStatusFilter);
   const openCreate = useOrdersStore((state) => state.openCreate);
+
+  const handleDownload = async () => {
+    if (!filteredOrders.length || isDownloading) return;
+
+    try {
+      setIsDownloading(true);
+      await downloadOrdersPdf({ orders: filteredOrders, activeDay });
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -58,6 +78,16 @@ export const TableToolbar = () => {
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <Button
+        type="button"
+        variant="secondary"
+        onClick={handleDownload}
+        disabled={!filteredOrders.length || isDownloading}
+      >
+        <DownloadIcon className="size-4" />
+        {isDownloading ? "Preparing..." : "Download"}
+      </Button>
 
       <Button type="button" className="ml-auto" onClick={openCreate}>
         <PlusIcon className="size-4" />
