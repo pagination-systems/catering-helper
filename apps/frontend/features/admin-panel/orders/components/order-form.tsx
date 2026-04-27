@@ -6,10 +6,10 @@ import { useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { DayTab } from "@/features/client-portal/components/day-tab";
 import { cn } from "@/lib/utils";
 import {
   adminPackageCatalog,
@@ -19,6 +19,7 @@ import {
 } from "../data/package-catalog";
 import { type CreateOrderValues, createOrderSchema } from "../schemas/order.schema";
 import type { DaySlot } from "../store/useStore";
+import { DayTab } from "./day-tab";
 
 interface OrderFormProps {
   onSubmit: (data: CreateOrderValues) => void;
@@ -207,283 +208,317 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
 
   return (
     <Form {...form}>
-      <form className="flex h-full min-h-0 flex-col pt-2" onSubmit={form.handleSubmit(onSubmit)} noValidate>
-        <div className="flex-1 overflow-y-auto px-1 pb-3">
-          <div className="space-y-5">
-            <div className="grid gap-4 md:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="customerName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Customer Name</FormLabel>
-                    <FormControl>
-                      <Input type="text" placeholder="Enter customer name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+      <form
+        className="flex h-full min-h-0 flex-col overflow-x-hidden pt-0 sm:pt-2"
+        onSubmit={form.handleSubmit(onSubmit)}
+        noValidate
+      >
+        <div className="flex-1 overflow-y-auto px-0 pb-3 sm:px-1">
+          <div className="grid gap-3 sm:gap-4 xl:grid-cols-12">
+            <div className="space-y-4 xl:col-span-12">
+              <Card size="sm">
+                <CardHeader className="border-b px-4 pb-3">
+                  <CardTitle>Customer Details</CardTitle>
+                  <CardDescription>Enter customer contact and delivery information.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4 px-4 pt-4">
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="customerName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Customer Name</FormLabel>
+                          <FormControl>
+                            <Input type="text" placeholder="Enter customer name" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-              <FormField
-                control={form.control}
-                name="customerPhone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
-                    <FormControl>
-                      <Input type="tel" placeholder="01XXXXXXXXX" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                    <FormField
+                      control={form.control}
+                      name="customerPhone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Phone Number</FormLabel>
+                          <FormControl>
+                            <Input type="tel" placeholder="01XXXXXXXXX" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <FormField
+                    control={form.control}
+                    name="address"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Delivery Address</FormLabel>
+                        <FormControl>
+                          <Textarea rows={3} placeholder="Building, road, area and delivery instructions" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="notes"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Note</FormLabel>
+                        <FormControl>
+                          <Textarea rows={2} placeholder="Optional notes for kitchen or rider" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+
+              <Card size="sm">
+                <CardHeader className="border-b px-4 pb-3">
+                  <CardTitle>Package Selection</CardTitle>
+                  <CardDescription>Select a package to view and add meal variants.</CardDescription>
+                </CardHeader>
+                <CardContent className="px-4 pt-4">
+                  <FormField
+                    control={form.control}
+                    name="packageName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                            {packageOptions.map((packageName) => {
+                              const item = getPackageByName(packageName) ?? adminPackageCatalog[0];
+                              const selected = field.value === packageName;
+
+                              return (
+                                <button
+                                  key={packageName}
+                                  type="button"
+                                  onClick={() => updatePackageName(packageName)}
+                                  className={cn(
+                                    "rounded-lg border p-3 text-left transition-all",
+                                    selected
+                                      ? "border-primary bg-primary/5 ring-1 ring-primary"
+                                      : "border-border/70 hover:border-primary/50",
+                                  )}
+                                >
+                                  <div className="flex items-start justify-between gap-2">
+                                    <div className="min-w-0">
+                                      <p className="truncate text-sm font-semibold text-foreground">
+                                        {item?.name ?? packageName}
+                                      </p>
+                                      <p className="mt-0.5 text-xs text-muted-foreground">
+                                        {item?.variants.length ?? 0} variants
+                                      </p>
+                                    </div>
+                                    <p className="shrink-0 text-sm font-bold text-primary">
+                                      {bdtFormatter.format(item?.pricePerMeal ?? 0)}
+                                    </p>
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+
+              <Card size="sm">
+                <CardHeader className="border-b px-4 pb-3">
+                  <CardTitle>Delivery Date</CardTitle>
+                  <CardDescription>Choose the delivery day for this order.</CardDescription>
+                </CardHeader>
+                <CardContent className="px-4 pt-4">
+                  <FormField
+                    control={form.control}
+                    name="deliveryDate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <div className="flex flex-wrap gap-2">
+                            {deliveryDateCards.map((day) => (
+                              <DayTab
+                                key={day.value}
+                                dayLabel={day.dayLabel}
+                                dateLabel={day.dateLabel}
+                                active={field.value === day.value}
+                                onClick={() => updateDeliveryDate(day.value)}
+                              />
+                            ))}
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+
+              <Card size="sm">
+                <CardHeader className="border-b px-4 pb-3">
+                  <CardTitle>Meal Variants</CardTitle>
+                  <CardDescription>
+                    Add meal quantities for {activeDeliveryLabel || "the selected date"}.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3 px-4 pt-4">
+                  <FormField
+                    control={form.control}
+                    name="items"
+                    render={() => (
+                      <FormItem className="space-y-3">
+                        <FormControl>
+                          <div className="overflow-hidden rounded-xl border border-border/70 bg-background">
+                            <div className="flex items-center justify-between border-b border-border/60 bg-muted/35 px-4 py-3">
+                              <p className="text-sm font-semibold text-foreground">{activeDeliveryLabel}</p>
+                              <p className="text-base font-semibold text-foreground">
+                                {bdtFormatter.format(activeDateSubtotal)}
+                              </p>
+                            </div>
+
+                            <div className="divide-y divide-border/50">
+                              {variantOptions.map((variantName) => {
+                                const quantity =
+                                  selectedItemMap.get(
+                                    lineItemKey(activePackageName, activeDeliveryDate, variantName),
+                                  ) ?? 0;
+
+                                return (
+                                  <div key={variantName} className="px-4 py-3">
+                                    <div className="mb-2 min-w-0">
+                                      <p className="truncate text-sm font-semibold text-foreground">
+                                        {activePackageName} - {variantName}
+                                      </p>
+                                      <p className="mt-0.5 text-xs text-muted-foreground">
+                                        {bdtFormatter.format(pricePerMeal)} per meal
+                                      </p>
+                                    </div>
+
+                                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                      <div className="inline-flex self-start items-center rounded-full border border-border/80 bg-background px-1 py-1 sm:self-auto">
+                                        <Button
+                                          type="button"
+                                          variant="ghost"
+                                          size="icon"
+                                          className="h-7 w-7 rounded-full"
+                                          onClick={() => updateVariantQuantity(variantName, quantity - 1)}
+                                          disabled={quantity <= 0}
+                                        >
+                                          <Minus className="h-4 w-4" />
+                                        </Button>
+
+                                        <p className="w-7 text-center text-sm font-semibold text-foreground">
+                                          {quantity}
+                                        </p>
+
+                                        <Button
+                                          type="button"
+                                          variant="ghost"
+                                          size="icon"
+                                          className="h-7 w-7 rounded-full"
+                                          onClick={() => updateVariantQuantity(variantName, quantity + 1)}
+                                        >
+                                          <Plus className="h-4 w-4" />
+                                        </Button>
+                                      </div>
+
+                                      <p className="text-base font-semibold text-foreground sm:text-right">
+                                        {bdtFormatter.format(quantity * pricePerMeal)}
+                                      </p>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {variantOptions.length === 0 ? (
+                    <div className="rounded-lg border border-dashed bg-muted/20 px-4 py-3 text-center text-sm text-muted-foreground">
+                      Select a package to view variants
+                    </div>
+                  ) : null}
+                </CardContent>
+              </Card>
             </div>
 
-            <FormField
-              control={form.control}
-              name="address"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Delivery Address</FormLabel>
-                  <FormControl>
-                    <Textarea rows={3} placeholder="Building, road, area and delivery instructions" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="notes"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Note</FormLabel>
-                  <FormControl>
-                    <Textarea rows={2} placeholder="Optional notes for kitchen or rider" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <section className="space-y-3">
-              <div>
-                <p className="text-sm font-semibold text-foreground">Package</p>
-                <p className="text-sm text-muted-foreground">Select a package to view variants</p>
-              </div>
-
-              <FormField
-                control={form.control}
-                name="packageName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
-                        {packageOptions.map((packageName) => {
-                          const item = getPackageByName(packageName) ?? adminPackageCatalog[0];
-                          const selected = field.value === packageName;
-
-                          return (
-                            <button
-                              key={packageName}
-                              type="button"
-                              onClick={() => updatePackageName(packageName)}
-                              className={cn(
-                                "p-3 rounded-lg border transition-all text-left",
-                                selected
-                                  ? "border-primary bg-primary/5 ring-1 ring-primary"
-                                  : "border-border/70 hover:border-primary/50",
-                              )}
-                            >
-                              <div className="flex items-start justify-between gap-2">
-                                <div className="min-w-0">
-                                  <p className="font-semibold text-foreground text-sm truncate">
-                                    {item?.name ?? packageName}
-                                  </p>
-                                  <p className="text-xs text-muted-foreground mt-0.5">
-                                    {item?.variants.length ?? 0} variants
-                                  </p>
-                                </div>
-                                <p className="text-sm font-bold text-primary shrink-0">
-                                  {bdtFormatter.format(item?.pricePerMeal ?? 0)}
-                                </p>
-                              </div>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </section>
-
-            <section className="space-y-3">
-              <div>
-                <p className="text-sm font-semibold text-foreground">Delivery Date</p>
-                <p className="text-sm text-muted-foreground">Select date for this order</p>
-              </div>
-
-              <FormField
-                control={form.control}
-                name="deliveryDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <div className="flex gap-2 overflow-x-auto pb-1">
-                        {deliveryDateCards.map((day) => (
-                          <DayTab
-                            key={day.value}
-                            dayLabel={day.dayLabel}
-                            dateLabel={day.dateLabel}
-                            active={field.value === day.value}
-                            onClick={() => updateDeliveryDate(day.value)}
-                          />
-                        ))}
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </section>
-
-            <section className="space-y-3">
-              <div>
-                <p className="text-sm font-semibold text-foreground">Meal Variants</p>
-                <p className="text-sm text-muted-foreground">
-                  Add variants for {activeDeliveryLabel || "the selected date"}
-                </p>
-              </div>
-
-              <FormField
-                control={form.control}
-                name="items"
-                render={() => (
-                  <FormItem className="space-y-3">
-                    <FormControl>
-                      <div className="overflow-hidden rounded-xl border border-border/70 bg-background">
-                        <div className="flex items-center justify-between border-b border-border/60 bg-muted/35 px-4 py-3">
-                          <p className="text-sm font-semibold text-foreground">{activeDeliveryLabel}</p>
-                          <p className="text-base font-semibold text-foreground">
-                            {bdtFormatter.format(activeDateSubtotal)}
+            <div className="space-y-4 xl:col-span-12 xl:sticky xl:top-2 xl:self-start">
+              <Card size="sm">
+                <CardHeader className="border-b px-4 pb-3">
+                  <CardTitle>Selected Variants</CardTitle>
+                  <CardDescription>Only added variants are listed here.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2 px-4 pt-4">
+                  {selectedVariants.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">No variants selected yet.</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {selectedVariants.map((item) => (
+                        <div
+                          key={lineItemKey(item.packageName, item.deliveryDate, item.variantName)}
+                          className="flex flex-col gap-2 rounded-md border border-border/60 bg-background/70 px-3 py-2 sm:flex-row sm:items-start sm:justify-between"
+                        >
+                          <div className="min-w-0">
+                            <p className="truncate text-sm font-medium text-foreground">
+                              {item.packageName} - {item.variantName}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {item.deliveryLabel} · Qty {item.quantity}
+                            </p>
+                          </div>
+                          <p className="text-sm font-semibold text-foreground sm:ml-4 sm:text-right">
+                            {bdtFormatter.format(item.subtotal)}
                           </p>
                         </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
 
-                        <div className="divide-y divide-border/50">
-                          {variantOptions.map((variantName) => {
-                            const quantity =
-                              selectedItemMap.get(lineItemKey(activePackageName, activeDeliveryDate, variantName)) ?? 0;
-
-                            return (
-                              <div key={variantName} className="px-4 py-3">
-                                <div className="mb-2 min-w-0">
-                                  <p className="truncate text-sm font-semibold text-foreground">
-                                    {activePackageName} - {variantName}
-                                  </p>
-                                  <p className="mt-0.5 text-xs text-muted-foreground">
-                                    {bdtFormatter.format(pricePerMeal)} per meal
-                                  </p>
-                                </div>
-
-                                <div className="flex items-center justify-between gap-3">
-                                  <div className="inline-flex items-center rounded-full border border-border/80 bg-background px-1 py-1">
-                                    <Button
-                                      type="button"
-                                      variant="ghost"
-                                      size="icon"
-                                      className="h-7 w-7 rounded-full"
-                                      onClick={() => updateVariantQuantity(variantName, quantity - 1)}
-                                      disabled={quantity <= 0}
-                                    >
-                                      <Minus className="h-4 w-4" />
-                                    </Button>
-
-                                    <p className="w-7 text-center text-sm font-semibold text-foreground">{quantity}</p>
-
-                                    <Button
-                                      type="button"
-                                      variant="ghost"
-                                      size="icon"
-                                      className="h-7 w-7 rounded-full"
-                                      onClick={() => updateVariantQuantity(variantName, quantity + 1)}
-                                    >
-                                      <Plus className="h-4 w-4" />
-                                    </Button>
-                                  </div>
-
-                                  <p className="text-base font-semibold text-foreground">
-                                    {bdtFormatter.format(quantity * pricePerMeal)}
-                                  </p>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {variantOptions.length === 0 ? (
-                <div className="rounded-lg border border-dashed bg-muted/20 px-4 py-3 text-sm text-muted-foreground text-center">
-                  Select a package to view variants
-                </div>
-              ) : null}
-
-              <div className="space-y-2 rounded-lg border border-border/70 bg-muted/15 p-4">
-                <div>
-                  <p className="text-sm font-semibold text-foreground">Selected Variants</p>
-                  <p className="text-xs text-muted-foreground">Only added variants are listed here</p>
-                </div>
-
-                {selectedVariants.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">No variants selected yet.</p>
-                ) : (
-                  <div className="space-y-2">
-                    {selectedVariants.map((item) => (
-                      <div
-                        key={lineItemKey(item.packageName, item.deliveryDate, item.variantName)}
-                        className="flex items-start justify-between rounded-md border border-border/60 bg-background/70 px-3 py-2"
-                      >
-                        <div className="min-w-0">
-                          <p className="truncate text-sm font-medium text-foreground">
-                            {item.packageName} - {item.variantName}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {item.deliveryLabel} · Qty {item.quantity}
-                          </p>
-                        </div>
-                        <p className="ml-4 text-sm font-semibold text-foreground">
-                          {bdtFormatter.format(item.subtotal)}
-                        </p>
-                      </div>
-                    ))}
+              <Card size="sm">
+                <CardHeader className="border-b px-4 pb-3">
+                  <CardTitle>Order Summary</CardTitle>
+                  <CardDescription>Review the final amount before creating the order.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2 px-4 pt-4">
+                  <div className="flex items-center justify-between gap-3 text-sm text-muted-foreground">
+                    <p>Subtotal</p>
+                    <p className="font-medium text-foreground">{bdtFormatter.format(selectedSubtotal)}</p>
                   </div>
-                )}
-              </div>
-            </section>
-
-            <section className="space-y-2 rounded-lg border border-border/70 bg-muted/20 p-4">
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
-                <p>Delivery Fee</p>
-                <p className="font-medium text-foreground">{bdtFormatter.format(DELIVERY_FEE)}</p>
-              </div>
-              <div className="flex items-center justify-between border-t pt-2">
-                <p className="text-sm font-semibold text-foreground">Total Price</p>
-                <p className="text-base font-bold text-primary">{bdtFormatter.format(totalPrice)}</p>
-              </div>
-            </section>
+                  <div className="flex items-center justify-between gap-3 text-sm text-muted-foreground">
+                    <p>Delivery Fee</p>
+                    <p className="font-medium text-foreground">{bdtFormatter.format(DELIVERY_FEE)}</p>
+                  </div>
+                </CardContent>
+                <CardFooter className="flex flex-col items-start justify-between gap-2 border-t bg-muted/20 px-4 py-3 sm:flex-row sm:items-center">
+                  <p className="text-sm font-semibold text-foreground">Total Price</p>
+                  <p className="text-base font-bold text-primary">{bdtFormatter.format(totalPrice)}</p>
+                </CardFooter>
+              </Card>
+            </div>
           </div>
         </div>
 
-        <div className="sticky bottom-0 z-10 mt-auto flex justify-end border-t bg-background px-1 pt-4 pb-1">
-          <Button type="submit" className="min-w-32">
+        <div className="sticky bottom-0 z-10 mt-auto flex justify-stretch border-t bg-background px-0 pt-4 pb-1 sm:justify-end sm:px-1">
+          <Button type="submit" className="w-full sm:w-auto sm:min-w-32">
             {submitLabel}
           </Button>
         </div>
