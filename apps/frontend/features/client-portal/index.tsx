@@ -1,24 +1,24 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
-import { useRouter } from "next/navigation";
 import { Clock3 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/components/language-provider";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { clientPortalContent, type ClientPortalContent } from "@/lib/i18n";
-import { cn } from "@/lib/utils";
-import { OrderSummary } from "@/features/client-portal/components/OrderSummary";
-
-import { useClientPortalStore, createQuantityKey } from "./store";
-import { packages, bdt } from "./data";
-import { getUpcomingDays } from "./components/utils";
-import { DayTab } from "./components/day-tab";
-import { VariantCard } from "./components/variant-card";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef } from "react";
 import type { TenantData } from "@/app/(client-portal)/data";
 import { If } from "@/components/if";
+import { useLanguage } from "@/components/language-provider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { OrderSummary } from "@/features/client-portal/components/OrderSummary";
+import { type ClientPortalContent, clientPortalContent } from "@/lib/i18n";
+import { cn } from "@/lib/utils";
+import { DayTab } from "./components/day-tab";
+import { getUpcomingDays } from "./components/utils";
+import { VariantCard } from "./components/variant-card";
+import { bdt, packages } from "./data";
 import { useOrderSummaryData } from "./order-summary-data";
+import { createQuantityKey, useClientPortalStore } from "./store";
 
 export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
   const router = useRouter();
@@ -48,18 +48,14 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
   const activePackage = packages.find((pkg) => pkg.id === activePackageId) ?? packages[0];
   const activeSelection = packageSelections[activePackage.id];
   const activeDayName = activeSelection?.activeDay || activePackage.days[0]?.day;
-  const activeDay =
-    activePackage.days.find((d) => d.day === activeDayName) ?? activePackage.days[0];
+  const activeDay = activePackage.days.find((d) => d.day === activeDayName) ?? activePackage.days[0];
   const upcomingDays = useMemo(() => getUpcomingDays(language), [language]);
 
   const packageSelectionTotals = useMemo(() => {
     return Object.fromEntries(
       packages.map((pkg) => {
         const selection = packageSelections[pkg.id] || { quantities: {} };
-        const selected = Object.values(selection.quantities).reduce(
-          (a, b) => a + Math.max(0, b),
-          0,
-        );
+        const selected = Object.values(selection.quantities).reduce((a, b) => a + Math.max(0, b), 0);
         return [pkg.id, selected];
       }),
     );
@@ -68,9 +64,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
 
   const handlePickPackage = (id: string) => {
     pickPackage(id);
-    requestAnimationFrame(() =>
-      customizerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
-    );
+    requestAnimationFrame(() => customizerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
 
   return (
@@ -91,10 +85,12 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
               </p>
             </div>
             <div className="relative h-[240px] sm:h-[320px] lg:h-[350px] w-full overflow-hidden rounded-3xl bg-muted/30 shadow-xl ring-1 ring-border/50 dark:bg-card">
-              <img
+              <Image
                 src={tenant.menuUrl}
                 alt="Display"
                 className="h-full w-full object-cover transition duration-700 hover:scale-105"
+                width={100}
+                height={100}
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent" />
             </div>
@@ -103,9 +99,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
 
         <section className="space-y-7">
           <div>
-            <h2 className="text-2xl font-semibold tracking-tight text-foreground">
-              {content.packageLabel}
-            </h2>
+            <h2 className="text-2xl font-semibold tracking-tight text-foreground">{content.packageLabel}</h2>
             <p className="mt-2 text-sm text-muted-foreground">{content.packageDescription}</p>
           </div>
 
@@ -130,9 +124,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
 
                   <CardHeader className="space-y-3 p-5 sm:p-6">
                     <CardTitle className="text-xl sm:text-2xl font-semibold">{pkg.name}</CardTitle>
-                    <p className="text-xs sm:text-sm text-muted-foreground h-12">
-                      {pkg.description}
-                    </p>
+                    <p className="text-xs sm:text-sm text-muted-foreground h-12">{pkg.description}</p>
                     <div className="flex items-end gap-1.5 sm:gap-2 mt-2">
                       <p className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
                         {bdt.format(pkg.pricePerMeal)}
@@ -162,10 +154,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
         </section>
 
         <If expression={customizerOpen}>
-          <section
-            ref={customizerRef}
-            className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]"
-          >
+          <section ref={customizerRef} className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
             <div className="space-y-3">
               <Card className="border-border/70 bg-card/96 shadow-sm dark:bg-card">
                 <CardHeader className="space-y-5 border-b border-border/70 bg-muted/40 p-4 dark:bg-muted/40 sm:p-5">
@@ -175,8 +164,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                         {content.customizeTitle}
                       </CardTitle>
                       <p className="mt-2 text-sm text-muted-foreground">
-                        {activePackage.name} - <b>{bdt.format(activePackage.pricePerMeal)}</b>{" "}
-                        {content.perMealSuffix}
+                        {activePackage.name} - <b>{bdt.format(activePackage.pricePerMeal)}</b> {content.perMealSuffix}
                       </p>
                     </div>
                   </div>
@@ -185,9 +173,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                     {upcomingDays.map(({ day, dateLabel }) => (
                       <DayTab
                         key={day}
-                        dayLabel={
-                          content.dayShortLabel[day as keyof typeof content.dayShortLabel] || day
-                        }
+                        dayLabel={content.dayShortLabel[day as keyof typeof content.dayShortLabel] || day}
                         dateLabel={dateLabel}
                         active={activeDay?.day === day}
                         onClick={() => setActiveDay(activePackage.id, day as any)}
@@ -204,21 +190,14 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                           <VariantCard
                             key={v.id}
                             variant={v}
-                            quantity={
-                              activeSelection?.quantities?.[
-                                createQuantityKey(activeDay.day, v.id)
-                              ] || 0
-                            }
+                            quantity={activeSelection?.quantities?.[createQuantityKey(activeDay.day, v.id)] || 0}
                             price={activePackage.pricePerMeal}
                             mealSuffix={content.mealSuffix}
                             unavailableLabel={content.unavailable}
                             pulse={
-                              recentlyUpdatedKey ===
-                              `${activePackage.id}::${createQuantityKey(activeDay.day, v.id)}`
+                              recentlyUpdatedKey === `${activePackage.id}::${createQuantityKey(activeDay.day, v.id)}`
                             }
-                            onQuantityChange={(nxt) =>
-                              updateQuantity(activePackage.id, activeDay.day, v.id, nxt)
-                            }
+                            onQuantityChange={(nxt) => updateQuantity(activePackage.id, activeDay.day, v.id, nxt)}
                           />
                         ))}
                       </div>
@@ -251,10 +230,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                 </p>
                 <p className="text-lg font-semibold leading-tight">{bdt.format(subtotal)}</p>
               </div>
-              <Button
-                disabled={groupedOrders.length === 0}
-                onClick={() => router.push("/checkout")}
-              >
+              <Button disabled={groupedOrders.length === 0} onClick={() => router.push("/checkout")}>
                 {content.checkout}
               </Button>
             </div>
@@ -269,13 +245,10 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                     >
                       <CollapsibleTrigger className="rounded-none border-b bg-muted/40 px-3 py-2 text-xs font-semibold text-foreground">
                         <span>
-                          {content.dayShortLabel[group.day as keyof typeof content.dayShortLabel] ||
-                            group.day}
-                          , {group.dateLabel}
+                          {content.dayShortLabel[group.day as keyof typeof content.dayShortLabel] || group.day},{" "}
+                          {group.dateLabel}
                         </span>
-                        <span className="text-[11px] font-bold text-primary">
-                          {bdt.format(group.subTotal)}
-                        </span>
+                        <span className="text-[11px] font-bold text-primary">{bdt.format(group.subTotal)}</span>
                       </CollapsibleTrigger>
 
                       <CollapsibleContent>
@@ -286,9 +259,7 @@ export function ClientPortalPage({ tenant }: { tenant: TenantData }) {
                                 <div className="text-[13px] font-semibold">
                                   {r.packageName} - {r.label}
                                 </div>
-                                <div className="mt-0.5 text-[11px] text-muted-foreground">
-                                  {bdt.format(r.subtotal)}
-                                </div>
+                                <div className="mt-0.5 text-[11px] text-muted-foreground">{bdt.format(r.subtotal)}</div>
                               </div>
                               <div className="whitespace-nowrap rounded bg-muted px-2 py-1 text-xs font-semibold">
                                 {r.quantity}x

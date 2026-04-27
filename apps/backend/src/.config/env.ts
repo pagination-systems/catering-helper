@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+
 dotenv.config();
 
 // 1. Define the exact shape of your validated environment
@@ -44,9 +45,7 @@ const validateEnv = (): EnvConfig => {
   const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY;
   const AWS_ACCESS_KEY_SECRET = process.env.AWS_ACCESS_KEY_SECRET;
   if (!AWS_ACCESS_KEY && !AWS_ACCESS_KEY_SECRET) {
-    console.info(
-      "ℹ️ INFO: AWS_ACCESS_KEY and AWS_ACCESS_KEY_SECRET are not set. S3 functionality will be disabled.",
-    );
+    console.info("ℹ️ INFO: AWS_ACCESS_KEY and AWS_ACCESS_KEY_SECRET are not set. S3 functionality will be disabled.");
   }
   let RATE_LIMIT_WINDOW_MS = process.env.RATE_LIMIT_WINDOW_MS;
   let RATE_LIMIT_MAX = process.env.RATE_LIMIT_MAX;

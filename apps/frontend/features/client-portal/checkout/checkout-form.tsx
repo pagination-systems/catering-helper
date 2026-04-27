@@ -6,14 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -85,10 +78,7 @@ export function CheckoutForm() {
             <FormItem>
               <FormLabel>Address</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Building, road, area, and delivery instructions"
-                  {...field}
-                />
+                <Textarea placeholder="Building, road, area, and delivery instructions" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

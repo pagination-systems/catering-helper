@@ -44,12 +44,7 @@ const sendErrorProd = (err: ErrorWithStatus, _req: Request, res: Response): void
   }
 };
 
-const globalErrorHandler = (
-  err: ErrorWithStatus,
-  req: Request,
-  res: Response,
-  _next: NextFunction,
-): void => {
+const globalErrorHandler = (err: ErrorWithStatus, req: Request, res: Response, _next: NextFunction): void => {
   err.httpStatusCode = err.httpStatusCode || 500;
   err.status = err.status || "error";
 

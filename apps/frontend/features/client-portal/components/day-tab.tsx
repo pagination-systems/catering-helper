@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export function DayTab({
   dayLabel,
@@ -32,12 +32,7 @@ export function DayTab({
       >
         {dateLabel}
       </p>
-      <p
-        className={cn(
-          "mt-0.5 text-xs sm:text-sm font-semibold",
-          active ? "text-primary-foreground" : "",
-        )}
-      >
+      <p className={cn("mt-0.5 text-xs sm:text-sm font-semibold", active ? "text-primary-foreground" : "")}>
         {dayLabel}
       </p>
     </Button>

@@ -1,5 +1,5 @@
-import { logger } from "../common/helper";
 import type { Express } from "express";
+import { logger } from "../common/helper";
 import { agenda } from "./config";
 
 export const setupAgenda = (app: Express) => {

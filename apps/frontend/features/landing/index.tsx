@@ -1,7 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/components/language-provider";
-import { landingContent, type LandingContent } from "@/lib/i18n";
+import { type LandingContent, landingContent } from "@/lib/i18n";
 
 import { FeaturesGridSection } from "./features-grid";
 import { HeroSection } from "./hero";
@@ -11,9 +11,7 @@ import { ProblemSolutionSection } from "./problem-solution";
 
 export const LandingPage = () => {
   const { language } = useLanguage();
-  const { hero, problemSolution, features, howItWorks, pricing } = landingContent[
-    language
-  ] as LandingContent;
+  const { hero, problemSolution, features, howItWorks, pricing } = landingContent[language] as LandingContent;
 
   return (
     <>

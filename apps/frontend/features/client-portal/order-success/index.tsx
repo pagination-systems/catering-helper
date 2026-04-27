@@ -1,7 +1,7 @@
 "use client";
 
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
-import { CheckCircle2, ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,17 +30,14 @@ export function OrderSuccess() {
               Order Confirmed
             </CardTitle>
             <CardDescription className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-              Your order was placed successfully. Head to your profile page to view status updates
-              and manage upcoming meals.
+              Your order was placed successfully. Head to your profile page to view status updates and manage upcoming
+              meals.
             </CardDescription>
           </CardHeader>
 
           <div className="mx-auto max-w-4xl px-6 pb-8 sm:px-8">
             <Button asChild className="h-11 w-full text-sm sm:text-base">
-              <Link
-                href="/orders"
-                className="inline-flex items-center justify-center gap-2 font-semibold"
-              >
+              <Link href="/orders" className="inline-flex items-center justify-center gap-2 font-semibold">
                 Go to Orders
                 <ArrowRight className="h-4 w-4" />
               </Link>

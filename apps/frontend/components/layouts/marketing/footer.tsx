@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useLanguage } from "@/components/language-provider";
-import { landingContent, type LandingContent } from "@/lib/i18n";
+import { type LandingContent, landingContent } from "@/lib/i18n";
 
 export function Footer() {
   const { language } = useLanguage();
