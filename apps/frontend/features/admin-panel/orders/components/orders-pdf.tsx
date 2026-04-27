@@ -12,14 +12,21 @@ type OrdersPdfDocumentProps = {
 };
 
 type PackageDetailLine = {
+  key: string;
   text: string;
   isPackageName: boolean;
 };
+
+const DATE_FORMAT = "DD MMM YYYY";
+const TIMESTAMP_FORMAT = "YYYY-MM-DD-HHmm";
+const GENERATED_AT_FORMAT = "DD MMM YYYY, hh:mm A";
 
 const bdt = new Intl.NumberFormat("en-BD", {
   style: "decimal",
   maximumFractionDigits: 0,
 });
+
+const formatCurrency = (amount: number) => bdt.format(amount);
 
 const companyInfo = {
   name: "Catering Helper",
@@ -32,17 +39,15 @@ let isPdfFontRegistered = false;
 const ensurePdfFontRegistered = () => {
   if (isPdfFontRegistered) return;
 
-  const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
-
   Font.register({
     family: PDF_FONT_FAMILY,
     fonts: [
       {
-        src: `${baseUrl}/fonts/NotoSansBengali-Regular.ttf`,
+        src: "/fonts/NotoSansBengali-Regular.ttf",
         fontWeight: 400,
       },
       {
-        src: `${baseUrl}/fonts/NotoSansBengali-Bold.ttf`,
+        src: "/fonts/NotoSansBengali-Bold.ttf",
         fontWeight: 700,
       },
     ],
@@ -54,66 +59,124 @@ const ensurePdfFontRegistered = () => {
 const styles = StyleSheet.create({
   page: {
     paddingTop: 32,
-    paddingBottom: 28,
+    paddingBottom: 48,
     paddingHorizontal: 26,
     fontFamily: PDF_FONT_FAMILY,
     fontSize: 10,
     color: "#111827",
     backgroundColor: "#ffffff",
   },
+
+  // ── Header ────────────────────────────────────────────────────────────────
   header: {
-    paddingBottom: 12,
-    marginBottom: 5,
-    gap: 4,
+    marginBottom: 14,
+  },
+  headerTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 8,
+  },
+  headerLeft: {
+    flexDirection: "column",
+    gap: 2,
+  },
+  headerRight: {
+    flexDirection: "column",
+    alignItems: "flex-end",
+    gap: 2,
   },
   title: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 700,
     color: "#0f172a",
+    letterSpacing: 0.3,
   },
   subtitle: {
-    fontSize: 10,
-    color: "#334155",
+    fontSize: 9.5,
+    color: "#475569",
   },
+  headerDivider: {
+    borderBottomWidth: 2,
+    borderBottomColor: "#0f172a",
+    marginBottom: 0,
+  },
+
+  // ── Table ─────────────────────────────────────────────────────────────────
   table: {
     borderWidth: 1,
     borderColor: "#cbd5e1",
-    borderRadius: 2,
+    borderRadius: 3,
     overflow: "hidden",
   },
   tableHeader: {
     flexDirection: "row",
-    backgroundColor: "#f8fafc",
-    borderBottomWidth: 1,
-    borderBottomColor: "#cbd5e1",
-    minHeight: 30,
+    backgroundColor: "#334155",
+    minHeight: 28,
     alignItems: "center",
-    paddingVertical: 4,
+    paddingVertical: 5,
   },
-  headerRow: {
+  bodyRow: {
     flexDirection: "row",
     borderBottomWidth: 1,
     borderBottomColor: "#e2e8f0",
-    minHeight: 20,
-    paddingVertical: 4,
+    minHeight: 22,
+    paddingVertical: 5,
+    backgroundColor: "#ffffff",
+  },
+  bodyRowAlt: {
+    backgroundColor: "#f8fafc",
   },
   bodyRowLast: {
     borderBottomWidth: 0,
   },
+
+  // ── Summary row ───────────────────────────────────────────────────────────
+  summaryRow: {
+    flexDirection: "row",
+    borderTopWidth: 1,
+    borderTopColor: "#e2e8f0",
+    minHeight: 26,
+    paddingVertical: 5,
+  },
+  summaryLabelCell: {
+    width: "74%",
+    paddingHorizontal: 8,
+    justifyContent: "center",
+  },
+  summaryLabelText: {
+    fontSize: 9,
+    fontWeight: 700,
+    color: "#0f172a",
+    textAlign: "right",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  summaryValueText: {
+    fontSize: 9,
+    fontWeight: 700,
+    color: "#0f172a",
+  },
+  summaryEmptyText: {
+    fontSize: 9,
+    color: "#94a3b8",
+  },
+
+  // ── Columns ───────────────────────────────────────────────────────────────
   colCustomer: {
     width: "22%",
-    paddingHorizontal: 6,
+    paddingHorizontal: 7,
   },
   colAddress: {
     width: "28%",
-    paddingHorizontal: 6,
-  },
-  colMeals: {
-    width: "8%",
-    paddingHorizontal: 6,
+    paddingHorizontal: 7,
   },
   colItems: {
     width: "24%",
+    paddingHorizontal: 7,
+  },
+  colMeals: {
+    width: "8%",
     paddingHorizontal: 6,
   },
   colAmount: {
@@ -124,108 +187,142 @@ const styles = StyleSheet.create({
     width: "9%",
     paddingHorizontal: 6,
   },
+
+  // ── Header cell text ──────────────────────────────────────────────────────
   tableHeaderText: {
-    fontSize: 9,
+    fontSize: 8.5,
     fontWeight: 700,
-    color: "#1e293b",
+    color: "#ffffff",
     textTransform: "uppercase",
+    letterSpacing: 0.4,
   },
+  textCenter: {
+    textAlign: "center",
+  },
+  textRight: {
+    textAlign: "right",
+  },
+
+  // ── Body cell text ────────────────────────────────────────────────────────
   tableCellText: {
     fontSize: 9,
     color: "#0f172a",
-    lineHeight: 1.3,
+    lineHeight: 1.35,
   },
   customerNameText: {
     fontWeight: 700,
+    fontSize: 9,
+    color: "#0f172a",
   },
   customerPhoneText: {
-    fontSize: 8.5,
-    color: "#475569",
-    lineHeight: 1.2,
-    marginTop: 2,
+    fontSize: 8,
+    color: "#64748b",
+    marginTop: 1,
   },
   itemLine: {
     fontSize: 8.5,
-    color: "#334155",
-    lineHeight: 1.25,
+    color: "#475569",
+    lineHeight: 1.3,
   },
   packageNameLine: {
     fontSize: 9,
     fontWeight: 700,
     color: "#0f172a",
-    lineHeight: 1.25,
+    lineHeight: 1.3,
   },
+  amountText: {
+    fontSize: 9,
+    color: "#0f172a",
+    textAlign: "right",
+  },
+  mealsText: {
+    fontSize: 9,
+    color: "#0f172a",
+    textAlign: "center",
+  },
+
+  // ── Footer ────────────────────────────────────────────────────────────────
   footer: {
     position: "absolute",
-    bottom: 22,
+    bottom: 16,
     left: 26,
     right: 26,
-    paddingTop: 8,
+  },
+  footerDivider: {
+    borderTopWidth: 1,
+    borderTopColor: "#e2e8f0",
+    marginBottom: 5,
   },
   footerRow: {
     flexDirection: "row",
-    alignItems: "flex-end",
+    alignItems: "center",
     justifyContent: "space-between",
-    width: "100%",
   },
-  footerCol: {
-    width: "50%",
-  },
-  footerColLeft: {
-    textAlign: "left",
-  },
-  footerColRight: {
-    textAlign: "right",
-  },
-  footerRegularText: {
-    fontSize: 9,
+  footerText: {
+    fontSize: 8.5,
     color: "#64748b",
   },
 });
 
 const formatItems = (order: IOrder): PackageDetailLine[] => {
   return order.items.flatMap((item) => [
-    {
-      text: item.packageName,
-      isPackageName: true,
-    },
-    {
-      text: `${item.variantName} (${item.quantity})`,
-      isPackageName: false,
-    },
+    { key: `${item.id}-package`, text: item.packageName, isPackageName: true },
+    { key: `${item.id}-variant`, text: `${item.variantName} (${item.quantity})`, isPackageName: false },
   ]);
 };
 
 const OrdersPdfDocument = ({ orders }: OrdersPdfDocumentProps) => {
-  const todayLabel = moment().format("DD MMM YYYY");
+  const todayLabel = moment().format(DATE_FORMAT);
+
+  const totalMeals = orders.reduce((sum, o) => sum + o.totalMeals, 0);
+  const totalAmount = orders.reduce((sum, o) => sum + o.total, 0);
 
   return (
     <Document title={`Orders-${todayLabel}`}>
       <Page size="A4" style={styles.page}>
+        {/* ── Page Header ── */}
         <View style={styles.header}>
-          <Text style={styles.title}>{companyInfo.name}</Text>
-          <Text style={styles.subtitle}>Phone: {companyInfo.phone}</Text>
-          <Text style={styles.subtitle}>Date: {todayLabel}</Text>
+          <View style={styles.headerTop}>
+            <View style={styles.headerLeft}>
+              <Text style={styles.title}>{companyInfo.name}</Text>
+              <Text style={styles.subtitle}>Phone: {companyInfo.phone}</Text>
+            </View>
+            <View style={styles.headerRight}>
+              <Text style={styles.subtitle}>Date: {todayLabel}</Text>
+              <Text style={styles.subtitle}>Total Orders: {orders.length}</Text>
+            </View>
+          </View>
+          <View style={styles.headerDivider} />
         </View>
 
+        {/* ── Table ── */}
         <View style={styles.table}>
+          {/* Table header row */}
           <View style={styles.tableHeader}>
             <Text style={[styles.tableHeaderText, styles.colCustomer]}>Customer</Text>
             <Text style={[styles.tableHeaderText, styles.colAddress]}>Delivery Address</Text>
             <Text style={[styles.tableHeaderText, styles.colItems]}>Package Details</Text>
-            <Text style={[styles.tableHeaderText, styles.colMeals]}>Meal</Text>
-            <Text style={[styles.tableHeaderText, styles.colAmount]}>Amount</Text>
-            <Text style={[styles.tableHeaderText, styles.colPaidAmount]}>Paid</Text>
+            <Text style={[styles.tableHeaderText, styles.colMeals, styles.textCenter]}>Meal</Text>
+            <Text style={[styles.tableHeaderText, styles.colAmount, styles.textRight]}>Amount</Text>
+            <Text style={[styles.tableHeaderText, styles.colPaidAmount, styles.textRight]}>Paid</Text>
           </View>
 
+          {/* Body rows */}
           {orders.map((order, index) => {
             const itemLines = formatItems(order);
-            const rowStyle = index === orders.length - 1 ? [styles.headerRow, styles.bodyRowLast] : styles.headerRow;
+            const isLast = index === orders.length - 1;
+            const isAlt = index % 2 === 1;
+            const rowStyle: Array<typeof styles.bodyRow | typeof styles.bodyRowAlt | typeof styles.bodyRowLast> = [
+              styles.bodyRow,
+            ];
+
+            if (isAlt) rowStyle.push(styles.bodyRowAlt);
+            if (isLast) rowStyle.push(styles.bodyRowLast);
 
             return (
               <View key={order.id} style={rowStyle} wrap={false}>
                 <View style={styles.colCustomer}>
-                  <Text style={[styles.tableCellText, styles.customerNameText]}>{order.customerName}</Text>
+                  <Text style={styles.customerNameText}>{order.customerName}</Text>
                   <Text style={styles.customerPhoneText}>{order.customerPhone}</Text>
                 </View>
 
@@ -235,43 +332,53 @@ const OrdersPdfDocument = ({ orders }: OrdersPdfDocumentProps) => {
 
                 <View style={styles.colItems}>
                   {itemLines.map((line) => (
-                    <Text
-                      key={`${order.id}-item-${line.text}`}
-                      style={line.isPackageName ? styles.packageNameLine : styles.itemLine}
-                    >
+                    <Text key={line.key} style={line.isPackageName ? styles.packageNameLine : styles.itemLine}>
                       {line.text}
                     </Text>
                   ))}
                 </View>
 
                 <View style={styles.colMeals}>
-                  <Text style={styles.tableCellText}>{order.totalMeals}</Text>
+                  <Text style={styles.mealsText}>{order.totalMeals}</Text>
                 </View>
 
                 <View style={styles.colAmount}>
-                  <Text style={styles.tableCellText}>{bdt.format(order.total)}</Text>
+                  <Text style={styles.amountText}>{formatCurrency(order.total)}</Text>
                 </View>
 
-                <View style={styles.colPaidAmount}>
-                  <Text style={styles.tableCellText}> </Text>
-                </View>
+                <View style={styles.colPaidAmount}>{/* blank — to be filled manually */}</View>
               </View>
             );
           })}
+
+          {/* ── Summary / Totals row (rendered after last data row) ── */}
+          <View style={styles.summaryRow} wrap={false}>
+            <View style={styles.summaryLabelCell}>
+              <Text style={styles.summaryLabelText}>Total</Text>
+            </View>
+
+            <View style={styles.colMeals}>
+              <Text style={[styles.summaryValueText, styles.textCenter]}>{totalMeals}</Text>
+            </View>
+
+            <View style={styles.colAmount}>
+              <Text style={[styles.summaryValueText, styles.textRight]}>{formatCurrency(totalAmount)}</Text>
+            </View>
+
+            <View style={styles.colPaidAmount}>{/* blank paid total — to be filled manually */}</View>
+          </View>
         </View>
 
+        {/* ── Footer (fixed — no top border on the View itself) ── */}
         <View style={styles.footer} fixed>
+          <View style={styles.footerDivider} />
           <View style={styles.footerRow}>
-            <View style={[styles.footerCol, styles.footerColLeft]}>
-              <Text
-                style={styles.footerRegularText}
-                render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
-              />
-            </View>
-
-            <View style={[styles.footerCol, styles.footerColRight]}>
-              <Text style={styles.footerRegularText}>Generated: {moment().format("DD MMM YYYY, hh:mm A")}</Text>
-            </View>
+            <Text
+              style={styles.footerText}
+              render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
+            />
+            <Text style={styles.footerText}>{companyInfo.name}</Text>
+            <Text style={styles.footerText}>Generated: {moment().format(GENERATED_AT_FORMAT)}</Text>
           </View>
         </View>
       </Page>
@@ -287,7 +394,7 @@ export const downloadOrdersPdf = async ({ orders, activeDay }: OrdersPdfProps) =
 
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
-  const fileStamp = moment().format("YYYY-MM-DD-HHmm");
+  const fileStamp = moment().format(TIMESTAMP_FORMAT);
 
   link.href = url;
   link.download = `orders-${activeDay.toLowerCase()}-${fileStamp}.pdf`;
