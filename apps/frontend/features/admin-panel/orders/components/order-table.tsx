@@ -92,7 +92,7 @@ export const OrderTable = ({ data, handlePaginate }: OrderTableProps) => {
     },
     {
       accessorKey: "updatedAt",
-      header: "Updated",
+      header: "Last Updated",
       cell: (item) => dateFormatter.format(item.updatedAt),
     },
     {
