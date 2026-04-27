@@ -44,8 +44,13 @@ export const UserTable = ({ data, handlePaginate }: UserTableProps) => {
     },
     {
       accessorKey: "createdAt",
-      header: "Created At",
+      header: "Created",
       cell: (user) => user.createdAt.toLocaleDateString(),
+    },
+    {
+      accessorKey: "updatedAt",
+      header: "Last Updated",
+      cell: (user) => user.updatedAt.toLocaleDateString(),
     },
     {
       id: "actions",

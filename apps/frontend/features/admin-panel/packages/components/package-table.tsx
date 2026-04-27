@@ -62,7 +62,7 @@ export const PackageTable = ({ data, handlePaginate }: PackageTableProps) => {
     },
     {
       accessorKey: "updatedAt",
-      header: "Updated At",
+      header: "Last Updated",
       cell: (item) => item.updatedAt.toLocaleDateString(),
     },
     {

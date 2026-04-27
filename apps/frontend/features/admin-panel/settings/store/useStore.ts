@@ -15,6 +15,7 @@ export const useSettingsStore = create<SettingsStoreState>((set) => ({
     menuUrl: "https://plus.unsplash.com/premium_photo-1673108852141-e8c3c22a4a22",
     description:
       "Premium corporate catering platform. Healthy, balanced, and perfectly on time for your team's success.",
+    deliveryFee: 0,
     contactEmail: "info@uttaracatering.com",
     contactPhone: "+880 1711-000000",
     contactWhatsapp: "+880 1711-000000",

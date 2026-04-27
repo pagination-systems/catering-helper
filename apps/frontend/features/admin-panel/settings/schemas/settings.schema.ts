@@ -8,6 +8,7 @@ export interface ITenant {
   logoUrl: string;
   menuUrl: string;
   description: string;
+  deliveryFee: number;
   contactEmail: string;
   contactPhone: string;
   contactWhatsapp: string;
@@ -25,6 +26,7 @@ export const updateTenantSchema = z.object({
   logoUrl: z.string().trim().url(requiredUrlMessage),
   menuUrl: z.string().trim().url(requiredUrlMessage),
   description: z.string().trim().min(20, "Description must be at least 20 characters."),
+  deliveryFee: z.number().int().min(0, "Delivery fee cannot be negative."),
   contactEmail: z.string().trim().email("Enter a valid email address."),
   contactPhone: z.string().trim().min(7, "Phone number must be at least 7 characters."),
   contactWhatsapp: z.string().trim().min(7, "WhatsApp number must be at least 7 characters."),

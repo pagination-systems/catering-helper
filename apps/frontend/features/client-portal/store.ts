@@ -91,10 +91,15 @@ export const useClientPortalStore = create<ClientPortalState>((set) => ({
           ...state.packageSelections,
           [pkgId]: {
             ...currentPkgSelection,
-            quantities: {
-              ...currentPkgSelection.quantities,
-              [key]: safe,
-            },
+            quantities:
+              safe === 0
+                ? Object.fromEntries(
+                    Object.entries(currentPkgSelection.quantities).filter(([quantityKey]) => quantityKey !== key),
+                  )
+                : {
+                    ...currentPkgSelection.quantities,
+                    [key]: safe,
+                  },
           },
         },
       };
