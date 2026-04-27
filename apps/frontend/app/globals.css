@@ -92,8 +92,10 @@
   --layout-space-block: clamp(0.75rem, 0.65rem + 0.5vw, 1.25rem);
 }
 
-/* Admin panel theme (route-level) */
-[data-app-theme="admin"] {
+/* Admin panel theme (route-level)
+  Include body:has(...) so Radix portal content mounted under <body> inherits admin tokens. */
+[data-app-theme="admin"],
+body:has([data-app-theme="admin"]) {
   /* Main canvas and text */
   --background: 214 20% 96%;
   --foreground: 215 28% 17%;
@@ -138,7 +140,8 @@
   --sidebar-ring: 115 52% 78%;
 }
 
-.dark [data-app-theme="admin"] {
+.dark [data-app-theme="admin"],
+.dark body:has([data-app-theme="admin"]) {
   /* Main canvas and text */
   --background: 220 16% 12%;
   --foreground: 210 33% 96%;
