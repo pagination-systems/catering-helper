@@ -1,5 +1,6 @@
-import { Schema } from "mongoose";
 import bcrypt from "bcryptjs";
+import type { Document } from "mongoose";
+import { Schema } from "mongoose";
 
 export type PasswordHashInput = {
   password: string;
@@ -8,11 +9,11 @@ export type PasswordHashInput = {
 export interface IPasswordHashDoc extends PasswordHashInput, Document {
   passwordChangeAt?: Date;
   correctPassword(password: string): Promise<boolean>;
-  passwordChangeAfter(JWTTimestamp: string): boolean;
+  passwordChangeAfter(JWTTimestamp: number): boolean;
 }
 
 /**
- *  passwordHashPlugin
+ * passwordHashPlugin
  * @param {Schema} schema - Mongoose schema
  * @throws {Error} If the schema is not an instance of mongoose Schema
  * @description This plugin hashes the password before saving the document and adds a method to compare the password and check if the password is changed after JWT issued
@@ -39,19 +40,23 @@ const passwordHashPlugin = <T extends IPasswordHashDoc>(schema: Schema<T>): void
   schema.add(passwordHashSchema);
 
   // Pre-save hook that hashes the password
-  schema.pre("save", async function (next) {
+  schema.pre("save", async function () {
     const user = this as T;
-    if (!this.isModified("password")) return next();
+
+    // Return early to exit; Mongoose 9 handles the Promise
+    if (!this.isModified("password")) return;
+
     user.password = await bcrypt.hash(user.password, 12);
-    next();
   });
 
   // Pre-save hook that adds passwordChangeAt when password is changed
-  schema.pre("save", function (next) {
+  schema.pre("save", function () {
     const user = this as T;
-    if (!this.isModified("password") || this.isNew) return next();
+
+    // Synchronous hook, return early to exit
+    if (!this.isModified("password") || this.isNew) return;
+
     user.passwordChangeAt = new Date();
-    next();
   });
 
   // Method to check if the password is correct
