@@ -93,7 +93,7 @@
 }
 
 /* Admin panel theme (route-level) */
-body[data-app-theme="admin"] {
+[data-app-theme="admin"] {
   /* Main canvas and text */
   --background: 214 20% 96%;
   --foreground: 215 28% 17%;
@@ -138,7 +138,7 @@ body[data-app-theme="admin"] {
   --sidebar-ring: 115 52% 78%;
 }
 
-.dark body[data-app-theme="admin"] {
+.dark [data-app-theme="admin"] {
   /* Main canvas and text */
   --background: 220 16% 12%;
   --foreground: 210 33% 96%;
