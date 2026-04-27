@@ -1,10 +1,4 @@
-export interface CateringPackage {
-  id: string;
-  title: string;
-  priceCents: number;
-}
-
-export interface ISession {
-  // TODO: UPDATE THIS
-  userId: string;
-}
+export * from "./package";
+export * from "./session";
+export * from "./tenant";
+export * from "./user";
