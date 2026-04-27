@@ -1,4 +1,13 @@
-import { HandCoins, LayoutDashboard, ListOrdered, type LucideIcon, Package2, Settings, Users } from "lucide-react";
+import {
+  HandCoins,
+  LayoutDashboard,
+  ListOrdered,
+  type LucideIcon,
+  Package2,
+  Settings,
+  Users,
+  Utensils,
+} from "lucide-react";
 
 export type NavigationItem = {
   label: string;
@@ -28,6 +37,11 @@ export const navigationItems: NavigationItem[] = [
     label: "Orders",
     href: "/orders",
     icon: ListOrdered,
+  },
+  {
+    label: "Production Requirements",
+    href: "/production-requirements",
+    icon: Utensils,
   },
   {
     label: "Customer Ledger",
