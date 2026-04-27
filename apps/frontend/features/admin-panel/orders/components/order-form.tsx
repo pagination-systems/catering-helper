@@ -208,7 +208,7 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
   return (
     <Form {...form}>
       <form className="flex h-full min-h-0 flex-col pt-2" onSubmit={form.handleSubmit(onSubmit)} noValidate>
-        <div className="flex-1 overflow-y-auto pr-1 pb-2">
+        <div className="flex-1 overflow-y-auto px-1 pb-3">
           <div className="space-y-5">
             <div className="grid gap-4 md:grid-cols-2">
               <FormField
@@ -482,7 +482,7 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
           </div>
         </div>
 
-        <div className="sticky bottom-0 z-10 mt-auto flex justify-end border-t bg-background pt-4 pb-1">
+        <div className="sticky bottom-0 z-10 mt-auto flex justify-end border-t bg-background px-1 pt-4 pb-1">
           <Button type="submit" className="min-w-32">
             {submitLabel}
           </Button>
