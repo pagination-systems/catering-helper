@@ -26,7 +26,7 @@ export interface IPasswordHashDoc extends PasswordHashInput, Document {
  */
 
 const passwordHashPlugin = <T extends IPasswordHashDoc>(schema: Schema<T>): void => {
-  let passwordHashSchema = new Schema<IPasswordHashDoc>({
+  const passwordHashSchema = new Schema<IPasswordHashDoc>({
     password: {
       type: String,
       required: true,
@@ -40,7 +40,7 @@ const passwordHashPlugin = <T extends IPasswordHashDoc>(schema: Schema<T>): void
 
   // Pre-save hook that hashes the password
   schema.pre("save", async function (next) {
-    let user = this as T;
+    const user = this as T;
     if (!this.isModified("password")) return next();
     user.password = await bcrypt.hash(user.password, 12);
     next();
@@ -48,7 +48,7 @@ const passwordHashPlugin = <T extends IPasswordHashDoc>(schema: Schema<T>): void
 
   // Pre-save hook that adds passwordChangeAt when password is changed
   schema.pre("save", function (next) {
-    let user = this as T;
+    const user = this as T;
     if (!this.isModified("password") || this.isNew) return next();
     user.passwordChangeAt = new Date();
     next();
@@ -56,13 +56,13 @@ const passwordHashPlugin = <T extends IPasswordHashDoc>(schema: Schema<T>): void
 
   // Method to check if the password is correct
   schema.methods.correctPassword = async function (password: string): Promise<boolean> {
-    let user = this as T;
+    const user = this as T;
     return await bcrypt.compare(password, user.password);
   };
 
   // Method to check if password is changed after JWT was issued
   schema.methods.passwordChangeAfter = function (JWTTimestamp: number): boolean {
-    let user = this as T;
+    const user = this as T;
     if (user.passwordChangeAt) {
       const passwordChangeTimestamp = parseInt((user.passwordChangeAt.getTime() / 1000).toString(), 10);
       return passwordChangeTimestamp > JWTTimestamp;

@@ -23,6 +23,12 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.682.0
         version: 3.1032.0
+      '@casl/ability':
+        specifier: ^6.7.3
+        version: 6.8.1
+      '@casl/mongoose':
+        specifier: ^8.0.3
+        version: 8.0.5(@casl/ability@6.8.1)(mongoose@9.4.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7))
       '@catering/authz':
         specifier: workspace:*
         version: link:../../packages/authz
@@ -38,6 +44,9 @@ importers:
       agenda:
         specifier: ^5.0.0
         version: 5.0.0
+      bcryptjs:
+        specifier: ^2.4.3
+        version: 2.4.3
       cookie-parser:
         specifier: ^1.4.6
         version: 1.4.7
@@ -74,6 +83,12 @@ importers:
       mongoose:
         specifier: ^9.4.1
         version: 9.4.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7)
+      mongoose-aggregate-paginate-v2:
+        specifier: ^1.1.2
+        version: 1.1.4
+      mongoose-paginate-v2:
+        specifier: ^1.8.3
+        version: 1.9.4(mongoose@9.4.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7))
       morgan:
         specifier: ^1.10.0
         version: 1.10.1
@@ -81,12 +96,15 @@ importers:
         specifier: ^4.4.0
         version: 4.4.1
       uuid:
-        specifier: ^9.0.1
-        version: 9.0.1
+        specifier: ^14.0.0
+        version: 14.0.0
       winston:
         specifier: ^3.13.1
         version: 3.19.0
     devDependencies:
+      '@types/bcryptjs':
+        specifier: ^2.4.6
+        version: 2.4.6
       '@types/cookie-parser':
         specifier: ^1.4.7
         version: 1.4.10(@types/express@5.0.6)
@@ -99,6 +117,9 @@ importers:
       '@types/hpp':
         specifier: ^0.2.6
         version: 0.2.7
+      '@types/mongoose-paginate-v2':
+        specifier: ^1.6.5
+        version: 1.6.5(mongoose@9.4.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7))
       '@types/morgan':
         specifier: ^1.9.9
         version: 1.9.10
@@ -621,6 +642,15 @@ packages:
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
+
+  '@casl/ability@6.8.1':
+    resolution: {integrity: sha512-VX5DD1JbSP/DdewZnNwXXaCzve+0pLe14mcUj2l93CdOFAQUT/ylAptNqxf3Wc/jlsuSanAgXza4Z1Iq23dzpQ==}
+
+  '@casl/mongoose@8.0.5':
+    resolution: {integrity: sha512-dCUFBtNFLBKH01eDKFfC0DXfZGQimtFkxfzMfRAuURkbRM7aYOKzr3Yd5dTe30q2sDP6ocLtFKA0YM5DcprBnw==}
+    peerDependencies:
+      '@casl/ability': ^6.7.0
+      mongoose: ^6.0.13 || ^7.0.0 || ^8.0.0 || ^9.0.0
 
   '@colors/colors@1.6.0':
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
@@ -1987,6 +2017,9 @@ packages:
   '@react-pdf/types@2.11.1':
     resolution: {integrity: sha512-i9xQgfaDU9QoeNnbp6rltXCWg1huEh195rpOuN8cE4BZ2FuLdQrsIcb2dhFF9aOxXf+XBA6LOSpIW051MDD/bw==}
 
+  '@riadhossain43/mongoose-autoincrement@2.1.1':
+    resolution: {integrity: sha512-hRCj32sKsfJc0SNjgT83StI3d3ULM1VliS49s2Eyngi47Te+yY5PBdW2SJCQSRCk1CnFPJm93zmPZ8WUYuZH9g==}
+
   '@rollup/rollup-android-arm-eabi@4.60.2':
     resolution: {integrity: sha512-dnlp69efPPg6Uaw2dVqzWRfAWRnYVb1XJ8CyyhIbZeaq4CA5/mLeZ1IEt9QqQxmbdvagjLIm2ZL8BxXv5lH4Yw==}
     cpu: [arm]
@@ -2446,6 +2479,9 @@ packages:
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
 
+  '@types/bcryptjs@2.4.6':
+    resolution: {integrity: sha512-9xlo6R2qDs5uixm0bcIqCeMCE6HiQsIyel9KQySStiyqNl2tnj2mP3DX1Nf56MD6KMenNNlBBsy3LJ7gUEQPXQ==}
+
   '@types/body-parser@1.19.6':
     resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
 
@@ -2480,6 +2516,10 @@ packages:
 
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+
+  '@types/mongoose-paginate-v2@1.6.5':
+    resolution: {integrity: sha512-OdnsqewLwCtZvExUHuL+KDVlZ6OdnzGcUdPpEqMRVKZ6mWy7fgnt1IkLSs8Zugv5cUTLVT46hjmL2OPWtml1Rw==}
+    deprecated: This is a stub types definition. mongoose-paginate-v2 provides its own type definitions, so you do not need this installed.
 
   '@types/morgan@1.9.10':
     resolution: {integrity: sha512-sS4A1zheMvsADRVfT0lYbJ4S9lmsey8Zo2F7cnbYjWHP67Q0AwMYuuzLlkIM2N8gAbb9cubhIVFwcIN2XyYCkA==}
@@ -2597,6 +2637,18 @@ packages:
   '@typescript-eslint/visitor-keys@8.58.2':
     resolution: {integrity: sha512-f1WO2Lx8a9t8DARmcWAUPJbu0G20bJlj8L4z72K00TMeJAoyLr/tHhI/pzYBLrR4dXWkcxO1cWYZEOX8DKHTqA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@ucast/core@1.10.2':
+    resolution: {integrity: sha512-ons5CwXZ/51wrUPfoduC+cO7AS1/wRb0ybpQJ9RrssossDxVy4t49QxWoWgfBDvVKsz9VXzBk9z0wqTdZ+Cq8g==}
+
+  '@ucast/js@3.1.0':
+    resolution: {integrity: sha512-eJ7yQeYtMK85UZjxoxBEbTWx6UMxEXKbjVyp+NlzrT5oMKV5Gpo/9bjTl3r7msaXTVC8iD9NJacqJ8yp7joX+Q==}
+
+  '@ucast/mongo2js@1.4.1':
+    resolution: {integrity: sha512-9aeg5cmqwRQnKCXHN6I17wk83Rcm487bHelaG8T4vfpWneAI469wSI3Srnbu+PuZ5znWRbnwtVq9RgPL+bN6CA==}
+
+  '@ucast/mongo@2.4.3':
+    resolution: {integrity: sha512-XcI8LclrHWP83H+7H2anGCEeDq0n+12FU2mXCTz6/Tva9/9ddK/iacvvhCyW6cijAAOILmt0tWplRyRhVyZLsA==}
 
   '@unrs/resolver-binding-android-arm-eabi@1.11.1':
     resolution: {integrity: sha512-ppLRUgHVaGRWUx0R0Ut06Mjo9gBaBkg3v/8AxusGLhsIotbBLuRk51rAzqLC8gq6NyyAojEXglNjzf6R948DNw==}
@@ -2856,6 +2908,9 @@ packages:
   basic-auth@2.0.1:
     resolution: {integrity: sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==}
     engines: {node: '>= 0.8'}
+
+  bcryptjs@2.4.3:
+    resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==}
 
   bidi-js@1.0.3:
     resolution: {integrity: sha512-RKshQI1R3YQ+n9YJz2QQ147P66ELpa1FQEg20Dk8oW9t2KgLbpDLLp9aGZ7y8WHSshDknG0bknqGw5/tyCs5tw==}
@@ -4452,6 +4507,20 @@ packages:
       socks:
         optional: true
 
+  mongoose-aggregate-paginate-v2@1.1.4:
+    resolution: {integrity: sha512-CdQIar3wlS7g0H6JjSJIZzvzz05vFc+Xy9SosJmj46l3xIomgl3ZjDn/n4vDpEei9RBawgUk5zGTIP6fMKdMdA==}
+    engines: {node: '>=4.0.0'}
+
+  mongoose-lean-virtuals@1.1.1:
+    resolution: {integrity: sha512-8chOqpVE3bcoWT2pIgcJeIZlXaOfQCavZgQZF4qytUtjRBqsNMyzUoR16qdw9XL2kC478N8iA8z0AA+NSS0d1A==}
+    engines: {node: '>=16.20.1'}
+    peerDependencies:
+      mongoose: '>=5.11.10'
+
+  mongoose-paginate-v2@1.9.4:
+    resolution: {integrity: sha512-0LOsVEQmjrbJKVDi/IvFEhIezmuRjUE4loGgslv57j9nK/NMC+mbKT0QnaPSPpib4lByKVBcy3VbDa1TvlHZjA==}
+    engines: {node: '>=4.0.0'}
+
   mongoose@8.23.1:
     resolution: {integrity: sha512-gHSPD8qEwRmiXapK17hEnFWZdcFENMegHTcw5XIIg2+7R8eXQvdwSiMpD/A2oG8tKzFLLHyRXd8/eaDPAVwZgQ==}
     engines: {node: '>=16.20.1'}
@@ -4469,6 +4538,10 @@ packages:
 
   motion-utils@12.36.0:
     resolution: {integrity: sha512-eHWisygbiwVvf6PZ1vhaHCLamvkSbPIeAYxWUuL3a2PD/TROgE7FvfHWTIH4vMl798QLfMw15nRqIaRDXTlYRg==}
+
+  mpath@0.8.4:
+    resolution: {integrity: sha512-DTxNZomBcTWlrMW76jy1wvV37X/cNNxPW1y2Jzd4DZkAaC5ZGsm8bfGfNOthcDuRJujXLqiuS6o3Tpy0JEoh7g==}
+    engines: {node: '>=4.0.0'}
 
   mpath@0.9.0:
     resolution: {integrity: sha512-ikJRQTk8hw5DEoFVxHG1Gn9T/xcjtdnOKIU1JTmGjZZlg9LST2mBLmcX3/ICIbgJydT2GOc15RnNy5mHmzfSew==}
@@ -5547,8 +5620,8 @@ packages:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
 
-  uuid@9.0.1:
-    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+  uuid@14.0.0:
+    resolution: {integrity: sha512-Qo+uWgilfSmAhXCMav1uYFynlQO7fMFiMVZsQqZRMIXp0O7rR7qjkj+cPvBHLgBqi960QCoo/PH2/6ZtVqKvrg==}
     hasBin: true
 
   validate-npm-package-name@7.0.2:
@@ -6467,6 +6540,15 @@ snapshots:
 
   '@biomejs/cli-win32-x64@2.4.12':
     optional: true
+
+  '@casl/ability@6.8.1':
+    dependencies:
+      '@ucast/mongo2js': 1.4.1
+
+  '@casl/mongoose@8.0.5(@casl/ability@6.8.1)(mongoose@9.4.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7))':
+    dependencies:
+      '@casl/ability': 6.8.1
+      mongoose: 9.4.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7)
 
   '@colors/colors@1.6.0': {}
 
@@ -7857,6 +7939,20 @@ snapshots:
       '@react-pdf/primitives': 4.3.0
       '@react-pdf/stylesheet': 6.2.1
 
+  '@riadhossain43/mongoose-autoincrement@2.1.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7)':
+    dependencies:
+      extend: 3.0.2
+      mongoose: 8.23.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7)
+    transitivePeerDependencies:
+      - '@aws-sdk/credential-providers'
+      - '@mongodb-js/zstd'
+      - gcp-metadata
+      - kerberos
+      - mongodb-client-encryption
+      - snappy
+      - socks
+      - supports-color
+
   '@rollup/rollup-android-arm-eabi@4.60.2':
     optional: true
 
@@ -8368,6 +8464,8 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
+  '@types/bcryptjs@2.4.6': {}
+
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
@@ -8409,6 +8507,12 @@ snapshots:
   '@types/json-schema@7.0.15': {}
 
   '@types/json5@0.0.29': {}
+
+  '@types/mongoose-paginate-v2@1.6.5(mongoose@9.4.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7))':
+    dependencies:
+      mongoose-paginate-v2: 1.9.4(mongoose@9.4.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7))
+    transitivePeerDependencies:
+      - mongoose
 
   '@types/morgan@1.9.10':
     dependencies:
@@ -8560,6 +8664,22 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.58.2
       eslint-visitor-keys: 5.0.1
+
+  '@ucast/core@1.10.2': {}
+
+  '@ucast/js@3.1.0':
+    dependencies:
+      '@ucast/core': 1.10.2
+
+  '@ucast/mongo2js@1.4.1':
+    dependencies:
+      '@ucast/core': 1.10.2
+      '@ucast/js': 3.1.0
+      '@ucast/mongo': 2.4.3
+
+  '@ucast/mongo@2.4.3':
+    dependencies:
+      '@ucast/core': 1.10.2
 
   '@unrs/resolver-binding-android-arm-eabi@1.11.1':
     optional: true
@@ -8803,6 +8923,8 @@ snapshots:
   basic-auth@2.0.1:
     dependencies:
       safe-buffer: 5.1.2
+
+  bcryptjs@2.4.3: {}
 
   bidi-js@1.0.3:
     dependencies:
@@ -10504,6 +10626,19 @@ snapshots:
       '@aws-sdk/credential-providers': 3.1032.0
       socks: 2.8.7
 
+  mongoose-aggregate-paginate-v2@1.1.4: {}
+
+  mongoose-lean-virtuals@1.1.1(mongoose@9.4.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7)):
+    dependencies:
+      mongoose: 9.4.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7)
+      mpath: 0.8.4
+
+  mongoose-paginate-v2@1.9.4(mongoose@9.4.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7)):
+    dependencies:
+      mongoose-lean-virtuals: 1.1.1(mongoose@9.4.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7))
+    transitivePeerDependencies:
+      - mongoose
+
   mongoose@8.23.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7):
     dependencies:
       bson: 6.10.4
@@ -10555,6 +10690,8 @@ snapshots:
       motion-utils: 12.36.0
 
   motion-utils@12.36.0: {}
+
+  mpath@0.8.4: {}
 
   mpath@0.9.0: {}
 
@@ -11863,7 +12000,7 @@ snapshots:
 
   utils-merge@1.0.1: {}
 
-  uuid@9.0.1: {}
+  uuid@14.0.0: {}
 
   validate-npm-package-name@7.0.2: {}
 

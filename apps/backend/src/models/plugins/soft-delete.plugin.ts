@@ -1,11 +1,11 @@
 import {
+  type Document,
+  type Model,
+  type PaginateModel,
+  type PaginateResult,
+  type QueryWithHelpers,
   Schema,
-  Document,
-  Model,
-  PaginateModel,
-  PaginateResult,
-  UpdateWriteOpResult,
-  QueryWithHelpers,
+  type UpdateWriteOpResult,
 } from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 
@@ -80,12 +80,12 @@ export const softDeletePlugin = <T extends ISoftDeleteDoc>(schema: Schema<T>): v
             "deleteMarker.dateScheduled": new Date(),
           },
         },
-        options
+        options,
       )) as UpdateWriteOpResult;
 
       return { deleted: result.modifiedCount || 0 };
     } catch (err: any) {
-      throw new Error(err.name + ": " + err.message);
+      throw new Error(`${err.name}: ${err.message}`);
     }
   });
 
@@ -104,12 +104,12 @@ export const softDeletePlugin = <T extends ISoftDeleteDoc>(schema: Schema<T>): v
             "deleteMarker.dateScheduled": null,
           },
         },
-        options
+        options,
       )) as UpdateWriteOpResult;
 
       return { restored: result.modifiedCount || 0 };
     } catch (err: any) {
-      throw new Error(err.name + ": " + err.message);
+      throw new Error(`${err.name}: ${err.message}`);
     }
   });
 
