@@ -20,3 +20,12 @@ export enum EMAIL_VERIFICATION_STATUS_ENUMS {
   UNVERIFIED = "unverified",
   VERIFIED = "verified",
 }
+
+export interface IUser {
+  _id: string;
+  tenantId: string;
+  email: string;
+  type: ACCOUNT_TYPE_ENUMS;
+  role?: USER_ROLE_ENUMS;
+  emailVerificationStatus: EMAIL_VERIFICATION_STATUS_ENUMS;
+}

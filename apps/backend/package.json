@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch --ignore 'node_modules/!(@catering/**)' src/server.ts",
+    "dev": "tsx watch src/server.ts",
     "build": "tsup src/server.ts --format esm --dts --sourcemap",
     "start": "node dist/server.js",
     "lint": "echo \"No lint configured for @catering/backend\""
