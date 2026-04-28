@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { formatDateTime } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import { getPriceByPackageName } from "../data/package-catalog";
 import {
   type CreateOrderValues,
@@ -77,7 +77,7 @@ const getUpcomingDays = (): DaySlot[] => {
     return {
       day,
       date,
-      dateLabel: formatDateTime(date),
+      dateLabel: formatDate(date),
       tabLabel: index === 0 ? `Today (${day})` : day,
       isToday: index === 0,
     };

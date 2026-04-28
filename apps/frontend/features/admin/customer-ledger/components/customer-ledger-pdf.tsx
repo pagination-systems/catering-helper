@@ -1,6 +1,6 @@
 import { Document, Font, Page, pdf, StyleSheet, Text, View } from "@react-pdf/renderer";
 import moment from "moment";
-import { formatCurrency } from "@/lib/utils";
+import { formatDecimal } from "@/lib/utils";
 import type { ICustomerLedger } from "../schemas/customer-ledger.schema";
 
 type CustomerLedgerPdfProps = {
@@ -230,13 +230,13 @@ const CustomerLedgerPdfDocument = ({ entries }: CustomerLedgerPdfDocumentProps) 
                 <Text style={styles.tableCellText}>{entry.customerPhone}</Text>
               </View>
               <View style={styles.colAmount}>
-                <Text style={[styles.tableCellText, styles.textRight]}>{formatCurrency(entry.totalAmount)}</Text>
+                <Text style={[styles.tableCellText, styles.textRight]}>{formatDecimal(entry.totalAmount)}</Text>
               </View>
               <View style={styles.colPaid}>
-                <Text style={[styles.tableCellText, styles.textRight]}>{formatCurrency(entry.totalPaidAmount)}</Text>
+                <Text style={[styles.tableCellText, styles.textRight]}>{formatDecimal(entry.totalPaidAmount)}</Text>
               </View>
               <View style={styles.colDue}>
-                <Text style={[styles.tableCellText, styles.textRight]}>{formatCurrency(entry.dueAmount)}</Text>
+                <Text style={[styles.tableCellText, styles.textRight]}>{formatDecimal(entry.dueAmount)}</Text>
               </View>
             </View>
           ))}
@@ -246,13 +246,13 @@ const CustomerLedgerPdfDocument = ({ entries }: CustomerLedgerPdfDocumentProps) 
               <Text style={styles.summaryLabelText}>Totals</Text>
             </View>
             <View style={styles.colAmount}>
-              <Text style={styles.summaryValueText}>{formatCurrency(totalAmount)}</Text>
+              <Text style={styles.summaryValueText}>{formatDecimal(totalAmount)}</Text>
             </View>
             <View style={styles.colPaid}>
-              <Text style={styles.summaryValueText}>{formatCurrency(totalPaid)}</Text>
+              <Text style={styles.summaryValueText}>{formatDecimal(totalPaid)}</Text>
             </View>
             <View style={styles.colDue}>
-              <Text style={styles.summaryValueText}>{formatCurrency(totalDue)}</Text>
+              <Text style={styles.summaryValueText}>{formatDecimal(totalDue)}</Text>
             </View>
           </View>
         </View>

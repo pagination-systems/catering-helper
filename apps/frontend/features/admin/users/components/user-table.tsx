@@ -2,6 +2,7 @@
 
 import { UsersIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { formatDate } from "@/lib/utils";
 import { DataTable, type DataTableColumn } from "../../components/data-table";
 import type { GetUsersResponse, IUser } from "../schemas/user.schema";
 import { useUsersStore } from "../store/useStore";
@@ -45,12 +46,12 @@ export const UserTable = ({ data, handlePaginate }: UserTableProps) => {
     {
       accessorKey: "createdAt",
       header: "Created",
-      cell: (user) => user.createdAt.toLocaleDateString(),
+      cell: (user) => formatDate(user.createdAt),
     },
     {
       accessorKey: "updatedAt",
       header: "Last Updated",
-      cell: (user) => user.updatedAt.toLocaleDateString(),
+      cell: (user) => formatDate(user.updatedAt),
     },
     {
       id: "actions",

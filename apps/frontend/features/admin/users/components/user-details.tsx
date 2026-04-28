@@ -1,6 +1,7 @@
 import { Clock, Fingerprint, Mail, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
+import { formatDate } from "@/lib/utils";
 import type { IUser } from "../schemas/user.schema";
 import { getRoleBadgeVariant } from "../utils/badge";
 
@@ -14,16 +15,6 @@ const getInitials = (name: string): string => {
     .map((word) => word.charAt(0).toUpperCase())
     .join("")
     .slice(0, 2);
-};
-
-const formatDate = (date: Date): string => {
-  return new Date(date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
 };
 
 const DetailField = ({
