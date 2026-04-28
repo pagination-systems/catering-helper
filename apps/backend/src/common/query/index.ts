@@ -1,7 +1,7 @@
 import type { AnyMongoAbility } from "@casl/ability";
 import { accessibleBy } from "@casl/mongoose";
+import { AbilityAction } from "@catering/types";
 import type { PipelineStage } from "mongoose";
-import { AbilityAction } from "../../types/ability";
 
 type Constructor<T> = new (...args: any[]) => T;
 

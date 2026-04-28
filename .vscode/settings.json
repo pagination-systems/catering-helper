@@ -4,6 +4,6 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports.biome": "explicit"
   },
-  "cSpell.words": ["autoincrement", "filemedias", "riadhossain", "virtuals"],
+  "cSpell.words": ["autoincrement", "bullmq", "filemedia", "filemedias", "riadhossain", "virtuals"],
   "tailwindCSS.lint.suggestCanonicalClasses": "ignore"
 }

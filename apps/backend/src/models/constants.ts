@@ -3,3 +3,5 @@ export const modelNames = {
   FILE_MEDIA: "filemedias",
   TENANT: "tenants",
 };
+
+export type ModelNames = (typeof modelNames)[keyof typeof modelNames];

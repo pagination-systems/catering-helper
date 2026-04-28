@@ -1,13 +1,5 @@
 import { ACCOUNT_TYPE_ENUMS, EMAIL_VERIFICATION_STATUS_ENUMS, USER_ROLE_ENUMS } from "@catering/types";
-import {
-  type AggregatePaginateModel,
-  type Document,
-  type Model,
-  model,
-  type PaginateModel,
-  Schema,
-  type Types,
-} from "mongoose";
+import { type AggregatePaginateModel, type Document, type Model, model, type PaginateModel, Schema } from "mongoose";
 import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 import mongoosePaginate from "mongoose-paginate-v2";
 import { modelNames } from "./constants";
@@ -26,14 +18,13 @@ export interface UserInput extends PasswordHashInput, TenantInput {
   firstName: string;
   lastName: string;
   email: string;
-  profileImageId?: Types.ObjectId;
+  // profileImageId?: Types.ObjectId;
   role?: USER_ROLE_ENUMS;
   type?: ACCOUNT_TYPE_ENUMS;
 }
 
 // Define an interface for User document
 export interface IUserDoc extends UserInput, IPasswordHashDoc, ITenantDoc, ISoftDeleteDoc, Document {
-  fullName: string;
   emailVerificationStatus: EMAIL_VERIFICATION_STATUS_ENUMS;
   createdAt: Date;
   updatedAt: Date;
@@ -63,10 +54,10 @@ const userSchema = new Schema<IUserDoc>(
       unique: true,
       required: true,
     },
-    profileImageId: {
-      type: Schema.Types.ObjectId,
-      ref: modelNames.FILE_MEDIA,
-    },
+    // profileImageId: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: modelNames.FILE_MEDIA,
+    // },
     type: {
       type: String,
       enum: Object.values(ACCOUNT_TYPE_ENUMS),
@@ -85,16 +76,8 @@ const userSchema = new Schema<IUserDoc>(
   },
   {
     timestamps: true,
-    toJSON: {
-      virtuals: true,
-    },
   },
 );
-
-// Define a virtual property for full name
-userSchema.virtual("fullName").get(function (this: IUserDoc) {
-  return `${this.firstName} ${this.lastName}`;
-});
 
 // Apply plugins
 userSchema.plugin(tenantDataPlugin);
