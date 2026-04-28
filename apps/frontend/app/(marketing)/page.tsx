@@ -1,5 +1,5 @@
-import { LandingPage } from "@/features/landing";
+import { Landing } from "@/features/marketing/landing";
 
-export default function HomePage() {
-  return <LandingPage />;
+export default function LandingRoute() {
+  return <Landing />;
 }
