@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@casl/ability": "^6.8.1",
+    "@casl/react": "^6.0.0",
     "@catering/authz": "workspace:*",
     "@catering/types": "workspace:*",
     "@catering/utils": "workspace:*",

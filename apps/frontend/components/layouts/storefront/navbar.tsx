@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import type { TenantData } from "@/app/(storefront)/data";
-import { useLanguage } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -18,6 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { type ClientPortalContent, clientPortalContent } from "@/lib/i18n";
 import { formatDateTime } from "@/lib/utils";
+import { useLanguage } from "@/providers/language-provider";
 
 const themeOrder = ["system", "light", "dark"] as const;
 

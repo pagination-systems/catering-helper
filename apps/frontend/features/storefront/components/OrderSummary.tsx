@@ -3,12 +3,12 @@
 import { Minus, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { If } from "@/components/if";
-import { useLanguage } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { type ClientPortalContent, clientPortalContent } from "@/lib/i18n";
 import { cn, formatCurrency } from "@/lib/utils";
+import { useLanguage } from "@/providers/language-provider";
 import { useOrderSummaryData } from "../order-summary-data";
 import { useStorefrontStore } from "../store/useStore";
 

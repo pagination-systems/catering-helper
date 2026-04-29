@@ -4,8 +4,8 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { TenantData } from "@/app/(storefront)/data";
-import { useLanguage } from "@/components/language-provider";
 import { type ClientPortalContent, clientPortalContent } from "@/lib/i18n";
+import { useLanguage } from "@/providers/language-provider";
 
 export function Footer({ tenant }: { tenant: TenantData }) {
   const { language } = useLanguage();

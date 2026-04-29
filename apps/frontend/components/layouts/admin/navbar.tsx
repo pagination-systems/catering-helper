@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 
-import { useAdminLayout } from "./admin-layout-context";
+import { useAdminLayout } from "./store/useStore";
 
 const themeOrder = ["system", "light", "dark"] as const;
 

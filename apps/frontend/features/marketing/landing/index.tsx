@@ -1,7 +1,7 @@
 "use client";
 
-import { useLanguage } from "@/components/language-provider";
 import { type LandingContent, landingContent } from "@/lib/i18n";
+import { useLanguage } from "@/providers/language-provider";
 
 import { FeaturesGridSection } from "./components/features-grid";
 import { HeroSection } from "./components/hero";
