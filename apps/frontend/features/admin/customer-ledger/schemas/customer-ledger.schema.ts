@@ -30,21 +30,6 @@ export interface GetCustomerLedgerResponse {
   };
 }
 
-const bdPhoneRegex = /^01[3-9]\d{8}$/;
-
-export const customerLedgerSchema = z.object({
-  customerName: z.string().trim().min(2, "Customer name must be at least 2 characters.").max(80),
-  customerPhone: z
-    .string()
-    .trim()
-    .regex(bdPhoneRegex, "Enter a valid Bangladesh phone number.")
-    .min(10, "Phone number must be at least 10 digits.")
-    .max(20, "Phone number is too long."),
-  totalAmount: z.number().nonnegative(),
-  totalPaidAmount: z.number().nonnegative(),
-  dueAmount: z.number().nonnegative(),
-});
-
 export const updateLedgerPaymentSchema = z.object({
   paidAmount: z
     .number({

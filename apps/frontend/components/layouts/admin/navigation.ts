@@ -49,6 +49,11 @@ export const navigationItems: NavigationItem[] = [
     icon: HandCoins,
   },
   {
+    label: "Expenses",
+    href: "/admin/expenses",
+    icon: HandCoins,
+  },
+  {
     label: "Settings",
     href: "/admin/settings",
     icon: Settings,
