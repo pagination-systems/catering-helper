@@ -143,3 +143,27 @@ export function isItemActive(item: NavigationItem, pathname: string): boolean {
   // Recursively check children
   return Boolean(item.children?.some((child) => isItemActive(child, pathname)));
 }
+
+/**
+ * Finds the navigation item that best matches the current pathname.
+ * Returns the deepest matching item so route-level permission checks
+ * can reuse the same navigation definitions as the sidebar.
+ */
+export function getNavigationItemForPath(items: NavigationItem[], pathname: string): NavigationItem | undefined {
+  for (const item of items) {
+    if (item.href === "/admin/dashboard") {
+      if (pathname === "/admin" || pathname === "/admin/dashboard") {
+        return item;
+      }
+    } else if (pathname === item.href || pathname.startsWith(`${item.href}/`)) {
+      return item.children ? (getNavigationItemForPath(item.children, pathname) ?? item) : item;
+    }
+
+    const childMatch = item.children ? getNavigationItemForPath(item.children, pathname) : undefined;
+    if (childMatch) {
+      return childMatch;
+    }
+  }
+
+  return undefined;
+}

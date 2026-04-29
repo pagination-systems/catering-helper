@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { Footer } from "@/components/layouts/admin/footer";
 import { Navbar } from "@/components/layouts/admin/navbar";
+import { AdminRouteGuard } from "@/components/layouts/admin/route-guard";
 import { Sidebar } from "@/components/layouts/admin/sidebar";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
@@ -12,7 +13,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       <div className="flex min-h-screen min-w-0 flex-1 flex-col">
         <Navbar />
         <main className="min-w-0 flex-1 px-[var(--layout-space-inline)] py-[var(--layout-space-block)]">
-          {children}
+          <AdminRouteGuard>{children}</AdminRouteGuard>
         </main>
         <Footer />
       </div>
