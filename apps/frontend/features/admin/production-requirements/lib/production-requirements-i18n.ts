@@ -78,11 +78,11 @@ const content: Record<string, ProductionRequirementsContent> = {
     },
   },
   bn: {
-    title: "প্রোডাকশন রিকোয়ারমেন্ট",
-    description: "প্যাকেজ ও ভ্যারিয়েন্ট অনুযায়ী আজকের মিল রিকোয়ারমেন্ট",
+    title: "উৎপাদন চাহিদা",
+    description: "প্যাকেজ ও ভ্যারিয়েন্ট অনুযায়ী আজকের মিল প্রস্তুতির চাহিদা",
     toolbar: {
-      download: "PDF ডাউনলোড",
-      downloadPreparing: "প্রস্তুত করছে...",
+      download: "PDF ডাউনলোড করুন",
+      downloadPreparing: "প্রস্তুত হচ্ছে...",
     },
     summary: {
       title: "দৈনিক সারসংক্ষেপ",
@@ -90,28 +90,28 @@ const content: Record<string, ProductionRequirementsContent> = {
     },
     empty: {
       noOrdersTitle: "আজ কোনো অর্ডার নেই",
-      noOrdersDescription: "আজকের কোনো কনফার্মড অর্ডার পাওয়া যায়নি। অর্ডার এলে প্রোডাকশন রিকোয়ারমেন্ট এখানে দেখাবে।",
+      noOrdersDescription: "আজকের জন্য কোনো নিশ্চিত অর্ডার পাওয়া যায়নি। অর্ডার এলে এখানে উৎপাদন চাহিদা দেখা যাবে।",
     },
     packageCard: {
-      variantsSingular: "ভ্যারিয়েন্ট",
-      variantsPlural: "ভ্যারিয়েন্টসমূহ",
+      variantsSingular: "ভ্যারিয়েন্ট",
+      variantsPlural: "ভ্যারিয়েন্টসমূহ",
       totalMealsLabel: "মোট মিল",
     },
     table: {
-      variant: "ভ্যারিয়েন্ট",
-      foodItems: "খাবারের আইটেম",
+      variant: "ভ্যারিয়েন্ট",
+      foodItems: "খাবারের তালিকা",
       meals: "মিল",
     },
     pdf: {
-      title: "প্রোডাকশন রিকোয়ারমেন্ট",
-      subtitle: "প্যাকেজ ও ভ্যারিয়েন্ট অনুযায়ী পরিষ্কার প্রোডাকশন সারসংক্ষেপ",
+      title: "উৎপাদন চাহিদা",
+      subtitle: "প্যাকেজ ও ভ্যারিয়েন্ট অনুযায়ী উৎপাদনের সারসংক্ষেপ",
       dateLabel: "তারিখ",
       dayLabel: "দিন",
       packages: "প্যাকেজসমূহ",
-      variants: "ভ্যারিয়েন্ট",
+      variants: "ভ্যারিয়েন্টসমূহ",
       totalMeals: "মোট মিল",
       mealsLabel: "মিল",
-      generated: "উত্পন্ন করা হয়েছে",
+      generated: "তৈরি করা হয়েছে",
     },
   },
 };

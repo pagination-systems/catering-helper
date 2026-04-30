@@ -1,5 +1,6 @@
 "use client";
 
+import { useProfileI18n } from "@/features/admin/profile/lib/profile-i18n";
 import { PersonalInfoForm } from "./components/personal-info-form";
 import { SecurityForm } from "./components/security-form";
 import type { UpdatePasswordValues, UpdatePersonalInfoValues, UserProfile } from "./schemas/profile.schema";
@@ -15,6 +16,7 @@ const user: UserProfile = {
 };
 
 export const Profile = () => {
+  const i18n = useProfileI18n();
   const handlePersonalInfoSubmit = async (data: UpdatePersonalInfoValues) => {
     console.log("Personal info submitted with data:", data);
   };
@@ -26,8 +28,8 @@ export const Profile = () => {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">My Profile</h1>
-        <p className="text-muted-foreground">Manage your account settings and preferences.</p>
+        <h1 className="text-3xl font-bold tracking-tight">{i18n.pageTitle}</h1>
+        <p className="text-muted-foreground">{i18n.pageDescription}</p>
       </div>
 
       <PersonalInfoForm initialValues={user} onSubmit={handlePersonalInfoSubmit} />

@@ -73,7 +73,7 @@ const content: Record<Language, SettingsContent> = {
       sectionLabel: "Branding",
       cardTitle: "Storefront identity",
       cardDescription: "Shape the name, message, and links customers see first.",
-      nameLabel: "Tenant Name",
+      nameLabel: "Store Name",
       namePlaceholder: "Uttara Catering",
       nameDescription: "Shown across the admin and customer-facing screens.",
       headlineLabel: "Headline",
@@ -131,65 +131,83 @@ const content: Record<Language, SettingsContent> = {
   },
   bn: {
     title: "সেটিংস",
-    description: "টেন্যান্ট প্রোফাইল, যোগাযোগের বিবরণ এবং সোশ্যাল লিঙ্ক আপডেট করুন।",
+    description: "টেন্যান্ট প্রোফাইল, যোগাযোগের তথ্য এবং সোশ্যাল মিডিয়া লিঙ্ক আপডেট করুন।",
+
     branding: {
       sectionLabel: "ব্র্যান্ডিং",
-      cardTitle: "স্টোরফ্রন্ট পরিচয়",
-      cardDescription: "গ্রাহকরা প্রথমে যে নাম, বার্তা এবং লিঙ্ক দেখেন তা আকার দিন।",
-      nameLabel: "টেন্যান্ট নাম",
+      cardTitle: "স্টোরফ্রন্ট পরিচিতি",
+      cardDescription: "গ্রাহকদের সামনে আপনার ব্র্যান্ড কীভাবে উপস্থাপন হবে তা নির্ধারণ করুন।",
+
+      nameLabel: "স্টোরের নাম",
       namePlaceholder: "উত্তরা ক্যাটারিং",
-      nameDescription: "প্রশাসন এবং গ্রাহক-মুখী সমস্ত স্ক্রিনে প্রদর্শিত হয়।",
+      nameDescription: "অ্যাডমিন ও গ্রাহক—উভয় জায়গায় এই নামটি দেখানো হবে।",
+
       headlineLabel: "হেডলাইন",
-      headlinePlaceholder: "প্রিমিয়াম মেনু, ঘর্ষণহীন কাস্টমাইজেশন",
-      headlineDescription: "একটি ছোট লাইন যা আপনার ব্র্যান্ড প্রতিশ্রুতি সমর্থন করে।",
+      headlinePlaceholder: "প্রিমিয়াম মেনু, সহজ অর্ডারিং অভিজ্ঞতা",
+      headlineDescription: "আপনার ব্র্যান্ডকে সংক্ষেপে উপস্থাপন করার একটি শক্তিশালী বাক্য।",
+
       logoUrlLabel: "লোগো URL",
       logoUrlPlaceholder: "https://example.com/logo.png",
-      logoUrlDescription: "লোগো নির্ভরযোগ্যভাবে লোড হওয়ার জন্য একটি সরাসরি ছবির লিঙ্ক ব্যবহার করুন।",
-      menuUrlLabel: "মেনু URL",
+      logoUrlDescription: "লোগো দেখানোর জন্য একটি সরাসরি ইমেজ লিংক দিন।",
+
+      menuUrlLabel: "মেনু লিংক",
       menuUrlPlaceholder: "https://example.com/menu",
-      menuUrlDescription: "জনসাধারণের মেনু, ব্রোশিওর বা অর্ডারিং পৃষ্ঠার লিঙ্ক।",
-      deliveryFeeLabel: "ডেলিভারি ফি",
+      menuUrlDescription: "পাবলিক মেনু বা অর্ডার পেজের লিংক দিন।",
+
+      deliveryFeeLabel: "ডেলিভারি চার্জ",
       deliveryFeePlaceholder: "0",
-      deliveryFeeDescription: "চেকআউটে অ্যাড-অন বা ট্যাক্সের আগে প্রদর্শিত হয়।",
+      deliveryFeeDescription: "চেকআউটের আগে এই চার্জ দেখানো হবে।",
+
       lastOrderTimeLabel: "শেষ অর্ডারের সময়",
       lastOrderTimePlaceholder: "১৭:৩০",
-      lastOrderTimeDescription: "গ্রাহকরা সর্বশেষ কখন অর্ডার করতে পারবে (স্থানীয় সময়)।",
+      lastOrderTimeDescription: "এই সময়ের পর নতুন অর্ডার গ্রহণ করা হবে না।",
+
       descriptionLabel: "বিবরণ",
-      descriptionPlaceholder: "আপনার টেন্যান্ট প্রস্তাব এবং সেবা প্রতিশ্রুতি বর্ণনা করুন।",
-      descriptionDescription: "সংক্ষিপ্ত, গ্রাহক-বান্ধব উপায়ে সেবা কী করে তোলে তা ব্যাখ্যা করুন।",
+      descriptionPlaceholder: "আপনার সেবা এবং বিশেষত্ব সম্পর্কে সংক্ষেপে লিখুন।",
+      descriptionDescription: "গ্রাহকদের জন্য আপনার সার্ভিস কীভাবে আলাদা তা সহজভাবে ব্যাখ্যা করুন।",
     },
+
     contact: {
       sectionLabel: "যোগাযোগ",
-      cardTitle: "সহায়তা বিবরণ",
-      cardDescription: "এগুলি বর্তমান রাখুন যাতে গ্রাহকরা আপনার সাথে সহজেই যোগাযোগ করতে পারেন।",
-      emailLabel: "যোগাযোগ ইমেল",
+      cardTitle: "যোগাযোগের তথ্য",
+      cardDescription: "গ্রাহকদের সাথে সহজ যোগাযোগের জন্য তথ্যগুলো আপডেট রাখুন।",
+
+      emailLabel: "ইমেইল",
       emailPlaceholder: "info@company.com",
-      emailDescription: "অর্ডার প্রশ্ন এবং প্রশাসনিক অনুসরণের জন্য সেরা।",
-      phoneLabel: "যোগাযোগ ফোন",
+      emailDescription: "অর্ডার ও প্রশাসনিক যোগাযোগের জন্য ব্যবহৃত হবে।",
+
+      phoneLabel: "ফোন নম্বর",
       phonePlaceholder: "+880 1711-000000",
-      phoneDescription: "গ্রাহকদের প্রথমে যোগাযোগ করার সংখ্যা ব্যবহার করুন।",
+      phoneDescription: "গ্রাহকদের প্রধান যোগাযোগ নম্বর।",
+
       whatsappLabel: "হোয়াটসঅ্যাপ",
       whatsappPlaceholder: "+880 1711-000000",
-      whatsappDescription: "দ্রুত গ্রাহক যোগাযোগের জন্য সহায়ক।",
+      whatsappDescription: "দ্রুত যোগাযোগের জন্য ব্যবহার করুন।",
+
       addressLabel: "ঠিকানা",
-      addressPlaceholder: "১২৩ কর্পোরেট এলাকা, গুলশান ১, ঢাকা",
-      addressDescription: "প্রাসঙ্গিক হলে চালান এবং যোগাযোগ পৃষ্ঠায় প্রদর্শিত হয়।",
+      addressPlaceholder: "১২৩ কর্পোরেট এরিয়া, গুলশান ১, ঢাকা",
+      addressDescription: "ইনভয়েস এবং যোগাযোগ পৃষ্ঠায় দেখানো হবে।",
     },
+
     social: {
-      sectionLabel: "সোশ্যাল",
-      cardTitle: "সর্বজনীন চ্যানেল",
-      cardDescription: "আপনার সবচেয়ে দৃশ্যমান সোশ্যাল লিঙ্কগুলি সামঞ্জস্যপূর্ণ এবং খুঁজে পাওয়া সহজ রাখুন।",
+      sectionLabel: "সোশ্যাল মিডিয়া",
+      cardTitle: "অনলাইন উপস্থিতি",
+      cardDescription: "আপনার সোশ্যাল মিডিয়া লিংকগুলো এক জায়গায় রাখুন।",
+
       facebookLabel: "ফেসবুক",
       facebookPlaceholder: "https://facebook.com/your-page",
+
       instagramLabel: "ইনস্টাগ্রাম",
       instagramPlaceholder: "https://instagram.com/your-handle",
+
       youtubeLabel: "ইউটিউব",
       youtubePlaceholder: "https://youtube.com/@your-channel",
     },
+
     form: {
-      reviewMessage: "সংরক্ষণের আগে বিবরণ পর্যালোচনা করুন।",
-      reviewDescription: "এই সেটিংসগুলি আপনার টেন্যান্ট প্রোফাইল, যোগাযোগ পথ এবং সোশ্যাল উপস্থিতি আপডেট করে।",
-      submitLabel: "সেটিংস সংরক্ষণ করুন",
+      reviewMessage: "সংরক্ষণ করার আগে তথ্যগুলো যাচাই করুন।",
+      reviewDescription: "এই সেটিংসগুলো আপনার টেন্যান্ট প্রোফাইল ও কাস্টমার এক্সপেরিয়েন্সে প্রভাব ফেলবে।",
+      submitLabel: "সংরক্ষণ করুন",
     },
   },
 } as const;

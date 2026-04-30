@@ -70,25 +70,25 @@ const userCards = (t: any) => [
   {
     title: t.cards.totalPlatformAdmins,
     value: formatDecimal(3),
-    link: "/admin/users",
+    link: "/admin/catering-helper",
     icon: <ShieldCheck className="size-5" />,
   },
   {
     title: t.cards.totalTenantAdmins,
     value: formatDecimal(150),
-    link: "/admin/users",
+    link: "/admin/catering-helper",
     icon: <UserCog className="size-5" />,
   },
   {
     title: t.cards.totalCustomers,
     value: formatDecimal(500),
-    link: "/admin/users",
+    link: "/admin/customers",
     icon: <Users className="size-5" />,
   },
   {
     title: t.cards.terminatedCustomers,
     value: formatDecimal(5),
-    link: "/admin/users",
+    link: "/admin/customers",
     icon: <UserX className="size-5" />,
   },
 ];

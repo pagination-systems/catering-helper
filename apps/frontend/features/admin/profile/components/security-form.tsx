@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useProfileI18n } from "@/features/admin/profile/lib/profile-i18n";
 import type { UpdatePasswordValues } from "../schemas/profile.schema";
 import { updatePasswordSchema } from "../schemas/profile.schema";
 
@@ -17,6 +18,7 @@ interface SecurityFormProps {
 }
 
 export const SecurityForm = ({ onSubmit }: SecurityFormProps) => {
+  const i18n = useProfileI18n();
   const form = useForm<UpdatePasswordValues>({
     resolver: zodResolver(updatePasswordSchema),
     defaultValues: {
@@ -40,8 +42,8 @@ export const SecurityForm = ({ onSubmit }: SecurityFormProps) => {
       <form onSubmit={form.handleSubmit(handleSubmit)} noValidate className="space-y-6">
         <Card>
           <CardHeader className="border-b">
-            <CardTitle>Security Settings</CardTitle>
-            <CardDescription>Update your account password.</CardDescription>
+            <CardTitle>{i18n.security.cardTitle}</CardTitle>
+            <CardDescription>{i18n.security.cardDescription}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6 pt-6">
             <FormField
@@ -49,11 +51,11 @@ export const SecurityForm = ({ onSubmit }: SecurityFormProps) => {
               name="currentPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Current Password</FormLabel>
+                  <FormLabel>{i18n.security.currentPasswordLabel}</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="Enter your current password"
+                      placeholder={i18n.security.currentPasswordPlaceholder}
                       disabled={form.formState.isSubmitting}
                       {...field}
                     />
@@ -68,18 +70,16 @@ export const SecurityForm = ({ onSubmit }: SecurityFormProps) => {
               name="newPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>New Password</FormLabel>
+                  <FormLabel>{i18n.security.newPasswordLabel}</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="Enter your new password"
+                      placeholder={i18n.security.newPasswordPlaceholder}
                       disabled={form.formState.isSubmitting}
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-xs">
-                    Must be at least 8 characters with uppercase, lowercase, and numbers.
-                  </FormDescription>
+                  <FormDescription className="text-xs">{i18n.security.newPasswordDescription}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -90,11 +90,11 @@ export const SecurityForm = ({ onSubmit }: SecurityFormProps) => {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel>{i18n.security.confirmPasswordLabel}</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="Confirm your new password"
+                      placeholder={i18n.security.confirmPasswordPlaceholder}
                       disabled={form.formState.isSubmitting}
                       {...field}
                     />
@@ -108,11 +108,11 @@ export const SecurityForm = ({ onSubmit }: SecurityFormProps) => {
 
         <div className="flex justify-end gap-3">
           <Button type="button" variant="outline" disabled={form.formState.isSubmitting} onClick={() => form.reset()}>
-            Reset
+            {i18n.buttons.reset}
           </Button>
           <Can I={AbilityAction.UPDATE} a={UserAuthZEntity}>
             <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "Saving..." : "Save Security Settings"}
+              {form.formState.isSubmitting ? i18n.buttons.saving : i18n.buttons.saveSecurity}
             </Button>
           </Can>
         </div>
