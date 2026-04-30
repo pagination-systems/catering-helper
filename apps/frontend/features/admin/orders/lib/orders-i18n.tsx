@@ -1,0 +1,428 @@
+import type { Language } from "@/lib/i18n";
+import { useLanguage } from "@/providers/language-provider";
+
+export type OrdersContent = {
+  title: string;
+  description: string;
+  dayLabels: Record<string, string>;
+  dayTabs: {
+    all: string;
+    today: string;
+  };
+  toolbar: {
+    searchPlaceholder: string;
+    filter: string;
+    status: string;
+    resetFilters: string;
+    download: string;
+    downloadPreparing: string;
+    createOrder: string;
+  };
+  table: {
+    orderNo: string;
+    customer: string;
+    phone: string;
+    address: string;
+    packages: string;
+    meals: string;
+    amount: string;
+    status: string;
+    paidAmount: string;
+    actions: string;
+    noOrders: string;
+  };
+  details: {
+    title: string;
+    description: string;
+    order: string;
+    orderNo: string;
+    created: string;
+    lastUpdated: string;
+    delivery: string;
+    customer: string;
+    phone: string;
+    meals: string;
+    grandTotal: string;
+    source: string;
+    items: string;
+    deliveryAddress: string;
+    note: string;
+    noOrder: string;
+  };
+  form: {
+    createTitle: string;
+    createDescription: string;
+    editTitle: string;
+    editDescription: string;
+    customerDetailsTitle: string;
+    customerDetailsDescription: string;
+    customerNameLabel: string;
+    customerNamePlaceholder: string;
+    phoneNumberLabel: string;
+    phonePlaceholder: string;
+    deliveryAddressLabel: string;
+    deliveryAddressPlaceholder: string;
+    noteLabel: string;
+    notePlaceholder: string;
+    packageSelectionTitle: string;
+    packageSelectionDescription: string;
+    deliveryDateSelectionTitle: string;
+    deliveryDateSelectionDescription: string;
+    activeVariantsTitle: string;
+    activeVariantsDescription: string;
+    activeVariantsHint: string;
+    orderSummaryTitle: string;
+    orderSummaryDescription: string;
+    pricePerMeal: string;
+    deliveryFee: string;
+    subtotal: string;
+    total: string;
+    addVariant: string;
+    cancel: string;
+    submitCreate: string;
+    submitSave: string;
+    validation: {
+      customerNameMin: string;
+      customerNameMax: string;
+      phoneMin: string;
+      addressMin: string;
+      addressMax: string;
+      itemsRequired: string;
+    };
+  };
+  delete: {
+    title: string;
+    confirmMessage: string;
+    confirmMessageGeneric: string;
+    confirmText: string;
+    confirmKeyword: string;
+    cancel: string;
+    confirm: string;
+  };
+  cancel: {
+    title: string;
+    confirmMessage: string;
+    confirmMessageGeneric: string;
+    confirmText: string;
+    confirmKeyword: string;
+    cancel: string;
+    confirm: string;
+    lockedOrderMessage: string;
+    reasonPrompt: string;
+    reasonExample: string;
+  };
+  actions: {
+    view: string;
+    edit: string;
+    delete: string;
+    cancel: string;
+    openActionsFor: string;
+  };
+  pdf: {
+    title: string;
+    date: string;
+    totalOrders: string;
+    customer: string;
+    deliveryAddress: string;
+    packageDetails: string;
+    meal: string;
+    amount: string;
+    paid: string;
+    total: string;
+    generated: string;
+  };
+};
+
+const content: Record<string, OrdersContent> = {
+  en: {
+    title: "Orders",
+    description: "Track incoming client orders for today and the next 6 days with clear status control.",
+    dayLabels: {
+      Sat: "Saturday",
+      Sun: "Sunday",
+      Mon: "Monday",
+      Tue: "Tuesday",
+      Wed: "Wednesday",
+      Thu: "Thursday",
+      Fri: "Friday",
+    },
+    dayTabs: {
+      all: "All",
+      today: "Today",
+    },
+    toolbar: {
+      searchPlaceholder: "Search by order id, customer, phone, package, variant",
+      filter: "Filter",
+      status: "Status",
+      resetFilters: "Reset Filters",
+      download: "Download",
+      downloadPreparing: "Preparing...",
+      createOrder: "Create Order",
+    },
+    table: {
+      orderNo: "Order No",
+      customer: "Customer",
+      phone: "Phone",
+      address: "Address",
+      packages: "Packages",
+      meals: "Meals",
+      amount: "Amount",
+      status: "Status",
+      paidAmount: "Paid Amount",
+      actions: "Actions",
+      noOrders: "No orders found for your current query and filters.",
+    },
+    details: {
+      title: "Order Details",
+      description: "Review customer, delivery, item and billing breakdown for this order.",
+      order: "Order",
+      orderNo: "Order No",
+      created: "Created",
+      lastUpdated: "Last Updated",
+      delivery: "Delivery",
+      customer: "Customer",
+      phone: "Phone",
+      meals: "Meals",
+      grandTotal: "Grand Total",
+      source: "Source",
+      items: "Items",
+      deliveryAddress: "Delivery Address",
+      note: "Note",
+      noOrder: "No order found.",
+    },
+    form: {
+      createTitle: "Create Order",
+      createDescription: "Add an order for a client. Delivery day is restricted to today and the next 6 days.",
+      editTitle: "Update Order",
+      editDescription: "Update customer details and order status. Completed and cancelled orders are read-only.",
+      customerDetailsTitle: "Customer Details",
+      customerDetailsDescription: "Enter customer contact and delivery information.",
+      customerNameLabel: "Customer Name",
+      customerNamePlaceholder: "Enter customer name",
+      phoneNumberLabel: "Phone Number",
+      phonePlaceholder: "01XXXXXXXXX",
+      deliveryAddressLabel: "Delivery Address",
+      deliveryAddressPlaceholder: "Building, road, area and delivery instructions",
+      noteLabel: "Note",
+      notePlaceholder: "Optional notes for kitchen or rider",
+      packageSelectionTitle: "Package Selection",
+      packageSelectionDescription: "Select a package to view and add meal variants.",
+      deliveryDateSelectionTitle: "Delivery Date Selection",
+      deliveryDateSelectionDescription: "Choose the delivery date for this order.",
+      activeVariantsTitle: "Selected Variants",
+      activeVariantsDescription: "Only added variants are listed here.",
+      activeVariantsHint: "Add meal quantities for {{date}}.",
+      orderSummaryTitle: "Order Summary",
+      orderSummaryDescription: "Review the final amount before creating the order.",
+      pricePerMeal: "Price / Meal",
+      deliveryFee: "Delivery Fee",
+      subtotal: "Subtotal",
+      total: "Total",
+      addVariant: "Add Variant",
+      cancel: "Cancel",
+      submitCreate: "Create Order",
+      submitSave: "Save Changes",
+      validation: {
+        customerNameMin: "Customer name must be at least 2 characters.",
+        customerNameMax: "Customer name must be 100 characters or less.",
+        phoneMin: "Phone number must be at least 10 characters.",
+        addressMin: "Address must be at least 5 characters.",
+        addressMax: "Address must be 500 characters or less.",
+        itemsRequired: "Add at least one item.",
+      },
+    },
+    delete: {
+      title: "Delete order?",
+      confirmMessage: "Are you sure you want to delete {{orderNo}}? This action cannot be undone.",
+      confirmMessageGeneric: "Are you sure you want to delete this order? This action cannot be undone.",
+      confirmText: "Type delete-order to confirm.",
+      confirmKeyword: "delete-order",
+      cancel: "Cancel",
+      confirm: "Yes, Delete",
+    },
+    cancel: {
+      title: "Cancel order?",
+      confirmMessage: "Are you sure you want to cancel {{orderNo}}? This action cannot be undone.",
+      confirmMessageGeneric: "Are you sure you want to cancel this order? This action cannot be undone.",
+      confirmText: "Type cancel-order to confirm.",
+      confirmKeyword: "cancel-order",
+      cancel: "Keep Order",
+      confirm: "Cancel Order",
+      lockedOrderMessage: "This order is already locked and cannot be changed.",
+      reasonPrompt: "Please provide a reason for cancellation.",
+      reasonExample: "Example: Client requested cancellation",
+    },
+    actions: {
+      view: "View",
+      edit: "Edit",
+      delete: "Delete",
+      cancel: "Cancel",
+      openActionsFor: "Open actions for {{orderNo}}",
+    },
+    pdf: {
+      title: "Orders Report",
+      date: "Date",
+      totalOrders: "Total Orders",
+      customer: "Customer",
+      deliveryAddress: "Delivery Address",
+      packageDetails: "Package Details",
+      meal: "Meal",
+      amount: "Amount",
+      paid: "Paid",
+      total: "Total",
+      generated: "Generated",
+    },
+  },
+  bn: {
+    title: "অর্ডারসমূহ",
+    description: "আজ এবং পরবর্তী ৬ দিনের গ্রাহকের অর্ডার ট্র্যাক করুন এবং স্ট্যাটাস সহজে নিয়ন্ত্রণ করুন।",
+    dayLabels: {
+      Sat: "শনিবার",
+      Sun: "রবিবার",
+      Mon: "সোমবার",
+      Tue: "মঙ্গলবার",
+      Wed: "বুধবার",
+      Thu: "বৃহস্পতিবার",
+      Fri: "শুক্রবার",
+    },
+    dayTabs: {
+      all: "সব",
+      today: "আজ",
+    },
+    toolbar: {
+      searchPlaceholder: "অর্ডার আইডি, গ্রাহক, ফোন, প্যাকেজ বা ভ্যারিয়েন্ট দিয়ে অনুসন্ধান করুন",
+      filter: "ফিল্টার",
+      status: "স্ট্যাটাস",
+      resetFilters: "ফিল্টার রিসেট করুন",
+      download: "ডাউনলোড",
+      downloadPreparing: "প্রস্তুত হচ্ছে...",
+      createOrder: "অর্ডার তৈরি করুন",
+    },
+    table: {
+      orderNo: "অর্ডার নম্বর",
+      customer: "গ্রাহক",
+      phone: "ফোন নম্বর",
+      address: "ঠিকানা",
+      packages: "প্যাকেজসমূহ",
+      meals: "মিল",
+      amount: "পরিমাণ",
+      status: "স্ট্যাটাস",
+      paidAmount: "পরিশোধিত পরিমাণ",
+      actions: "অ্যাকশন",
+      noOrders: "আপনার অনুসন্ধান বা ফিল্টার অনুযায়ী কোনো অর্ডার পাওয়া যায়নি।",
+    },
+    details: {
+      title: "অর্ডারের বিস্তারিত",
+      description: "এই অর্ডারের গ্রাহক, ডেলিভারি, আইটেম এবং বিলের বিস্তারিত দেখুন।",
+      order: "অর্ডার",
+      orderNo: "অর্ডার নম্বর",
+      created: "তৈরির তারিখ",
+      lastUpdated: "সর্বশেষ আপডেট",
+      delivery: "ডেলিভারি",
+      customer: "গ্রাহক",
+      phone: "ফোন নম্বর",
+      meals: "মিল",
+      grandTotal: "সর্বমোট",
+      source: "উৎস",
+      items: "আইটেমসমূহ",
+      deliveryAddress: "ডেলিভারি ঠিকানা",
+      note: "নোট",
+      noOrder: "কোনো অর্ডার পাওয়া যায়নি।",
+    },
+    form: {
+      createTitle: "অর্ডার তৈরি করুন",
+      createDescription: "একজন গ্রাহকের জন্য অর্ডার তৈরি করুন। ডেলিভারি আজ থেকে পরবর্তী ৬ দিনের মধ্যে হতে হবে।",
+      editTitle: "অর্ডার আপডেট করুন",
+      editDescription: "গ্রাহকের তথ্য এবং অর্ডারের স্ট্যাটাস আপডেট করুন। সম্পন্ন বা বাতিল অর্ডার পরিবর্তনযোগ্য নয়।",
+      customerDetailsTitle: "গ্রাহকের তথ্য",
+      customerDetailsDescription: "গ্রাহকের যোগাযোগ এবং ডেলিভারি তথ্য দিন।",
+      customerNameLabel: "গ্রাহকের নাম",
+      customerNamePlaceholder: "গ্রাহকের নাম লিখুন",
+      phoneNumberLabel: "ফোন নম্বর",
+      phonePlaceholder: "01XXXXXXXXX",
+      deliveryAddressLabel: "ডেলিভারি ঠিকানা",
+      deliveryAddressPlaceholder: "বিল্ডিং, রাস্তা, এলাকা ও ডেলিভারি নির্দেশনা",
+      noteLabel: "নোট",
+      notePlaceholder: "রান্নাঘর বা ডেলিভারি কর্মীর জন্য নোট (ঐচ্ছিক)",
+      packageSelectionTitle: "প্যাকেজ নির্বাচন",
+      packageSelectionDescription: "প্যাকেজ নির্বাচন করে ভ্যারিয়েন্ট যোগ করুন।",
+      deliveryDateSelectionTitle: "ডেলিভারি তারিখ নির্বাচন",
+      deliveryDateSelectionDescription: "এই অর্ডারের ডেলিভারি তারিখ নির্ধারণ করুন।",
+      activeVariantsTitle: "নির্বাচিত ভ্যারিয়েন্ট",
+      activeVariantsDescription: "শুধুমাত্র যোগ করা ভ্যারিয়েন্ট এখানে দেখানো হবে।",
+      activeVariantsHint: "{{date}} তারিখের জন্য মিলের পরিমাণ যোগ করুন।",
+      orderSummaryTitle: "অর্ডার সারাংশ",
+      orderSummaryDescription: "অর্ডার তৈরি করার আগে মোট পরিমাণ যাচাই করুন।",
+      pricePerMeal: "প্রতি মিল মূল্য",
+      deliveryFee: "ডেলিভারি ফি",
+      subtotal: "সাবটোটাল",
+      total: "মোট",
+      addVariant: "ভ্যারিয়েন্ট যোগ করুন",
+      cancel: "বাতিল করুন",
+      submitCreate: "অর্ডার তৈরি করুন",
+      submitSave: "পরিবর্তন সংরক্ষণ করুন",
+      validation: {
+        customerNameMin: "গ্রাহকের নাম কমপক্ষে ২ অক্ষরের হতে হবে।",
+        customerNameMax: "গ্রাহকের নাম ১০০ অক্ষরের মধ্যে হতে হবে।",
+        phoneMin: "ফোন নম্বর কমপক্ষে ১০ অক্ষরের হতে হবে।",
+        addressMin: "ঠিকানা কমপক্ষে ৫ অক্ষরের হতে হবে।",
+        addressMax: "ঠিকানা ৫০০ অক্ষরের মধ্যে হতে হবে।",
+        itemsRequired: "কমপক্ষে একটি আইটেম যোগ করুন।",
+      },
+    },
+    delete: {
+      title: "অর্ডার মুছে ফেলতে চান?",
+      confirmMessage: "আপনি কি {{orderNo}} মুছে ফেলতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।",
+      confirmMessageGeneric: "আপনি কি এই অর্ডার মুছে ফেলতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।",
+      confirmText: "নিশ্চিত করতে delete-order লিখুন।",
+      confirmKeyword: "delete-order",
+      cancel: "বাতিল করুন",
+      confirm: "মুছে ফেলুন",
+    },
+    cancel: {
+      title: "অর্ডার বাতিল করতে চান?",
+      confirmMessage: "আপনি কি {{orderNo}} বাতিল করতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।",
+      confirmMessageGeneric: "আপনি কি এই অর্ডার বাতিল করতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।",
+      confirmText: "নিশ্চিত করতে cancel-order লিখুন।",
+      confirmKeyword: "cancel-order",
+      cancel: "অর্ডার রাখুন",
+      confirm: "অর্ডার বাতিল করুন",
+      lockedOrderMessage: "এই অর্ডারটি ইতিমধ্যে লক করা হয়েছে, পরিবর্তন করা যাবে না।",
+      reasonPrompt: "বাতিলের কারণ লিখুন।",
+      reasonExample: "উদাহরণ: গ্রাহক বাতিলের অনুরোধ করেছেন",
+    },
+    actions: {
+      view: "দেখুন",
+      edit: "সম্পাদনা করুন",
+      delete: "মুছে ফেলুন",
+      cancel: "বাতিল করুন",
+      openActionsFor: "{{orderNo}} এর জন্য অ্যাকশন খুলুন",
+    },
+    pdf: {
+      title: "অর্ডার রিপোর্ট",
+      date: "তারিখ",
+      totalOrders: "মোট অর্ডার",
+      customer: "গ্রাহক",
+      deliveryAddress: "ডেলিভারি ঠিকানা",
+      packageDetails: "প্যাকেজ বিবরণ",
+      meal: "মিল",
+      amount: "পরিমাণ",
+      paid: "পরিশোধ",
+      total: "মোট",
+      generated: "তৈরি করা হয়েছে",
+    },
+  },
+} as const;
+
+export const useOrdersI18n = () => {
+  const { language } = useLanguage();
+  return content[language] ?? content.en;
+};
+
+export const getOrdersContent = (lang: Language) => {
+  return content[lang] ?? content.en;
+};
+
+export const interpolate = (str: string, values: Record<string, string>): string => {
+  return str.replace(/\{\{(\w+)\}\}/g, (_, key) => values[key] || `{{${key}}}`);
+};
