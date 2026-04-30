@@ -1,8 +1,8 @@
+import { VISIBILITY_ENUM } from "@catering/types";
 import { omit } from "lodash";
-import { PipelineStage } from "mongoose";
-import { VISIBILITY_ENUM } from "@rl/types";
+import type { PipelineStage } from "mongoose";
 import { projectQuery } from "../../../common/query";
-import { IFileMediaDoc, FileMedia } from "../../../models";
+import { FileMedia, type IFileMediaDoc } from "../../../models";
 
 // event queries
 export const fileMediaProjectionQuery = (): PipelineStage[] => {

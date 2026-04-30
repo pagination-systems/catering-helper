@@ -42,9 +42,11 @@
     "bullmq": "^5.61.2",
     "@bull-board/api": "^6.14.0",
     "@bull-board/express": "^6.14.0",
-    "@ims-systems-00/ims-query-builder": "^0.0.11"
+    "@ims-systems-00/ims-query-builder": "^0.0.11",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/lodash": "^4.17.7",
     "@types/bcryptjs": "^2.4.6",
     "@types/cookie-parser": "^1.4.7",

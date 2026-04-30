@@ -1,5 +1,13 @@
 import { ACCOUNT_TYPE_ENUMS, EMAIL_VERIFICATION_STATUS_ENUMS, USER_ROLE_ENUMS } from "@catering/types";
-import { type AggregatePaginateModel, type Document, type Model, model, type PaginateModel, Schema } from "mongoose";
+import {
+  type AggregatePaginateModel,
+  type Document,
+  type Model,
+  model,
+  type PaginateModel,
+  Schema,
+  type Types,
+} from "mongoose";
 import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 import mongoosePaginate from "mongoose-paginate-v2";
 import { modelNames } from "./constants";
@@ -18,7 +26,7 @@ export interface UserInput extends PasswordHashInput, TenantInput {
   firstName: string;
   lastName: string;
   email: string;
-  // profileImageId?: Types.ObjectId;
+  profileImageId?: Types.ObjectId;
   role?: USER_ROLE_ENUMS;
   type?: ACCOUNT_TYPE_ENUMS;
 }
