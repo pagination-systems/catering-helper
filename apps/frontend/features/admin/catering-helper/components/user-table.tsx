@@ -5,6 +5,7 @@ import { UsersIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
 import { DataTable, type DataTableColumn } from "../../components/data-table";
+import { useCateringHelperI18n } from "../lib/catering-helper-i18n";
 import type { GetUsersResponse } from "../schemas/user.schema";
 import { useUsersStore } from "../store/useStore";
 import { getRoleBadgeStyles } from "../utils/badge";
@@ -16,12 +17,13 @@ interface UserTableProps {
 }
 
 export const UserTable = ({ data, handlePaginate }: UserTableProps) => {
+  const i18n = useCateringHelperI18n();
   const openView = useUsersStore((state) => state.openView);
 
   const columns: DataTableColumn<IUser>[] = [
     {
       accessorKey: "name",
-      header: "Name",
+      header: i18n.table.name,
       cell: (user) => (
         <div className="flex flex-col">
           <button
@@ -37,11 +39,11 @@ export const UserTable = ({ data, handlePaginate }: UserTableProps) => {
     },
     {
       accessorKey: "phone",
-      header: "Phone",
+      header: i18n.table.phone,
     },
     {
       accessorKey: "role",
-      header: "Role",
+      header: i18n.table.role,
       cell: (user) => (
         <Badge variant="outline" className={getRoleBadgeStyles(user.role)}>
           {user.role}
@@ -50,17 +52,17 @@ export const UserTable = ({ data, handlePaginate }: UserTableProps) => {
     },
     {
       accessorKey: "createdAt",
-      header: "Created",
+      header: i18n.table.created,
       cell: (user) => formatDate(user.createdAt),
     },
     {
       accessorKey: "updatedAt",
-      header: "Last Updated",
+      header: i18n.table.lastUpdated,
       cell: (user) => formatDate(user.updatedAt),
     },
     {
       id: "actions",
-      header: "Actions",
+      header: i18n.table.actions,
       cell: (user) => <RowActions user={user} />,
     },
   ];
@@ -75,7 +77,7 @@ export const UserTable = ({ data, handlePaginate }: UserTableProps) => {
       emptyState={
         <div className="flex flex-col items-center gap-2">
           <UsersIcon className="size-5" />
-          No users found for your current query and filters.
+          {i18n.table.noUsers}
         </div>
       }
     />

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Globe,
   LaptopMinimal,
   LogOut,
   Menu,
@@ -26,7 +27,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-
+import { getAdminContent } from "@/lib/admin-i18n";
+import { useLanguage } from "@/providers/language-provider";
 import { useAdminLayout } from "./store/useStore";
 
 const themeOrder = ["system", "light", "dark"] as const;
@@ -44,6 +46,8 @@ type NavbarProps = {
 export function Navbar({ onSearch }: NavbarProps) {
   const { isSidebarCollapsed, toggleSidebarCollapsed, toggleMobileSidebar } = useAdminLayout();
   const { theme, setTheme } = useTheme();
+  const { language, setLanguage } = useLanguage();
+  const t = getAdminContent(language);
   const [query, setQuery] = useState("");
   const [mounted, setMounted] = useState(false);
 
@@ -81,7 +85,7 @@ export function Navbar({ onSearch }: NavbarProps) {
           size="icon"
           className="md:hidden"
           onClick={toggleMobileSidebar}
-          aria-label="Open sidebar menu"
+          aria-label={t.navbar.aria.openSidebar}
         >
           <Menu className="h-4 w-4" />
         </Button>
@@ -92,7 +96,7 @@ export function Navbar({ onSearch }: NavbarProps) {
           size="icon"
           className="hidden md:inline-flex"
           onClick={toggleSidebarCollapsed}
-          aria-label={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-label={isSidebarCollapsed ? t.navbar.aria.expandSidebar : t.navbar.aria.collapseSidebar}
         >
           {isSidebarCollapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
         </Button>
@@ -103,18 +107,32 @@ export function Navbar({ onSearch }: NavbarProps) {
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search users, orders, and settings"
+            placeholder={t.navbar.searchPlaceholder}
             className="pl-9"
-            aria-label="Search in admin panel"
+            aria-label={t.navbar.aria.sidebarMenu}
           />
         </div>
 
         <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" aria-label={t.navbar.aria.language} className="h-9 w-9 rounded-full">
+                <Globe className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              <DropdownMenuLabel>{t.navbar.language}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setLanguage("en")}>EN</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLanguage("bn")}>BN</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <Button
             type="button"
             variant="ghost"
             size="icon"
-            aria-label="Toggle theme"
+            aria-label={t.navbar.aria.toggleTheme}
             onClick={toggleTheme}
             className="h-9 w-9 rounded-full"
           >
@@ -127,7 +145,7 @@ export function Navbar({ onSearch }: NavbarProps) {
                 type="button"
                 variant="ghost"
                 className="h-10 items-center gap-2 rounded-full px-1.5 hover:bg-muted"
-                aria-label="Open user menu"
+                aria-label={t.navbar.aria.userMenu}
               >
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/15 text-xs font-semibold text-primary">
                   AH
@@ -136,24 +154,24 @@ export function Navbar({ onSearch }: NavbarProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>{t.navbar.userMenu.myAccount}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
                 <Link href="/admin/profile" className="cursor-pointer">
                   <UserCircle2 className="mr-2 h-4 w-4" />
-                  Profile
+                  {t.navbar.userMenu.profile}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/admin/settings" className="cursor-pointer">
                   <Settings className="mr-2 h-4 w-4" />
-                  Settings
+                  {t.navbar.userMenu.settings}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive">
                 <LogOut className="mr-2 h-4 w-4" />
-                Logout
+                {t.navbar.userMenu.logout}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

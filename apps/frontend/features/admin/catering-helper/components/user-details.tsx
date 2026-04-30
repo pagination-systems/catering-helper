@@ -3,6 +3,7 @@ import { Clock, Fingerprint, Mail, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { formatDate } from "@/lib/utils";
+import { useCateringHelperI18n } from "../lib/catering-helper-i18n";
 import { getRoleBadgeStyles } from "../utils/badge";
 
 interface UserDetailsProps {
@@ -40,6 +41,8 @@ const DetailField = ({
 );
 
 export const UserDetails = ({ user }: UserDetailsProps) => {
+  const i18n = useCateringHelperI18n();
+
   return (
     <div className="space-y-6">
       {/* Hero Section - Profile Header */}
@@ -75,10 +78,10 @@ export const UserDetails = ({ user }: UserDetailsProps) => {
       <div className="space-y-4">
         <div className="flex items-center gap-2.5">
           <Mail className="h-4 w-4 text-primary/60" />
-          <h3 className="text-sm font-bold uppercase tracking-wider text-foreground">Contact</h3>
+          <h3 className="text-sm font-bold uppercase tracking-wider text-foreground">{i18n.details.contact}</h3>
         </div>
         <div className="rounded-lg border border-border/50 bg-card/50 p-5 backdrop-blur-sm transition-all hover:border-border hover:bg-card/80">
-          <DetailField icon={Mail} label="Email Address" value={user.phone} />
+          <DetailField icon={Mail} label={i18n.details.emailAddress} value={user.phone} />
         </div>
       </div>
 
@@ -86,14 +89,14 @@ export const UserDetails = ({ user }: UserDetailsProps) => {
       <div className="space-y-4">
         <div className="flex items-center gap-2.5">
           <Fingerprint className="h-4 w-4 text-primary/60" />
-          <h3 className="text-sm font-bold uppercase tracking-wider text-foreground">System Information</h3>
+          <h3 className="text-sm font-bold uppercase tracking-wider text-foreground">{i18n.details.systemInfo}</h3>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="rounded-lg border border-border/50 bg-card/50 p-5 backdrop-blur-sm transition-all hover:border-border hover:bg-card/80">
-            <DetailField icon={Fingerprint} label="User ID" value={user.id} mono />
+            <DetailField icon={Fingerprint} label={i18n.details.userId} value={user.id} mono />
           </div>
           <div className="rounded-lg border border-border/50 bg-card/50 p-5 backdrop-blur-sm transition-all hover:border-border hover:bg-card/80">
-            <DetailField icon={Users} label="Role" value={user.role} />
+            <DetailField icon={Users} label={i18n.details.roleLabel} value={user.role} />
           </div>
         </div>
       </div>
@@ -102,14 +105,14 @@ export const UserDetails = ({ user }: UserDetailsProps) => {
       <div className="space-y-4">
         <div className="flex items-center gap-2.5">
           <Clock className="h-4 w-4 text-primary/60" />
-          <h3 className="text-sm font-bold uppercase tracking-wider text-foreground">Activity</h3>
+          <h3 className="text-sm font-bold uppercase tracking-wider text-foreground">{i18n.details.activity}</h3>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="rounded-lg border border-border/50 bg-card/50 p-5 backdrop-blur-sm transition-all hover:border-border hover:bg-card/80">
-            <DetailField icon={Clock} label="Created" value={formatDate(user.createdAt)} />
+            <DetailField icon={Clock} label={i18n.details.createdLabel} value={formatDate(user.createdAt)} />
           </div>
           <div className="rounded-lg border border-border/50 bg-card/50 p-5 backdrop-blur-sm transition-all hover:border-border hover:bg-card/80">
-            <DetailField icon={Clock} label="Last Updated" value={formatDate(user.updatedAt)} />
+            <DetailField icon={Clock} label={i18n.details.lastUpdatedLabel} value={formatDate(user.updatedAt)} />
           </div>
         </div>
       </div>

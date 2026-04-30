@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Ban,
   CheckCircle,
@@ -11,79 +13,80 @@ import {
   UserX,
   Wallet,
 } from "lucide-react";
-
+import { getAdminContent } from "@/lib/admin-i18n";
 import { formatDecimal } from "@/lib/utils";
+import { useLanguage } from "@/providers/language-provider";
 import { DashboardCardSection } from "./components/dashboard-card-section";
 
-const accountingCards = [
+const accountingCards = (t: any) => [
   {
-    title: "Total Income",
+    title: t.cards.totalIncome,
     value: formatDecimal(59800),
     link: "/admin/customer-ledger",
     icon: <Wallet className="size-5" />,
   },
   {
-    title: "Total Expense",
+    title: t.cards.totalExpense,
     value: formatDecimal(15000),
     link: "/admin/expenses",
     icon: <Receipt className="size-5" />,
   },
   {
-    title: "Total Revenue",
+    title: t.cards.totalRevenue,
     value: formatDecimal(44800),
     link: "/admin/customer-ledger",
     icon: <CircleDollarSign className="size-5" />,
   },
 ];
 
-const tenantCards = [
+const tenantCards = (t: any) => [
   {
-    title: "Total Caterings",
+    title: t.cards.totalCaterings,
     value: formatDecimal(150),
     link: "/admin/orders",
     icon: <Store className="size-5" />,
   },
   {
-    title: "Active",
+    title: t.cards.activeCaterings,
     value: formatDecimal(100),
     link: "/admin/orders",
     icon: <CheckCircle className="size-5" />,
   },
   {
-    title: "Terminated",
+    title: t.cards.terminatedCaterings,
     value: formatDecimal(50),
     link: "/admin/orders",
     icon: <Ban className="size-5" />,
   },
   {
-    title: "Suspended",
+    title: t.cards.suspendedCaterings,
     value: formatDecimal(25),
     link: "/admin/orders",
     icon: <PauseCircle className="size-5" />,
   },
 ];
 
-const userCards = [
+const userCards = (t: any) => [
   {
-    title: "Total Platform Admins",
+    title: t.cards.totalPlatformAdmins,
     value: formatDecimal(3),
     link: "/admin/users",
     icon: <ShieldCheck className="size-5" />,
   },
   {
-    title: "Total Tenant Admins",
+    title: t.cards.totalTenantAdmins,
     value: formatDecimal(150),
     link: "/admin/users",
     icon: <UserCog className="size-5" />,
   },
   {
-    title: "Total Customers",
+    title: t.cards.totalCustomers,
     value: formatDecimal(500),
     link: "/admin/users",
     icon: <Users className="size-5" />,
   },
   {
-    title: "Terminated Customers",
+    title: t.cards.terminatedCustomers,
     value: formatDecimal(5),
     link: "/admin/users",
     icon: <UserX className="size-5" />,
@@ -91,11 +94,14 @@ const userCards = [
 ];
 
 export const PlatformAdminDashboard = () => {
+  const { language } = useLanguage();
+  const t = getAdminContent(language).dashboard;
+
   return (
     <div className="space-y-4">
-      <DashboardCardSection title="Accounting" cards={accountingCards} />
-      <DashboardCardSection title="Caterings" cards={tenantCards} />
-      <DashboardCardSection title="Users" cards={userCards} />
+      <DashboardCardSection title={t.sections.accounting} cards={accountingCards(t)} />
+      <DashboardCardSection title={t.sections.caterings} cards={tenantCards(t)} />
+      <DashboardCardSection title={t.sections.users} cards={userCards(t)} />
     </div>
   );
 };

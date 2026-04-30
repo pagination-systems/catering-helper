@@ -10,10 +10,12 @@ import { SentInvitationsTable } from "./components/sent-invitations-table";
 import { TableToolbar } from "./components/table-toolbar";
 import { UserDetails } from "./components/user-details";
 import { UserTable } from "./components/user-table";
+import { useCateringHelperI18n } from "./lib/catering-helper-i18n";
 import type { InvitePlatformAdminValues } from "./schemas/user.schema";
 import { useUsersStore } from "./store/useStore";
 
 export const CateringHelper = () => {
+  const i18n = useCateringHelperI18n();
   const data = useUsersStore((state) => state.list);
   const isInvitationSheetOpen = useUsersStore((state) => state.isInvitationSheetOpen);
   const isInvitationHistorySheetOpen = useUsersStore((state) => state.isInvitationHistorySheetOpen);
@@ -33,7 +35,7 @@ export const CateringHelper = () => {
 
   return (
     <section className="space-y-4" aria-labelledby="users-title">
-      <SectionHeader title="Platform Admins" description="Manage platform administrators and their permissions." />
+      <SectionHeader title={i18n.title} description={i18n.description} />
 
       <Card>
         <CardHeader className="space-y-3">
@@ -48,11 +50,11 @@ export const CateringHelper = () => {
       <Sheet open={isInvitationSheetOpen} onOpenChange={setInvitationSheetOpen}>
         <SheetContent side="right">
           <SheetHeader>
-            <SheetTitle>Invite New Platform Admin</SheetTitle>
-            <SheetDescription>Add a new platform admin and assign role access.</SheetDescription>
+            <SheetTitle>{i18n.invitation.title}</SheetTitle>
+            <SheetDescription>{i18n.invitation.description}</SheetDescription>
           </SheetHeader>
 
-          <InvitationForm onSubmit={onSubmitInvitation} submitLabel="Send Invitation" />
+          <InvitationForm onSubmit={onSubmitInvitation} submitLabel={i18n.invitation.sendInvitation} />
         </SheetContent>
       </Sheet>
 
@@ -62,10 +64,8 @@ export const CateringHelper = () => {
       >
         <SheetContent side="right" className="space-y-4 sm:!max-w-[700px]">
           <SheetHeader>
-            <SheetTitle>Sent Invitations</SheetTitle>
-            <SheetDescription>
-              Review recently invited users, resend invitations, or remove them from the list.
-            </SheetDescription>
+            <SheetTitle>{i18n.sentInvitations.title}</SheetTitle>
+            <SheetDescription>{i18n.sentInvitations.description}</SheetDescription>
           </SheetHeader>
 
           <Card>
@@ -77,13 +77,13 @@ export const CateringHelper = () => {
       <Sheet open={isViewSheetOpen} onOpenChange={(open) => (open ? setViewSheetOpen(true) : closeViewSheet())}>
         <SheetContent side="right" className="space-y-6">
           <SheetHeader>
-            <SheetTitle>User Details</SheetTitle>
-            <SheetDescription>Review the selected team member's profile and role access.</SheetDescription>
+            <SheetTitle>{i18n.details.title}</SheetTitle>
+            <SheetDescription>{i18n.description}</SheetDescription>
           </SheetHeader>
 
           <If
             expression={!!selectedViewItem}
-            fallback={<p className="text-sm text-muted-foreground">No user found.</p>}
+            fallback={<p className="text-sm text-muted-foreground">{i18n.details.noUser}</p>}
           >
             {selectedViewItem && <UserDetails user={selectedViewItem} />}
           </If>

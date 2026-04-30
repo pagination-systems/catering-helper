@@ -20,6 +20,8 @@ import {
   Users,
   Utensils,
 } from "lucide-react";
+import { getAdminContent } from "@/lib/admin-i18n";
+import type { Language } from "@/lib/i18n";
 
 /**
  * Represents a single navigation item in the admin sidebar.
@@ -42,61 +44,65 @@ export type NavigationItem = {
  * Main navigation items for the admin panel.
  * Each item can have permission checks and nested children.
  */
-export const navigationItems: NavigationItem[] = [
-  {
-    label: "Dashboard",
-    href: "/admin/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    label: "Catering Helper",
-    href: "/admin/catering-helper",
-    icon: Fingerprint,
-    canView: (ability) => ability.can(AbilityAction.MANAGE, UserAuthZEntity),
-  },
-  {
-    label: "Customers",
-    href: "/admin/customers",
-    icon: Users,
-    canView: (ability) => ability.can(AbilityAction.MANAGE, UserAuthZEntity),
-  },
-  {
-    label: "Packages",
-    href: "/admin/packages",
-    icon: Package2,
-    canView: (ability) => ability.can(AbilityAction.MANAGE, PackageAuthZEntity),
-  },
-  {
-    label: "Orders",
-    href: "/admin/orders",
-    icon: ListOrdered,
-    canView: (ability) => ability.can(AbilityAction.MANAGE, OrderAuthZEntity),
-  },
-  {
-    label: "Production Requirements",
-    href: "/admin/production-requirements",
-    icon: Utensils,
-    canView: (ability) => ability.can(AbilityAction.MANAGE, ProductionRequirementAuthZEntity),
-  },
-  {
-    label: "Customer Ledger",
-    href: "/admin/customer-ledger",
-    icon: HandCoins,
-    canView: (ability) => ability.can(AbilityAction.MANAGE, CustomerLedgerAuthZEntity),
-  },
-  {
-    label: "Expenses",
-    href: "/admin/expenses",
-    icon: HandCoins,
-    canView: (ability) => ability.can(AbilityAction.MANAGE, ExpenseAuthZEntity),
-  },
-  {
-    label: "Settings",
-    href: "/admin/settings",
-    icon: Settings,
-    canView: (ability) => ability.can(AbilityAction.MANAGE, TenantAuthZEntity),
-  },
-];
+export function getNavigationItems(lang: Language): NavigationItem[] {
+  const t = getAdminContent(lang).nav;
+
+  return [
+    {
+      label: t.dashboard,
+      href: "/admin/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      label: t.cateringHelper,
+      href: "/admin/catering-helper",
+      icon: Fingerprint,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, UserAuthZEntity),
+    },
+    {
+      label: t.customers,
+      href: "/admin/customers",
+      icon: Users,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, UserAuthZEntity),
+    },
+    {
+      label: t.packages,
+      href: "/admin/packages",
+      icon: Package2,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, PackageAuthZEntity),
+    },
+    {
+      label: t.orders,
+      href: "/admin/orders",
+      icon: ListOrdered,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, OrderAuthZEntity),
+    },
+    {
+      label: t.productionRequirements,
+      href: "/admin/production-requirements",
+      icon: Utensils,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, ProductionRequirementAuthZEntity),
+    },
+    {
+      label: t.customerLedger,
+      href: "/admin/customer-ledger",
+      icon: HandCoins,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, CustomerLedgerAuthZEntity),
+    },
+    {
+      label: t.expenses,
+      href: "/admin/expenses",
+      icon: HandCoins,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, ExpenseAuthZEntity),
+    },
+    {
+      label: t.settings,
+      href: "/admin/settings",
+      icon: Settings,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, TenantAuthZEntity),
+    },
+  ];
+}
 
 /**
  * Recursively filters navigation items based on user permissions.

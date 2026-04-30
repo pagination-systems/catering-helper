@@ -3,6 +3,7 @@
 import { PackageIcon } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { DataTable, type DataTableColumn } from "../../components/data-table";
+import { usePackagesI18n } from "../lib/packages-i18n";
 import type { GetPackagesResponse, ICateringPackage } from "../schemas/package.schema";
 import { usePackagesStore } from "../store/useStore";
 import { getPackageStatusBadgeClassName } from "../utils/badge";
@@ -14,12 +15,13 @@ interface PackageTableProps {
 }
 
 export const PackageTable = ({ data, handlePaginate }: PackageTableProps) => {
+  const i18n = usePackagesI18n();
   const openView = usePackagesStore((state) => state.openView);
 
   const columns: DataTableColumn<ICateringPackage>[] = [
     {
       accessorKey: "name",
-      header: "Package",
+      header: i18n.table.package,
       cell: (item) => (
         <>
           <button
@@ -30,23 +32,25 @@ export const PackageTable = ({ data, handlePaginate }: PackageTableProps) => {
             {item.name}
           </button>
           <div className="text-xs text-muted-foreground line-clamp-1">{item.description}</div>
-          <div className="text-xs text-muted-foreground">ID: {item.id}</div>
+          <div className="text-xs text-muted-foreground">
+            {i18n.table.idLabel} {item.id}
+          </div>
         </>
       ),
     },
     {
       accessorKey: "pricePerMeal",
-      header: "Price / Meal",
+      header: i18n.table.pricePerMeal,
       cell: (item) => formatCurrency(item.pricePerMeal),
     },
     {
       id: "variants",
-      header: "Variants / Week",
+      header: i18n.table.variantsPerWeek,
       cell: (item) => item.days.reduce((sum, day) => sum + day.variants.length, 0),
     },
     {
       accessorKey: "status",
-      header: "Status",
+      header: i18n.table.status,
       cell: (item) => (
         <span
           className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${getPackageStatusBadgeClassName(item.status)}`}
@@ -57,12 +61,12 @@ export const PackageTable = ({ data, handlePaginate }: PackageTableProps) => {
     },
     {
       accessorKey: "updatedAt",
-      header: "Last Updated",
+      header: i18n.table.lastUpdated,
       cell: (item) => formatDate(new Date(item.updatedAt)),
     },
     {
       id: "actions",
-      header: "Actions",
+      header: i18n.table.actions,
       cell: (item) => <RowActions item={item} />,
     },
   ];
@@ -77,7 +81,7 @@ export const PackageTable = ({ data, handlePaginate }: PackageTableProps) => {
       emptyState={
         <div className="flex flex-col items-center gap-2">
           <PackageIcon className="size-5" />
-          No packages found for your current query and filters.
+          {i18n.table.noPackages}
         </div>
       }
     />

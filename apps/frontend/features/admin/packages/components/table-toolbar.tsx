@@ -12,9 +12,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { usePackagesI18n } from "../lib/packages-i18n";
 import { usePackagesStore } from "../store/useStore";
 
 export const TableToolbar = () => {
+  const i18n = usePackagesI18n();
   const query = usePackagesStore((state) => state.query);
   const statusFilter = usePackagesStore((state) => state.statusFilter);
   const setQuery = usePackagesStore((state) => state.setQuery);
@@ -28,7 +30,7 @@ export const TableToolbar = () => {
         <Input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search by package name, id, or description"
+          placeholder={i18n.toolbar.searchPlaceholder}
           className="pl-8"
         />
       </div>
@@ -37,11 +39,11 @@ export const TableToolbar = () => {
         <DropdownMenuTrigger asChild>
           <Button variant="outline" type="button">
             <FilterIcon className="size-4" />
-            Filter
+            {i18n.toolbar.filter}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-64">
-          <DropdownMenuLabel>Status</DropdownMenuLabel>
+          <DropdownMenuLabel>{i18n.toolbar.status}</DropdownMenuLabel>
           {Object.values(PACKAGE_STATUS_ENUM).map((status) => (
             <DropdownMenuCheckboxItem
               key={status}
@@ -55,7 +57,7 @@ export const TableToolbar = () => {
           <DropdownMenuSeparator />
           <div className="p-1">
             <Button type="button" variant="ghost" size="sm" className="w-full" onClick={() => setStatusFilter("all")}>
-              Reset Filters
+              {i18n.toolbar.resetFilters}
             </Button>
           </div>
         </DropdownMenuContent>
@@ -64,7 +66,7 @@ export const TableToolbar = () => {
       <Can I={AbilityAction.CREATE} a={PackageAuthZEntity}>
         <Button type="button" className="ml-auto" onClick={openCreate}>
           <PlusIcon className="size-4" />
-          Create Package
+          {i18n.toolbar.createPackage}
         </Button>
       </Can>
     </div>

@@ -4,7 +4,8 @@ import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { useEffect } from "react";
 import { useAbility } from "@/authz/ability-context";
-import { getNavigationItemForPath, navigationItems } from "./navigation";
+import { useLanguage } from "@/providers/language-provider";
+import { getNavigationItemForPath, getNavigationItems } from "./navigation";
 
 interface AdminRouteGuardProps {
   children: ReactNode;
@@ -16,7 +17,8 @@ interface AdminRouteGuardProps {
 export function AdminRouteGuard({ children }: AdminRouteGuardProps) {
   const pathname = usePathname();
   const ability = useAbility();
-  const item = getNavigationItemForPath(navigationItems, pathname);
+  const { language } = useLanguage();
+  const item = getNavigationItemForPath(getNavigationItems(language), pathname);
   const router = useRouter();
 
   useEffect(() => {

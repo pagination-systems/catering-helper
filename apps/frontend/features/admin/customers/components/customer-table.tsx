@@ -5,6 +5,7 @@ import { UsersIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
 import { DataTable, type DataTableColumn } from "../../components/data-table";
+import { useCustomersI18n } from "../lib/customers-i18n";
 import type { GetUsersResponse } from "../schemas/customer.schema";
 import { useCustomersStore } from "../store/useStore";
 import { getRoleBadgeStyles } from "../utils/badge";
@@ -16,12 +17,13 @@ interface CustomerTableProps {
 }
 
 export const CustomerTable = ({ data, handlePaginate }: CustomerTableProps) => {
+  const i18n = useCustomersI18n();
   const openView = useCustomersStore((state) => state.openView);
 
   const columns: DataTableColumn<IUser>[] = [
     {
       accessorKey: "name",
-      header: "Name",
+      header: i18n.table.name,
       cell: (user) => (
         <div className="flex flex-col">
           <button
@@ -31,17 +33,19 @@ export const CustomerTable = ({ data, handlePaginate }: CustomerTableProps) => {
           >
             {user.name}
           </button>
-          <span className="text-xs text-muted-foreground">ID: {user.id}</span>
+          <span className="text-xs text-muted-foreground">
+            {i18n.table.idLabel} {user.id}
+          </span>
         </div>
       ),
     },
     {
       accessorKey: "phone",
-      header: "Phone",
+      header: i18n.table.phone,
     },
     {
       accessorKey: "role",
-      header: "Role",
+      header: i18n.table.role,
       cell: (user) => (
         <Badge variant="outline" className={getRoleBadgeStyles(user.role)}>
           {user.role}
@@ -50,17 +54,17 @@ export const CustomerTable = ({ data, handlePaginate }: CustomerTableProps) => {
     },
     {
       accessorKey: "createdAt",
-      header: "Created",
+      header: i18n.table.created,
       cell: (user) => formatDate(user.createdAt),
     },
     {
       accessorKey: "updatedAt",
-      header: "Last Updated",
+      header: i18n.table.lastUpdated,
       cell: (user) => formatDate(user.updatedAt),
     },
     {
       id: "actions",
-      header: "Actions",
+      header: i18n.table.actions,
       cell: (user) => <RowActions user={user} />,
     },
   ];
@@ -75,7 +79,7 @@ export const CustomerTable = ({ data, handlePaginate }: CustomerTableProps) => {
       emptyState={
         <div className="flex flex-col items-center gap-2">
           <UsersIcon className="size-5" />
-          No customers found for your current query and filters.
+          {i18n.table.noCustomers}
         </div>
       }
     />

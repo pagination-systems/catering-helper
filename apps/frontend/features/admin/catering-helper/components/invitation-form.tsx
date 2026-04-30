@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useCateringHelperI18n } from "../lib/catering-helper-i18n";
 import { type InvitePlatformAdminValues, invitePlatformAdminSchema } from "../schemas/user.schema";
 
 interface InvitationFormProps {
@@ -16,7 +17,8 @@ const getDefaultValues = (initialValues?: InvitePlatformAdminValues): InvitePlat
   phone: initialValues?.phone ?? "",
 });
 
-export const InvitationForm = ({ onSubmit, initialValues, submitLabel = "Submit" }: InvitationFormProps) => {
+export const InvitationForm = ({ onSubmit, initialValues, submitLabel }: InvitationFormProps) => {
+  const i18n = useCateringHelperI18n();
   const form = useForm<InvitePlatformAdminValues>({
     resolver: zodResolver(invitePlatformAdminSchema),
     defaultValues: getDefaultValues(initialValues),
@@ -39,9 +41,9 @@ export const InvitationForm = ({ onSubmit, initialValues, submitLabel = "Submit"
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone</FormLabel>
+                <FormLabel>{i18n.invitation.phoneLabel}</FormLabel>
                 <FormControl>
-                  <Input type="tel" placeholder="Enter phone number" {...field} />
+                  <Input type="tel" placeholder={i18n.invitation.phonePlaceholder} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -50,7 +52,7 @@ export const InvitationForm = ({ onSubmit, initialValues, submitLabel = "Submit"
         </div>
 
         <div className="mt-auto flex justify-end border-t pt-4">
-          <Button type="submit">{submitLabel}</Button>
+          <Button type="submit">{submitLabel || i18n.invitation.sendInvitation}</Button>
         </div>
       </form>
     </Form>

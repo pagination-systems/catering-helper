@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { interpolate, useCateringHelperI18n } from "../lib/catering-helper-i18n";
 import { useUsersStore } from "../store/useStore";
 
 interface RowActionsProps {
@@ -17,14 +18,17 @@ interface RowActionsProps {
 }
 
 export const RowActions = ({ user }: RowActionsProps) => {
+  const i18n = useCateringHelperI18n();
   const openView = useUsersStore((state) => state.openView);
   const openDeleteDialog = useUsersStore((state) => state.openDeleteDialog);
+
+  const ariaLabel = interpolate(i18n.actions.openActionsFor, { name: user.name });
 
   return (
     <div className="flex justify-end">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button type="button" variant="ghost" size="icon-sm" aria-label={`Open actions for ${user.name}`}>
+          <Button type="button" variant="ghost" size="icon-sm" aria-label={ariaLabel}>
             <MoreHorizontalIcon className="size-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -32,14 +36,14 @@ export const RowActions = ({ user }: RowActionsProps) => {
           <Can I={AbilityAction.READ} a={UserAuthZEntity}>
             <DropdownMenuItem onSelect={() => openView(user)}>
               <EyeIcon className="size-4" />
-              View
+              {i18n.actions.view}
             </DropdownMenuItem>
           </Can>
           <DropdownMenuSeparator />
           <Can I={AbilityAction.HARD_DELETE} a={UserAuthZEntity}>
             <DropdownMenuItem variant="destructive" onSelect={() => openDeleteDialog(user)}>
               <Trash2Icon className="size-4" />
-              Delete
+              {i18n.actions.delete}
             </DropdownMenuItem>
           </Can>
         </DropdownMenuContent>

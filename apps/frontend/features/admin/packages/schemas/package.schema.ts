@@ -36,39 +36,61 @@ export interface GetPackagesResponse {
   };
 }
 
-const foodItemSchema = z.string().trim().min(1, "Food item is required.").max(80, "Food item is too long.");
+export type PackageValidationMessages = {
+  packageNameMin: string;
+  packageNameMax: string;
+  descriptionMin: string;
+  descriptionMax: string;
+  priceMin: string;
+  priceMax: string;
+  variantNameMin: string;
+  variantNameMax: string;
+  foodItemRequired: string;
+  foodItemTooLong: string;
+  addAtLeastOneFoodItem: string;
+  eachDayNeedsAtLeastOneVariant: string;
+  exactlySevenDayPlans: string;
+  eachDayOnce: string;
+};
 
-const menuVariantSchema = z.object({
-  id: z.string().optional(),
-  name: z.string().trim().min(2, "Variant name must be at least 2 characters.").max(80),
-  note: z.string().trim().max(160),
-  items: z.array(foodItemSchema).min(1, "Add at least one food item."),
-  available: z.boolean().optional(),
-});
+export const createPackageSchema = (messages: PackageValidationMessages) =>
+  z
+    .object({
+      name: z.string().trim().min(2, messages.packageNameMin).max(100, messages.packageNameMax),
+      description: z.string().trim().min(8, messages.descriptionMin).max(300, messages.descriptionMax),
+      pricePerMeal: z.number().int().min(1, messages.priceMin).max(100000, messages.priceMax),
+      status: z.enum(PACKAGE_STATUS_ENUM),
+      days: z
+        .array(
+          z.object({
+            day: z.enum(dayOrder),
+            variants: z
+              .array(
+                z.object({
+                  id: z.string().optional(),
+                  name: z.string().trim().min(2, messages.variantNameMin).max(80, messages.variantNameMax),
+                  note: z.string().trim().max(160),
+                  items: z
+                    .array(z.string().trim().min(1, messages.foodItemRequired).max(80, messages.foodItemTooLong))
+                    .min(1, messages.addAtLeastOneFoodItem),
+                  available: z.boolean().optional(),
+                }),
+              )
+              .min(1, messages.eachDayNeedsAtLeastOneVariant),
+          }),
+        )
+        .length(dayOrder.length, messages.exactlySevenDayPlans),
+    })
+    .superRefine((value, ctx) => {
+      const uniqueDays = new Set(value.days.map((day) => day.day));
 
-const dayPlanSchema = z.object({
-  day: z.enum(dayOrder),
-  variants: z.array(menuVariantSchema).min(1, "Each day needs at least one variant."),
-});
+      if (uniqueDays.size !== dayOrder.length) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["days"],
+          message: messages.eachDayOnce,
+        });
+      }
+    });
 
-export const createPackageSchema = z
-  .object({
-    name: z.string().trim().min(2, "Package name must be at least 2 characters.").max(100),
-    description: z.string().trim().min(8, "Description must be at least 8 characters.").max(300),
-    pricePerMeal: z.number().int().min(1, "Price must be at least 1 BDT.").max(100000),
-    status: z.enum(PACKAGE_STATUS_ENUM),
-    days: z.array(dayPlanSchema).length(dayOrder.length, "A package must have exactly 7 day plans."),
-  })
-  .superRefine((value, ctx) => {
-    const uniqueDays = new Set(value.days.map((day) => day.day));
-
-    if (uniqueDays.size !== dayOrder.length) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["days"],
-        message: "Each day from Sat to Fri must be configured exactly once.",
-      });
-    }
-  });
-
-export type CreatePackageValues = z.infer<typeof createPackageSchema>;
+export type CreatePackageValues = z.infer<ReturnType<typeof createPackageSchema>>;

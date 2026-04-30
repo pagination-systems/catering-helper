@@ -3,16 +3,20 @@
 import { If } from "@/components/if";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { useLanguage } from "@/providers/language-provider";
 import { SectionHeader } from "../components/section-header";
 import { DeleteConfirmation } from "./components/delete-confirmation";
 import { PackageDetails } from "./components/package-details";
 import { PackageForm } from "./components/package-form";
 import { PackageTable } from "./components/package-table";
 import { TableToolbar } from "./components/table-toolbar";
+import { usePackagesI18n } from "./lib/packages-i18n";
 import type { CreatePackageValues, ICateringPackage } from "./schemas/package.schema";
 import { usePackagesStore } from "./store/useStore";
 
 export const Packages = () => {
+  const i18n = usePackagesI18n();
+  const { language } = useLanguage();
   const data = usePackagesStore((state) => state.list);
   const addItem = usePackagesStore((state) => state.addItem);
   const updatePackage = usePackagesStore((state) => state.updatePackage);
@@ -64,7 +68,7 @@ export const Packages = () => {
 
   return (
     <section className="space-y-4" aria-labelledby="packages-title">
-      <SectionHeader title="Packages" description="Manage package pricing, day plans, variants, and food items." />
+      <SectionHeader title={i18n.title} description={i18n.description} />
 
       <Card>
         <CardHeader className="space-y-3">
@@ -79,25 +83,30 @@ export const Packages = () => {
       <Sheet open={isCreateSheetOpen} onOpenChange={setCreateSheetOpen}>
         <SheetContent side="right" className="w-full overflow-hidden sm:!max-w-[880px]">
           <SheetHeader>
-            <SheetTitle>Create Package</SheetTitle>
-            <SheetDescription>Create a package and configure variants for each day of the week.</SheetDescription>
+            <SheetTitle>{i18n.form.createTitle}</SheetTitle>
+            <SheetDescription>{i18n.form.createDescription}</SheetDescription>
           </SheetHeader>
 
-          <PackageForm onSubmit={onSubmitCreatePackage} submitLabel="Create Package" />
+          <PackageForm
+            key={`${language}-create`}
+            onSubmit={onSubmitCreatePackage}
+            submitLabel={i18n.form.submitCreate}
+          />
         </SheetContent>
       </Sheet>
 
       <Sheet open={isEditSheetOpen} onOpenChange={setEditSheetOpen}>
         <SheetContent side="right" className="w-full overflow-hidden sm:!max-w-[880px]">
           <SheetHeader>
-            <SheetTitle>Edit Package</SheetTitle>
-            <SheetDescription>Update package details, day plans, variants, and food items.</SheetDescription>
+            <SheetTitle>{i18n.form.editTitle}</SheetTitle>
+            <SheetDescription>{i18n.form.editDescription}</SheetDescription>
           </SheetHeader>
 
           <PackageForm
+            key={`${language}-edit`}
             onSubmit={onSubmitEditPackage}
             initialValues={selectedItem ?? undefined}
-            submitLabel="Save Changes"
+            submitLabel={i18n.form.submitSave}
           />
         </SheetContent>
       </Sheet>
@@ -105,13 +114,13 @@ export const Packages = () => {
       <Sheet open={isViewSheetOpen} onOpenChange={(open) => (open ? setViewSheetOpen(true) : closeViewSheet())}>
         <SheetContent side="right" className="w-full overflow-auto sm:!max-w-[880px]">
           <SheetHeader>
-            <SheetTitle>Package Details</SheetTitle>
-            <SheetDescription>Review this package, its day plans, and all configured variants.</SheetDescription>
+            <SheetTitle>{i18n.details.title}</SheetTitle>
+            <SheetDescription>{i18n.details.viewDescription}</SheetDescription>
           </SheetHeader>
 
           <If
             expression={!!selectedViewItem}
-            fallback={<p className="text-sm text-muted-foreground">No package found.</p>}
+            fallback={<p className="text-sm text-muted-foreground">{i18n.details.noPackage}</p>}
           >
             {selectedViewItem && <PackageDetails item={selectedViewItem} />}
           </If>

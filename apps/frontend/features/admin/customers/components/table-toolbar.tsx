@@ -1,20 +1,14 @@
 import { UserAuthZEntity } from "@catering/authz";
-import { AbilityAction, USER_ROLE_ENUM } from "@catering/types";
-import { FilterIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { AbilityAction } from "@catering/types";
+import { PlusIcon, SearchIcon } from "lucide-react";
 import { Can } from "@/authz/ability-context";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { useCustomersI18n } from "../lib/customers-i18n";
 import { useCustomersStore } from "../store/useStore";
 
 export const TableToolbar = () => {
+  const i18n = useCustomersI18n();
   const query = useCustomersStore((state) => state.query);
   const setQuery = useCustomersStore((state) => state.setQuery);
   const openCreate = useCustomersStore((state) => state.openCreate);
@@ -26,42 +20,15 @@ export const TableToolbar = () => {
         <Input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search by name, email or id"
+          placeholder={i18n.toolbar.searchPlaceholder}
           className="pl-8"
         />
       </div>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" type="button">
-            <FilterIcon className="size-4" />
-            Filter
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-64">
-          <DropdownMenuLabel>Role</DropdownMenuLabel>
-          {Object.values(USER_ROLE_ENUM).map((role) => (
-            <DropdownMenuCheckboxItem key={role} checked={false} onCheckedChange={() => {}}>
-              {role}
-            </DropdownMenuCheckboxItem>
-          ))}
-
-          <DropdownMenuSeparator />
-          <DropdownMenuLabel>Status</DropdownMenuLabel>
-
-          <DropdownMenuSeparator />
-          <div className="p-1">
-            <Button type="button" variant="ghost" size="sm" className="w-full" onClick={() => {}}>
-              Reset Filters
-            </Button>
-          </div>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
       <Can I={AbilityAction.CREATE} a={UserAuthZEntity}>
         <Button type="button" className="ml-auto" onClick={openCreate}>
           <PlusIcon className="size-4" />
-          Create Customer
+          {i18n.toolbar.createCustomer}
         </Button>
       </Can>
     </div>

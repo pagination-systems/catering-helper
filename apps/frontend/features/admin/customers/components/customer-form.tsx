@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useCustomersI18n } from "../lib/customers-i18n";
 import { type CreateCustomerValues, createCustomerSchema } from "../schemas/customer.schema";
 
 interface CustomerFormProps {
@@ -17,9 +18,11 @@ const getDefaultValues = (initialValues?: CreateCustomerValues): CreateCustomerV
   phone: initialValues?.phone ?? "",
 });
 
-export const CustomerForm = ({ onSubmit, initialValues, submitLabel = "Create User" }: CustomerFormProps) => {
+export const CustomerForm = ({ onSubmit, initialValues, submitLabel }: CustomerFormProps) => {
+  const i18n = useCustomersI18n();
+  const resolvedSubmitLabel = submitLabel ?? i18n.form.createCustomer;
   const form = useForm<CreateCustomerValues>({
-    resolver: zodResolver(createCustomerSchema),
+    resolver: zodResolver(createCustomerSchema(i18n.form.validation)),
     defaultValues: getDefaultValues(initialValues),
   });
 
@@ -40,9 +43,9 @@ export const CustomerForm = ({ onSubmit, initialValues, submitLabel = "Create Us
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Full Name</FormLabel>
+                <FormLabel>{i18n.form.nameLabel}</FormLabel>
                 <FormControl>
-                  <Input type="text" placeholder="Enter full name" {...field} />
+                  <Input type="text" placeholder={i18n.form.namePlaceholder} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -54,9 +57,9 @@ export const CustomerForm = ({ onSubmit, initialValues, submitLabel = "Create Us
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone</FormLabel>
+                <FormLabel>{i18n.form.phoneLabel}</FormLabel>
                 <FormControl>
-                  <Input type="tel" placeholder="Enter phone number" {...field} />
+                  <Input type="tel" placeholder={i18n.form.phonePlaceholder} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -65,7 +68,7 @@ export const CustomerForm = ({ onSubmit, initialValues, submitLabel = "Create Us
         </div>
 
         <div className="mt-auto flex justify-end border-t pt-4">
-          <Button type="submit">{submitLabel}</Button>
+          <Button type="submit">{resolvedSubmitLabel}</Button>
         </div>
       </form>
     </Form>

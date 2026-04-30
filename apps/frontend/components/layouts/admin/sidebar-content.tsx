@@ -4,12 +4,10 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { useAbility } from "@/authz/ability-context";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/providers/language-provider";
 import { NavItem } from "./nav-item";
-import { filterNavigationByPermission, type NavigationItem, navigationItems } from "./navigation";
+import { filterNavigationByPermission, getNavigationItems, type NavigationItem } from "./navigation";
 import { useAdminLayout } from "./store/useStore";
-
-const SIDEBAR_LOGO = "CH";
-const SIDEBAR_TITLE = "Catering Helper";
 
 interface SidebarContentProps {
   items: NavigationItem[];
@@ -30,7 +28,7 @@ function SidebarHeader() {
     >
       <Link href="/admin/dashboard" className="flex items-center gap-2 overflow-hidden">
         <span className="inline-flex h-8 w-8 items-center justify-center rounded-sm bg-sidebar-primary text-sm font-bold text-sidebar-primary-foreground">
-          {SIDEBAR_LOGO}
+          CH
         </span>
         <span
           className={cn(
@@ -38,7 +36,7 @@ function SidebarHeader() {
             isSidebarCollapsed ? "max-w-0 opacity-0" : "max-w-[12rem] opacity-100",
           )}
         >
-          {SIDEBAR_TITLE}
+          Catering Helper
         </span>
       </Link>
     </div>
@@ -66,7 +64,8 @@ function SidebarMenu({ items }: SidebarContentProps) {
  */
 export function SidebarContent() {
   const ability = useAbility();
-  const items = useMemo(() => filterNavigationByPermission(navigationItems, ability), [ability]);
+  const { language } = useLanguage();
+  const items = useMemo(() => filterNavigationByPermission(getNavigationItems(language), ability), [ability, language]);
 
   return (
     <>

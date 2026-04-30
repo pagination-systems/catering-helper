@@ -8,9 +8,15 @@ export interface GetUsersResponse {
   };
 }
 
-export const createCustomerSchema = z.object({
-  name: z.string().trim().min(2, "Name must be at least 2 characters."),
-  phone: z.string().trim().min(10, "Phone number must be at least 10 characters."),
-});
+export interface CreateCustomerSchemaMessages {
+  nameMin: string;
+  phoneMin: string;
+}
 
-export type CreateCustomerValues = z.infer<typeof createCustomerSchema>;
+export const createCustomerSchema = (messages: CreateCustomerSchemaMessages) =>
+  z.object({
+    name: z.string().trim().min(2, messages.nameMin),
+    phone: z.string().trim().min(10, messages.phoneMin),
+  });
+
+export type CreateCustomerValues = z.infer<ReturnType<typeof createCustomerSchema>>;

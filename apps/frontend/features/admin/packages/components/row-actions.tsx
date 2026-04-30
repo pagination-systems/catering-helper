@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { interpolate, usePackagesI18n } from "../lib/packages-i18n";
 import type { ICateringPackage } from "../schemas/package.schema";
 import { usePackagesStore } from "../store/useStore";
 
@@ -18,6 +19,7 @@ interface RowActionsProps {
 }
 
 export const RowActions = ({ item }: RowActionsProps) => {
+  const i18n = usePackagesI18n();
   const openView = usePackagesStore((state) => state.openView);
   const openEdit = usePackagesStore((state) => state.openEdit);
   const openDeleteDialog = usePackagesStore((state) => state.openDeleteDialog);
@@ -26,7 +28,12 @@ export const RowActions = ({ item }: RowActionsProps) => {
     <div className="flex justify-end">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button type="button" variant="ghost" size="icon-sm" aria-label={`Open actions for ${item.name}`}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            aria-label={interpolate(i18n.actions.openActionsFor, { name: item.name })}
+          >
             <MoreHorizontalIcon className="size-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -34,21 +41,21 @@ export const RowActions = ({ item }: RowActionsProps) => {
           <Can I={AbilityAction.READ} a={PackageAuthZEntity}>
             <DropdownMenuItem onSelect={() => openView(item)}>
               <EyeIcon className="size-4" />
-              View
+              {i18n.actions.view}
             </DropdownMenuItem>
           </Can>
           <DropdownMenuSeparator />
           <Can I={AbilityAction.UPDATE} a={PackageAuthZEntity}>
             <DropdownMenuItem onSelect={() => openEdit(item)}>
               <PencilIcon className="size-4" />
-              Edit
+              {i18n.actions.edit}
             </DropdownMenuItem>
           </Can>
           <DropdownMenuSeparator />
           <Can I={AbilityAction.HARD_DELETE} a={PackageAuthZEntity}>
             <DropdownMenuItem variant="destructive" onSelect={() => openDeleteDialog(item)}>
               <Trash2Icon className="size-4" />
-              Delete
+              {i18n.actions.delete}
             </DropdownMenuItem>
           </Can>
         </DropdownMenuContent>

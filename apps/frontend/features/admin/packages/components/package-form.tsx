@@ -12,6 +12,7 @@ import { Select, type SelectOption } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { usePackagesI18n } from "../lib/packages-i18n";
 import { type CreatePackageValues, createPackageSchema, type DayName, dayOrder } from "../schemas/package.schema";
 
 interface PackageFormProps {
@@ -33,21 +34,6 @@ interface VariantCardProps {
   canRemove: boolean;
   onRemove: () => void;
 }
-
-const dayLabelMap: Record<DayName, string> = {
-  Sat: "Saturday",
-  Sun: "Sunday",
-  Mon: "Monday",
-  Tue: "Tuesday",
-  Wed: "Wednesday",
-  Thu: "Thursday",
-  Fri: "Friday",
-};
-
-const statusOptions: SelectOption<PACKAGE_STATUS_ENUM>[] = Object.values(PACKAGE_STATUS_ENUM).map((status) => ({
-  value: status,
-  label: status,
-}));
 
 const createEmptyVariant = () => ({
   id: crypto.randomUUID(),
@@ -82,6 +68,7 @@ const getDefaultValues = (initialValues?: CreatePackageValues): CreatePackageVal
 });
 
 const VariantCard = ({ form, dayIndex, variantIndex, canRemove, onRemove }: VariantCardProps) => {
+  const i18n = usePackagesI18n();
   const variantPrefix = `days.${dayIndex}.variants.${variantIndex}` as const;
 
   const {
@@ -115,14 +102,16 @@ const VariantCard = ({ form, dayIndex, variantIndex, canRemove, onRemove }: Vari
       )}
     >
       <div className="mb-3 flex items-center justify-between">
-        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Variant {variantIndex + 1}</p>
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          {i18n.form.variantPrefix} {variantIndex + 1}
+        </p>
         <Button
           type="button"
           variant="ghost"
           size="icon"
           onClick={onRemove}
           disabled={!canRemove}
-          aria-label="Remove variant"
+          aria-label={i18n.form.removeVariant}
         >
           <Trash2Icon className="size-4" />
         </Button>
@@ -130,21 +119,21 @@ const VariantCard = ({ form, dayIndex, variantIndex, canRemove, onRemove }: Vari
 
       <div className="grid gap-3 md:grid-cols-2">
         <div className="space-y-1.5">
-          <Label className="text-xs">Variant Name</Label>
-          <Input {...form.register(`${variantPrefix}.name`)} placeholder="Chicken Bhuna Set" />
+          <Label className="text-xs">{i18n.form.variantNameLabel}</Label>
+          <Input {...form.register(`${variantPrefix}.name`)} placeholder={i18n.form.variantNamePlaceholder} />
           {variantNameError ? <p className="text-xs text-destructive">{variantNameError}</p> : null}
         </div>
 
         <div className="space-y-1.5">
-          <Label className="text-xs">Variant Note</Label>
-          <Input {...form.register(`${variantPrefix}.note`)} placeholder="Mild spice, office favorite" />
+          <Label className="text-xs">{i18n.form.variantNoteLabel}</Label>
+          <Input {...form.register(`${variantPrefix}.note`)} placeholder={i18n.form.variantNotePlaceholder} />
         </div>
       </div>
 
       <div className="mt-3 flex items-center justify-between rounded-sm border border-border/70 bg-muted/20 px-3 py-2">
         <div>
-          <p className="text-xs font-medium">Available</p>
-          <p className="text-[11px] text-muted-foreground">Toggle this variant on/off for client orders.</p>
+          <p className="text-xs font-medium">{i18n.form.availableLabel}</p>
+          <p className="text-[11px] text-muted-foreground">{i18n.form.availableDescription}</p>
         </div>
         <FormField
           control={form.control}
@@ -161,9 +150,9 @@ const VariantCard = ({ form, dayIndex, variantIndex, canRemove, onRemove }: Vari
 
       <div className="mt-4 space-y-2">
         <div className="flex items-center justify-between">
-          <Label className="text-xs">Food Items</Label>
+          <Label className="text-xs">{i18n.form.foodItemsLabel}</Label>
           <Button type="button" variant="outline" size="sm" onClick={() => append("")}>
-            <PlusIcon className="mr-1 size-4" /> Add Item
+            <PlusIcon className="mr-1 size-4" /> {i18n.form.addItem}
           </Button>
         </div>
 
@@ -173,7 +162,10 @@ const VariantCard = ({ form, dayIndex, variantIndex, canRemove, onRemove }: Vari
             return (
               <div key={itemField.id} className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <Input {...form.register(`${variantPrefix}.items.${itemIndex}`)} placeholder="Rice" />
+                  <Input
+                    {...form.register(`${variantPrefix}.items.${itemIndex}`)}
+                    placeholder={i18n.form.itemPlaceholder}
+                  />
                   <Button type="button" variant="ghost" size="icon" onClick={() => remove(itemIndex)}>
                     <Trash2Icon className="size-4" />
                   </Button>
@@ -190,6 +182,7 @@ const VariantCard = ({ form, dayIndex, variantIndex, canRemove, onRemove }: Vari
 };
 
 const DayPlanSection = ({ form, dayIndex, day }: DayPlanSectionProps) => {
+  const i18n = usePackagesI18n();
   const {
     fields: variants,
     append,
@@ -203,11 +196,10 @@ const DayPlanSection = ({ form, dayIndex, day }: DayPlanSectionProps) => {
     <div className="rounded-md border border-border/70 p-3">
       <div className="mb-3 flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold text-foreground">{dayLabelMap[day]}</p>
-          <p className="text-xs text-muted-foreground">{day}</p>
+          <p className="text-sm font-semibold text-foreground">{i18n.dayLabels[day]}</p>
         </div>
         <Button type="button" variant="outline" size="sm" onClick={() => append(createEmptyVariant())}>
-          <PlusIcon className="mr-1 size-4" /> Add Variant
+          <PlusIcon className="mr-1 size-4" /> {i18n.form.addVariant}
         </Button>
       </div>
 
@@ -227,9 +219,10 @@ const DayPlanSection = ({ form, dayIndex, day }: DayPlanSectionProps) => {
   );
 };
 
-export const PackageForm = ({ onSubmit, initialValues, submitLabel = "Create Package" }: PackageFormProps) => {
+export const PackageForm = ({ onSubmit, initialValues, submitLabel }: PackageFormProps) => {
+  const i18n = usePackagesI18n();
   const form = useForm<CreatePackageValues>({
-    resolver: zodResolver(createPackageSchema),
+    resolver: zodResolver(createPackageSchema(i18n.form.validation)),
     defaultValues: getDefaultValues(initialValues),
   });
 
@@ -243,6 +236,11 @@ export const PackageForm = ({ onSubmit, initialValues, submitLabel = "Create Pac
   });
 
   const dayPlans = useWatch({ control: form.control, name: "days" }) || [];
+  const statusOptions: SelectOption<PACKAGE_STATUS_ENUM>[] = Object.values(PACKAGE_STATUS_ENUM).map((status) => ({
+    value: status,
+    label: status,
+  }));
+  const resolvedSubmitLabel = submitLabel ?? i18n.form.submitCreate;
 
   return (
     <Form {...form}>
@@ -250,8 +248,8 @@ export const PackageForm = ({ onSubmit, initialValues, submitLabel = "Create Pac
         <div className="space-y-4 overflow-y-auto pr-1">
           <Card size="sm">
             <CardHeader>
-              <CardTitle>Package Overview</CardTitle>
-              <CardDescription>Define the core pricing and positioning of this package.</CardDescription>
+              <CardTitle>{i18n.form.overviewTitle}</CardTitle>
+              <CardDescription>{i18n.form.overviewDescription}</CardDescription>
             </CardHeader>
             <CardContent className="mt-2 grid gap-4 md:grid-cols-2">
               <FormField
@@ -259,9 +257,9 @@ export const PackageForm = ({ onSubmit, initialValues, submitLabel = "Create Pac
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Package Name</FormLabel>
+                    <FormLabel>{i18n.form.packageNameLabel}</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Daily Basic Package" {...field} />
+                      <Input type="text" placeholder={i18n.form.packageNamePlaceholder} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -273,7 +271,7 @@ export const PackageForm = ({ onSubmit, initialValues, submitLabel = "Create Pac
                 name="pricePerMeal"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price / Meal (BDT)</FormLabel>
+                    <FormLabel>{i18n.form.priceLabel}</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -295,7 +293,7 @@ export const PackageForm = ({ onSubmit, initialValues, submitLabel = "Create Pac
                 name="status"
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
-                    <FormLabel>Status</FormLabel>
+                    <FormLabel>{i18n.form.statusLabel}</FormLabel>
                     <FormControl>
                       <Select
                         options={statusOptions}
@@ -314,13 +312,9 @@ export const PackageForm = ({ onSubmit, initialValues, submitLabel = "Create Pac
                 name="description"
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>{i18n.form.descriptionLabel}</FormLabel>
                     <FormControl>
-                      <Textarea
-                        rows={3}
-                        placeholder="Affordable weekday office meals with familiar favorites."
-                        {...field}
-                      />
+                      <Textarea rows={3} placeholder={i18n.form.descriptionPlaceholder} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -332,14 +326,15 @@ export const PackageForm = ({ onSubmit, initialValues, submitLabel = "Create Pac
           <Card size="sm">
             <CardHeader className="space-y-3">
               <div>
-                <CardTitle>7-Day Menu Plan</CardTitle>
-                <CardDescription>Configure one or more variants per day and edit food items quickly.</CardDescription>
+                <CardTitle>{i18n.form.menuPlanTitle}</CardTitle>
+                <CardDescription>{i18n.form.menuPlanDescription}</CardDescription>
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground md:grid-cols-4">
                 {dayPlans.map((item) => (
                   <div key={item.day} className="rounded border border-border/60 bg-muted/30 px-2 py-1">
-                    {item.day}: {item.variants?.length || 0} variant{item.variants?.length > 1 ? "s" : ""}
+                    {i18n.dayLabels[item.day]}: {item.variants?.length || 0}{" "}
+                    {(item.variants?.length || 0) === 1 ? i18n.form.variantLabel : i18n.form.variantsLabel}
                   </div>
                 ))}
               </div>
@@ -356,7 +351,7 @@ export const PackageForm = ({ onSubmit, initialValues, submitLabel = "Create Pac
         </div>
 
         <div className="mt-4 flex justify-end border-t pt-4">
-          <Button type="submit">{submitLabel}</Button>
+          <Button type="submit">{resolvedSubmitLabel}</Button>
         </div>
       </form>
     </Form>
