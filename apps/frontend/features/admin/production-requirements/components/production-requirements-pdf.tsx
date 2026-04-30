@@ -1,14 +1,17 @@
 import { Document, Font, Page, pdf, StyleSheet, Text, View } from "@react-pdf/renderer";
 import moment from "moment";
 import { formatDecimal } from "@/lib/utils";
+import { getProductionRequirementsContent } from "../lib/production-requirements-i18n";
 import type { ProductionRequirementsData } from "../schemas/production.schema";
 
 type ProductionRequirementsPdfProps = {
   data: ProductionRequirementsData;
+  language?: string;
 };
 
 type ProductionRequirementsPdfDocumentProps = {
   data: ProductionRequirementsData;
+  language?: string;
 };
 
 const DATE_FORMAT = "DD MMM YYYY";
@@ -231,37 +234,39 @@ const styles = StyleSheet.create({
 
 const formatItems = (items: string[]) => (items.length ? items.join(" · ") : "No items listed");
 
-const ProductionRequirementsPdfDocument = ({ data }: ProductionRequirementsPdfDocumentProps) => {
+const ProductionRequirementsPdfDocument = ({ data, language }: ProductionRequirementsPdfDocumentProps) => {
+  const t = getProductionRequirementsContent(language ?? "en");
+
   const todayLabel = moment(data.date).format(DATE_FORMAT);
   const packageCount = data.packages.length;
   const variantCount = data.packages.reduce((sum, pkg) => sum + pkg.variants.length, 0);
 
   return (
-    <Document title={`Production-Requirements-${todayLabel}`}>
+    <Document title={`${t.title}-${todayLabel}`}>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <View style={styles.headerTop}>
             <View>
-              <Text style={styles.title}>Production Requirements</Text>
-              <Text style={styles.subtitle}>Clean production summary by package and variant</Text>
+              <Text style={styles.title}>{t.title}</Text>
+              <Text style={styles.subtitle}>{t.pdf.subtitle}</Text>
             </View>
             <View>
-              <Text style={styles.subtitle}>Date: {todayLabel}</Text>
-              <Text style={styles.subtitle}>Day: {data.dayName}</Text>
+              <Text style={styles.subtitle}>{`${t.pdf.dateLabel}: ${todayLabel}`}</Text>
+              <Text style={styles.subtitle}>{`${t.pdf.dayLabel}: ${data.dayName}`}</Text>
             </View>
           </View>
 
           <View style={styles.summaryRow}>
             <View style={styles.summaryCard}>
-              <Text style={styles.summaryLabel}>Packages</Text>
+              <Text style={styles.summaryLabel}>{t.pdf.packages}</Text>
               <Text style={styles.summaryValue}>{packageCount}</Text>
             </View>
             <View style={styles.summaryCard}>
-              <Text style={styles.summaryLabel}>Variants</Text>
+              <Text style={styles.summaryLabel}>{t.pdf.variants}</Text>
               <Text style={styles.summaryValue}>{variantCount}</Text>
             </View>
             <View style={styles.summaryCard}>
-              <Text style={styles.summaryLabel}>Total Meals</Text>
+              <Text style={styles.summaryLabel}>{t.pdf.totalMeals}</Text>
               <Text style={styles.summaryValue}>{data.totalMeals}</Text>
             </View>
           </View>
@@ -278,20 +283,21 @@ const ProductionRequirementsPdfDocument = ({ data }: ProductionRequirementsPdfDo
                     {pkg.packageName} ({formatDecimal(pkg.packagePrice)})
                   </Text>
                   <Text style={styles.packageMeta}>
-                    {pkg.variants.length} variant{pkg.variants.length !== 1 ? "s" : ""}
+                    {pkg.variants.length}{" "}
+                    {pkg.variants.length !== 1 ? t.packageCard.variantsPlural : t.packageCard.variantsSingular}
                   </Text>
                 </View>
                 <View>
                   <Text style={styles.packageTotal}>{pkg.totalMeals}</Text>
-                  <Text style={styles.packageTotalLabel}>Meals</Text>
+                  <Text style={styles.packageTotalLabel}>{t.pdf.mealsLabel}</Text>
                 </View>
               </View>
 
               <View style={styles.table}>
                 <View style={styles.tableHeader}>
-                  <Text style={[styles.tableHeaderText, styles.colVariant]}>Variant</Text>
-                  <Text style={[styles.tableHeaderText, styles.colItems]}>Food Items</Text>
-                  <Text style={[styles.tableHeaderText, styles.colMeals]}>Meals</Text>
+                  <Text style={[styles.tableHeaderText, styles.colVariant]}>{t.table.variant}</Text>
+                  <Text style={[styles.tableHeaderText, styles.colItems]}>{t.table.foodItems}</Text>
+                  <Text style={[styles.tableHeaderText, styles.colMeals]}>{t.table.meals}</Text>
                 </View>
 
                 {pkg.variants.map((variant, variantIndex) => {
@@ -335,8 +341,10 @@ const ProductionRequirementsPdfDocument = ({ data }: ProductionRequirementsPdfDo
               style={styles.footerText}
               render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
             />
-            <Text style={styles.footerText}>Production Requirements</Text>
-            <Text style={styles.footerText}>Generated: {moment(data.date).format(GENERATED_AT_FORMAT)}</Text>
+            <Text style={styles.footerText}>{t.title}</Text>
+            <Text
+              style={styles.footerText}
+            >{`${t.pdf.generated}: ${moment(data.date).format(GENERATED_AT_FORMAT)}`}</Text>
           </View>
         </View>
       </Page>
@@ -344,10 +352,10 @@ const ProductionRequirementsPdfDocument = ({ data }: ProductionRequirementsPdfDo
   );
 };
 
-export const downloadProductionRequirementsPdf = async ({ data }: ProductionRequirementsPdfProps) => {
+export const downloadProductionRequirementsPdf = async ({ data, language }: ProductionRequirementsPdfProps) => {
   ensurePdfFontRegistered();
 
-  const blob = await pdf(<ProductionRequirementsPdfDocument data={data} />).toBlob();
+  const blob = await pdf(<ProductionRequirementsPdfDocument data={data} language={language} />).toBlob();
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
 

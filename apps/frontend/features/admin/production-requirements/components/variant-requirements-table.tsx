@@ -1,5 +1,6 @@
 "use client";
 
+import { useProductionRequirementsI18n } from "../lib/production-requirements-i18n";
 import type { VariantRequirement } from "../schemas/production.schema";
 
 interface VariantRequirementsTableProps {
@@ -7,14 +8,15 @@ interface VariantRequirementsTableProps {
 }
 
 export const VariantRequirementsTable = ({ variants }: VariantRequirementsTableProps) => {
+  const i18n = useProductionRequirementsI18n();
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-border">
-            <th className="px-4 py-3 text-left font-medium text-muted-foreground">Variant</th>
-            <th className="px-4 py-3 text-left font-medium text-muted-foreground">Food Items</th>
-            <th className="px-4 py-3 text-right font-medium text-muted-foreground">Meals</th>
+            <th className="px-4 py-3 text-left font-medium text-muted-foreground">{i18n.table.variant}</th>
+            <th className="px-4 py-3 text-left font-medium text-muted-foreground">{i18n.table.foodItems}</th>
+            <th className="px-4 py-3 text-right font-medium text-muted-foreground">{i18n.table.meals}</th>
           </tr>
         </thead>
         <tbody>
