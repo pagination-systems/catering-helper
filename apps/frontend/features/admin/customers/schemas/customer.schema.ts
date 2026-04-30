@@ -1,11 +1,5 @@
+import type { IUser } from "@catering/types";
 import { z } from "zod";
-
-export enum UserRole {
-  Owner = "Owner",
-  Admin = "Admin",
-  Manager = "Manager",
-  Support = "Support",
-}
 
 export interface PaginationMeta {
   totalDocs: number;
@@ -19,15 +13,6 @@ export interface PaginationMeta {
   pagingCounter: number;
 }
 
-export interface IUser {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export interface GetUsersResponse {
   data: IUser[];
   meta: {
@@ -35,10 +20,9 @@ export interface GetUsersResponse {
   };
 }
 
-export const createUserSchema = z.object({
+export const createCustomerSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters."),
-  email: z.string().trim().email("Enter a valid email address."),
-  role: z.enum(UserRole),
+  phone: z.string().trim().min(10, "Phone number must be at least 10 characters."),
 });
 
-export type CreateUserValues = z.infer<typeof createUserSchema>;
+export type CreateCustomerValues = z.infer<typeof createCustomerSchema>;

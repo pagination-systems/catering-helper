@@ -10,6 +10,7 @@ import {
 } from "@catering/authz";
 import { AbilityAction } from "@catering/types";
 import {
+  Fingerprint,
   HandCoins,
   LayoutDashboard,
   ListOrdered,
@@ -48,8 +49,14 @@ export const navigationItems: NavigationItem[] = [
     icon: LayoutDashboard,
   },
   {
-    label: "Users",
-    href: "/admin/users",
+    label: "Catering Helper",
+    href: "/admin/catering-helper",
+    icon: Fingerprint,
+    canView: (ability) => ability.can(AbilityAction.MANAGE, UserAuthZEntity),
+  },
+  {
+    label: "Customers",
+    href: "/admin/customers",
     icon: Users,
     canView: (ability) => ability.can(AbilityAction.MANAGE, UserAuthZEntity),
   },

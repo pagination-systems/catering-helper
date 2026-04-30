@@ -1,33 +1,25 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, type SelectOption } from "@/components/ui/select";
-import { type CreateUserValues, createUserSchema, UserRole } from "../schemas/user.schema";
+import { type CreateCustomerValues, createCustomerSchema } from "../schemas/customer.schema";
 
-interface UserFormProps {
-  onSubmit: (data: CreateUserValues) => void;
-  initialValues?: CreateUserValues;
+interface CustomerFormProps {
+  onSubmit: (data: CreateCustomerValues) => void;
+  initialValues?: CreateCustomerValues;
   submitLabel?: string;
 }
 
-const roleOptions: SelectOption<UserRole>[] = Object.values(UserRole).map((role) => ({
-  value: role,
-  label: role,
-}));
-
-const getDefaultValues = (initialValues?: CreateUserValues): CreateUserValues => ({
+const getDefaultValues = (initialValues?: CreateCustomerValues): CreateCustomerValues => ({
   name: initialValues?.name ?? "",
-  email: initialValues?.email ?? "",
-  role: initialValues?.role ?? UserRole.Manager,
+  phone: initialValues?.phone ?? "",
 });
 
-export const UserForm = ({ onSubmit, initialValues, submitLabel = "Create User" }: UserFormProps) => {
-  const form = useForm<CreateUserValues>({
-    resolver: zodResolver(createUserSchema),
+export const CustomerForm = ({ onSubmit, initialValues, submitLabel = "Create User" }: CustomerFormProps) => {
+  const form = useForm<CreateCustomerValues>({
+    resolver: zodResolver(createCustomerSchema),
     defaultValues: getDefaultValues(initialValues),
   });
 
@@ -35,7 +27,7 @@ export const UserForm = ({ onSubmit, initialValues, submitLabel = "Create User" 
     form.reset(getDefaultValues(initialValues));
   }, [form, initialValues]);
 
-  const handleSubmit = (data: CreateUserValues) => {
+  const handleSubmit = (data: CreateCustomerValues) => {
     onSubmit(data);
   };
 
@@ -59,32 +51,12 @@ export const UserForm = ({ onSubmit, initialValues, submitLabel = "Create User" 
 
           <FormField
             control={form.control}
-            name="email"
+            name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Phone</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="name@company.com" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="role"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Role</FormLabel>
-                <FormControl>
-                  <Select
-                    name={field.name}
-                    options={roleOptions}
-                    value={field.value}
-                    onValueChange={field.onChange}
-                    onBlur={field.onBlur}
-                  />
+                  <Input type="tel" placeholder="Enter phone number" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

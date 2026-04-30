@@ -1,3 +1,4 @@
+import { USER_ROLE_ENUM } from "@catering/types";
 import { FilterIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,13 +10,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { UserRole } from "../schemas/user.schema";
-import { useUsersStore } from "../store/useStore";
+import { useCustomersStore } from "../store/useStore";
 
 export const TableToolbar = () => {
-  const query = useUsersStore((state) => state.query);
-  const setQuery = useUsersStore((state) => state.setQuery);
-  const openCreate = useUsersStore((state) => state.openCreate);
+  const query = useCustomersStore((state) => state.query);
+  const setQuery = useCustomersStore((state) => state.setQuery);
+  const openCreate = useCustomersStore((state) => state.openCreate);
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -38,7 +38,7 @@ export const TableToolbar = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-64">
           <DropdownMenuLabel>Role</DropdownMenuLabel>
-          {Object.values(UserRole).map((role) => (
+          {Object.values(USER_ROLE_ENUM).map((role) => (
             <DropdownMenuCheckboxItem key={role} checked={false} onCheckedChange={() => {}}>
               {role}
             </DropdownMenuCheckboxItem>
@@ -58,7 +58,7 @@ export const TableToolbar = () => {
 
       <Button type="button" className="ml-auto" onClick={openCreate}>
         <PlusIcon className="size-4" />
-        Create User
+        Create Customer
       </Button>
     </div>
   );

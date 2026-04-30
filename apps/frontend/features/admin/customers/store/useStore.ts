@@ -1,7 +1,8 @@
+import { type IUser, USER_ROLE_ENUM } from "@catering/types";
 import { create } from "zustand";
-import { type CreateUserValues, type GetUsersResponse, type IUser, UserRole } from "../schemas/user.schema";
+import type { CreateCustomerValues, GetUsersResponse } from "../schemas/customer.schema";
 
-type UsersStoreState = {
+type CustomersStoreState = {
   list: GetUsersResponse;
   query: string;
   isCreateSheetOpen: boolean;
@@ -26,50 +27,42 @@ type UsersStoreState = {
   closeDeleteDialog: () => void;
   addItem: (item: IUser) => void;
   deleteUser: (userId: IUser["id"]) => void;
-  updateUser: (userId: IUser["id"], values: CreateUserValues) => void;
+  updateUser: (userId: IUser["id"], values: CreateCustomerValues) => void;
 };
 
-export const useUsersStore = create<UsersStoreState>((set) => {
+export const useCustomersStore = create<CustomersStoreState>((set) => {
   const seedUsers: IUser[] = [
     {
       id: "1",
-      name: "Alice Johnson",
-      email: "alice.johnson@example.com",
-      role: UserRole.Admin,
+      name: "Customer 1",
+      phone: "01700000001",
+      role: USER_ROLE_ENUM.CUSTOMER,
       createdAt: new Date("2024-01-15T10:00:00Z"),
       updatedAt: new Date("2024-06-01T12:00:00Z"),
     },
     {
       id: "2",
-      name: "Bob Smith",
-      email: "bob.smith@example.com",
-      role: UserRole.Manager,
+      name: "Customer 2",
+      phone: "01700000002",
+      role: USER_ROLE_ENUM.CUSTOMER,
       createdAt: new Date("2024-02-20T14:30:00Z"),
       updatedAt: new Date("2024-06-05T09:45:00Z"),
     },
     {
       id: "3",
-      name: "Charlie Davis",
-      email: "charlie.davis@example.com",
-      role: UserRole.Support,
+      name: "Customer 3",
+      phone: "01700000003",
+      role: USER_ROLE_ENUM.CUSTOMER,
       createdAt: new Date("2024-03-10T08:15:00Z"),
       updatedAt: new Date("2024-06-10T16:20:00Z"),
     },
     {
       id: "4",
-      name: "Diana Rahman",
-      email: "diana.rahman@example.com",
-      role: UserRole.Owner,
+      name: "Customer 4",
+      phone: "01700000004",
+      role: USER_ROLE_ENUM.CUSTOMER,
       createdAt: new Date("2024-04-02T09:00:00Z"),
       updatedAt: new Date("2024-06-12T11:30:00Z"),
-    },
-    {
-      id: "5",
-      name: "Evan Karim",
-      email: "evan.karim@example.com",
-      role: UserRole.Admin,
-      createdAt: new Date("2024-04-18T13:25:00Z"),
-      updatedAt: new Date("2024-06-14T15:10:00Z"),
     },
   ];
 

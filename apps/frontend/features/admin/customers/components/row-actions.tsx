@@ -1,3 +1,4 @@
+import type { IUser } from "@catering/types";
 import { EyeIcon, MoreHorizontalIcon, PencilIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,17 +8,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { IUser } from "../schemas/user.schema";
-import { useUsersStore } from "../store/useStore";
+import { useCustomersStore } from "../store/useStore";
 
 interface RowActionsProps {
   user: IUser;
 }
 
 export const RowActions = ({ user }: RowActionsProps) => {
-  const openView = useUsersStore((state) => state.openView);
-  const openEdit = useUsersStore((state) => state.openEdit);
-  const openDeleteDialog = useUsersStore((state) => state.openDeleteDialog);
+  const openView = useCustomersStore((state) => state.openView);
+  const openEdit = useCustomersStore((state) => state.openEdit);
+  const openDeleteDialog = useCustomersStore((state) => state.openDeleteDialog);
 
   return (
     <div className="flex justify-end">

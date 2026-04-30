@@ -5,53 +5,35 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { SectionHeader } from "../components/section-header";
 import { DeleteConfirmation } from "./components/delete-confirmation";
+import { InvitationForm } from "./components/invitation-form";
+import { SentInvitationsTable } from "./components/sent-invitations-table";
 import { TableToolbar } from "./components/table-toolbar";
 import { UserDetails } from "./components/user-details";
-import { UserForm } from "./components/user-form";
 import { UserTable } from "./components/user-table";
-import type { CreateUserValues, IUser } from "./schemas/user.schema";
+import type { InvitePlatformAdminValues } from "./schemas/user.schema";
 import { useUsersStore } from "./store/useStore";
 
-export const Users = () => {
+export const CateringHelper = () => {
   const data = useUsersStore((state) => state.list);
-  const addItem = useUsersStore((state) => state.addItem);
-  const updateUser = useUsersStore((state) => state.updateUser);
-  const isCreateSheetOpen = useUsersStore((state) => state.isCreateSheetOpen);
-  const isEditSheetOpen = useUsersStore((state) => state.isEditSheetOpen);
+  const isInvitationSheetOpen = useUsersStore((state) => state.isInvitationSheetOpen);
+  const isInvitationHistorySheetOpen = useUsersStore((state) => state.isInvitationHistorySheetOpen);
   const isViewSheetOpen = useUsersStore((state) => state.isViewSheetOpen);
-  const selectedItem = useUsersStore((state) => state.selectedItem);
   const selectedViewItem = useUsersStore((state) => state.selectedViewItem);
-  const setCreateSheetOpen = useUsersStore((state) => state.setCreateSheetOpen);
-  const setEditSheetOpen = useUsersStore((state) => state.setEditSheetOpen);
+  const setInvitationSheetOpen = useUsersStore((state) => state.setInvitationSheetOpen);
+  const setInvitationHistorySheetOpen = useUsersStore((state) => state.setInvitationHistorySheetOpen);
   const setViewSheetOpen = useUsersStore((state) => state.setViewSheetOpen);
-  const closeCreateSheet = useUsersStore((state) => state.closeCreateSheet);
-  const closeEditSheet = useUsersStore((state) => state.closeEditSheet);
+  const closeInvitationSheet = useUsersStore((state) => state.closeInvitationSheet);
+  const closeInvitationHistorySheet = useUsersStore((state) => state.closeInvitationHistorySheet);
   const closeViewSheet = useUsersStore((state) => state.closeViewSheet);
 
-  const onSubmitCreateUser = (values: CreateUserValues) => {
-    const newUser: IUser = {
-      id: crypto.randomUUID(),
-      name: values.name,
-      email: values.email,
-      role: values.role,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    addItem(newUser);
-    closeCreateSheet();
-  };
-
-  const onSubmitEditUser = (values: CreateUserValues) => {
-    if (!selectedItem) return;
-
-    updateUser(selectedItem.id, values);
-    closeEditSheet();
+  const onSubmitInvitation = (values: InvitePlatformAdminValues) => {
+    console.log("Sending invitation with values:", values);
+    closeInvitationSheet();
   };
 
   return (
     <section className="space-y-4" aria-labelledby="users-title">
-      <SectionHeader title="Users" description="Manage roles, permissions, and team access." />
+      <SectionHeader title="Platform Admins" description="Manage platform administrators and their permissions." />
 
       <Card>
         <CardHeader className="space-y-3">
@@ -63,25 +45,32 @@ export const Users = () => {
         </CardContent>
       </Card>
 
-      <Sheet open={isCreateSheetOpen} onOpenChange={setCreateSheetOpen}>
+      <Sheet open={isInvitationSheetOpen} onOpenChange={setInvitationSheetOpen}>
         <SheetContent side="right">
           <SheetHeader>
-            <SheetTitle>Create User</SheetTitle>
-            <SheetDescription>Add a team member and assign role access.</SheetDescription>
+            <SheetTitle>Invite New Platform Admin</SheetTitle>
+            <SheetDescription>Add a new platform admin and assign role access.</SheetDescription>
           </SheetHeader>
 
-          <UserForm onSubmit={onSubmitCreateUser} submitLabel="Create User" />
+          <InvitationForm onSubmit={onSubmitInvitation} submitLabel="Send Invitation" />
         </SheetContent>
       </Sheet>
 
-      <Sheet open={isEditSheetOpen} onOpenChange={setEditSheetOpen}>
-        <SheetContent side="right">
+      <Sheet
+        open={isInvitationHistorySheetOpen}
+        onOpenChange={(open) => (open ? setInvitationHistorySheetOpen(true) : closeInvitationHistorySheet())}
+      >
+        <SheetContent side="right" className="space-y-4 sm:!max-w-[700px]">
           <SheetHeader>
-            <SheetTitle>Edit User</SheetTitle>
-            <SheetDescription>Update team member details and role access.</SheetDescription>
+            <SheetTitle>Sent Invitations</SheetTitle>
+            <SheetDescription>
+              Review recently invited users, resend invitations, or remove them from the list.
+            </SheetDescription>
           </SheetHeader>
 
-          <UserForm onSubmit={onSubmitEditUser} initialValues={selectedItem ?? undefined} submitLabel="Save Changes" />
+          <Card>
+            <SentInvitationsTable />
+          </Card>
         </SheetContent>
       </Sheet>
 

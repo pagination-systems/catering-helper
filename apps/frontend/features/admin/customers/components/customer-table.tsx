@@ -1,21 +1,22 @@
 "use client";
 
+import type { IUser } from "@catering/types";
 import { UsersIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
 import { DataTable, type DataTableColumn } from "../../components/data-table";
-import type { GetUsersResponse, IUser } from "../schemas/user.schema";
-import { useUsersStore } from "../store/useStore";
-import { getRoleBadgeVariant } from "../utils/badge";
+import type { GetUsersResponse } from "../schemas/customer.schema";
+import { useCustomersStore } from "../store/useStore";
+import { getRoleBadgeStyles } from "../utils/badge";
 import { RowActions } from "./row-actions";
 
-interface UserTableProps {
+interface CustomerTableProps {
   data: GetUsersResponse;
   handlePaginate?: (payload: { page: number; limit: number }) => void;
 }
 
-export const UserTable = ({ data, handlePaginate }: UserTableProps) => {
-  const openView = useUsersStore((state) => state.openView);
+export const CustomerTable = ({ data, handlePaginate }: CustomerTableProps) => {
+  const openView = useCustomersStore((state) => state.openView);
 
   const columns: DataTableColumn<IUser>[] = [
     {
@@ -35,13 +36,17 @@ export const UserTable = ({ data, handlePaginate }: UserTableProps) => {
       ),
     },
     {
-      accessorKey: "email",
-      header: "Email",
+      accessorKey: "phone",
+      header: "Phone",
     },
     {
       accessorKey: "role",
       header: "Role",
-      cell: (user) => <Badge variant={getRoleBadgeVariant(user.role)}>{user.role}</Badge>,
+      cell: (user) => (
+        <Badge variant="outline" className={getRoleBadgeStyles(user.role)}>
+          {user.role}
+        </Badge>
+      ),
     },
     {
       accessorKey: "createdAt",
@@ -70,7 +75,7 @@ export const UserTable = ({ data, handlePaginate }: UserTableProps) => {
       emptyState={
         <div className="flex flex-col items-center gap-2">
           <UsersIcon className="size-5" />
-          No users found for your current query and filters.
+          No customers found for your current query and filters.
         </div>
       }
     />

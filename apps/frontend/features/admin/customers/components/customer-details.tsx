@@ -1,9 +1,9 @@
+import type { IUser } from "@catering/types";
 import { Clock, Fingerprint, Mail, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { formatDate } from "@/lib/utils";
-import type { IUser } from "../schemas/user.schema";
-import { getRoleBadgeVariant } from "../utils/badge";
+import { getRoleBadgeStyles } from "../utils/badge";
 
 interface UserDetailsProps {
   user: IUser;
@@ -39,18 +39,18 @@ const DetailField = ({
   </div>
 );
 
-export const UserDetails = ({ user }: UserDetailsProps) => {
+export const CustomerDetails = ({ user }: UserDetailsProps) => {
   return (
     <div className="space-y-6">
       {/* Hero Section - Profile Header */}
-      <div className="relative overflow-hidden rounded-xl border border-border/50 bg-gradient-to-br from-card via-card to-muted/30 p-8 shadow-lg">
+      <div className="relative overflow-hidden rounded-xl border border-border/50 bg-gradient-to-br from-card via-card to-muted/30 p-8">
         {/* Decorative background elements */}
         <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-primary/5 blur-3xl" />
         <div className="absolute -bottom-20 -left-20 h-40 w-40 rounded-full bg-primary/5 blur-3xl" />
 
         <div className="relative flex items-start gap-6">
           {/* Avatar */}
-          <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-2xl font-bold text-primary-foreground shadow-lg">
+          <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-2xl font-bold text-primary-foreground">
             {getInitials(user.name)}
           </div>
 
@@ -58,11 +58,11 @@ export const UserDetails = ({ user }: UserDetailsProps) => {
           <div className="flex-1 min-w-0">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0 flex-1">
-                <h2 className="truncate text-3xl font-bold tracking-tight text-foreground">{user.name}</h2>
-                <p className="mt-1 truncate text-sm text-muted-foreground">{user.email}</p>
+                <h2 className="truncate text-xl font-bold tracking-tight text-foreground">{user.name}</h2>
+                <p className="mt-1 truncate text-sm text-muted-foreground">{user.phone}</p>
               </div>
               <div className="flex-shrink-0">
-                <Badge variant={getRoleBadgeVariant(user.role)} className="px-3 py-1 text-xs font-semibold">
+                <Badge variant="outline" className={getRoleBadgeStyles(user.role)}>
                   {user.role}
                 </Badge>
               </div>
@@ -78,7 +78,7 @@ export const UserDetails = ({ user }: UserDetailsProps) => {
           <h3 className="text-sm font-bold uppercase tracking-wider text-foreground">Contact</h3>
         </div>
         <div className="rounded-lg border border-border/50 bg-card/50 p-5 backdrop-blur-sm transition-all hover:border-border hover:bg-card/80">
-          <DetailField icon={Mail} label="Email Address" value={user.email} />
+          <DetailField icon={Mail} label="Email Address" value={user.phone} />
         </div>
       </div>
 
