@@ -1,4 +1,7 @@
+import { PackageAuthZEntity } from "@catering/authz";
+import { AbilityAction } from "@catering/types";
 import { FilterIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { Can } from "@/authz/ability-context";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -59,10 +62,12 @@ export const TableToolbar = () => {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Button type="button" className="ml-auto" onClick={openCreate}>
-        <PlusIcon className="size-4" />
-        Create Package
-      </Button>
+      <Can I={AbilityAction.CREATE} a={PackageAuthZEntity}>
+        <Button type="button" className="ml-auto" onClick={openCreate}>
+          <PlusIcon className="size-4" />
+          Create Package
+        </Button>
+      </Can>
     </div>
   );
 };

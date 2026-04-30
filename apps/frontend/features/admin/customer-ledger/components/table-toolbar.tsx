@@ -1,6 +1,8 @@
+import { CustomerLedgerAuthZEntity } from "@catering/authz";
+import { AbilityAction } from "@catering/types";
 import { DownloadIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
-
+import { Can } from "@/authz/ability-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { ICustomerLedger } from "../schemas/customer-ledger.schema";
@@ -39,15 +41,17 @@ export const TableToolbar = ({ filteredCustomers }: TableToolbarProps) => {
         />
       </div>
 
-      <Button
-        type="button"
-        variant="secondary"
-        onClick={handleDownload}
-        disabled={!filteredCustomers.length || isDownloading}
-      >
-        <DownloadIcon className="size-4" />
-        {isDownloading ? "Preparing..." : "Download"}
-      </Button>
+      <Can I={AbilityAction.READ} a={CustomerLedgerAuthZEntity}>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={handleDownload}
+          disabled={!filteredCustomers.length || isDownloading}
+        >
+          <DownloadIcon className="size-4" />
+          {isDownloading ? "Preparing..." : "Download"}
+        </Button>
+      </Can>
     </div>
   );
 };

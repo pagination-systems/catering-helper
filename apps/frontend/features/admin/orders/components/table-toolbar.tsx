@@ -1,5 +1,8 @@
+import { OrderAuthZEntity } from "@catering/authz";
+import { AbilityAction } from "@catering/types";
 import { DownloadIcon, FilterIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
+import { Can } from "@/authz/ability-context";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -79,20 +82,24 @@ export const TableToolbar = ({ filteredOrders, activeDay }: TableToolbarProps) =
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Button
-        type="button"
-        variant="secondary"
-        onClick={handleDownload}
-        disabled={!filteredOrders.length || isDownloading}
-      >
-        <DownloadIcon className="size-4" />
-        {isDownloading ? "Preparing..." : "Download"}
-      </Button>
+      <Can I={AbilityAction.READ} a={OrderAuthZEntity}>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={handleDownload}
+          disabled={!filteredOrders.length || isDownloading}
+        >
+          <DownloadIcon className="size-4" />
+          {isDownloading ? "Preparing..." : "Download"}
+        </Button>
+      </Can>
 
-      <Button type="button" className="ml-auto" onClick={openCreate}>
-        <PlusIcon className="size-4" />
-        Create Order
-      </Button>
+      <Can I={AbilityAction.CREATE} a={OrderAuthZEntity}>
+        <Button type="button" className="ml-auto" onClick={openCreate}>
+          <PlusIcon className="size-4" />
+          Create Order
+        </Button>
+      </Can>
     </div>
   );
 };

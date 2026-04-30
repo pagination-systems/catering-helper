@@ -1,8 +1,10 @@
 "use client";
 
+import { ProductionRequirementAuthZEntity } from "@catering/authz";
+import { AbilityAction } from "@catering/types";
 import { DownloadIcon } from "lucide-react";
 import { useState } from "react";
-
+import { Can } from "@/authz/ability-context";
 import { If } from "@/components/if";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader } from "@/components/ui/card";
@@ -39,16 +41,18 @@ export const ProductionRequirements = () => {
           titleId="production-requirements-title"
         />
 
-        <Button
-          type="button"
-          variant="secondary"
-          className="sm:shrink-0"
-          onClick={handleDownload}
-          disabled={!hasRequirements || isDownloading}
-        >
-          <DownloadIcon className="size-4" />
-          {isDownloading ? "Preparing..." : "Download PDF"}
-        </Button>
+        <Can I={AbilityAction.READ} a={ProductionRequirementAuthZEntity}>
+          <Button
+            type="button"
+            variant="secondary"
+            className="sm:shrink-0"
+            onClick={handleDownload}
+            disabled={!hasRequirements || isDownloading}
+          >
+            <DownloadIcon className="size-4" />
+            {isDownloading ? "Preparing..." : "Download PDF"}
+          </Button>
+        </Can>
       </div>
 
       <Card>

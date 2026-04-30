@@ -1,4 +1,7 @@
+import { OrderAuthZEntity } from "@catering/authz";
 import { BanIcon, EyeIcon, MoreHorizontalIcon, PencilIcon, Trash2Icon } from "lucide-react";
+import { Can } from "@/authz/ability-context";
+import { If } from "@/components/if";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -7,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { AbilityAction } from "../../../../../../packages/types/dist/ability-action";
 import { type IOrder, isOrderLocked } from "../schemas/order.schema";
 import { useOrdersStore } from "../store/useStore";
 
@@ -30,38 +34,43 @@ export const RowActions = ({ item }: RowActionsProps) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-52">
-          <DropdownMenuItem onSelect={() => openView(item)}>
-            <EyeIcon className="size-4" />
-            View
-          </DropdownMenuItem>
+          <Can I={AbilityAction.READ} a={OrderAuthZEntity}>
+            <DropdownMenuItem onSelect={() => openView(item)}>
+              <EyeIcon className="size-4" />
+              View
+            </DropdownMenuItem>
+          </Can>
+
+          <DropdownMenuSeparator />
+          <Can I={AbilityAction.UPDATE} a={OrderAuthZEntity}>
+            <DropdownMenuItem disabled={locked} onSelect={() => openEdit(item)}>
+              <PencilIcon className="size-4" />
+              Edit
+            </DropdownMenuItem>
+          </Can>
 
           <DropdownMenuSeparator />
 
-          <DropdownMenuItem disabled={locked} onSelect={() => openEdit(item)}>
-            <PencilIcon className="size-4" />
-            Edit
-          </DropdownMenuItem>
+          <Can I={AbilityAction.UPDATE} a={OrderAuthZEntity}>
+            <DropdownMenuItem disabled={locked} variant="destructive" onSelect={() => openCancelDialog(item)}>
+              <BanIcon className="size-4" />
+              Mark as Cancelled
+            </DropdownMenuItem>
+          </Can>
 
           <DropdownMenuSeparator />
 
-          <DropdownMenuItem disabled={locked} variant="destructive" onSelect={() => openCancelDialog(item)}>
-            <BanIcon className="size-4" />
-            Mark as Cancelled
-          </DropdownMenuItem>
+          <Can I={AbilityAction.HARD_DELETE} a={OrderAuthZEntity}>
+            <DropdownMenuItem disabled={locked} variant="destructive" onSelect={() => openDeleteDialog(item)}>
+              <Trash2Icon className="size-4" />
+              Delete
+            </DropdownMenuItem>
+          </Can>
 
-          <DropdownMenuSeparator />
-
-          <DropdownMenuItem disabled={locked} variant="destructive" onSelect={() => openDeleteDialog(item)}>
-            <Trash2Icon className="size-4" />
-            Delete
-          </DropdownMenuItem>
-
-          {locked && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem disabled>{item.status} orders cannot be changed</DropdownMenuItem>
-            </>
-          )}
+          <If expression={locked}>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem disabled>{item.status} orders cannot be changed</DropdownMenuItem>
+          </If>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

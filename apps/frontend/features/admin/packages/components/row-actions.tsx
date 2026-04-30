@@ -1,4 +1,7 @@
+import { PackageAuthZEntity } from "@catering/authz";
+import { AbilityAction } from "@catering/types";
 import { EyeIcon, MoreHorizontalIcon, PencilIcon, Trash2Icon } from "lucide-react";
+import { Can } from "@/authz/ability-context";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -28,20 +31,26 @@ export const RowActions = ({ item }: RowActionsProps) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-40">
-          <DropdownMenuItem onSelect={() => openView(item)}>
-            <EyeIcon className="size-4" />
-            View
-          </DropdownMenuItem>
+          <Can I={AbilityAction.READ} a={PackageAuthZEntity}>
+            <DropdownMenuItem onSelect={() => openView(item)}>
+              <EyeIcon className="size-4" />
+              View
+            </DropdownMenuItem>
+          </Can>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onSelect={() => openEdit(item)}>
-            <PencilIcon className="size-4" />
-            Edit
-          </DropdownMenuItem>
+          <Can I={AbilityAction.UPDATE} a={PackageAuthZEntity}>
+            <DropdownMenuItem onSelect={() => openEdit(item)}>
+              <PencilIcon className="size-4" />
+              Edit
+            </DropdownMenuItem>
+          </Can>
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive" onSelect={() => openDeleteDialog(item)}>
-            <Trash2Icon className="size-4" />
-            Delete
-          </DropdownMenuItem>
+          <Can I={AbilityAction.HARD_DELETE} a={PackageAuthZEntity}>
+            <DropdownMenuItem variant="destructive" onSelect={() => openDeleteDialog(item)}>
+              <Trash2Icon className="size-4" />
+              Delete
+            </DropdownMenuItem>
+          </Can>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

@@ -10,7 +10,7 @@ export const useSession = (): ISession => {
         id: "user-1",
         phone: "01790362665",
         name: "Catering Admin",
-        role: USER_ROLE_ENUM.PLATFORM_ADMIN,
+        role: USER_ROLE_ENUM.CATERING_ADMIN,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

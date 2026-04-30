@@ -8,5 +8,5 @@ export enum AbilityAction {
   RESTORE = "restore",
   APPROVE = "approve",
   REJECT = "reject",
-  SEND = "send",
+  SEND_INVITATION = "send-invitation",
 }

@@ -1,5 +1,7 @@
-import type { IUser } from "@catering/types";
+import { UserAuthZEntity } from "@catering/authz";
+import { AbilityAction, type IUser } from "@catering/types";
 import { EyeIcon, MoreHorizontalIcon, Trash2Icon } from "lucide-react";
+import { Can } from "@/authz/ability-context";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -27,15 +29,19 @@ export const RowActions = ({ user }: RowActionsProps) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-40">
-          <DropdownMenuItem onSelect={() => openView(user)}>
-            <EyeIcon className="size-4" />
-            View
-          </DropdownMenuItem>
+          <Can I={AbilityAction.READ} a={UserAuthZEntity}>
+            <DropdownMenuItem onSelect={() => openView(user)}>
+              <EyeIcon className="size-4" />
+              View
+            </DropdownMenuItem>
+          </Can>
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive" onSelect={() => openDeleteDialog(user)}>
-            <Trash2Icon className="size-4" />
-            Delete
-          </DropdownMenuItem>
+          <Can I={AbilityAction.HARD_DELETE} a={UserAuthZEntity}>
+            <DropdownMenuItem variant="destructive" onSelect={() => openDeleteDialog(user)}>
+              <Trash2Icon className="size-4" />
+              Delete
+            </DropdownMenuItem>
+          </Can>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

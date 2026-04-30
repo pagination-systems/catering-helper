@@ -1,4 +1,7 @@
+import { UserAuthZEntity } from "@catering/authz";
+import { AbilityAction } from "@catering/types";
 import { Eye, SearchIcon, UserPlus } from "lucide-react";
+import { Can } from "@/authz/ability-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUsersStore } from "../store/useStore";
@@ -21,15 +24,19 @@ export const TableToolbar = () => {
         />
       </div>
 
-      <Button variant="outline" type="button" onClick={openInvitationHistory}>
-        <Eye className="size-4" />
-        View Sent Invitations
-      </Button>
+      <Can I={AbilityAction.READ} a={UserAuthZEntity}>
+        <Button variant="outline" type="button" onClick={openInvitationHistory}>
+          <Eye className="size-4" />
+          View Sent Invitations
+        </Button>
+      </Can>
 
-      <Button type="button" className="ml-auto" onClick={openInvitation}>
-        <UserPlus className="size-4" />
-        Invite Platform Admin
-      </Button>
+      <Can I={AbilityAction.SEND_INVITATION} a={UserAuthZEntity}>
+        <Button type="button" className="ml-auto" onClick={openInvitation}>
+          <UserPlus className="size-4" />
+          Invite Platform Admin
+        </Button>
+      </Can>
     </div>
   );
 };

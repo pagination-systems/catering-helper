@@ -1,4 +1,7 @@
+import { CustomerLedgerAuthZEntity } from "@catering/authz";
+import { AbilityAction } from "@catering/types";
 import { MoreHorizontalIcon, PencilIcon } from "lucide-react";
+import { Can } from "@/authz/ability-context";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -25,10 +28,12 @@ export const RowActions = ({ item }: RowActionsProps) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
-          <DropdownMenuItem onSelect={() => openEdit(item)} disabled={item.dueAmount <= 0}>
-            <PencilIcon className="size-4" />
-            Update Payment
-          </DropdownMenuItem>
+          <Can I={AbilityAction.UPDATE} a={CustomerLedgerAuthZEntity}>
+            <DropdownMenuItem onSelect={() => openEdit(item)} disabled={item.dueAmount <= 0}>
+              <PencilIcon className="size-4" />
+              Update Payment
+            </DropdownMenuItem>
+          </Can>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

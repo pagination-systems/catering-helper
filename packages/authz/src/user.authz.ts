@@ -37,6 +37,16 @@ export class UserAbilityBuilder implements IAbilityBuilder {
       builder.can(AbilityAction.MANAGE, UserAuthZEntity);
     }
 
+    if (this.session.user.role === USER_ROLE_ENUM.CATERING_ADMIN) {
+      builder.can(AbilityAction.READ, UserAuthZEntity, { _id: this.session.user.id });
+      builder.can(AbilityAction.UPDATE, UserAuthZEntity, { _id: this.session.user.id });
+    }
+
+    if (this.session.user.role === USER_ROLE_ENUM.CUSTOMER) {
+      builder.can(AbilityAction.READ, UserAuthZEntity, { _id: this.session.user.id });
+      builder.can(AbilityAction.UPDATE, UserAuthZEntity, { _id: this.session.user.id });
+    }
+
     return builder.build({
       conditionsMatcher: buildMongoQueryMatcher(),
     });

@@ -1,13 +1,14 @@
 "use client";
 
+import { UserAuthZEntity } from "@catering/authz";
+import { AbilityAction } from "@catering/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
+import { Can } from "@/authz/ability-context";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
 import type { UpdatePersonalInfoValues, UserProfile } from "../schemas/profile.schema";
 import { updatePersonalInfoSchema } from "../schemas/profile.schema";
 
@@ -112,9 +113,11 @@ export const PersonalInfoForm = ({ onSubmit, initialValues }: PersonalInfoFormPr
           >
             Reset
           </Button>
-          <Button type="submit" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? "Saving..." : "Save Personal Info"}
-          </Button>
+          <Can I={AbilityAction.UPDATE} a={UserAuthZEntity}>
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? "Saving..." : "Save Personal Info"}
+            </Button>
+          </Can>
         </div>
       </form>
     </Form>

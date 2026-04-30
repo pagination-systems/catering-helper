@@ -1,8 +1,10 @@
+import { TenantAuthZEntity } from "@catering/authz";
+import { AbilityAction } from "@catering/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Building2, Phone, SaveIcon, Share2 } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-
+import { Can } from "@/authz/ability-context";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -278,18 +280,20 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 rounded-xl border border-border/70 bg-muted/30 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-1">
-            <p className="text-sm font-medium text-foreground">Review the details before saving.</p>
-            <p className="text-sm text-muted-foreground">
-              These settings update your tenant profile, contact paths, and social presence.
-            </p>
+        <Can I={AbilityAction.UPDATE} a={TenantAuthZEntity}>
+          <div className="flex flex-col gap-3 rounded-xl border border-border/70 bg-muted/30 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-1">
+              <p className="text-sm font-medium text-foreground">Review the details before saving.</p>
+              <p className="text-sm text-muted-foreground">
+                These settings update your tenant profile, contact paths, and social presence.
+              </p>
+            </div>
+            <Button type="submit" className="w-full sm:w-auto">
+              <SaveIcon className="size-4" />
+              {submitLabel}
+            </Button>
           </div>
-          <Button type="submit" className="w-full sm:w-auto">
-            <SaveIcon className="size-4" />
-            {submitLabel}
-          </Button>
-        </div>
+        </Can>
       </form>
     </Form>
   );

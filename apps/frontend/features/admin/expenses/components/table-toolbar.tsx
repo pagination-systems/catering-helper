@@ -1,7 +1,10 @@
 "use client";
 
+import { ExpenseAuthZEntity } from "@catering/authz";
+import { AbilityAction } from "@catering/types";
 import { DownloadIcon, FilterIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
+import { Can } from "@/authz/ability-context";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -81,20 +84,24 @@ export const TableToolbar = ({ filteredExpenses = [] }: TableToolbarProps) => {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Button
-        type="button"
-        variant="secondary"
-        onClick={handleDownload}
-        disabled={!filteredExpenses.length || isDownloading}
-      >
-        <DownloadIcon className="size-4" />
-        {isDownloading ? "Preparing..." : "Download"}
-      </Button>
+      <Can I={AbilityAction.READ} a={ExpenseAuthZEntity}>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={handleDownload}
+          disabled={!filteredExpenses.length || isDownloading}
+        >
+          <DownloadIcon className="size-4" />
+          {isDownloading ? "Preparing..." : "Download"}
+        </Button>
+      </Can>
 
-      <Button type="button" className="ml-auto" onClick={openCreate}>
-        <PlusIcon className="size-4" />
-        Add Expense
-      </Button>
+      <Can I={AbilityAction.CREATE} a={ExpenseAuthZEntity}>
+        <Button type="button" className="ml-auto" onClick={openCreate}>
+          <PlusIcon className="size-4" />
+          Add Expense
+        </Button>
+      </Can>
     </div>
   );
 };
