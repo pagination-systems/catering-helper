@@ -10,6 +10,7 @@ type ExpensesPdfProps = {
   lang?: Language;
 };
 
+const DATE_FORMAT = "DD MMM YYYY";
 const TIMESTAMP_FORMAT = "YYYY-MM-DD-HHmm";
 const GENERATED_AT_FORMAT = "DD MMM YYYY, hh:mm A";
 
@@ -65,6 +66,12 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     color: "#0f172a",
     letterSpacing: 0.3,
+  },
+  brandTitle: {
+    fontSize: 12,
+    fontWeight: 700,
+    color: "#0f172a",
+    textAlign: "right",
   },
   subtitle: {
     fontSize: 9.5,
@@ -183,11 +190,17 @@ const styles = StyleSheet.create({
     fontSize: 8.5,
     color: "#64748b",
   },
+  footerBrand: {
+    fontSize: 8.5,
+    color: "#94a3b8",
+    fontWeight: 500,
+  },
 });
 
 const ExpensesPdfDocument = ({ entries, lang = "en" }: { entries: IExpense[]; lang?: Language }) => {
   const i18n = getExpensesContent(lang);
   const total = entries.reduce((s, e) => s + e.amount, 0);
+  const todayLabel = moment().format(DATE_FORMAT);
 
   return (
     <Document title={i18n.pdf.title}>
@@ -195,17 +208,16 @@ const ExpensesPdfDocument = ({ entries, lang = "en" }: { entries: IExpense[]; la
         <View style={styles.header}>
           <View style={styles.headerTop}>
             <View>
-              <Text style={styles.title}>{companyInfo.name}</Text>
+              <Text style={styles.title}>{i18n.pdf.title}</Text>
               <Text style={styles.subtitle}>
-                {i18n.pdf.phone}: {companyInfo.phone}
+                {i18n.pdf.date}: {todayLabel}
               </Text>
             </View>
             <View>
+              <Text style={styles.brandTitle}>{companyInfo.name}</Text>
+              <Text style={styles.subtitle}>Phone: {companyInfo.phone}</Text>
               <Text style={styles.subtitle}>
                 {i18n.pdf.totalRecords}: {entries.length}
-              </Text>
-              <Text style={styles.subtitle}>
-                {i18n.pdf.generated}: {moment().format(GENERATED_AT_FORMAT)}
               </Text>
             </View>
           </View>
@@ -264,8 +276,8 @@ const ExpensesPdfDocument = ({ entries, lang = "en" }: { entries: IExpense[]; la
                 interpolate(i18n.pdf.pageOf, { page: String(pageNumber), total: String(totalPages) })
               }
             />
-            <Text style={styles.footerText}>{companyInfo.name}</Text>
-            <Text style={styles.footerText}>{i18n.pdf.footerModule}</Text>
+            <Text style={styles.footerBrand}>Powered by {companyInfo.name}</Text>
+            <Text style={styles.footerText}>{`${i18n.pdf.generated}: ${moment().format(GENERATED_AT_FORMAT)}`}</Text>
           </View>
         </View>
       </Page>
@@ -274,7 +286,6 @@ const ExpensesPdfDocument = ({ entries, lang = "en" }: { entries: IExpense[]; la
 };
 
 export const downloadExpensesPdf = async ({ entries, lang = "en" }: ExpensesPdfProps) => {
-  const i18n = getExpensesContent(lang);
   ensurePdfFontRegistered();
 
   const blob = await pdf(<ExpensesPdfDocument entries={entries} lang={lang} />).toBlob();
@@ -282,7 +293,7 @@ export const downloadExpensesPdf = async ({ entries, lang = "en" }: ExpensesPdfP
   const link = document.createElement("a");
 
   link.href = url;
-  link.download = `${i18n.pdf.filePrefix}-${moment().format(TIMESTAMP_FORMAT)}.pdf`;
+  link.download = `expenses-${moment().format(TIMESTAMP_FORMAT)}.pdf`;
   link.click();
 
   URL.revokeObjectURL(url);

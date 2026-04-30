@@ -14,6 +14,7 @@ type CustomerLedgerPdfDocumentProps = {
   labels: CustomerLedgerContent["pdf"];
 };
 
+const DATE_FORMAT = "DD MMM YYYY";
 const TIMESTAMP_FORMAT = "YYYY-MM-DD-HHmm";
 const GENERATED_AT_FORMAT = "DD MMM YYYY, hh:mm A";
 
@@ -64,11 +65,27 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     marginBottom: 8,
   },
+  headerLeft: {
+    flexDirection: "column",
+    gap: 2,
+  },
+  headerRight: {
+    flexDirection: "column",
+    alignItems: "flex-end",
+    gap: 2,
+  },
   title: {
     fontSize: 18,
     fontWeight: 700,
     color: "#0f172a",
     letterSpacing: 0.3,
+    textTransform: "uppercase",
+  },
+  brandTitle: {
+    fontSize: 12,
+    fontWeight: 700,
+    color: "#0f172a",
+    textAlign: "right",
   },
   subtitle: {
     fontSize: 9.5,
@@ -187,30 +204,39 @@ const styles = StyleSheet.create({
     fontSize: 8.5,
     color: "#64748b",
   },
+  footerBrand: {
+    fontSize: 8.5,
+    color: "#94a3b8",
+    fontWeight: 700,
+  },
 });
 
 const CustomerLedgerPdfDocument = ({ entries, labels }: CustomerLedgerPdfDocumentProps) => {
   const totalAmount = entries.reduce((sum, item) => sum + item.totalAmount, 0);
   const totalPaid = entries.reduce((sum, item) => sum + item.totalPaidAmount, 0);
   const totalDue = entries.reduce((sum, item) => sum + item.dueAmount, 0);
+  const todayLabel = moment().format(DATE_FORMAT);
 
   return (
     <Document title={labels.title}>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <View style={styles.headerTop}>
-            <View>
-              <Text style={styles.title}>{companyInfo.name}</Text>
+            <View style={styles.headerLeft}>
+              {/* Report Title */}
+              <Text style={styles.title}>{labels.title}</Text>
+              <Text style={styles.subtitle}>
+                {labels.date}: {todayLabel}
+              </Text>
+            </View>
+            <View style={styles.headerRight}>
+              {/* SaaS Branding */}
+              <Text style={styles.brandTitle}>{companyInfo.name}</Text>
               <Text style={styles.subtitle}>
                 {labels.phone}: {companyInfo.phone}
               </Text>
-            </View>
-            <View>
               <Text style={styles.subtitle}>
                 {labels.totalCustomers}: {entries.length}
-              </Text>
-              <Text style={styles.subtitle}>
-                {labels.generated}: {moment().format(GENERATED_AT_FORMAT)}
               </Text>
             </View>
           </View>
@@ -277,8 +303,9 @@ const CustomerLedgerPdfDocument = ({ entries, labels }: CustomerLedgerPdfDocumen
                   .replace("{{totalPages}}", String(totalPages))
               }
             />
-            <Text style={styles.footerText}>{companyInfo.name}</Text>
-            <Text style={styles.footerText}>{labels.footerTitle}</Text>
+            {/* Added Footer Branding */}
+            <Text style={styles.footerBrand}>Powered by {companyInfo.name}</Text>
+            <Text style={styles.footerText}>{`${labels.generated}: ${moment().format(GENERATED_AT_FORMAT)}`}</Text>
           </View>
         </View>
       </Page>
@@ -294,7 +321,7 @@ export const downloadCustomerLedgerPdf = async ({ entries, labels }: CustomerLed
   const link = document.createElement("a");
 
   link.href = url;
-  link.download = `${labels.fileNamePrefix}-${moment().format(TIMESTAMP_FORMAT)}.pdf`;
+  link.download = `customer-ledger-${moment().format(TIMESTAMP_FORMAT)}.pdf`;
   link.click();
 
   URL.revokeObjectURL(url);

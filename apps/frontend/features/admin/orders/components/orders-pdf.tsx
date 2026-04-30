@@ -89,6 +89,13 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     color: "#0f172a",
     letterSpacing: 0.3,
+    textTransform: "uppercase",
+  },
+  brandTitle: {
+    fontSize: 12,
+    fontWeight: 700,
+    color: "#0f172a",
+    textAlign: "right",
   },
   subtitle: {
     fontSize: 9.5,
@@ -260,6 +267,11 @@ const styles = StyleSheet.create({
     fontSize: 8.5,
     color: "#64748b",
   },
+  footerBrand: {
+    fontSize: 8.5,
+    color: "#94a3b8",
+    fontWeight: 500,
+  },
 });
 
 const formatItems = (order: IOrder): PackageDetailLine[] => {
@@ -282,13 +294,16 @@ const OrdersPdfDocument = ({ orders, i18n }: OrdersPdfDocumentProps) => {
         <View style={styles.header}>
           <View style={styles.headerTop}>
             <View style={styles.headerLeft}>
-              <Text style={styles.title}>{companyInfo.name}</Text>
-              <Text style={styles.subtitle}>Phone: {companyInfo.phone}</Text>
-            </View>
-            <View style={styles.headerRight}>
+              {/* Order Report Indicator */}
+              <Text style={styles.title}>{i18n?.pdf?.title || "Order Report"}</Text>
               <Text style={styles.subtitle}>
                 {i18n?.pdf?.date || "Date"}: {todayLabel}
               </Text>
+            </View>
+            <View style={styles.headerRight}>
+              {/* SaaS Branding */}
+              <Text style={styles.brandTitle}>{companyInfo.name}</Text>
+              <Text style={styles.subtitle}>Phone: {companyInfo.phone}</Text>
               <Text style={styles.subtitle}>
                 {i18n?.pdf?.totalOrders || "Total Orders"}: {orders.length}
               </Text>
@@ -389,8 +404,9 @@ const OrdersPdfDocument = ({ orders, i18n }: OrdersPdfDocumentProps) => {
               style={styles.footerText}
               render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
             />
-            <Text style={styles.footerText}>{companyInfo.name}</Text>
-            <Text style={styles.footerText}>Generated: {moment().format(GENERATED_AT_FORMAT)}</Text>
+            {/* Added Footer Branding */}
+            <Text style={styles.footerBrand}>Powered by {companyInfo.name}</Text>
+            <Text style={styles.footerText}>{`${i18n?.pdf?.generated}: ${moment().format(GENERATED_AT_FORMAT)}`}</Text>
           </View>
         </View>
       </Page>

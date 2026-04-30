@@ -77,8 +77,6 @@ export type ExpensesContent = {
     amount: string;
     total: string;
     pageOf: string;
-    footerModule: string;
-    filePrefix: string;
   };
 };
 
@@ -148,7 +146,7 @@ const content: Record<Language, ExpensesContent> = {
       openActionsFor: "Open actions for {{label}}",
     },
     pdf: {
-      title: "Expenses",
+      title: "Expenses Report",
       phone: "Phone",
       totalRecords: "Total Records",
       generated: "Generated",
@@ -159,8 +157,6 @@ const content: Record<Language, ExpensesContent> = {
       amount: "Amount",
       total: "Total",
       pageOf: "Page {{page}} of {{total}}",
-      footerModule: "Expenses",
-      filePrefix: "expenses",
     },
   },
   bn: {
@@ -247,8 +243,6 @@ const content: Record<Language, ExpensesContent> = {
       amount: "পরিমাণ",
       total: "মোট",
       pageOf: "পৃষ্ঠা {{page}} / {{total}}",
-      footerModule: "খরচ",
-      filePrefix: "expenses",
     },
   },
 };

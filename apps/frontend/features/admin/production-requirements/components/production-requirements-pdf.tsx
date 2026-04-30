@@ -18,6 +18,11 @@ const DATE_FORMAT = "DD MMM YYYY";
 const TIMESTAMP_FORMAT = "YYYY-MM-DD-HHmm";
 const GENERATED_AT_FORMAT = "DD MMM YYYY, hh:mm A";
 
+const companyInfo = {
+  name: "Catering Helper",
+  phone: "+880 1711-000000",
+};
+
 const PDF_FONT_FAMILY = "NotoSansBengali";
 let isPdfFontRegistered = false;
 
@@ -60,11 +65,27 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     marginBottom: 10,
   },
+  headerLeft: {
+    flexDirection: "column",
+    gap: 2,
+  },
+  headerRight: {
+    flexDirection: "column",
+    alignItems: "flex-end",
+    gap: 2,
+  },
   title: {
     fontSize: 18,
     fontWeight: 700,
     color: "#0f172a",
     letterSpacing: 0.3,
+    textTransform: "uppercase",
+  },
+  brandTitle: {
+    fontSize: 12,
+    fontWeight: 700,
+    color: "#0f172a",
+    textAlign: "right",
   },
   subtitle: {
     fontSize: 9.5,
@@ -230,6 +251,11 @@ const styles = StyleSheet.create({
     fontSize: 8.5,
     color: "#64748b",
   },
+  footerBrand: {
+    fontSize: 8.5,
+    color: "#94a3b8",
+    fontWeight: 500,
+  },
 });
 
 const formatItems = (items: string[]) => (items.length ? items.join(" · ") : "No items listed");
@@ -242,17 +268,21 @@ const ProductionRequirementsPdfDocument = ({ data, language }: ProductionRequire
   const variantCount = data.packages.reduce((sum, pkg) => sum + pkg.variants.length, 0);
 
   return (
-    <Document title={`${t.title}-${todayLabel}`}>
+    <Document title={`production-requirements-${todayLabel}`}>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <View style={styles.headerTop}>
-            <View>
-              <Text style={styles.title}>{t.title}</Text>
+            <View style={styles.headerLeft}>
+              {/* Report Title & Info */}
+              <Text style={styles.title}>{t.pdf.title}</Text>
               <Text style={styles.subtitle}>{t.pdf.subtitle}</Text>
-            </View>
-            <View>
               <Text style={styles.subtitle}>{`${t.pdf.dateLabel}: ${todayLabel}`}</Text>
               <Text style={styles.subtitle}>{`${t.pdf.dayLabel}: ${data.dayName}`}</Text>
+            </View>
+            <View style={styles.headerRight}>
+              {/* SaaS Branding */}
+              <Text style={styles.brandTitle}>{companyInfo.name}</Text>
+              <Text style={styles.subtitle}>Phone: {companyInfo.phone}</Text>
             </View>
           </View>
 
@@ -341,10 +371,9 @@ const ProductionRequirementsPdfDocument = ({ data, language }: ProductionRequire
               style={styles.footerText}
               render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
             />
-            <Text style={styles.footerText}>{t.title}</Text>
-            <Text
-              style={styles.footerText}
-            >{`${t.pdf.generated}: ${moment(data.date).format(GENERATED_AT_FORMAT)}`}</Text>
+            {/* Added Footer Branding */}
+            <Text style={styles.footerBrand}>Powered by {companyInfo.name}</Text>
+            <Text style={styles.footerText}>{`${t.pdf.generated}: ${moment().format(GENERATED_AT_FORMAT)}`}</Text>
           </View>
         </View>
       </Page>

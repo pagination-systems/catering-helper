@@ -49,6 +49,7 @@ export type CustomerLedgerContent = {
   };
   pdf: {
     title: string;
+    date: string;
     phone: string;
     totalCustomers: string;
     generated: string;
@@ -59,8 +60,6 @@ export type CustomerLedgerContent = {
     dueAmount: string;
     totals: string;
     pageOf: string;
-    footerTitle: string;
-    fileNamePrefix: string;
   };
 };
 
@@ -113,6 +112,7 @@ const content: Record<Language, CustomerLedgerContent> = {
     },
     pdf: {
       title: "Customer Ledger",
+      date: "Date",
       phone: "Phone",
       totalCustomers: "Total Customers",
       generated: "Generated",
@@ -123,8 +123,6 @@ const content: Record<Language, CustomerLedgerContent> = {
       dueAmount: "Due Amount",
       totals: "Totals",
       pageOf: "Page {{pageNumber}} of {{totalPages}}",
-      footerTitle: "Customer Ledger",
-      fileNamePrefix: "customer-ledger",
     },
   },
   bn: {
@@ -175,6 +173,7 @@ const content: Record<Language, CustomerLedgerContent> = {
     },
     pdf: {
       title: "গ্রাহক লেজার",
+      date: "তারিখ",
       phone: "ফোন",
       totalCustomers: "মোট গ্রাহক",
       generated: "তৈরি করা হয়েছে",
@@ -185,8 +184,6 @@ const content: Record<Language, CustomerLedgerContent> = {
       dueAmount: "বকেয়া",
       totals: "সর্বমোট",
       pageOf: "পৃষ্ঠা {{pageNumber}} / {{totalPages}}",
-      footerTitle: "গ্রাহক লেজার",
-      fileNamePrefix: "customer-ledger",
     },
   },
 };

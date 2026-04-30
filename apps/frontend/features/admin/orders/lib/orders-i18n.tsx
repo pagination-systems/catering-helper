@@ -129,6 +129,7 @@ export type OrdersContent = {
     amount: string;
     paid: string;
     total: string;
+    generated: string;
   };
 };
 
@@ -269,6 +270,7 @@ const content: Record<string, OrdersContent> = {
       amount: "Amount",
       paid: "Paid",
       total: "Total",
+      generated: "Generated",
     },
   },
   bn: {
@@ -405,8 +407,9 @@ const content: Record<string, OrdersContent> = {
       packageDetails: "প্যাকেজ বিবরণ",
       meal: "মিল",
       amount: "পরিমাণ",
-      paid: "পরিশোধিত",
+      paid: "পরিশোধ",
       total: "মোট",
+      generated: "তৈরি করা হয়েছে",
     },
   },
 } as const;
