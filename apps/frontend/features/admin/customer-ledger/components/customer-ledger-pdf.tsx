@@ -1,14 +1,17 @@
 import { Document, Font, Page, pdf, StyleSheet, Text, View } from "@react-pdf/renderer";
 import moment from "moment";
 import { formatDecimal } from "@/lib/utils";
+import type { CustomerLedgerContent } from "../lib/customer-ledger-i18n";
 import type { ICustomerLedger } from "../schemas/customer-ledger.schema";
 
 type CustomerLedgerPdfProps = {
   entries: ICustomerLedger[];
+  labels: CustomerLedgerContent["pdf"];
 };
 
 type CustomerLedgerPdfDocumentProps = {
   entries: ICustomerLedger[];
+  labels: CustomerLedgerContent["pdf"];
 };
 
 const TIMESTAMP_FORMAT = "YYYY-MM-DD-HHmm";
@@ -186,23 +189,29 @@ const styles = StyleSheet.create({
   },
 });
 
-const CustomerLedgerPdfDocument = ({ entries }: CustomerLedgerPdfDocumentProps) => {
+const CustomerLedgerPdfDocument = ({ entries, labels }: CustomerLedgerPdfDocumentProps) => {
   const totalAmount = entries.reduce((sum, item) => sum + item.totalAmount, 0);
   const totalPaid = entries.reduce((sum, item) => sum + item.totalPaidAmount, 0);
   const totalDue = entries.reduce((sum, item) => sum + item.dueAmount, 0);
 
   return (
-    <Document title="Customer-Ledger">
+    <Document title={labels.title}>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <View style={styles.headerTop}>
             <View>
               <Text style={styles.title}>{companyInfo.name}</Text>
-              <Text style={styles.subtitle}>Phone: {companyInfo.phone}</Text>
+              <Text style={styles.subtitle}>
+                {labels.phone}: {companyInfo.phone}
+              </Text>
             </View>
             <View>
-              <Text style={styles.subtitle}>Total Customers: {entries.length}</Text>
-              <Text style={styles.subtitle}>Generated: {moment().format(GENERATED_AT_FORMAT)}</Text>
+              <Text style={styles.subtitle}>
+                {labels.totalCustomers}: {entries.length}
+              </Text>
+              <Text style={styles.subtitle}>
+                {labels.generated}: {moment().format(GENERATED_AT_FORMAT)}
+              </Text>
             </View>
           </View>
           <View style={styles.headerDivider} />
@@ -210,11 +219,11 @@ const CustomerLedgerPdfDocument = ({ entries }: CustomerLedgerPdfDocumentProps) 
 
         <View style={styles.table}>
           <View style={styles.tableHeader}>
-            <Text style={[styles.tableHeaderText, styles.colName]}>Customer</Text>
-            <Text style={[styles.tableHeaderText, styles.colPhone]}>Phone Number</Text>
-            <Text style={[styles.tableHeaderText, styles.colAmount, styles.textRight]}>Total Amount</Text>
-            <Text style={[styles.tableHeaderText, styles.colPaid, styles.textRight]}>Paid Amount</Text>
-            <Text style={[styles.tableHeaderText, styles.colDue, styles.textRight]}>Due Amount</Text>
+            <Text style={[styles.tableHeaderText, styles.colName]}>{labels.customer}</Text>
+            <Text style={[styles.tableHeaderText, styles.colPhone]}>{labels.phoneNumber}</Text>
+            <Text style={[styles.tableHeaderText, styles.colAmount, styles.textRight]}>{labels.totalAmount}</Text>
+            <Text style={[styles.tableHeaderText, styles.colPaid, styles.textRight]}>{labels.paidAmount}</Text>
+            <Text style={[styles.tableHeaderText, styles.colDue, styles.textRight]}>{labels.dueAmount}</Text>
           </View>
 
           {entries.map((entry, index) => (
@@ -243,7 +252,7 @@ const CustomerLedgerPdfDocument = ({ entries }: CustomerLedgerPdfDocumentProps) 
 
           <View style={styles.summaryRow} wrap={false}>
             <View style={styles.summaryLabelCell}>
-              <Text style={styles.summaryLabelText}>Totals</Text>
+              <Text style={styles.summaryLabelText}>{labels.totals}</Text>
             </View>
             <View style={styles.colAmount}>
               <Text style={styles.summaryValueText}>{formatDecimal(totalAmount)}</Text>
@@ -262,10 +271,14 @@ const CustomerLedgerPdfDocument = ({ entries }: CustomerLedgerPdfDocumentProps) 
           <View style={styles.footerRow}>
             <Text
               style={styles.footerText}
-              render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
+              render={({ pageNumber, totalPages }) =>
+                labels.pageOf
+                  .replace("{{pageNumber}}", String(pageNumber))
+                  .replace("{{totalPages}}", String(totalPages))
+              }
             />
             <Text style={styles.footerText}>{companyInfo.name}</Text>
-            <Text style={styles.footerText}>Customer Ledger</Text>
+            <Text style={styles.footerText}>{labels.footerTitle}</Text>
           </View>
         </View>
       </Page>
@@ -273,15 +286,15 @@ const CustomerLedgerPdfDocument = ({ entries }: CustomerLedgerPdfDocumentProps) 
   );
 };
 
-export const downloadCustomerLedgerPdf = async ({ entries }: CustomerLedgerPdfProps) => {
+export const downloadCustomerLedgerPdf = async ({ entries, labels }: CustomerLedgerPdfProps) => {
   ensurePdfFontRegistered();
 
-  const blob = await pdf(<CustomerLedgerPdfDocument entries={entries} />).toBlob();
+  const blob = await pdf(<CustomerLedgerPdfDocument entries={entries} labels={labels} />).toBlob();
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
 
   link.href = url;
-  link.download = `customer-ledger-${moment().format(TIMESTAMP_FORMAT)}.pdf`;
+  link.download = `${labels.fileNamePrefix}-${moment().format(TIMESTAMP_FORMAT)}.pdf`;
   link.click();
 
   URL.revokeObjectURL(url);

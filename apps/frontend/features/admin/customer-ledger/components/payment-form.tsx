@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { formatCurrency } from "@/lib/utils";
-import { type UpdateLedgerPaymentValues, updateLedgerPaymentSchema } from "../schemas/customer-ledger.schema";
+import { interpolate, useCustomerLedgerI18n } from "../lib/customer-ledger-i18n";
+import { createUpdateLedgerPaymentSchema, type UpdateLedgerPaymentValues } from "../schemas/customer-ledger.schema";
 
 interface PaymentFormProps {
   onSubmit: (values: UpdateLedgerPaymentValues) => void;
@@ -20,25 +21,28 @@ interface PaymentFormProps {
   submitLabel?: string;
 }
 
-export const PaymentForm = ({
-  onSubmit,
-  maxDueAmount,
-  customerName,
-  customerPhone,
-  submitLabel = "Save Payment",
-}: PaymentFormProps) => {
+export const PaymentForm = ({ onSubmit, maxDueAmount, customerName, customerPhone, submitLabel }: PaymentFormProps) => {
+  const i18n = useCustomerLedgerI18n();
+  const resolvedSubmitLabel = submitLabel ?? i18n.form.savePayment;
+
   const validationSchema = useMemo(
     () =>
-      updateLedgerPaymentSchema.superRefine((values, ctx) => {
+      createUpdateLedgerPaymentSchema({
+        paidAmountNumber: i18n.form.validation.paidAmountNumber,
+        paidAmountFinite: i18n.form.validation.paidAmountFinite,
+        paidAmountPositive: i18n.form.validation.paidAmountPositive,
+      }).superRefine((values, ctx) => {
         if (values.paidAmount > maxDueAmount) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             path: ["paidAmount"],
-            message: `Amount cannot exceed due amount (${formatCurrency(maxDueAmount)}).`,
+            message: interpolate(i18n.form.validation.amountCannotExceedDueAmount, {
+              amount: formatCurrency(maxDueAmount),
+            }),
           });
         }
       }),
-    [maxDueAmount],
+    [i18n.form.validation, maxDueAmount],
   );
 
   const form = useForm<UpdateLedgerPaymentValues>({
@@ -67,7 +71,7 @@ export const PaymentForm = ({
             <div className="rounded-md border bg-background p-3">
               <p className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 <UserRound className="h-3.5 w-3.5" />
-                Customer Name
+                {i18n.form.customerName}
               </p>
               <p className="text-sm font-semibold text-foreground">{customerName}</p>
             </div>
@@ -75,7 +79,7 @@ export const PaymentForm = ({
             <div className="rounded-md border bg-background p-3">
               <p className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 <Phone className="h-3.5 w-3.5" />
-                Phone Number
+                {i18n.form.phoneNumber}
               </p>
               <p className="text-sm font-semibold text-foreground">{customerPhone}</p>
             </div>
@@ -84,11 +88,11 @@ export const PaymentForm = ({
           <div className="rounded-md border border-dashed border-border bg-background p-3">
             <p className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
               <CircleDollarSign className="h-3.5 w-3.5" />
-              Current Due Amount
+              {i18n.form.currentDueAmount}
             </p>
             <p className="text-xl font-semibold text-destructive">{formatCurrency(maxDueAmount)}</p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Remaining after this payment: {formatCurrency(remainingDue)}
+              {interpolate(i18n.form.remainingAfterPayment, { amount: formatCurrency(remainingDue) })}
             </p>
           </div>
         </div>
@@ -98,7 +102,7 @@ export const PaymentForm = ({
           name="paidAmount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Pay Amount</FormLabel>
+              <FormLabel>{i18n.form.payAmount}</FormLabel>
               <FormControl>
                 <Input
                   type="number"
@@ -106,7 +110,7 @@ export const PaymentForm = ({
                   min={1}
                   max={maxDueAmount}
                   step="1"
-                  placeholder="Enter paid amount"
+                  placeholder={i18n.form.paidAmountPlaceholder}
                   {...field}
                   value={Number.isFinite(field.value) ? field.value : ""}
                   onChange={(event) => {
@@ -143,7 +147,7 @@ export const PaymentForm = ({
 
         <div className="mt-auto flex justify-end border-t border-border/80 pt-4">
           <Button type="submit" disabled={maxDueAmount <= 0}>
-            {submitLabel}
+            {resolvedSubmitLabel}
           </Button>
         </div>
       </form>

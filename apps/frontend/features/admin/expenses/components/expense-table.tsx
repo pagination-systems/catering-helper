@@ -4,6 +4,7 @@ import { ClipboardListIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { DataTable, type DataTableColumn } from "../../components/data-table";
+import { useExpensesI18n } from "../lib/expenses-i18n";
 import type { IExpense } from "../schemas/expense.schema";
 import { useExpensesStore } from "../store/useStore";
 import { getCategoryBadgeStyles } from "../utils/badge";
@@ -16,11 +17,12 @@ interface ExpenseTableProps {
 
 export const ExpenseTable = ({ data, handlePaginate }: ExpenseTableProps) => {
   const openView = useExpensesStore((s) => s.openView);
+  const i18n = useExpensesI18n();
 
   const columns: DataTableColumn<IExpense>[] = [
     {
       accessorKey: "label",
-      header: "Label",
+      header: i18n.table.label,
       cell: (item) => (
         <button
           type="button"
@@ -33,7 +35,7 @@ export const ExpenseTable = ({ data, handlePaginate }: ExpenseTableProps) => {
     },
     {
       accessorKey: "category",
-      header: "Category",
+      header: i18n.table.category,
       cell: (item) => (
         <Badge variant="outline" className={getCategoryBadgeStyles(item.category)}>
           {item.category}
@@ -42,17 +44,17 @@ export const ExpenseTable = ({ data, handlePaginate }: ExpenseTableProps) => {
     },
     {
       accessorKey: "amount",
-      header: "Amount",
+      header: i18n.table.amount,
       cell: (item) => formatCurrency(item.amount),
     },
     {
       accessorKey: "date",
-      header: "Date",
+      header: i18n.table.date,
       cell: (item) => formatDate(item.date),
     },
     {
       id: "actions",
-      header: "Actions",
+      header: i18n.table.actions,
       cell: (item) => <RowActions item={item} />,
     },
   ];
@@ -66,13 +68,18 @@ export const ExpenseTable = ({ data, handlePaginate }: ExpenseTableProps) => {
         limit: 10,
         page: 1,
         totalPages: Math.max(1, Math.ceil(data.length / 10)),
+        hasNextPage: false,
+        hasPrevPage: false,
+        nextPage: null,
+        prevPage: null,
+        pagingCounter: 1,
       }}
       handlePaginate={handlePaginate}
       getRowId={(item) => item.id}
       emptyState={
         <div className="flex flex-col items-center gap-2">
           <ClipboardListIcon className="size-5" />
-          No expenses found for your current query and filters.
+          {i18n.table.noExpenses}
         </div>
       }
     />

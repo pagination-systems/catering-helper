@@ -9,6 +9,7 @@ import { ExpenseDetails } from "./components/expense-details";
 import { ExpenseForm } from "./components/expense-form";
 import { ExpenseTable } from "./components/expense-table";
 import { TableToolbar } from "./components/table-toolbar";
+import { useExpensesI18n } from "./lib/expenses-i18n";
 import type { CreateExpenseValues, IExpense } from "./schemas/expense.schema";
 import { useExpensesStore } from "./store/useStore";
 
@@ -28,6 +29,7 @@ const buildFormValuesFromExpense = (expense: IExpense): CreateExpenseValues => {
 };
 
 export const Expenses = () => {
+  const i18n = useExpensesI18n();
   const list = useExpensesStore((s) => s.list);
   const query = useExpensesStore((s) => s.query);
   const categoryFilter = useExpensesStore((s) => s.categoryFilter);
@@ -77,7 +79,7 @@ export const Expenses = () => {
 
   return (
     <section className="space-y-4" aria-labelledby="expenses-title">
-      <SectionHeader title="Expenses" description="Log and review admin expenses." />
+      <SectionHeader title={i18n.title} description={i18n.description} />
 
       <Card>
         <CardHeader className="space-y-3">
@@ -92,25 +94,25 @@ export const Expenses = () => {
       <Sheet open={isCreateSheetOpen} onOpenChange={setCreateSheetOpen}>
         <SheetContent side="right" className="w-full sm:!max-w-[640px]">
           <SheetHeader>
-            <SheetTitle>Add Expense</SheetTitle>
-            <SheetDescription>Enter expense details below.</SheetDescription>
+            <SheetTitle>{i18n.sheet.createTitle}</SheetTitle>
+            <SheetDescription>{i18n.sheet.createDescription}</SheetDescription>
           </SheetHeader>
 
-          <ExpenseForm onSubmit={onSubmitCreateExpense} submitLabel="Add Expense" />
+          <ExpenseForm onSubmit={onSubmitCreateExpense} submitLabel={i18n.form.submitCreate} />
         </SheetContent>
       </Sheet>
 
       <Sheet open={isEditSheetOpen} onOpenChange={setEditSheetOpen}>
         <SheetContent side="right" className="w-full sm:!max-w-[640px]">
           <SheetHeader>
-            <SheetTitle>Edit Expense</SheetTitle>
-            <SheetDescription>Update the expense details below.</SheetDescription>
+            <SheetTitle>{i18n.sheet.editTitle}</SheetTitle>
+            <SheetDescription>{i18n.sheet.editDescription}</SheetDescription>
           </SheetHeader>
 
           <ExpenseForm
             onSubmit={onSubmitEditExpense}
             initialValues={selectedItem ? buildFormValuesFromExpense(selectedItem) : undefined}
-            submitLabel="Save Changes"
+            submitLabel={i18n.form.submitSave}
           />
         </SheetContent>
       </Sheet>
@@ -118,14 +120,14 @@ export const Expenses = () => {
       <Sheet open={isViewSheetOpen} onOpenChange={(open) => (open ? setViewSheetOpen(true) : closeViewSheet())}>
         <SheetContent side="right" className="w-full sm:!max-w-[520px]">
           <SheetHeader>
-            <SheetTitle>Expense Details</SheetTitle>
-            <SheetDescription>Review the selected expense.</SheetDescription>
+            <SheetTitle>{i18n.sheet.detailsTitle}</SheetTitle>
+            <SheetDescription>{i18n.sheet.detailsDescription}</SheetDescription>
           </SheetHeader>
 
           {selectedViewItem ? (
             <ExpenseDetails item={selectedViewItem} />
           ) : (
-            <p className="p-4 text-sm text-muted-foreground">No expense selected.</p>
+            <p className="p-4 text-sm text-muted-foreground">{i18n.sheet.noExpenseSelected}</p>
           )}
         </SheetContent>
       </Sheet>

@@ -3,6 +3,7 @@
 import { BookUserIcon } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { DataTable, type DataTableColumn } from "../../components/data-table";
+import { interpolate, useCustomerLedgerI18n } from "../lib/customer-ledger-i18n";
 import type { GetCustomerLedgerResponse, ICustomerLedger } from "../schemas/customer-ledger.schema";
 import { useCustomerLedgerStore } from "../store/useStore";
 import { RowActions } from "./row-actions";
@@ -13,19 +14,20 @@ interface CustomerLedgerTableProps {
 }
 
 export const CustomerLedgerTable = ({ data, handlePaginate }: CustomerLedgerTableProps) => {
+  const i18n = useCustomerLedgerI18n();
   const openEdit = useCustomerLedgerStore((state) => state.openEdit);
 
   const columns: DataTableColumn<ICustomerLedger>[] = [
     {
       accessorKey: "customerName",
-      header: "Customer",
+      header: i18n.table.customer,
       cell: (item) =>
         item.dueAmount > 0 ? (
           <button
             type="button"
             className="font-medium text-left text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             onClick={() => openEdit(item)}
-            aria-label={`Update payment for ${item.customerName}`}
+            aria-label={interpolate(i18n.table.updatePaymentFor, { customerName: item.customerName })}
           >
             {item.customerName}
           </button>
@@ -35,22 +37,22 @@ export const CustomerLedgerTable = ({ data, handlePaginate }: CustomerLedgerTabl
     },
     {
       accessorKey: "customerPhone",
-      header: "Phone Number",
+      header: i18n.table.phoneNumber,
       cell: (item) => <p>{item.customerPhone}</p>,
     },
     {
       accessorKey: "totalAmount",
-      header: "Total Amount",
+      header: i18n.table.totalAmount,
       cell: (item) => formatCurrency(item.totalAmount),
     },
     {
       accessorKey: "totalPaidAmount",
-      header: "Total Paid",
+      header: i18n.table.totalPaid,
       cell: (item) => <span className="font-medium text-emerald-700">{formatCurrency(item.totalPaidAmount)}</span>,
     },
     {
       accessorKey: "dueAmount",
-      header: "Due Amount",
+      header: i18n.table.dueAmount,
       cell: (item) => (
         <span className={item.dueAmount > 0 ? "font-medium text-destructive" : "font-medium text-emerald-700"}>
           {formatCurrency(item.dueAmount)}
@@ -59,12 +61,12 @@ export const CustomerLedgerTable = ({ data, handlePaginate }: CustomerLedgerTabl
     },
     {
       accessorKey: "updatedAt",
-      header: "Last Updated",
+      header: i18n.table.lastUpdated,
       cell: (item) => formatDate(item.updatedAt),
     },
     {
       id: "actions",
-      header: "Actions",
+      header: i18n.table.actions,
       cell: (item) => <RowActions item={item} />,
     },
   ];
@@ -79,7 +81,7 @@ export const CustomerLedgerTable = ({ data, handlePaginate }: CustomerLedgerTabl
       emptyState={
         <div className="flex flex-col items-center gap-2">
           <BookUserIcon className="size-5" />
-          No ledger entries found for your current query.
+          {i18n.table.noEntries}
         </div>
       }
     />

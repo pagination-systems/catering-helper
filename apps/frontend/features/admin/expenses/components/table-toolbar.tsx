@@ -15,6 +15,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { useLanguage } from "@/providers/language-provider";
+import { useExpensesI18n } from "../lib/expenses-i18n";
 import type { IExpense } from "../schemas/expense.schema";
 import { useExpensesStore } from "../store/useStore";
 import { downloadExpensesPdf } from "./expenses-pdf";
@@ -25,6 +27,8 @@ interface TableToolbarProps {
 
 export const TableToolbar = ({ filteredExpenses = [] }: TableToolbarProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
+  const i18n = useExpensesI18n();
+  const { language } = useLanguage();
 
   const query = useExpensesStore((state) => state.query);
   const categoryFilter = useExpensesStore((state) => state.categoryFilter);
@@ -37,7 +41,7 @@ export const TableToolbar = ({ filteredExpenses = [] }: TableToolbarProps) => {
 
     try {
       setIsDownloading(true);
-      await downloadExpensesPdf({ entries: filteredExpenses });
+      await downloadExpensesPdf({ entries: filteredExpenses, lang: language });
     } finally {
       setIsDownloading(false);
     }
@@ -50,7 +54,7 @@ export const TableToolbar = ({ filteredExpenses = [] }: TableToolbarProps) => {
         <Input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search by label, description, category"
+          placeholder={i18n.toolbar.searchPlaceholder}
           className="pl-8"
         />
       </div>
@@ -59,11 +63,11 @@ export const TableToolbar = ({ filteredExpenses = [] }: TableToolbarProps) => {
         <DropdownMenuTrigger asChild>
           <Button variant="outline" type="button">
             <FilterIcon className="size-4" />
-            Filter
+            {i18n.toolbar.filter}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-64">
-          <DropdownMenuLabel>Category</DropdownMenuLabel>
+          <DropdownMenuLabel>{i18n.toolbar.category}</DropdownMenuLabel>
           {Object.values(EXPENSE_CATEGORY_ENUM).map((category) => (
             <DropdownMenuCheckboxItem
               key={category}
@@ -77,7 +81,7 @@ export const TableToolbar = ({ filteredExpenses = [] }: TableToolbarProps) => {
           <DropdownMenuSeparator />
           <div className="p-1">
             <Button type="button" variant="ghost" size="sm" className="w-full" onClick={() => setCategoryFilter("all")}>
-              Reset Filters
+              {i18n.toolbar.resetFilters}
             </Button>
           </div>
         </DropdownMenuContent>
@@ -91,14 +95,14 @@ export const TableToolbar = ({ filteredExpenses = [] }: TableToolbarProps) => {
           disabled={!filteredExpenses.length || isDownloading}
         >
           <DownloadIcon className="size-4" />
-          {isDownloading ? "Preparing..." : "Download"}
+          {isDownloading ? i18n.toolbar.downloadPreparing : i18n.toolbar.download}
         </Button>
       </Can>
 
       <Can I={AbilityAction.CREATE} a={ExpenseAuthZEntity}>
         <Button type="button" className="ml-auto" onClick={openCreate}>
           <PlusIcon className="size-4" />
-          Add Expense
+          {i18n.toolbar.addExpense}
         </Button>
       </Can>
     </div>

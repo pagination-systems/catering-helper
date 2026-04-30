@@ -19,13 +19,31 @@ export interface GetCustomerLedgerResponse {
   };
 }
 
-export const updateLedgerPaymentSchema = z.object({
-  paidAmount: z
-    .number({
-      message: "Pay amount must be a number.",
-    })
-    .finite("Pay amount must be a valid number.")
-    .gt(0, "Pay amount must be greater than 0."),
-});
+type LedgerPaymentValidationMessages = {
+  paidAmountNumber: string;
+  paidAmountFinite: string;
+  paidAmountPositive: string;
+};
+
+const defaultValidationMessages: LedgerPaymentValidationMessages = {
+  paidAmountNumber: "Pay amount must be a number.",
+  paidAmountFinite: "Pay amount must be a valid number.",
+  paidAmountPositive: "Pay amount must be greater than 0.",
+};
+
+export const createUpdateLedgerPaymentSchema = (messages?: Partial<LedgerPaymentValidationMessages>) => {
+  const nextMessages = { ...defaultValidationMessages, ...messages };
+
+  return z.object({
+    paidAmount: z
+      .number({
+        message: nextMessages.paidAmountNumber,
+      })
+      .finite(nextMessages.paidAmountFinite)
+      .gt(0, nextMessages.paidAmountPositive),
+  });
+};
+
+export const updateLedgerPaymentSchema = createUpdateLedgerPaymentSchema();
 
 export type UpdateLedgerPaymentValues = z.infer<typeof updateLedgerPaymentSchema>;

@@ -1,10 +1,13 @@
 import { Document, Font, Page, pdf, StyleSheet, Text, View } from "@react-pdf/renderer";
 import moment from "moment";
+import type { Language } from "@/lib/i18n";
 import { formatDecimal } from "@/lib/utils";
+import { getExpensesContent, interpolate } from "../lib/expenses-i18n";
 import type { IExpense } from "../schemas/expense.schema";
 
 type ExpensesPdfProps = {
   entries: IExpense[];
+  lang?: Language;
 };
 
 const TIMESTAMP_FORMAT = "YYYY-MM-DD-HHmm";
@@ -182,21 +185,28 @@ const styles = StyleSheet.create({
   },
 });
 
-const ExpensesPdfDocument = ({ entries }: { entries: IExpense[] }) => {
+const ExpensesPdfDocument = ({ entries, lang = "en" }: { entries: IExpense[]; lang?: Language }) => {
+  const i18n = getExpensesContent(lang);
   const total = entries.reduce((s, e) => s + e.amount, 0);
 
   return (
-    <Document title="Expenses">
+    <Document title={i18n.pdf.title}>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <View style={styles.headerTop}>
             <View>
               <Text style={styles.title}>{companyInfo.name}</Text>
-              <Text style={styles.subtitle}>Phone: {companyInfo.phone}</Text>
+              <Text style={styles.subtitle}>
+                {i18n.pdf.phone}: {companyInfo.phone}
+              </Text>
             </View>
             <View>
-              <Text style={styles.subtitle}>Total Records: {entries.length}</Text>
-              <Text style={styles.subtitle}>Generated: {moment().format(GENERATED_AT_FORMAT)}</Text>
+              <Text style={styles.subtitle}>
+                {i18n.pdf.totalRecords}: {entries.length}
+              </Text>
+              <Text style={styles.subtitle}>
+                {i18n.pdf.generated}: {moment().format(GENERATED_AT_FORMAT)}
+              </Text>
             </View>
           </View>
           <View style={styles.headerDivider} />
@@ -204,11 +214,11 @@ const ExpensesPdfDocument = ({ entries }: { entries: IExpense[] }) => {
 
         <View style={styles.table}>
           <View style={styles.tableHeader}>
-            <Text style={[styles.tableHeaderText, styles.colDate]}>Date</Text>
-            <Text style={[styles.tableHeaderText, styles.colLabel]}>Label</Text>
-            <Text style={[styles.tableHeaderText, styles.colCategory]}>Category</Text>
-            <Text style={[styles.tableHeaderText, styles.colDesc]}>Description</Text>
-            <Text style={[styles.tableHeaderText, styles.colAmount, styles.textRight]}>Amount</Text>
+            <Text style={[styles.tableHeaderText, styles.colDate]}>{i18n.pdf.date}</Text>
+            <Text style={[styles.tableHeaderText, styles.colLabel]}>{i18n.pdf.label}</Text>
+            <Text style={[styles.tableHeaderText, styles.colCategory]}>{i18n.pdf.category}</Text>
+            <Text style={[styles.tableHeaderText, styles.colDesc]}>{i18n.pdf.description}</Text>
+            <Text style={[styles.tableHeaderText, styles.colAmount, styles.textRight]}>{i18n.pdf.amount}</Text>
           </View>
 
           {entries.map((entry, idx) => (
@@ -237,7 +247,7 @@ const ExpensesPdfDocument = ({ entries }: { entries: IExpense[] }) => {
 
           <View style={styles.summaryRow} wrap={false}>
             <View style={styles.summaryLabelCell}>
-              <Text style={styles.summaryLabelText}>Total</Text>
+              <Text style={styles.summaryLabelText}>{i18n.pdf.total}</Text>
             </View>
             <View style={styles.colAmount}>
               <Text style={styles.summaryValueText}>{formatDecimal(total)}</Text>
@@ -250,10 +260,12 @@ const ExpensesPdfDocument = ({ entries }: { entries: IExpense[] }) => {
           <View style={styles.footerRow}>
             <Text
               style={styles.footerText}
-              render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
+              render={({ pageNumber, totalPages }) =>
+                interpolate(i18n.pdf.pageOf, { page: String(pageNumber), total: String(totalPages) })
+              }
             />
             <Text style={styles.footerText}>{companyInfo.name}</Text>
-            <Text style={styles.footerText}>Expenses</Text>
+            <Text style={styles.footerText}>{i18n.pdf.footerModule}</Text>
           </View>
         </View>
       </Page>
@@ -261,15 +273,16 @@ const ExpensesPdfDocument = ({ entries }: { entries: IExpense[] }) => {
   );
 };
 
-export const downloadExpensesPdf = async ({ entries }: ExpensesPdfProps) => {
+export const downloadExpensesPdf = async ({ entries, lang = "en" }: ExpensesPdfProps) => {
+  const i18n = getExpensesContent(lang);
   ensurePdfFontRegistered();
 
-  const blob = await pdf(<ExpensesPdfDocument entries={entries} />).toBlob();
+  const blob = await pdf(<ExpensesPdfDocument entries={entries} lang={lang} />).toBlob();
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
 
   link.href = url;
-  link.download = `expenses-${moment().format(TIMESTAMP_FORMAT)}.pdf`;
+  link.download = `${i18n.pdf.filePrefix}-${moment().format(TIMESTAMP_FORMAT)}.pdf`;
   link.click();
 
   URL.revokeObjectURL(url);

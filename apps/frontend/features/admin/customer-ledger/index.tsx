@@ -8,6 +8,7 @@ import { SectionHeader } from "../components/section-header";
 import { CustomerLedgerTable } from "./components/customer-ledger-table";
 import { PaymentForm } from "./components/payment-form";
 import { TableToolbar } from "./components/table-toolbar";
+import { useCustomerLedgerI18n } from "./lib/customer-ledger-i18n";
 import type { UpdateLedgerPaymentValues } from "./schemas/customer-ledger.schema";
 import { useCustomerLedgerStore } from "./store/useStore";
 
@@ -24,6 +25,7 @@ const buildPagination = (totalDocs: number) => ({
 });
 
 export const CustomerLedger = () => {
+  const i18n = useCustomerLedgerI18n();
   const data = useCustomerLedgerStore((state) => state.list);
   const query = useCustomerLedgerStore((state) => state.query);
   const isEditSheetOpen = useCustomerLedgerStore((state) => state.isEditSheetOpen);
@@ -63,10 +65,7 @@ export const CustomerLedger = () => {
 
   return (
     <section className="space-y-4" aria-labelledby="customer-ledger-title">
-      <SectionHeader
-        title="Customer Ledger"
-        description="Track customer total, paid, and due balances. Update only payment entries with validation."
-      />
+      <SectionHeader title={i18n.title} description={i18n.description} />
 
       <Card>
         <CardHeader className="space-y-3">
@@ -81,17 +80,15 @@ export const CustomerLedger = () => {
       <Sheet open={isEditSheetOpen} onOpenChange={setEditSheetOpen}>
         <SheetContent side="right" className="w-full sm:!max-w-[520px]">
           <SheetHeader>
-            <SheetTitle>Update Paid Amount</SheetTitle>
-            <SheetDescription>
-              Add received payment for the selected customer. Due amount will be reduced automatically.
-            </SheetDescription>
+            <SheetTitle>{i18n.sheet.title}</SheetTitle>
+            <SheetDescription>{i18n.sheet.description}</SheetDescription>
           </SheetHeader>
 
           <PaymentForm
             onSubmit={onSubmitPayment}
             maxDueAmount={selectedItem?.dueAmount ?? 0}
-            customerName={selectedItem?.customerName ?? "Unknown customer"}
-            customerPhone={selectedItem?.customerPhone ?? "N/A"}
+            customerName={selectedItem?.customerName ?? i18n.placeholders.unknownCustomer}
+            customerPhone={selectedItem?.customerPhone ?? i18n.placeholders.noPhone}
           />
         </SheetContent>
       </Sheet>

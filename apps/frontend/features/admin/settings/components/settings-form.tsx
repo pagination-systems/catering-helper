@@ -10,7 +10,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { type UpdateTenantValues, updateTenantSchema } from "../schemas/settings.schema";
+import { useSettingsI18n } from "../lib/settings-i18n";
+import type { UpdateTenantValues } from "../schemas/settings.schema";
+import { updateTenantSchema } from "../schemas/settings.schema";
 
 interface SettingsFormProps {
   onSubmit: (data: UpdateTenantValues) => void;
@@ -18,7 +20,8 @@ interface SettingsFormProps {
   submitLabel?: string;
 }
 
-export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Settings" }: SettingsFormProps) => {
+export const SettingsForm = ({ onSubmit, initialValues, submitLabel }: SettingsFormProps) => {
+  const i18n = useSettingsI18n();
   const form = useForm<UpdateTenantValues, unknown, UpdateTenantValues>({
     resolver: zodResolver(updateTenantSchema),
     defaultValues: initialValues,
@@ -40,10 +43,10 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
             <CardHeader className="space-y-2 border-b pb-4">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Building2 className="size-4" />
-                <span className="text-xs font-medium uppercase tracking-[0.2em]">Branding</span>
+                <span className="text-xs font-medium uppercase tracking-[0.2em]">{i18n.branding.sectionLabel}</span>
               </div>
-              <CardTitle className="text-lg">Storefront identity</CardTitle>
-              <CardDescription>Shape the name, message, and links customers see first.</CardDescription>
+              <CardTitle className="text-lg">{i18n.branding.cardTitle}</CardTitle>
+              <CardDescription>{i18n.branding.cardDescription}</CardDescription>
             </CardHeader>
             <CardContent className="mt-4 grid gap-4 md:grid-cols-2">
               <FormField
@@ -51,11 +54,11 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tenant Name</FormLabel>
+                    <FormLabel>{i18n.branding.nameLabel}</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Uttara Catering" {...field} />
+                      <Input type="text" placeholder={i18n.branding.namePlaceholder} {...field} />
                     </FormControl>
-                    <FormDescription>Shown across the admin and customer-facing screens.</FormDescription>
+                    <FormDescription>{i18n.branding.nameDescription}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -66,11 +69,11 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Headline</FormLabel>
+                    <FormLabel>{i18n.branding.headlineLabel}</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Premium Menus, Frictionless Customization" {...field} />
+                      <Input type="text" placeholder={i18n.branding.headlinePlaceholder} {...field} />
                     </FormControl>
-                    <FormDescription>A short line that supports your brand promise.</FormDescription>
+                    <FormDescription>{i18n.branding.headlineDescription}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -81,11 +84,11 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
                 name="logoUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Logo URL</FormLabel>
+                    <FormLabel>{i18n.branding.logoUrlLabel}</FormLabel>
                     <FormControl>
-                      <Input type="url" placeholder="https://example.com/logo.png" {...field} />
+                      <Input type="url" placeholder={i18n.branding.logoUrlPlaceholder} {...field} />
                     </FormControl>
-                    <FormDescription>Use a direct image link so the logo loads reliably.</FormDescription>
+                    <FormDescription>{i18n.branding.logoUrlDescription}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -96,11 +99,11 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
                 name="menuUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Menu URL</FormLabel>
+                    <FormLabel>{i18n.branding.menuUrlLabel}</FormLabel>
                     <FormControl>
-                      <Input type="url" placeholder="https://example.com/menu" {...field} />
+                      <Input type="url" placeholder={i18n.branding.menuUrlPlaceholder} {...field} />
                     </FormControl>
-                    <FormDescription>Link to the public menu, brochure, or ordering page.</FormDescription>
+                    <FormDescription>{i18n.branding.menuUrlDescription}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -111,18 +114,38 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
                 name="deliveryFee"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Delivery Fee</FormLabel>
+                    <FormLabel>{i18n.branding.deliveryFeeLabel}</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         min="0"
                         step="1"
-                        placeholder="0"
+                        placeholder={i18n.branding.deliveryFeePlaceholder}
                         value={field.value ?? 0}
                         onChange={(event) => field.onChange(event.target.value === "" ? 0 : Number(event.target.value))}
                       />
                     </FormControl>
-                    <FormDescription>Shown at checkout before add-ons or taxes.</FormDescription>
+                    <FormDescription>{i18n.branding.deliveryFeeDescription}</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="lastOrderTime"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{i18n.branding.lastOrderTimeLabel}</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="time"
+                        placeholder={i18n.branding.lastOrderTimePlaceholder}
+                        value={field.value ?? ""}
+                        onChange={(event) => field.onChange(event.target.value)}
+                      />
+                    </FormControl>
+                    <FormDescription>{i18n.branding.lastOrderTimeDescription}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -133,17 +156,11 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
                 name="description"
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>{i18n.branding.descriptionLabel}</FormLabel>
                     <FormControl>
-                      <Textarea
-                        placeholder="Describe your tenant proposition and service promise."
-                        rows={5}
-                        {...field}
-                      />
+                      <Textarea placeholder={i18n.branding.descriptionPlaceholder} rows={5} {...field} />
                     </FormControl>
-                    <FormDescription>
-                      Explain what makes the service different in a concise, customer-friendly way.
-                    </FormDescription>
+                    <FormDescription>{i18n.branding.descriptionDescription}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -156,10 +173,10 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
               <CardHeader className="space-y-2 border-b pb-4">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Phone className="size-4" />
-                  <span className="text-xs font-medium uppercase tracking-[0.2em]">Contact</span>
+                  <span className="text-xs font-medium uppercase tracking-[0.2em]">{i18n.contact.sectionLabel}</span>
                 </div>
-                <CardTitle className="text-lg">Support details</CardTitle>
-                <CardDescription>Keep these current so customers can contact you without friction.</CardDescription>
+                <CardTitle className="text-lg">{i18n.contact.cardTitle}</CardTitle>
+                <CardDescription>{i18n.contact.cardDescription}</CardDescription>
               </CardHeader>
               <CardContent className="mt-4 grid gap-4 sm:grid-cols-2">
                 <FormField
@@ -167,11 +184,11 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
                   name="contactEmail"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Contact Email</FormLabel>
+                      <FormLabel>{i18n.contact.emailLabel}</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="info@company.com" {...field} />
+                        <Input type="email" placeholder={i18n.contact.emailPlaceholder} {...field} />
                       </FormControl>
-                      <FormDescription>Best for order questions and admin follow-ups.</FormDescription>
+                      <FormDescription>{i18n.contact.emailDescription}</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -182,11 +199,11 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
                   name="contactPhone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Contact Phone</FormLabel>
+                      <FormLabel>{i18n.contact.phoneLabel}</FormLabel>
                       <FormControl>
-                        <Input type="text" placeholder="+880 1711-000000" {...field} />
+                        <Input type="text" placeholder={i18n.contact.phonePlaceholder} {...field} />
                       </FormControl>
-                      <FormDescription>Use the number customers should call first.</FormDescription>
+                      <FormDescription>{i18n.contact.phoneDescription}</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -197,11 +214,11 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
                   name="contactWhatsapp"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>WhatsApp</FormLabel>
+                      <FormLabel>{i18n.contact.whatsappLabel}</FormLabel>
                       <FormControl>
-                        <Input type="text" placeholder="+880 1711-000000" {...field} />
+                        <Input type="text" placeholder={i18n.contact.whatsappPlaceholder} {...field} />
                       </FormControl>
-                      <FormDescription>Helpful for quick customer communication.</FormDescription>
+                      <FormDescription>{i18n.contact.whatsappDescription}</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -212,11 +229,11 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
                   name="address"
                   render={({ field }) => (
                     <FormItem className="sm:col-span-2">
-                      <FormLabel>Address</FormLabel>
+                      <FormLabel>{i18n.contact.addressLabel}</FormLabel>
                       <FormControl>
-                        <Input type="text" placeholder="123 Corporate Area, Gulshan 1, Dhaka" {...field} />
+                        <Input type="text" placeholder={i18n.contact.addressPlaceholder} {...field} />
                       </FormControl>
-                      <FormDescription>Shown on invoices and contact pages when relevant.</FormDescription>
+                      <FormDescription>{i18n.contact.addressDescription}</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -228,10 +245,10 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
               <CardHeader className="space-y-2 border-b pb-4">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Share2 className="size-4" />
-                  <span className="text-xs font-medium uppercase tracking-[0.2em]">Social</span>
+                  <span className="text-xs font-medium uppercase tracking-[0.2em]">{i18n.social.sectionLabel}</span>
                 </div>
-                <CardTitle className="text-lg">Public channels</CardTitle>
-                <CardDescription>Keep your most visible social links consistent and easy to find.</CardDescription>
+                <CardTitle className="text-lg">{i18n.social.cardTitle}</CardTitle>
+                <CardDescription>{i18n.social.cardDescription}</CardDescription>
               </CardHeader>
               <CardContent className="mt-4 grid gap-4">
                 <FormField
@@ -239,9 +256,9 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
                   name="social.facebook"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Facebook</FormLabel>
+                      <FormLabel>{i18n.social.facebookLabel}</FormLabel>
                       <FormControl>
-                        <Input type="url" placeholder="https://facebook.com/your-page" {...field} />
+                        <Input type="url" placeholder={i18n.social.facebookPlaceholder} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -253,9 +270,9 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
                   name="social.instagram"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Instagram</FormLabel>
+                      <FormLabel>{i18n.social.instagramLabel}</FormLabel>
                       <FormControl>
-                        <Input type="url" placeholder="https://instagram.com/your-handle" {...field} />
+                        <Input type="url" placeholder={i18n.social.instagramPlaceholder} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -267,9 +284,9 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
                   name="social.youtube"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>YouTube</FormLabel>
+                      <FormLabel>{i18n.social.youtubeLabel}</FormLabel>
                       <FormControl>
-                        <Input type="url" placeholder="https://youtube.com/@your-channel" {...field} />
+                        <Input type="url" placeholder={i18n.social.youtubePlaceholder} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -283,14 +300,12 @@ export const SettingsForm = ({ onSubmit, initialValues, submitLabel = "Save Sett
         <Can I={AbilityAction.UPDATE} a={TenantAuthZEntity}>
           <div className="flex flex-col gap-3 rounded-xl border border-border/70 bg-muted/30 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1">
-              <p className="text-sm font-medium text-foreground">Review the details before saving.</p>
-              <p className="text-sm text-muted-foreground">
-                These settings update your tenant profile, contact paths, and social presence.
-              </p>
+              <p className="text-sm font-medium text-foreground">{i18n.form.reviewMessage}</p>
+              <p className="text-sm text-muted-foreground">{i18n.form.reviewDescription}</p>
             </div>
             <Button type="submit" className="w-full sm:w-auto">
               <SaveIcon className="size-4" />
-              {submitLabel}
+              {submitLabel || i18n.form.submitLabel}
             </Button>
           </div>
         </Can>

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Can } from "@/authz/ability-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useCustomerLedgerI18n } from "../lib/customer-ledger-i18n";
 import type { ICustomerLedger } from "../schemas/customer-ledger.schema";
 import { useCustomerLedgerStore } from "../store/useStore";
 import { downloadCustomerLedgerPdf } from "./customer-ledger-pdf";
@@ -14,6 +15,7 @@ interface TableToolbarProps {
 }
 
 export const TableToolbar = ({ filteredCustomers }: TableToolbarProps) => {
+  const i18n = useCustomerLedgerI18n();
   const [isDownloading, setIsDownloading] = useState(false);
   const query = useCustomerLedgerStore((state) => state.query);
   const setQuery = useCustomerLedgerStore((state) => state.setQuery);
@@ -23,7 +25,7 @@ export const TableToolbar = ({ filteredCustomers }: TableToolbarProps) => {
 
     try {
       setIsDownloading(true);
-      await downloadCustomerLedgerPdf({ entries: filteredCustomers });
+      await downloadCustomerLedgerPdf({ entries: filteredCustomers, labels: i18n.pdf });
     } finally {
       setIsDownloading(false);
     }
@@ -36,7 +38,7 @@ export const TableToolbar = ({ filteredCustomers }: TableToolbarProps) => {
         <Input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search by customer name or phone"
+          placeholder={i18n.toolbar.searchPlaceholder}
           className="pl-8"
         />
       </div>
@@ -49,7 +51,7 @@ export const TableToolbar = ({ filteredCustomers }: TableToolbarProps) => {
           disabled={!filteredCustomers.length || isDownloading}
         >
           <DownloadIcon className="size-4" />
-          {isDownloading ? "Preparing..." : "Download"}
+          {isDownloading ? i18n.toolbar.downloadPreparing : i18n.toolbar.download}
         </Button>
       </Can>
     </div>

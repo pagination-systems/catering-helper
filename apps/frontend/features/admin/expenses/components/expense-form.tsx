@@ -15,6 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn, formatDateValue } from "@/lib/utils";
+import { useExpensesI18n } from "../lib/expenses-i18n";
 import { type CreateExpenseValues, createExpenseSchema } from "../schemas/expense.schema";
 
 const categories = Object.values(EXPENSE_CATEGORY_ENUM) as EXPENSE_CATEGORY_ENUM[];
@@ -27,8 +28,10 @@ interface ExpenseFormProps {
 
 type ExpenseFormInputValues = z.input<typeof createExpenseSchema>;
 
-export const ExpenseForm = ({ onSubmit, initialValues, submitLabel = "Add Expense" }: ExpenseFormProps) => {
+export const ExpenseForm = ({ onSubmit, initialValues, submitLabel }: ExpenseFormProps) => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const i18n = useExpensesI18n();
+  const resolvedSubmitLabel = submitLabel || i18n.form.submitCreate;
 
   const form = useForm<ExpenseFormInputValues, unknown, CreateExpenseValues>({
     resolver: zodResolver(createExpenseSchema),
@@ -62,9 +65,9 @@ export const ExpenseForm = ({ onSubmit, initialValues, submitLabel = "Add Expens
                     name="label"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Label</FormLabel>
+                        <FormLabel>{i18n.form.label}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Expense label" {...field} />
+                          <Input placeholder={i18n.form.labelPlaceholder} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -76,7 +79,7 @@ export const ExpenseForm = ({ onSubmit, initialValues, submitLabel = "Add Expens
                     name="date"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Date</FormLabel>
+                        <FormLabel>{i18n.form.date}</FormLabel>
                         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                           <PopoverTrigger asChild>
                             <FormControl>
@@ -87,7 +90,11 @@ export const ExpenseForm = ({ onSubmit, initialValues, submitLabel = "Add Expens
                                   !field.value && "text-muted-foreground",
                                 )}
                               >
-                                {field.value ? format(new Date(field.value), "PPP") : <span>Pick a date</span>}
+                                {field.value ? (
+                                  format(new Date(field.value), "PPP")
+                                ) : (
+                                  <span>{i18n.form.datePlaceholder}</span>
+                                )}
                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                               </Button>
                             </FormControl>
@@ -116,10 +123,13 @@ export const ExpenseForm = ({ onSubmit, initialValues, submitLabel = "Add Expens
                     name="category"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Category</FormLabel>
+                        <FormLabel>{i18n.form.category}</FormLabel>
                         <FormControl>
                           <Select
-                            options={categories.map((category) => ({ label: category, value: category }))}
+                            options={categories.map((category) => ({
+                              label: category,
+                              value: category,
+                            }))}
                             value={field.value}
                             onValueChange={(value) => field.onChange(value)}
                           />
@@ -134,14 +144,14 @@ export const ExpenseForm = ({ onSubmit, initialValues, submitLabel = "Add Expens
                     name="amount"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Amount</FormLabel>
+                        <FormLabel>{i18n.form.amount}</FormLabel>
                         <FormControl>
                           <Input
                             type="number"
                             inputMode="decimal"
                             min={1}
                             step="1"
-                            placeholder="Enter amount"
+                            placeholder={i18n.form.amountPlaceholder}
                             {...field}
                             value={Number.isFinite(field.value) ? field.value : ""}
                             onChange={(event) => {
@@ -161,9 +171,9 @@ export const ExpenseForm = ({ onSubmit, initialValues, submitLabel = "Add Expens
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>{i18n.form.description}</FormLabel>
                       <FormControl>
-                        <Textarea rows={3} placeholder="Optional description" {...field} />
+                        <Textarea rows={3} placeholder={i18n.form.descriptionPlaceholder} {...field} />
                       </FormControl>
                     </FormItem>
                   )}
@@ -175,7 +185,7 @@ export const ExpenseForm = ({ onSubmit, initialValues, submitLabel = "Add Expens
 
         <div className="sticky bottom-0 z-10 mt-auto flex justify-stretch border-t bg-background px-0 pt-4 pb-1 sm:justify-end sm:px-1">
           <Button type="submit" className="w-full sm:w-auto sm:min-w-32">
-            {submitLabel}
+            {resolvedSubmitLabel}
           </Button>
         </div>
       </form>
