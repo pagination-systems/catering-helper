@@ -1,5 +1,5 @@
 import { PackageAuthZEntity } from "@catering/authz";
-import { AbilityAction } from "@catering/types";
+import { AbilityAction, PACKAGE_STATUS_ENUM } from "@catering/types";
 import { FilterIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { Can } from "@/authz/ability-context";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { PackageStatus } from "../schemas/package.schema";
 import { usePackagesStore } from "../store/useStore";
 
 export const TableToolbar = () => {
@@ -43,7 +42,7 @@ export const TableToolbar = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-64">
           <DropdownMenuLabel>Status</DropdownMenuLabel>
-          {Object.values(PackageStatus).map((status) => (
+          {Object.values(PACKAGE_STATUS_ENUM).map((status) => (
             <DropdownMenuCheckboxItem
               key={status}
               checked={statusFilter === status}

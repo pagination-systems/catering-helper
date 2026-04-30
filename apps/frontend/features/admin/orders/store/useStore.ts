@@ -1,3 +1,4 @@
+import { ORDER_STATUS_ENUM } from "@catering/types";
 import { create } from "zustand";
 import { formatDate } from "@/lib/utils";
 import { getPriceByPackageName } from "../data/package-catalog";
@@ -9,7 +10,6 @@ import {
   type IOrder,
   type IOrderItem,
   isOrderLocked,
-  OrderStatus,
 } from "../schemas/order.schema";
 
 export type DaySlot = {
@@ -20,7 +20,7 @@ export type DaySlot = {
   isToday: boolean;
 };
 
-type StatusFilter = "all" | OrderStatus;
+type StatusFilter = "all" | ORDER_STATUS_ENUM;
 type DayFilter = "all" | DayName;
 
 type OrdersStoreState = {
@@ -128,7 +128,7 @@ type SeedOrderInput = {
   customerPhone: string;
   address: string;
   notes?: string;
-  status: OrderStatus;
+  status: ORDER_STATUS_ENUM;
   dayOffset: number;
   createdHoursAgo: number;
   items: Array<{
@@ -179,7 +179,7 @@ const seedOrderBlueprints: Omit<SeedOrderInput, "seed">[] = [
     customerName: "Rahim Uddin",
     customerPhone: "01711000001",
     address: "House 14, Road 7, Dhanmondi, Dhaka",
-    status: OrderStatus.Confirmed,
+    status: ORDER_STATUS_ENUM.CONFIRMED,
     dayOffset: 0,
     createdHoursAgo: 1,
     items: [
@@ -204,7 +204,7 @@ const seedOrderBlueprints: Omit<SeedOrderInput, "seed">[] = [
     customerPhone: "01822000002",
     address: "House 22, Gulshan 1, Dhaka",
     notes: "Call before delivery",
-    status: OrderStatus.Confirmed,
+    status: ORDER_STATUS_ENUM.CONFIRMED,
     dayOffset: 0,
     createdHoursAgo: 3,
     items: [
@@ -221,7 +221,7 @@ const seedOrderBlueprints: Omit<SeedOrderInput, "seed">[] = [
     customerName: "Aman Group Ltd",
     customerPhone: "01933000003",
     address: "Tejgaon Industrial Area, Dhaka",
-    status: OrderStatus.Confirmed,
+    status: ORDER_STATUS_ENUM.CONFIRMED,
     dayOffset: 1,
     createdHoursAgo: 6,
     items: [
@@ -238,7 +238,7 @@ const seedOrderBlueprints: Omit<SeedOrderInput, "seed">[] = [
     customerName: "Mehedi Hasan",
     customerPhone: "01644000004",
     address: "Mirpur DOHS, Dhaka",
-    status: OrderStatus.Cancelled,
+    status: ORDER_STATUS_ENUM.CANCELLED,
     dayOffset: 2,
     createdHoursAgo: 12,
     items: [
@@ -255,7 +255,7 @@ const seedOrderBlueprints: Omit<SeedOrderInput, "seed">[] = [
     customerName: "Shamim Enterprise",
     customerPhone: "01555000005",
     address: "Banani, Dhaka",
-    status: OrderStatus.Confirmed,
+    status: ORDER_STATUS_ENUM.CONFIRMED,
     dayOffset: 3,
     createdHoursAgo: 28,
     items: [
@@ -272,7 +272,7 @@ const seedOrderBlueprints: Omit<SeedOrderInput, "seed">[] = [
     customerName: "Arifa Sultana",
     customerPhone: "01366000006",
     address: "Uttara Sector 11, Dhaka",
-    status: OrderStatus.Cancelled,
+    status: ORDER_STATUS_ENUM.CANCELLED,
     dayOffset: 4,
     createdHoursAgo: 32,
     items: [
@@ -289,7 +289,7 @@ const seedOrderBlueprints: Omit<SeedOrderInput, "seed">[] = [
     customerName: "Zaman Trading",
     customerPhone: "01777000007",
     address: "Moghbazar, Dhaka",
-    status: OrderStatus.Confirmed,
+    status: ORDER_STATUS_ENUM.CONFIRMED,
     dayOffset: 5,
     createdHoursAgo: 10,
     items: [
@@ -306,7 +306,7 @@ const seedOrderBlueprints: Omit<SeedOrderInput, "seed">[] = [
     customerName: "Rifat Chowdhury",
     customerPhone: "01488000008",
     address: "Badda, Dhaka",
-    status: OrderStatus.Confirmed,
+    status: ORDER_STATUS_ENUM.CONFIRMED,
     dayOffset: 6,
     createdHoursAgo: 2,
     items: [
@@ -431,7 +431,7 @@ export const useOrdersStore = create<OrdersStoreState>((set) => ({
 
         return {
           ...order,
-          status: OrderStatus.Cancelled,
+          status: ORDER_STATUS_ENUM.CANCELLED,
           notes: `${order.notes}${cancelNote}`.trim(),
           updatedAt: new Date(),
         };

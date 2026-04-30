@@ -1,16 +1,5 @@
+import type { PaginationMeta } from "@catering/types";
 import { z } from "zod";
-
-export interface PaginationMeta {
-  totalDocs: number;
-  limit: number;
-  hasPrevPage: boolean;
-  hasNextPage: boolean;
-  page?: number | undefined;
-  totalPages: number;
-  prevPage?: number | null | undefined;
-  nextPage?: number | null | undefined;
-  pagingCounter: number;
-}
 
 export interface ICustomerLedger {
   id: string;

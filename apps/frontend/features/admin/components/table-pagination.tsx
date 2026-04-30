@@ -1,5 +1,6 @@
 "use client";
 
+import type { PaginationMeta } from "@catering/types";
 import { useEffect, useMemo, useState } from "react";
 import {
   Pagination,
@@ -13,15 +14,8 @@ import {
 
 type PageItem = number | "ellipsis";
 
-export interface TablePaginationMeta {
-  totalDocs: number;
-  limit: number;
-  page?: number;
-  totalPages: number;
-}
-
 interface TablePaginationProps {
-  pagination: TablePaginationMeta;
+  pagination: PaginationMeta;
   pageSizeOptions?: number[];
   onPageChange?: (page: number) => void;
   onPageSizeChange?: (pageSize: number) => void;

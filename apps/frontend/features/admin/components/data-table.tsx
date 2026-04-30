@@ -1,10 +1,11 @@
 "use client";
 
+import type { PaginationMeta } from "@catering/types";
 import type { ReactNode } from "react";
 import { If } from "@/components/if";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { TablePagination, type TablePaginationMeta } from "./table-pagination";
+import { TablePagination } from "./table-pagination";
 
 type ColumnSize = number | string;
 
@@ -19,7 +20,7 @@ export interface DataTableColumn<TData> {
 interface DataTableProps<TData> {
   data: TData[];
   columns: DataTableColumn<TData>[];
-  pagination: TablePaginationMeta;
+  pagination: PaginationMeta;
   handlePaginate?: (payload: { page: number; limit: number }) => void;
   getRowId: (row: TData, index: number) => string;
   emptyState?: ReactNode;

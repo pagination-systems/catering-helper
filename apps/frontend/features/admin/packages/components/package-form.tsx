@@ -1,8 +1,8 @@
+import { PACKAGE_STATUS_ENUM } from "@catering/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon, Trash2Icon } from "lucide-react";
 import { useEffect } from "react";
 import { type UseFormReturn, useFieldArray, useForm, useWatch } from "react-hook-form";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -12,13 +12,7 @@ import { Select, type SelectOption } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import {
-  type CreatePackageValues,
-  createPackageSchema,
-  type DayName,
-  dayOrder,
-  PackageStatus,
-} from "../schemas/package.schema";
+import { type CreatePackageValues, createPackageSchema, type DayName, dayOrder } from "../schemas/package.schema";
 
 interface PackageFormProps {
   onSubmit: (data: CreatePackageValues) => void;
@@ -50,7 +44,7 @@ const dayLabelMap: Record<DayName, string> = {
   Fri: "Friday",
 };
 
-const statusOptions: SelectOption<PackageStatus>[] = Object.values(PackageStatus).map((status) => ({
+const statusOptions: SelectOption<PACKAGE_STATUS_ENUM>[] = Object.values(PACKAGE_STATUS_ENUM).map((status) => ({
   value: status,
   label: status,
 }));
@@ -83,7 +77,7 @@ const getDefaultValues = (initialValues?: CreatePackageValues): CreatePackageVal
   name: initialValues?.name ?? "",
   description: initialValues?.description ?? "",
   pricePerMeal: initialValues?.pricePerMeal ?? 120,
-  status: initialValues?.status ?? PackageStatus.Active,
+  status: initialValues?.status ?? PACKAGE_STATUS_ENUM.ACTIVE,
   days: normalizeDays(initialValues?.days),
 });
 

@@ -1,4 +1,4 @@
-import { EXPENSE_CATEGORY_ENUM } from "../schemas/expense.schema";
+import { EXPENSE_CATEGORY_ENUM } from "@catering/types";
 
 export const getCategoryBadgeStyles = (category: EXPENSE_CATEGORY_ENUM): string => {
   switch (category) {

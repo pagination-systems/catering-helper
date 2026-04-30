@@ -1,12 +1,12 @@
 "use client";
 
+import { EXPENSE_CATEGORY_ENUM } from "@catering/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -15,7 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn, formatDateValue } from "@/lib/utils";
-import { type CreateExpenseValues, createExpenseSchema, EXPENSE_CATEGORY_ENUM } from "../schemas/expense.schema";
+import { type CreateExpenseValues, createExpenseSchema } from "../schemas/expense.schema";
 
 const categories = Object.values(EXPENSE_CATEGORY_ENUM) as EXPENSE_CATEGORY_ENUM[];
 

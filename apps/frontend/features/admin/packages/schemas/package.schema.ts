@@ -1,25 +1,9 @@
+import { PACKAGE_STATUS_ENUM, type PaginationMeta } from "@catering/types";
 import { z } from "zod";
 
 export const dayOrder = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"] as const;
 
 export type DayName = (typeof dayOrder)[number];
-
-export enum PackageStatus {
-  Active = "Active",
-  Inactive = "Inactive",
-}
-
-export interface PaginationMeta {
-  totalDocs: number;
-  limit: number;
-  hasPrevPage: boolean;
-  hasNextPage: boolean;
-  page?: number | undefined;
-  totalPages: number;
-  prevPage?: number | null | undefined;
-  nextPage?: number | null | undefined;
-  pagingCounter: number;
-}
 
 export interface IMenuVariant {
   id: string;
@@ -39,7 +23,7 @@ export interface ICateringPackage {
   name: string;
   description: string;
   pricePerMeal: number;
-  status: PackageStatus;
+  status: PACKAGE_STATUS_ENUM;
   days: IDayPlan[];
   createdAt: Date;
   updatedAt: Date;
@@ -72,7 +56,7 @@ export const createPackageSchema = z
     name: z.string().trim().min(2, "Package name must be at least 2 characters.").max(100),
     description: z.string().trim().min(8, "Description must be at least 8 characters.").max(300),
     pricePerMeal: z.number().int().min(1, "Price must be at least 1 BDT.").max(100000),
-    status: z.enum(PackageStatus),
+    status: z.enum(PACKAGE_STATUS_ENUM),
     days: z.array(dayPlanSchema).length(dayOrder.length, "A package must have exactly 7 day plans."),
   })
   .superRefine((value, ctx) => {

@@ -1,15 +1,5 @@
+import { EXPENSE_CATEGORY_ENUM } from "@catering/types";
 import { z } from "zod";
-
-export enum EXPENSE_CATEGORY_ENUM {
-  FOOD_AND_RAW_MATERIALS = "Food & Raw Materials",
-  LABOR = "Labor",
-  TRANSPORT = "Transport",
-  RENT = "Rent",
-  UTILITIES = "Utilities",
-  MARKETING_AND_SALES = "Marketing & Sales",
-  SOFTWARE = "Software",
-  OTHER = "Other",
-}
 
 export const createExpenseSchema = z.object({
   label: z.string().min(1, "Label is required"),

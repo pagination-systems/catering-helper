@@ -1,5 +1,5 @@
 import { OrderAuthZEntity } from "@catering/authz";
-import { AbilityAction } from "@catering/types";
+import { AbilityAction, ORDER_STATUS_ENUM } from "@catering/types";
 import { DownloadIcon, FilterIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 import { Can } from "@/authz/ability-context";
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import type { IOrder } from "../schemas/order.schema";
-import { OrderStatus } from "../schemas/order.schema";
+
 import { useOrdersStore } from "../store/useStore";
 import { downloadOrdersPdf } from "./orders-pdf";
 
@@ -63,7 +63,7 @@ export const TableToolbar = ({ filteredOrders, activeDay }: TableToolbarProps) =
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-64">
           <DropdownMenuLabel>Status</DropdownMenuLabel>
-          {Object.values(OrderStatus).map((status) => (
+          {Object.values(ORDER_STATUS_ENUM).map((status) => (
             <DropdownMenuCheckboxItem
               key={status}
               checked={statusFilter === status}

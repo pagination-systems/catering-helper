@@ -1,5 +1,6 @@
+import { EXPENSE_CATEGORY_ENUM } from "@catering/types";
 import { create } from "zustand";
-import { type CreateExpenseValues, EXPENSE_CATEGORY_ENUM, type IExpense } from "../schemas/expense.schema";
+import type { CreateExpenseValues, IExpense } from "../schemas/expense.schema";
 
 type CategoryFilter = "all" | EXPENSE_CATEGORY_ENUM;
 

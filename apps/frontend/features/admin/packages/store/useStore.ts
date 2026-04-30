@@ -1,3 +1,4 @@
+import { PACKAGE_STATUS_ENUM } from "@catering/types";
 import { create } from "zustand";
 import {
   type CreatePackageValues,
@@ -5,10 +6,9 @@ import {
   dayOrder,
   type GetPackagesResponse,
   type ICateringPackage,
-  PackageStatus,
 } from "../schemas/package.schema";
 
-type StatusFilter = "all" | PackageStatus;
+type StatusFilter = "all" | (typeof PACKAGE_STATUS_ENUM)[keyof typeof PACKAGE_STATUS_ENUM];
 
 type PackagesStoreState = {
   list: GetPackagesResponse;
@@ -48,7 +48,7 @@ const packageSeed: ICateringPackage[] = [
     name: "ডেইলি বেসিক প্যাকেজ",
     description: "সাশ্রয়ী দৈনন্দিন অফিস মিল, সহজ ও পরিচিত খাবার।",
     pricePerMeal: 120,
-    status: PackageStatus.Active,
+    status: PACKAGE_STATUS_ENUM.ACTIVE,
     days: [
       {
         day: "Sat",
@@ -197,7 +197,7 @@ const packageSeed: ICateringPackage[] = [
     name: "স্ট্যান্ডার্ড প্যাকেজ",
     description: "সুষম ও কিছুটা উন্নত মানের অফিস মিল।",
     pricePerMeal: 130,
-    status: PackageStatus.Active,
+    status: PACKAGE_STATUS_ENUM.ACTIVE,
     days: dayOrder.map((day) => ({
       day: day as DayName,
       variants: [
@@ -229,7 +229,7 @@ const packageSeed: ICateringPackage[] = [
     name: "প্রিমিয়াম প্যাকেজ",
     description: "উন্নত মানের খাবার, মিটিং ও বিশেষ দিনের জন্য উপযুক্ত।",
     pricePerMeal: 150,
-    status: PackageStatus.Active,
+    status: PACKAGE_STATUS_ENUM.ACTIVE,
     days: dayOrder.map((day) => ({
       day: day as DayName,
       variants: [

@@ -1,25 +1,9 @@
+import { ORDER_STATUS_ENUM, type PaginationMeta } from "@catering/types";
 import { z } from "zod";
 
 export const dayOrder = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
 
 export type DayName = (typeof dayOrder)[number];
-
-export enum OrderStatus {
-  Confirmed = "Confirmed",
-  Cancelled = "Cancelled",
-}
-
-export interface PaginationMeta {
-  totalDocs: number;
-  limit: number;
-  hasPrevPage: boolean;
-  hasNextPage: boolean;
-  page?: number | undefined;
-  totalPages: number;
-  prevPage?: number | null | undefined;
-  nextPage?: number | null | undefined;
-  pagingCounter: number;
-}
 
 export interface IOrderItem {
   id: string;
@@ -40,7 +24,7 @@ export interface IOrder {
   address: string;
   notes: string;
   source: "Client Portal" | "Admin Panel";
-  status: OrderStatus;
+  status: ORDER_STATUS_ENUM;
   deliveryDay: DayName;
   deliveryDate: Date;
   items: IOrderItem[];
@@ -94,6 +78,6 @@ export const createOrderSchema = z.object({
 
 export type CreateOrderValues = z.infer<typeof createOrderSchema>;
 
-export const LOCKED_ORDER_STATUSES: OrderStatus[] = [OrderStatus.Cancelled];
+export const LOCKED_ORDER_STATUSES: ORDER_STATUS_ENUM[] = [ORDER_STATUS_ENUM.CANCELLED];
 
-export const isOrderLocked = (status: OrderStatus) => LOCKED_ORDER_STATUSES.includes(status);
+export const isOrderLocked = (status: ORDER_STATUS_ENUM) => LOCKED_ORDER_STATUSES.includes(status);

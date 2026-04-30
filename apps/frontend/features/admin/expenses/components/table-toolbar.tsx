@@ -1,7 +1,7 @@
 "use client";
 
 import { ExpenseAuthZEntity } from "@catering/authz";
-import { AbilityAction } from "@catering/types";
+import { AbilityAction, EXPENSE_CATEGORY_ENUM } from "@catering/types";
 import { DownloadIcon, FilterIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 import { Can } from "@/authz/ability-context";
@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import type { IExpense } from "../schemas/expense.schema";
-import { EXPENSE_CATEGORY_ENUM } from "../schemas/expense.schema";
 import { useExpensesStore } from "../store/useStore";
 import { downloadExpensesPdf } from "./expenses-pdf";
 

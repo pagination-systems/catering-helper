@@ -1,7 +1,7 @@
 "use client";
 
+import { ORDER_STATUS_ENUM } from "@catering/types";
 import { useMemo } from "react";
-
 import { If } from "@/components/if";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -15,7 +15,6 @@ import { OrderTable } from "./components/order-table";
 import { TableToolbar } from "./components/table-toolbar";
 import { getPriceByPackageName } from "./data/package-catalog";
 import type { CreateOrderValues, DayName, IOrder } from "./schemas/order.schema";
-import { OrderStatus } from "./schemas/order.schema";
 import { useOrdersStore } from "./store/useStore";
 
 const buildPagination = (totalDocs: number) => ({
@@ -174,7 +173,7 @@ export const Orders = () => {
       address: values.address,
       notes: values.notes ?? "",
       source: "Admin Panel",
-      status: OrderStatus.Confirmed,
+      status: ORDER_STATUS_ENUM.CONFIRMED,
       deliveryDay: deliverySlot?.day ?? "Sun",
       deliveryDate: deliverySlot?.date ?? now,
       items: nextItems,
