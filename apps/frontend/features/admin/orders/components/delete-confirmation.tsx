@@ -12,11 +12,13 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
+import { useOrdersI18n } from "../lib/orders-i18n";
 import { isOrderLocked } from "../schemas/order.schema";
 import { useOrdersStore } from "../store/useStore";
 
 export const DeleteConfirmation = () => {
   const [confirmText, setConfirmText] = useState("");
+  const i18n = useOrdersI18n();
   const deleteOrder = useOrdersStore((state) => state.deleteOrder);
   const isDeleteDialogOpen = useOrdersStore((state) => state.isDeleteDialogOpen);
   const selectedDeleteItem = useOrdersStore((state) => state.selectedDeleteItem);
@@ -42,33 +44,31 @@ export const DeleteConfirmation = () => {
     <AlertDialog open={isDeleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete order?</AlertDialogTitle>
+          <AlertDialogTitle>{i18n.delete.title}</AlertDialogTitle>
           <AlertDialogDescription>
             {selectedDeleteItem
-              ? `Are you sure you want to delete ${selectedDeleteItem.orderNo}? This action cannot be undone.`
-              : "Are you sure you want to delete this order? This action cannot be undone."}
+              ? i18n.delete.confirmMessage.replace("{{orderNo}}", selectedDeleteItem.orderNo)
+              : i18n.delete.confirmMessageGeneric}
           </AlertDialogDescription>
 
           {isLocked ? (
             <p className="text-sm text-muted-foreground">Completed and cancelled orders cannot be deleted.</p>
           ) : (
             <div className="mt-2 space-y-2">
-              <p className="text-sm text-muted-foreground">
-                Type <span className="font-medium text-foreground">delete-order</span> to confirm.
-              </p>
+              <p className="text-sm text-muted-foreground">{i18n.delete.confirmText}</p>
               <Input
                 value={confirmText}
                 onChange={(event) => setConfirmText(event.target.value)}
-                placeholder="delete-order"
+                placeholder={i18n.delete.confirmKeyword}
                 autoComplete="off"
               />
             </div>
           )}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{i18n.delete.cancel}</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirmDelete} disabled={!isDeleteEnabled || isLocked}>
-            Delete
+            {i18n.delete.confirm}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

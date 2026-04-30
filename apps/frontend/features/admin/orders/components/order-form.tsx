@@ -17,6 +17,7 @@ import {
   getPriceByPackageName,
   getVariantsByPackageName,
 } from "../data/package-catalog";
+import { useOrdersI18n } from "../lib/orders-i18n";
 import { type CreateOrderValues, createOrderSchema } from "../schemas/order.schema";
 import type { DaySlot } from "../store/useStore";
 import { DayTab } from "./day-tab";
@@ -48,6 +49,7 @@ const lineItemKey = (packageName: string, deliveryDate: string, variantName: str
   `${packageName}::${deliveryDate}::${variantName}`;
 
 export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order", upcomingDays }: OrderFormProps) => {
+  const i18n = useOrdersI18n();
   const packageOptions = useMemo(() => adminPackageCatalog.map((pkg) => pkg.name), []);
 
   const deliveryDateCards = useMemo(
@@ -204,8 +206,8 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
             <div className="space-y-4 xl:col-span-12">
               <Card size="sm">
                 <CardHeader className="border-b px-4 pb-3">
-                  <CardTitle>Customer Details</CardTitle>
-                  <CardDescription>Enter customer contact and delivery information.</CardDescription>
+                  <CardTitle>{i18n.form.customerDetailsTitle}</CardTitle>
+                  <CardDescription>{i18n.form.customerDetailsDescription}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4 px-4 pt-4">
                   <div className="grid gap-4 md:grid-cols-2">
@@ -214,9 +216,9 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
                       name="customerName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Customer Name</FormLabel>
+                          <FormLabel>{i18n.form.customerNameLabel}</FormLabel>
                           <FormControl>
-                            <Input type="text" placeholder="Enter customer name" {...field} />
+                            <Input type="text" placeholder={i18n.form.customerNamePlaceholder} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -228,9 +230,9 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
                       name="customerPhone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Phone Number</FormLabel>
+                          <FormLabel>{i18n.form.phoneNumberLabel}</FormLabel>
                           <FormControl>
-                            <Input type="tel" placeholder="01XXXXXXXXX" {...field} />
+                            <Input type="tel" placeholder={i18n.form.phonePlaceholder} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -243,9 +245,9 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
                     name="address"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Delivery Address</FormLabel>
+                        <FormLabel>{i18n.form.deliveryAddressLabel}</FormLabel>
                         <FormControl>
-                          <Textarea rows={3} placeholder="Building, road, area and delivery instructions" {...field} />
+                          <Textarea rows={3} placeholder={i18n.form.deliveryAddressPlaceholder} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -257,9 +259,9 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
                     name="notes"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Note</FormLabel>
+                        <FormLabel>{i18n.form.noteLabel}</FormLabel>
                         <FormControl>
-                          <Textarea rows={2} placeholder="Optional notes for kitchen or rider" {...field} />
+                          <Textarea rows={2} placeholder={i18n.form.notePlaceholder} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -270,8 +272,8 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
 
               <Card size="sm">
                 <CardHeader className="border-b px-4 pb-3">
-                  <CardTitle>Package Selection</CardTitle>
-                  <CardDescription>Select a package to view and add meal variants.</CardDescription>
+                  <CardTitle>{i18n.form.packageSelectionTitle}</CardTitle>
+                  <CardDescription>{i18n.form.packageSelectionDescription}</CardDescription>
                 </CardHeader>
                 <CardContent className="px-4 pt-4">
                   <FormField
@@ -324,8 +326,8 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
 
               <Card size="sm">
                 <CardHeader className="border-b px-4 pb-3">
-                  <CardTitle>Delivery Date</CardTitle>
-                  <CardDescription>Choose the delivery day for this order.</CardDescription>
+                  <CardTitle>{i18n.form.deliveryDateSelectionTitle}</CardTitle>
+                  <CardDescription>{i18n.form.deliveryDateSelectionDescription}</CardDescription>
                 </CardHeader>
                 <CardContent className="px-4 pt-4">
                   <FormField
@@ -355,7 +357,7 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
 
               <Card size="sm">
                 <CardHeader className="border-b px-4 pb-3">
-                  <CardTitle>Meal Variants</CardTitle>
+                  <CardTitle>{i18n.form.addVariant}</CardTitle>
                   <CardDescription>
                     Add meal quantities for {activeDeliveryLabel || "the selected date"}.
                   </CardDescription>
@@ -389,7 +391,7 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
                                         {activePackageName} - {variantName}
                                       </p>
                                       <p className="mt-0.5 text-xs text-muted-foreground">
-                                        {formatCurrency(pricePerMeal)} per meal
+                                        {formatCurrency(pricePerMeal)} {i18n.form.pricePerMeal}
                                       </p>
                                     </div>
 
@@ -438,7 +440,7 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
 
                   {variantOptions.length === 0 ? (
                     <div className="rounded-lg border border-dashed bg-muted/20 px-4 py-3 text-center text-sm text-muted-foreground">
-                      Select a package to view variants
+                      {i18n.form.packageSelectionDescription}
                     </div>
                   ) : null}
                 </CardContent>
@@ -448,12 +450,12 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
             <div className="space-y-4 xl:col-span-12 xl:sticky xl:top-2 xl:self-start">
               <Card size="sm">
                 <CardHeader className="border-b px-4 pb-3">
-                  <CardTitle>Selected Variants</CardTitle>
+                  <CardTitle>{i18n.form.addVariant}</CardTitle>
                   <CardDescription>Only added variants are listed here.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2 px-4 pt-4">
                   {selectedVariants.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No variants selected yet.</p>
+                    <p className="text-sm text-muted-foreground">{i18n.table.noOrders}</p>
                   ) : (
                     <div className="space-y-2">
                       {selectedVariants.map((item) => (
@@ -486,16 +488,16 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
                 </CardHeader>
                 <CardContent className="space-y-2 px-4 pt-4">
                   <div className="flex items-center justify-between gap-3 text-sm text-muted-foreground">
-                    <p>Subtotal</p>
+                    <p>{i18n.form.subtotal}</p>
                     <p className="font-medium text-foreground">{formatCurrency(selectedSubtotal)}</p>
                   </div>
                   <div className="flex items-center justify-between gap-3 text-sm text-muted-foreground">
-                    <p>Delivery Fee</p>
+                    <p>{i18n.form.deliveryFee}</p>
                     <p className="font-medium text-foreground">{formatCurrency(DELIVERY_FEE)}</p>
                   </div>
                 </CardContent>
                 <CardFooter className="flex flex-col items-start justify-between gap-2 border-t bg-muted/20 px-4 py-3 sm:flex-row sm:items-center">
-                  <p className="text-sm font-semibold text-foreground">Total Price</p>
+                  <p className="text-sm font-semibold text-foreground">{i18n.form.total}</p>
                   <p className="text-base font-bold text-primary">{formatCurrency(totalPrice)}</p>
                 </CardFooter>
               </Card>

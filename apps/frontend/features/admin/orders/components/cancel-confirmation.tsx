@@ -12,11 +12,13 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { useOrdersI18n } from "../lib/orders-i18n";
 import { isOrderLocked } from "../schemas/order.schema";
 import { useOrdersStore } from "../store/useStore";
 
 export const CancelConfirmation = () => {
   const [reason, setReason] = useState("");
+  const i18n = useOrdersI18n();
   const cancelOrder = useOrdersStore((state) => state.cancelOrder);
   const isCancelDialogOpen = useOrdersStore((state) => state.isCancelDialogOpen);
   const selectedCancelItem = useOrdersStore((state) => state.selectedCancelItem);
@@ -45,11 +47,11 @@ export const CancelConfirmation = () => {
     <AlertDialog open={isCancelDialogOpen} onOpenChange={setCancelDialogOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Mark order as cancelled?</AlertDialogTitle>
+          <AlertDialogTitle>{i18n.cancel.title}</AlertDialogTitle>
           <AlertDialogDescription>
             {selectedCancelItem
-              ? `This will change ${selectedCancelItem.orderNo} status to Cancelled.`
-              : "This will change the selected order status to Cancelled."}
+              ? i18n.cancel.confirmMessage.replace("{{orderNo}}", selectedCancelItem.orderNo)
+              : i18n.cancel.confirmMessageGeneric}
           </AlertDialogDescription>
 
           {isLocked ? (
@@ -67,9 +69,9 @@ export const CancelConfirmation = () => {
           )}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>No</AlertDialogCancel>
+          <AlertDialogCancel>{i18n.cancel.cancel}</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirmCancel} disabled={!isCancelEnabled || isLocked}>
-            Yes, cancel order
+            {i18n.cancel.confirm}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

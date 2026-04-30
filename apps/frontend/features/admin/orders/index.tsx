@@ -14,6 +14,7 @@ import { OrderForm } from "./components/order-form";
 import { OrderTable } from "./components/order-table";
 import { TableToolbar } from "./components/table-toolbar";
 import { getPriceByPackageName } from "./data/package-catalog";
+import { useOrdersI18n } from "./lib/orders-i18n";
 import type { CreateOrderValues, DayName, IOrder } from "./schemas/order.schema";
 import { useOrdersStore } from "./store/useStore";
 
@@ -72,6 +73,7 @@ const buildFormValuesFromOrder = (order: IOrder): CreateOrderValues => {
 };
 
 export const Orders = () => {
+  const i18n = useOrdersI18n();
   const data = useOrdersStore((state) => state.list);
   const upcomingDays = useOrdersStore((state) => state.upcomingDays);
   const query = useOrdersStore((state) => state.query);
@@ -198,10 +200,7 @@ export const Orders = () => {
 
   return (
     <section className="space-y-4" aria-labelledby="orders-title">
-      <SectionHeader
-        title="Orders"
-        description="Track incoming client orders for today and the next 6 days with clear status control."
-      />
+      <SectionHeader title={i18n.title} description={i18n.description} />
 
       <DayTabs upcomingDays={upcomingDays} activeDay={dayFilter} onChange={setDayFilter} counts={dayCounts} />
 
@@ -218,29 +217,25 @@ export const Orders = () => {
       <Sheet open={isCreateSheetOpen} onOpenChange={setCreateSheetOpen}>
         <SheetContent side="right" className="w-full overflow-hidden sm:!max-w-[760px]">
           <SheetHeader>
-            <SheetTitle>Create Order</SheetTitle>
-            <SheetDescription>
-              Add an order for a client. Delivery day is restricted to today and the next 6 days.
-            </SheetDescription>
+            <SheetTitle>{i18n.form.createTitle}</SheetTitle>
+            <SheetDescription>{i18n.form.createDescription}</SheetDescription>
           </SheetHeader>
 
-          <OrderForm onSubmit={onSubmitCreateOrder} submitLabel="Create Order" upcomingDays={upcomingDays} />
+          <OrderForm onSubmit={onSubmitCreateOrder} submitLabel={i18n.form.submitCreate} upcomingDays={upcomingDays} />
         </SheetContent>
       </Sheet>
 
       <Sheet open={isEditSheetOpen} onOpenChange={setEditSheetOpen}>
         <SheetContent side="right" className="w-full overflow-hidden sm:!max-w-[760px]">
           <SheetHeader>
-            <SheetTitle>Update Order</SheetTitle>
-            <SheetDescription>
-              Update customer details and order status. Completed and cancelled orders are read-only.
-            </SheetDescription>
+            <SheetTitle>{i18n.form.editTitle}</SheetTitle>
+            <SheetDescription>{i18n.form.editDescription}</SheetDescription>
           </SheetHeader>
 
           <OrderForm
             onSubmit={onSubmitEditOrder}
             initialValues={selectedItem ? buildFormValuesFromOrder(selectedItem) : undefined}
-            submitLabel="Save Changes"
+            submitLabel={i18n.form.submitSave}
             upcomingDays={upcomingDays}
           />
         </SheetContent>
@@ -249,13 +244,13 @@ export const Orders = () => {
       <Sheet open={isViewSheetOpen} onOpenChange={(open) => (open ? setViewSheetOpen(true) : closeViewSheet())}>
         <SheetContent side="right" className="w-full overflow-auto sm:!max-w-[880px]">
           <SheetHeader>
-            <SheetTitle>Order Details</SheetTitle>
-            <SheetDescription>Review customer, delivery, item and billing breakdown for this order.</SheetDescription>
+            <SheetTitle>{i18n.details.title}</SheetTitle>
+            <SheetDescription>{i18n.details.description}</SheetDescription>
           </SheetHeader>
 
           <If
             expression={!!selectedViewItem}
-            fallback={<p className="text-sm text-muted-foreground">No order found.</p>}
+            fallback={<p className="text-sm text-muted-foreground">{i18n.details.noOrder}</p>}
           >
             {selectedViewItem && <OrderDetails item={selectedViewItem} />}
           </If>

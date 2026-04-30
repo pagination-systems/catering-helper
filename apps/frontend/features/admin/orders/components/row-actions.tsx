@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AbilityAction } from "../../../../../../packages/types/dist/ability-action";
+import { useOrdersI18n } from "../lib/orders-i18n";
 import { type IOrder, isOrderLocked } from "../schemas/order.schema";
 import { useOrdersStore } from "../store/useStore";
 
@@ -19,6 +20,7 @@ interface RowActionsProps {
 }
 
 export const RowActions = ({ item }: RowActionsProps) => {
+  const i18n = useOrdersI18n();
   const openView = useOrdersStore((state) => state.openView);
   const openEdit = useOrdersStore((state) => state.openEdit);
   const openDeleteDialog = useOrdersStore((state) => state.openDeleteDialog);
@@ -29,7 +31,12 @@ export const RowActions = ({ item }: RowActionsProps) => {
     <div className="flex justify-end">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button type="button" variant="ghost" size="icon-sm" aria-label={`Open actions for ${item.orderNo}`}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            aria-label={i18n.actions.openActionsFor.replace("{{orderNo}}", item.orderNo)}
+          >
             <MoreHorizontalIcon className="size-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -37,7 +44,7 @@ export const RowActions = ({ item }: RowActionsProps) => {
           <Can I={AbilityAction.READ} a={OrderAuthZEntity}>
             <DropdownMenuItem onSelect={() => openView(item)}>
               <EyeIcon className="size-4" />
-              View
+              {i18n.actions.view}
             </DropdownMenuItem>
           </Can>
 
@@ -45,7 +52,7 @@ export const RowActions = ({ item }: RowActionsProps) => {
           <Can I={AbilityAction.UPDATE} a={OrderAuthZEntity}>
             <DropdownMenuItem disabled={locked} onSelect={() => openEdit(item)}>
               <PencilIcon className="size-4" />
-              Edit
+              {i18n.actions.edit}
             </DropdownMenuItem>
           </Can>
 
@@ -54,7 +61,7 @@ export const RowActions = ({ item }: RowActionsProps) => {
           <Can I={AbilityAction.UPDATE} a={OrderAuthZEntity}>
             <DropdownMenuItem disabled={locked} variant="destructive" onSelect={() => openCancelDialog(item)}>
               <BanIcon className="size-4" />
-              Mark as Cancelled
+              {i18n.actions.cancel}
             </DropdownMenuItem>
           </Can>
 
@@ -63,7 +70,7 @@ export const RowActions = ({ item }: RowActionsProps) => {
           <Can I={AbilityAction.HARD_DELETE} a={OrderAuthZEntity}>
             <DropdownMenuItem disabled={locked} variant="destructive" onSelect={() => openDeleteDialog(item)}>
               <Trash2Icon className="size-4" />
-              Delete
+              {i18n.actions.delete}
             </DropdownMenuItem>
           </Can>
 

@@ -3,6 +3,7 @@
 import { ClipboardListIcon } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { DataTable, type DataTableColumn } from "../../components/data-table";
+import { useOrdersI18n } from "../lib/orders-i18n";
 import type { GetOrdersResponse, IOrder } from "../schemas/order.schema";
 import { useOrdersStore } from "../store/useStore";
 import { getOrderStatusBadgeClassName } from "../utils/badge";
@@ -14,12 +15,13 @@ interface OrderTableProps {
 }
 
 export const OrderTable = ({ data, handlePaginate }: OrderTableProps) => {
+  const i18n = useOrdersI18n();
   const openView = useOrdersStore((state) => state.openView);
 
   const columns: DataTableColumn<IOrder>[] = [
     {
       accessorKey: "orderNo",
-      header: "Order",
+      header: i18n.table.orderNo,
       cell: (item) => (
         <div className="space-y-0.5">
           <button
@@ -35,7 +37,7 @@ export const OrderTable = ({ data, handlePaginate }: OrderTableProps) => {
     },
     {
       id: "customer",
-      header: "Customer",
+      header: i18n.table.customer,
       cell: (item) => (
         <div className="space-y-0.5">
           <p className="font-medium">{item.customerName}</p>
@@ -45,7 +47,7 @@ export const OrderTable = ({ data, handlePaginate }: OrderTableProps) => {
     },
     {
       id: "delivery",
-      header: "Delivery",
+      header: i18n.details.delivery,
       cell: (item) => (
         <div className="space-y-0.5">
           <p className="font-medium">{item.deliveryDay}</p>
@@ -55,7 +57,7 @@ export const OrderTable = ({ data, handlePaginate }: OrderTableProps) => {
     },
     {
       accessorKey: "totalMeals",
-      header: "Meals",
+      header: i18n.table.meals,
       cell: (item) => (
         <div>
           <p className="font-medium">{item.totalMeals}</p>
@@ -65,12 +67,12 @@ export const OrderTable = ({ data, handlePaginate }: OrderTableProps) => {
     },
     {
       accessorKey: "total",
-      header: "Amount",
+      header: i18n.table.amount,
       cell: (item) => formatCurrency(item.total),
     },
     {
       accessorKey: "status",
-      header: "Status",
+      header: i18n.table.status,
       cell: (item) => (
         <span
           className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${getOrderStatusBadgeClassName(item.status)}`}
@@ -81,12 +83,12 @@ export const OrderTable = ({ data, handlePaginate }: OrderTableProps) => {
     },
     {
       accessorKey: "updatedAt",
-      header: "Last Updated",
+      header: i18n.details.lastUpdated,
       cell: (item) => formatDate(item.updatedAt),
     },
     {
       id: "actions",
-      header: "Actions",
+      header: i18n.table.actions,
       cell: (item) => <RowActions item={item} />,
     },
   ];
@@ -101,7 +103,7 @@ export const OrderTable = ({ data, handlePaginate }: OrderTableProps) => {
       emptyState={
         <div className="flex flex-col items-center gap-2">
           <ClipboardListIcon className="size-5" />
-          No orders found for your current query and filters.
+          {i18n.table.noOrders}
         </div>
       }
     />

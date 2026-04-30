@@ -1,5 +1,6 @@
 import { CalendarClockIcon, CookingPotIcon, MapPinIcon, PhoneIcon, ReceiptTextIcon, UserIcon } from "lucide-react";
 import { formatCurrency, formatDateTime } from "@/lib/utils";
+import { useOrdersI18n } from "../lib/orders-i18n";
 import type { IOrder } from "../schemas/order.schema";
 import { getOrderStatusBadgeClassName } from "../utils/badge";
 
@@ -8,6 +9,7 @@ interface OrderDetailsProps {
 }
 
 export const OrderDetails = ({ item }: OrderDetailsProps) => {
+  const i18n = useOrdersI18n();
   const statusClassName = getOrderStatusBadgeClassName(item.status);
 
   return (
@@ -15,7 +17,7 @@ export const OrderDetails = ({ item }: OrderDetailsProps) => {
       <section className="rounded-md border border-border/70 bg-muted/15 p-4 md:p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1">
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Order</p>
+            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{i18n.details.order}</p>
             <h3 className="text-base font-semibold text-foreground md:text-lg">{item.orderNo}</h3>
             <p className="text-sm text-muted-foreground">{item.source}</p>
           </div>
@@ -30,15 +32,15 @@ export const OrderDetails = ({ item }: OrderDetailsProps) => {
 
         <div className="mt-4 grid gap-3 border-t border-border/60 pt-4 text-xs sm:grid-cols-3">
           <div>
-            <p className="uppercase tracking-wide text-muted-foreground">Created</p>
+            <p className="uppercase tracking-wide text-muted-foreground">{i18n.details.created}</p>
             <p className="mt-1 font-medium text-foreground">{formatDateTime(item.createdAt)}</p>
           </div>
           <div>
-            <p className="uppercase tracking-wide text-muted-foreground">Last Updated</p>
+            <p className="uppercase tracking-wide text-muted-foreground">{i18n.details.lastUpdated}</p>
             <p className="mt-1 font-medium text-foreground">{formatDateTime(item.updatedAt)}</p>
           </div>
           <div>
-            <p className="uppercase tracking-wide text-muted-foreground">Delivery</p>
+            <p className="uppercase tracking-wide text-muted-foreground">{i18n.details.delivery}</p>
             <p className="mt-1 font-medium text-foreground">
               {item.deliveryDay}, {formatDateTime(item.deliveryDate)}
             </p>
@@ -49,7 +51,7 @@ export const OrderDetails = ({ item }: OrderDetailsProps) => {
       <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <div className="rounded-md border border-border/70 bg-card p-3.5">
           <div className="flex items-center justify-between gap-2">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Customer</p>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">{i18n.details.customer}</p>
             <UserIcon className="size-4 text-muted-foreground" />
           </div>
           <p className="mt-2 text-sm font-semibold text-foreground">{item.customerName}</p>
@@ -57,7 +59,7 @@ export const OrderDetails = ({ item }: OrderDetailsProps) => {
 
         <div className="rounded-md border border-border/70 bg-card p-3.5">
           <div className="flex items-center justify-between gap-2">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Phone</p>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">{i18n.details.phone}</p>
             <PhoneIcon className="size-4 text-muted-foreground" />
           </div>
           <p className="mt-2 text-sm font-semibold text-foreground">{item.customerPhone}</p>
@@ -65,7 +67,7 @@ export const OrderDetails = ({ item }: OrderDetailsProps) => {
 
         <div className="rounded-md border border-border/70 bg-card p-3.5">
           <div className="flex items-center justify-between gap-2">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Meals</p>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">{i18n.details.meals}</p>
             <CookingPotIcon className="size-4 text-muted-foreground" />
           </div>
           <p className="mt-2 text-base font-semibold text-foreground">{item.totalMeals}</p>
@@ -73,7 +75,7 @@ export const OrderDetails = ({ item }: OrderDetailsProps) => {
 
         <div className="rounded-md border border-border/70 bg-card p-3.5">
           <div className="flex items-center justify-between gap-2">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Grand Total</p>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">{i18n.details.grandTotal}</p>
             <ReceiptTextIcon className="size-4 text-muted-foreground" />
           </div>
           <p className="mt-2 text-base font-semibold text-foreground">{formatCurrency(item.total)}</p>

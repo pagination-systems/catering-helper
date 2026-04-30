@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { useOrdersI18n } from "../lib/orders-i18n";
 import type { IOrder } from "../schemas/order.schema";
 
 import { useOrdersStore } from "../store/useStore";
@@ -25,6 +26,7 @@ interface TableToolbarProps {
 
 export const TableToolbar = ({ filteredOrders, activeDay }: TableToolbarProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
+  const i18n = useOrdersI18n();
   const query = useOrdersStore((state) => state.query);
   const statusFilter = useOrdersStore((state) => state.statusFilter);
   const setQuery = useOrdersStore((state) => state.setQuery);
@@ -36,7 +38,7 @@ export const TableToolbar = ({ filteredOrders, activeDay }: TableToolbarProps) =
 
     try {
       setIsDownloading(true);
-      await downloadOrdersPdf({ orders: filteredOrders, activeDay });
+      await downloadOrdersPdf({ orders: filteredOrders, activeDay, i18n });
     } finally {
       setIsDownloading(false);
     }
@@ -49,7 +51,7 @@ export const TableToolbar = ({ filteredOrders, activeDay }: TableToolbarProps) =
         <Input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search by order id, customer, phone, package, variant"
+          placeholder={i18n.toolbar.searchPlaceholder}
           className="pl-8"
         />
       </div>
@@ -58,11 +60,11 @@ export const TableToolbar = ({ filteredOrders, activeDay }: TableToolbarProps) =
         <DropdownMenuTrigger asChild>
           <Button variant="outline" type="button">
             <FilterIcon className="size-4" />
-            Filter
+            {i18n.toolbar.filter}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-64">
-          <DropdownMenuLabel>Status</DropdownMenuLabel>
+          <DropdownMenuLabel>{i18n.toolbar.status}</DropdownMenuLabel>
           {Object.values(ORDER_STATUS_ENUM).map((status) => (
             <DropdownMenuCheckboxItem
               key={status}
@@ -76,7 +78,7 @@ export const TableToolbar = ({ filteredOrders, activeDay }: TableToolbarProps) =
           <DropdownMenuSeparator />
           <div className="p-1">
             <Button type="button" variant="ghost" size="sm" className="w-full" onClick={() => setStatusFilter("all")}>
-              Reset Filters
+              {i18n.toolbar.resetFilters}
             </Button>
           </div>
         </DropdownMenuContent>
@@ -90,14 +92,14 @@ export const TableToolbar = ({ filteredOrders, activeDay }: TableToolbarProps) =
           disabled={!filteredOrders.length || isDownloading}
         >
           <DownloadIcon className="size-4" />
-          {isDownloading ? "Preparing..." : "Download"}
+          {isDownloading ? i18n.toolbar.downloadPreparing : i18n.toolbar.download}
         </Button>
       </Can>
 
       <Can I={AbilityAction.CREATE} a={OrderAuthZEntity}>
         <Button type="button" className="ml-auto" onClick={openCreate}>
           <PlusIcon className="size-4" />
-          Create Order
+          {i18n.toolbar.createOrder}
         </Button>
       </Can>
     </div>

@@ -6,10 +6,12 @@ import type { IOrder } from "../schemas/order.schema";
 type OrdersPdfProps = {
   orders: IOrder[];
   activeDay: string;
+  i18n?: Record<string, any>;
 };
 
 type OrdersPdfDocumentProps = {
   orders: IOrder[];
+  i18n?: Record<string, any>;
 };
 
 type PackageDetailLine = {
@@ -267,7 +269,7 @@ const formatItems = (order: IOrder): PackageDetailLine[] => {
   ]);
 };
 
-const OrdersPdfDocument = ({ orders }: OrdersPdfDocumentProps) => {
+const OrdersPdfDocument = ({ orders, i18n }: OrdersPdfDocumentProps) => {
   const todayLabel = moment().format(DATE_FORMAT);
 
   const totalMeals = orders.reduce((sum, o) => sum + o.totalMeals, 0);
@@ -284,8 +286,12 @@ const OrdersPdfDocument = ({ orders }: OrdersPdfDocumentProps) => {
               <Text style={styles.subtitle}>Phone: {companyInfo.phone}</Text>
             </View>
             <View style={styles.headerRight}>
-              <Text style={styles.subtitle}>Date: {todayLabel}</Text>
-              <Text style={styles.subtitle}>Total Orders: {orders.length}</Text>
+              <Text style={styles.subtitle}>
+                {i18n?.pdf?.date || "Date"}: {todayLabel}
+              </Text>
+              <Text style={styles.subtitle}>
+                {i18n?.pdf?.totalOrders || "Total Orders"}: {orders.length}
+              </Text>
             </View>
           </View>
           <View style={styles.headerDivider} />
@@ -295,12 +301,22 @@ const OrdersPdfDocument = ({ orders }: OrdersPdfDocumentProps) => {
         <View style={styles.table}>
           {/* Table header row */}
           <View style={styles.tableHeader}>
-            <Text style={[styles.tableHeaderText, styles.colCustomer]}>Customer</Text>
-            <Text style={[styles.tableHeaderText, styles.colAddress]}>Delivery Address</Text>
-            <Text style={[styles.tableHeaderText, styles.colItems]}>Package Details</Text>
-            <Text style={[styles.tableHeaderText, styles.colMeals, styles.textCenter]}>Meal</Text>
-            <Text style={[styles.tableHeaderText, styles.colAmount, styles.textRight]}>Amount</Text>
-            <Text style={[styles.tableHeaderText, styles.colPaidAmount, styles.textRight]}>Paid</Text>
+            <Text style={[styles.tableHeaderText, styles.colCustomer]}>{i18n?.pdf?.customer || "Customer"}</Text>
+            <Text style={[styles.tableHeaderText, styles.colAddress]}>
+              {i18n?.pdf?.deliveryAddress || "Delivery Address"}
+            </Text>
+            <Text style={[styles.tableHeaderText, styles.colItems]}>
+              {i18n?.pdf?.packageDetails || "Package Details"}
+            </Text>
+            <Text style={[styles.tableHeaderText, styles.colMeals, styles.textCenter]}>
+              {i18n?.pdf?.meal || "Meal"}
+            </Text>
+            <Text style={[styles.tableHeaderText, styles.colAmount, styles.textRight]}>
+              {i18n?.pdf?.amount || "Amount"}
+            </Text>
+            <Text style={[styles.tableHeaderText, styles.colPaidAmount, styles.textRight]}>
+              {i18n?.pdf?.paid || "Paid"}
+            </Text>
           </View>
 
           {/* Body rows */}
@@ -350,7 +366,7 @@ const OrdersPdfDocument = ({ orders }: OrdersPdfDocumentProps) => {
           {/* ── Summary / Totals row (rendered after last data row) ── */}
           <View style={styles.summaryRow} wrap={false}>
             <View style={styles.summaryLabelCell}>
-              <Text style={styles.summaryLabelText}>Total</Text>
+              <Text style={styles.summaryLabelText}>{i18n?.pdf?.total || "Total"}</Text>
             </View>
 
             <View style={styles.colMeals}>
@@ -382,10 +398,10 @@ const OrdersPdfDocument = ({ orders }: OrdersPdfDocumentProps) => {
   );
 };
 
-export const downloadOrdersPdf = async ({ orders, activeDay }: OrdersPdfProps) => {
+export const downloadOrdersPdf = async ({ orders, activeDay, i18n }: OrdersPdfProps) => {
   ensurePdfFontRegistered();
 
-  const doc = <OrdersPdfDocument orders={orders} />;
+  const doc = <OrdersPdfDocument orders={orders} i18n={i18n} />;
   const blob = await pdf(doc).toBlob();
 
   const url = URL.createObjectURL(blob);
