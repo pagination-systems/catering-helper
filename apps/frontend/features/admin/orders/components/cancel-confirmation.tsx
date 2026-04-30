@@ -55,15 +55,15 @@ export const CancelConfirmation = () => {
           </AlertDialogDescription>
 
           {isLocked ? (
-            <p className="text-sm text-muted-foreground">This order is already locked and cannot be changed.</p>
+            <p className="text-sm text-muted-foreground">{i18n.cancel.lockedOrderMessage}</p>
           ) : (
             <div className="mt-2 space-y-2">
-              <p className="text-sm text-muted-foreground">Please provide a reason for cancellation.</p>
+              <p className="text-sm text-muted-foreground">{i18n.cancel.reasonPrompt}</p>
               <Textarea
                 value={reason}
                 onChange={(event) => setReason(event.target.value)}
                 rows={3}
-                placeholder="Example: Client requested cancellation"
+                placeholder={i18n.cancel.reasonExample}
               />
             </div>
           )}

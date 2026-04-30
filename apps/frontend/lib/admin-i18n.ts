@@ -272,6 +272,10 @@ export const adminContent = {
         Thu: "Thursday",
         Fri: "Friday",
       },
+      dayTabs: {
+        all: "All",
+        today: "Today",
+      },
       toolbar: {
         searchPlaceholder: "Search by order id, customer, phone, package, variant",
         filter: "Filter",
@@ -308,6 +312,8 @@ export const adminContent = {
         grandTotal: "Grand Total",
         source: "Source",
         items: "Items",
+        deliveryAddress: "Delivery Address",
+        note: "Note",
         noOrder: "No order found.",
       },
       form: {
@@ -329,6 +335,11 @@ export const adminContent = {
         packageSelectionDescription: "Select a package to view and add meal variants.",
         deliveryDateSelectionTitle: "Delivery Date Selection",
         deliveryDateSelectionDescription: "Choose the delivery date for this order.",
+        activeVariantsTitle: "Selected Variants",
+        activeVariantsDescription: "Only added variants are listed here.",
+        activeVariantsHint: "Add meal quantities for {{date}}.",
+        orderSummaryTitle: "Order Summary",
+        orderSummaryDescription: "Review the final amount before creating the order.",
         pricePerMeal: "Price / Meal",
         deliveryFee: "Delivery Fee",
         subtotal: "Subtotal",
@@ -353,7 +364,7 @@ export const adminContent = {
         confirmText: "Type delete-order to confirm.",
         confirmKeyword: "delete-order",
         cancel: "Cancel",
-        confirm: "Delete",
+        confirm: "Yes, Delete",
       },
       cancel: {
         title: "Cancel order?",
@@ -363,6 +374,9 @@ export const adminContent = {
         confirmKeyword: "cancel-order",
         cancel: "Keep Order",
         confirm: "Cancel Order",
+        lockedOrderMessage: "This order is already locked and cannot be changed.",
+        reasonPrompt: "Please provide a reason for cancellation.",
+        reasonExample: "Example: Client requested cancellation",
       },
       actions: {
         view: "View",
@@ -723,6 +737,10 @@ export const adminContent = {
         Thu: "বৃহস্পতিবার",
         Fri: "শুক্রবার",
       },
+      dayTabs: {
+        all: "সব",
+        today: "আজ",
+      },
       toolbar: {
         searchPlaceholder: "অর্ডার আইডি, কাস্টমার, ফোন, প্যাকেজ, ভ্যারিয়েন্ট দ্বারা অনুসন্ধান করুন",
         filter: "ফিল্টার",
@@ -759,6 +777,8 @@ export const adminContent = {
         grandTotal: "মোট",
         source: "উৎস",
         items: "আইটেম",
+        deliveryAddress: "ডেলিভারি ঠিকানা",
+        note: "নোট",
         noOrder: "কোনো অর্ডার পাওয়া যায়নি।",
       },
       form: {
@@ -780,6 +800,11 @@ export const adminContent = {
         packageSelectionDescription: "একটি প্যাকেজ নির্বাচন করুন এবং মিল ভ্যারিয়েন্ট যোগ করুন।",
         deliveryDateSelectionTitle: "ডেলিভারি তারিখ নির্বাচন",
         deliveryDateSelectionDescription: "এই অর্ডারের জন্য ডেলিভারি তারিখ বেছে নিন।",
+        activeVariantsTitle: "নির্বাচিত ভ্যারিয়েন্ট",
+        activeVariantsDescription: "শুধু যোগ করা ভ্যারিয়েন্টগুলো এখানে দেখানো হয়েছে।",
+        activeVariantsHint: "{{date}} এর জন্য মিলের পরিমাণ যোগ করুন।",
+        orderSummaryTitle: "অর্ডার সারাংশ",
+        orderSummaryDescription: "অর্ডার তৈরি করার আগে চূড়ান্ত পরিমাণ পর্যালোচনা করুন।",
         pricePerMeal: "প্রতি মিল মূল্য",
         deliveryFee: "ডেলিভারি ফি",
         subtotal: "সাবটোটাল",
@@ -804,7 +829,7 @@ export const adminContent = {
         confirmText: "নিশ্চিত করতে delete-order টাইপ করুন।",
         confirmKeyword: "delete-order",
         cancel: "বাতিল",
-        confirm: "মুছুন",
+        confirm: "হ্যাঁ, মুছুন",
       },
       cancel: {
         title: "অর্ডার বাতিল করবেন?",
@@ -814,6 +839,9 @@ export const adminContent = {
         confirmKeyword: "cancel-order",
         cancel: "অর্ডার রাখুন",
         confirm: "অর্ডার বাতিল করুন",
+        lockedOrderMessage: "এই অর্ডার ইতিমধ্যে লক করা হয়েছে এবং এটি পরিবর্তন করা যাবে না।",
+        reasonPrompt: "অনুগ্রহ করে বাতিলের কারণ প্রদান করুন।",
+        reasonExample: "উদাহরণ: ক্লায়েন্ট বাতিল অনুরোধ করেছেন",
       },
       actions: {
         view: "দেখুন",

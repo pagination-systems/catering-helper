@@ -1,17 +1,23 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useOrdersI18n } from "../lib/orders-i18n";
+import type { DayName } from "../schemas/order.schema";
 
 export function DayTab({
-  dayLabel,
+  day,
   dateLabel,
+  isToday,
   active,
   onClick,
 }: {
-  dayLabel: string;
+  day: DayName;
   dateLabel: string;
+  isToday: boolean;
   active: boolean;
   onClick: () => void;
 }) {
+  const i18n = useOrdersI18n();
+
   return (
     <Button
       type="button"
@@ -33,7 +39,7 @@ export function DayTab({
         {dateLabel}
       </p>
       <p className={cn("mt-0.5 text-xs font-semibold sm:text-sm", active ? "text-primary-foreground" : "")}>
-        {dayLabel}
+        {isToday ? i18n.dayTabs.today : i18n.dayLabels[day]}
       </p>
     </Button>
   );

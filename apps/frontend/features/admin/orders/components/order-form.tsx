@@ -17,7 +17,7 @@ import {
   getPriceByPackageName,
   getVariantsByPackageName,
 } from "../data/package-catalog";
-import { useOrdersI18n } from "../lib/orders-i18n";
+import { interpolate, useOrdersI18n } from "../lib/orders-i18n";
 import { type CreateOrderValues, createOrderSchema } from "../schemas/order.schema";
 import type { DaySlot } from "../store/useStore";
 import { DayTab } from "./day-tab";
@@ -56,8 +56,10 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
     () =>
       upcomingDays.map((day) => ({
         value: formatDateValue(day.date),
+        day: day.day,
         dayLabel: day.tabLabel,
         dateLabel: day.dateLabel,
+        isToday: day.isToday,
       })),
     [upcomingDays],
   );
@@ -340,8 +342,9 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
                             {deliveryDateCards.map((day) => (
                               <DayTab
                                 key={day.value}
-                                dayLabel={day.dayLabel}
+                                day={day.day}
                                 dateLabel={day.dateLabel}
+                                isToday={day.isToday}
                                 active={field.value === day.value}
                                 onClick={() => updateDeliveryDate(day.value)}
                               />
@@ -359,7 +362,9 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
                 <CardHeader className="border-b px-4 pb-3">
                   <CardTitle>{i18n.form.addVariant}</CardTitle>
                   <CardDescription>
-                    Add meal quantities for {activeDeliveryLabel || "the selected date"}.
+                    {interpolate(i18n.form.activeVariantsHint, {
+                      date: activeDeliveryLabel || "the selected date",
+                    })}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3 px-4 pt-4">
@@ -450,8 +455,8 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
             <div className="space-y-4 xl:col-span-12 xl:sticky xl:top-2 xl:self-start">
               <Card size="sm">
                 <CardHeader className="border-b px-4 pb-3">
-                  <CardTitle>{i18n.form.addVariant}</CardTitle>
-                  <CardDescription>Only added variants are listed here.</CardDescription>
+                  <CardTitle>{i18n.form.activeVariantsTitle}</CardTitle>
+                  <CardDescription>{i18n.form.activeVariantsDescription}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2 px-4 pt-4">
                   {selectedVariants.length === 0 ? (
@@ -483,8 +488,8 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
 
               <Card size="sm">
                 <CardHeader className="border-b px-4 pb-3">
-                  <CardTitle>Order Summary</CardTitle>
-                  <CardDescription>Review the final amount before creating the order.</CardDescription>
+                  <CardTitle>{i18n.form.orderSummaryTitle}</CardTitle>
+                  <CardDescription>{i18n.form.orderSummaryDescription}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2 px-4 pt-4">
                   <div className="flex items-center justify-between gap-3 text-sm text-muted-foreground">

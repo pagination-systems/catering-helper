@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useOrdersI18n } from "../lib/orders-i18n";
 import type { DayName } from "../schemas/order.schema";
 import type { DaySlot } from "../store/useStore";
 
@@ -11,6 +12,8 @@ type DayTabsProps = {
 };
 
 export const DayTabs = ({ upcomingDays, activeDay, onChange, counts }: DayTabsProps) => {
+  const i18n = useOrdersI18n();
+
   return (
     <div className="overflow-x-auto pb-1">
       <div className="inline-flex min-w-full gap-2">
@@ -20,7 +23,7 @@ export const DayTabs = ({ upcomingDays, activeDay, onChange, counts }: DayTabsPr
           className="h-auto rounded-full px-4 py-2"
           onClick={() => onChange("all")}
         >
-          All
+          {i18n.dayTabs.all}
         </Button>
 
         {upcomingDays.map((day) => (
@@ -32,7 +35,7 @@ export const DayTabs = ({ upcomingDays, activeDay, onChange, counts }: DayTabsPr
             onClick={() => onChange(day.day)}
           >
             <span className="flex items-center gap-2 whitespace-nowrap">
-              <span>{day.isToday ? "Today" : day.day}</span>
+              <span>{day.isToday ? i18n.dayTabs.today : i18n.dayLabels[day.day]}</span>
               <span className="text-xs opacity-80">{day.dateLabel}</span>
               <Badge
                 variant="secondary"

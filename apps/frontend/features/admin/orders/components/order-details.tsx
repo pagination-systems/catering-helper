@@ -83,17 +83,23 @@ export const OrderDetails = ({ item }: OrderDetailsProps) => {
       </section>
 
       <section className="rounded-md border border-border/70 p-4">
-        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Delivery Address</p>
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          {i18n.details.deliveryAddress}
+        </p>
         <div className="mt-2 flex gap-2">
           <MapPinIcon className="mt-0.5 size-4 text-muted-foreground" />
           <p className="text-sm text-foreground">{item.address}</p>
         </div>
-        {item.notes ? <p className="mt-2 text-sm text-muted-foreground">Note: {item.notes}</p> : null}
+        {item.notes ? (
+          <p className="mt-2 text-sm text-muted-foreground">
+            {i18n.details.note}: {item.notes}
+          </p>
+        ) : null}
       </section>
 
       <section className="space-y-3">
         <div className="flex items-center justify-between">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Order Items</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{i18n.details.items}</p>
           <div className="inline-flex items-center gap-1 text-xs text-muted-foreground">
             <CalendarClockIcon className="size-3.5" />
             {item.deliveryDay}
