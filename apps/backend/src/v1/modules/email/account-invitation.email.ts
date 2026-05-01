@@ -1,4 +1,4 @@
-import { ACCOUNT_TYPE_ENUMS } from "@rl/types";
+import type { ACCOUNT_TYPE_ENUMS } from "@catering/types";
 import { Email } from "./core";
 
 export class AccountInvitaionEmail extends Email {

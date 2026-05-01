@@ -10,6 +10,7 @@ import { setupAgenda } from "./agenda";
 import { CORS_ORIGIN } from "./common/constants";
 import { globalErrorHandler, NotFoundException } from "./common/helper";
 import { customQueryParser, globalRateLimiter } from "./common/middlewares";
+import { setupSwaggerDocs } from "./docs/swagger";
 import { setupApiRoutes } from "./v1/routes/api-routes";
 
 export const app: Express = express();
@@ -58,6 +59,7 @@ app.get("/", (_req, res) => {
 });
 
 // Load API routes
+setupSwaggerDocs(app);
 setupApiRoutes(app);
 setupAgenda(app);
 

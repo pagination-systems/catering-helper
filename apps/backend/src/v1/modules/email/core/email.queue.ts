@@ -1,9 +1,12 @@
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import sgMail from "@sendgrid/mail";
 import Bull, { type Job, type Queue } from "bull";
 import ejs from "ejs";
 import nodemailer from "nodemailer";
 import type { EmailConfiguration } from "./email.interface";
+
+const currentDir = path.dirname(fileURLToPath(import.meta.url));
 
 if (process.env.NODE_ENV === "production") sgMail.setApiKey(process.env.SEND_GRID_API_KEY!);
 
@@ -24,7 +27,7 @@ const emailQueue: Queue<EmailConfiguration> = new Bull("email-queue", {
 
 // Function to render the email template
 const renderTemplate = async (template: string, data: any): Promise<string> => {
-  const templatePath = path.join(__dirname, "..", "templates", `${template}.ejs`);
+  const templatePath = path.join(currentDir, "..", "templates", `${template}.ejs`);
 
   return ejs.renderFile(templatePath, data);
 };
