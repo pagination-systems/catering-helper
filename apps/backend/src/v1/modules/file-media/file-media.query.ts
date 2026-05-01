@@ -24,6 +24,7 @@ export const fileMediaSrcQuery = (): PipelineStage[] => {
             if: { $eq: ["$visibility", VISIBILITY_ENUM.PUBLIC] },
 
             // If true, concatenate the S3 URL pieces
+            // biome-ignore lint/suspicious/noThenProperty: MongoDB $cond requires the then key
             then: {
               $concat: [baseUrl, "/", "$storageInformation.Key"],
             },
@@ -37,6 +38,7 @@ export const fileMediaSrcQuery = (): PipelineStage[] => {
             if: {
               $and: [{ $eq: ["$visibility", VISIBILITY_ENUM.PUBLIC] }, { $ifNull: ["$thumbnail.Key", false] }],
             },
+            // biome-ignore lint/suspicious/noThenProperty: MongoDB $cond requires the then key
             then: {
               $concat: [baseUrl, "/", "$thumbnail.Key"],
             },
