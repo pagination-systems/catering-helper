@@ -43,7 +43,11 @@
     "@bull-board/api": "^6.14.0",
     "@bull-board/express": "^6.14.0",
     "@ims-systems-00/ims-query-builder": "^0.0.11",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "bull": "^4.16.0",
+    "@sendgrid/mail": "^8.1.4",
+    "ejs": "^3.1.10",
+    "nodemailer": "^6.9.14"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.6",
@@ -58,6 +62,8 @@
     "@types/node": "^22.19.17",
     "tsup": "^8.5.1",
     "tsx": "^4.19.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "@types/nodemailer": "^6.4.15",
+    "@types/ejs": "^3.1.5"
   }
 }

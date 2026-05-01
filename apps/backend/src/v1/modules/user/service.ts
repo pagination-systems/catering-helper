@@ -8,7 +8,7 @@ import { excludeDeletedQuery, matchQuery, onlyDeletedQuery } from "../../../comm
 import { User } from "../../../models";
 import { modelNames } from "../../../models/constants";
 import type { AwsStorageTemplate } from "../../../models/templates/aws-storage.template";
-import * as FileMediaService from "../file-media";
+import * as FileMediaService from "../file-media/file-media.service";
 import type { IListUserParams, IUserCreateParams, IUserGetParams, IUserUpdateParams } from "./interface";
 import { userProjectionQuery } from "./query";
 

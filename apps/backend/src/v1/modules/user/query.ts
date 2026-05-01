@@ -1,7 +1,7 @@
 import { accessibleBy } from "@casl/mongoose";
 import { type UserAbilityBuilder, UserAuthZEntity } from "@catering/authz";
 import { AbilityAction } from "@catering/types";
-import { omit } from "lodash";
+import _ from "lodash";
 import type { PipelineStage } from "mongoose";
 import { projectQuery } from "../../../common/query";
 import { type IUserDoc, User } from "../../../models";
@@ -25,7 +25,7 @@ export const excludeDeletedQuery = (): PipelineStage[] => {
 
 export const userProjectionQuery = (): PipelineStage[] => {
   const fieldsToExclude: (keyof IUserDoc | "__v")[] = ["__v" as keyof IUserDoc];
-  const selectedFields = Object.keys(omit(User.schema.paths, fieldsToExclude));
+  const selectedFields = Object.keys(_.omit(User.schema.paths, fieldsToExclude));
 
   return projectQuery(selectedFields);
 };

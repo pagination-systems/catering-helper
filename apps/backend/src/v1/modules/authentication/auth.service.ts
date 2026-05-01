@@ -1,18 +1,18 @@
+import { BadRequestException, logger, NotFoundException, SessionExpiredException } from "../../../common/helper";
+import type { IUserDoc } from "../../../models";
+import { EMAIL_VERIFICATION_STATUS_ENUMS, VERIFICATION_TOKEN_TYPE_ENUMS } from "../../../models/constants";
+import { AccountRecoveryEmail, AccountVerificationEmail } from "../email";
+import type { CustomJwtPayload } from "../token";
 import * as tokenService from "../token";
 import * as userService from "../user";
 import * as verificationTokenService from "../verification-token";
-import { AccountRecoveryEmail, AccountVerificationEmail } from "../email";
-import { CustomJwtPayload } from "../token";
-import { IUserDoc } from "../../../models";
-import { BadRequestException, logger, NotFoundException, SessionExpiredException } from "../../../common/helper";
-import { VERIFICATION_TOKEN_TYPE_ENUMS, EMAIL_VERIFICATION_STATUS_ENUMS } from "../../../models/constants";
-import {
+import type {
   GenerateSendAndStoreRegistrationTokenInput,
-  VerifyRecoveryInput,
   LoginInput,
-  RefreshAccessTokenInput,
   LogoutInput,
+  RefreshAccessTokenInput,
   UserPayload,
+  VerifyRecoveryInput,
 } from "./auth.interface";
 
 export const _generateSendAndStoreRegistrationToken = async ({

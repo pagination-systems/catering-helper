@@ -1,9 +1,8 @@
-import { AggregatePaginateModel, Document, Model, model, PaginateModel, Schema } from "mongoose";
+import { type AggregatePaginateModel, type Document, type Model, model, type PaginateModel, Schema } from "mongoose";
 import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 import mongoosePaginate from "mongoose-paginate-v2";
 import { modelNames, VERIFICATION_TOKEN_TYPE_ENUMS } from "./constants";
-import { automaticReferencePlugin } from "./plugins/automatic-reference.plugin";
-import { ITenantDoc, ITenantModel, TenantInput, tenantDataPlugin } from "./plugins/tenant-data.plugin";
+import { type ITenantDoc, type ITenantModel, type TenantInput, tenantDataPlugin } from "./plugins/tenant-data.plugin";
 
 export interface VerificationTokenInput extends TenantInput {
   token: string;

@@ -1,12 +1,13 @@
-import Joi, { CustomHelpers } from "joi";
+import { VISIBILITY_ENUM } from "@catering/types";
+import Joi, { type CustomHelpers } from "joi";
 import mongoose from "mongoose";
-import { AwsStorageTemplate } from "../../../models/templates/aws-storage.template";
 import { modelNames } from "../../../models/constants";
-import { VISIBILITY_ENUM } from "@rl/types";
+import type { AwsStorageTemplate } from "../../../models/templates/aws-storage.template";
 
 const objectIdValidation = (value: string, helpers: CustomHelpers) => {
   if (!mongoose.Types.ObjectId.isValid(value)) {
-    return helpers.message({ custom: `"${helpers.state.path.join(".")}" must be a valid ObjectId` });
+    const path = helpers.state.path?.join(".") ?? "value";
+    return helpers.message({ custom: `"${path}" must be a valid ObjectId` });
   }
   return value;
 };

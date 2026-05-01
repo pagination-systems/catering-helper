@@ -1,5 +1,5 @@
 import { VISIBILITY_ENUM } from "@catering/types";
-import { omit } from "lodash";
+import _ from "lodash";
 import type { PipelineStage } from "mongoose";
 import { projectQuery } from "../../../common/query";
 import { FileMedia, type IFileMediaDoc } from "../../../models";
@@ -8,7 +8,7 @@ import { FileMedia, type IFileMediaDoc } from "../../../models";
 export const fileMediaProjectionQuery = (): PipelineStage[] => {
   const fieldsToExclude: (keyof IFileMediaDoc | "__v")[] = ["__v"];
 
-  const selectedFields = Object.keys(omit(FileMedia.schema.paths, fieldsToExclude));
+  const selectedFields = Object.keys(_.omit(FileMedia.schema.paths, fieldsToExclude));
 
   return projectQuery(selectedFields);
 };
