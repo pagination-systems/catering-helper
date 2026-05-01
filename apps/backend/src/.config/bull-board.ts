@@ -4,6 +4,7 @@ import { ExpressAdapter } from "@bull-board/express";
 
 // Import your queues
 import { deadLetterQueue } from "../queue/Queue";
+import { emailQueue } from "../v1/modules/email/core/email.queue";
 
 export const initBullBoard = () => {
   const serverAdapter = new ExpressAdapter();
@@ -15,6 +16,7 @@ export const initBullBoard = () => {
   createBullBoard({
     queues: [
       new BullMQAdapter(deadLetterQueue),
+      new BullMQAdapter(emailQueue.queue),
       // Add future queues here easily
     ],
     serverAdapter: serverAdapter,

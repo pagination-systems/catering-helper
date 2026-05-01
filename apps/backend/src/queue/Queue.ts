@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { type BackoffOptions, Job, Queue, QueueEvents, Worker } from "bullmq";
-import { redisConnection } from "../.config";
+import { type BackoffOptions, Job, type JobsOptions, Queue, QueueEvents, Worker } from "bullmq";
+import { redisConnection } from "../.config/ioredis";
 
 /**
  * Defines the data structure for a job that lands in the DLQ.
@@ -72,7 +72,7 @@ export class ReusableQueue<T extends object> {
     });
   }
 
-  public async addJob(jobName: string, data: T): Promise<Job<T, any, string>> {
+  public async addJob(jobName: string, data: T, options?: JobsOptions): Promise<Job<T, any, string>> {
     const retryOptions: BackoffOptions = {
       type: "exponential",
       delay: 1000,
@@ -84,6 +84,7 @@ export class ReusableQueue<T extends object> {
       backoff: retryOptions,
       removeOnComplete: 100,
       removeOnFail: 1000,
+      ...options,
     }) as Promise<Job<T, any, string>>;
   }
 }

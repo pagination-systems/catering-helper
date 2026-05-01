@@ -1,7 +1,7 @@
 import Joi from "joi";
 import { EmailMissConfigException, validate } from "../../../../common/helper";
 import type { EmailOptions, EmailTemplateNames } from "./email.interface";
-import { emailQueue } from "./email.queue";
+import { emailQueue } from "./email.queue.js";
 
 export class Email {
   private receiver: string | undefined;
@@ -22,7 +22,7 @@ export class Email {
     this.receiver = receiver;
     return this;
   }
-  public withAttachments(attachments: any[]) {
+  public withAttachments(_attachments: any[]) {
     return this;
   }
   public schedule(date: Date) {
@@ -46,7 +46,8 @@ export class Email {
     }
     const delay = this.scheduleDate ? this.scheduleDate.getTime() - now.getTime() : 0;
 
-    emailQueue.add(
+    emailQueue.addJob(
+      "send-email",
       {
         receiver,
         sender,

@@ -1,5 +1,6 @@
+// cspell:ignore imsat
 import { ACCOUNT_TYPE_ENUMS, EMAIL_VERIFICATION_STATUS_ENUMS, USER_ROLE_ENUMS } from "@catering/types";
-import type { OpenAPIV3 } from "openapi-types";
+import type { OpenAPIV3 as OpenApiV3 } from "openapi-types";
 import { joiSchemaToOpenApi } from "../../../docs/joi";
 import {
   loginBodySchema,
@@ -11,22 +12,22 @@ import {
   verifyRegistrationQuerySchema,
 } from "./auth.validation";
 
-const cookieAuth: OpenAPIV3.SecuritySchemeObject = {
+const cookieAuth: OpenApiV3.SecuritySchemeObject = {
   type: "apiKey",
   in: "cookie",
   name: "__imsat__",
 };
 
 const responseSchema = (
-  properties: Record<string, OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject>,
+  properties: Record<string, OpenApiV3.SchemaObject | OpenApiV3.ReferenceObject>,
   required: string[],
-): OpenAPIV3.SchemaObject => ({
+): OpenApiV3.SchemaObject => ({
   type: "object",
   properties,
   required,
 });
 
-const authUserSchema: OpenAPIV3.SchemaObject = {
+const authUserSchema: OpenApiV3.SchemaObject = {
   type: "object",
   properties: {
     _id: { type: "string" },
@@ -103,7 +104,7 @@ export const authComponents = {
   },
 } as const;
 
-export const authPaths: OpenAPIV3.PathsObject = {
+export const authPaths: OpenApiV3.PathsObject = {
   "/api/v1/auth/login": {
     post: {
       tags: [...authTags],
