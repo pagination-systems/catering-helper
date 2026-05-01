@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { defaultLanguage, languageStorageKey, type Language } from "@/lib/i18n";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { defaultLanguage, type Language, languageStorageKey } from "@/lib/i18n";
 
 type LanguageContextValue = {
   language: Language;
@@ -29,19 +29,16 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.lang = defaultLanguage;
   }, []);
 
-  const setLanguage = (nextLanguage: Language) => {
+  const setLanguage = useCallback((nextLanguage: Language) => {
     setLanguageState(nextLanguage);
     window.localStorage.setItem(languageStorageKey, nextLanguage);
     document.documentElement.lang = nextLanguage;
-  };
+  }, []);
 
-  const value = useMemo(
-    () => ({
-      language,
-      setLanguage,
-    }),
-    [language],
-  );
+  const value = {
+    language,
+    setLanguage,
+  };
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }

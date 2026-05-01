@@ -4,6 +4,13 @@
   "packageManager": "pnpm@10.0.0",
   "scripts": {
     "build": "pnpm -r run build",
-    "lint": "pnpm -r run lint"
+    "start:dev": "concurrently --kill-others \"pnpm --filter @catering/backend dev\" \"pnpm --filter @catering/frontend dev\"",
+    "format": "biome format --write .",
+    "lint": "biome lint --write .",
+    "check": "biome check --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.12",
+    "concurrently": "^8.2.0"
   }
 }

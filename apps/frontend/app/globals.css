@@ -1,110 +1,196 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@config "../tailwind.config.ts";
 
-:root {
-  color-scheme: light;
-  --background: 220 33% 98%;
-  --foreground: 228 22% 14%;
+/* Dark mode selector */
+@custom-variant dark (&:is(.dark *));
+
+/* =========================
+   🎨 THEME TOKENS (LIGHT)
+   ========================= */
+@theme {
+  /* Base */
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+
+  /* Card */
   --card: 0 0% 100%;
-  --card-foreground: 222.2 47.4% 11.2%;
+  --card-foreground: 222 47% 11%;
+
+  /* Popover */
   --popover: 0 0% 100%;
-  --popover-foreground: 222.2 47.4% 11.2%;
-  --primary: 241 88% 57%;
+  --popover-foreground: 222 47% 11%;
+
+  /* Primary (Food Orange) */
+  --primary: 24 95% 53%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 220 33% 96%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 220 33% 96%;
-  --muted-foreground: 225 14% 42%;
-  --accent: 220 33% 96%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 221 24% 89%;
-  --input: 221 24% 89%;
-  --ring: 241 88% 57%;
+
+  /* Secondary (Soft Premium Beige) */
+  --secondary: 30 30% 96%;
+  --secondary-foreground: 222 47% 11%;
+
+  /* Muted */
+  --muted: 210 20% 96%;
+  --muted-foreground: 215 16% 47%;
+
+  /* Accent (Fresh Green) */
+  --accent: 142 72% 29%;
+  --accent-foreground: 0 0% 100%;
+
+  /* Destructive */
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  /* Borders / Inputs */
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 24 95% 53%;
+
+  /* Radius */
   --radius: 0.75rem;
 
-  --landing-bg: 220 100% 98%;
-  --landing-alt-bg: 34 56% 95%;
-  --landing-heading: 228 24% 11%;
-  --landing-subheading: 225 14% 44%;
-  --landing-card-bg: 0 0% 100%;
-  --landing-card-soft-bg: 220 60% 98%;
-  --landing-card-border: 221 38% 92%;
-  --landing-icon-bg: 227 100% 97%;
-  --landing-chip-bg: 223 100% 97%;
-  --landing-chip-bg-soft: 220 44% 95%;
-  --landing-rule: 221 44% 95%;
-  --landing-text-strong: 227 24% 16%;
-  --landing-text: 224 14% 40%;
-  --landing-text-muted: 226 13% 62%;
-  --landing-text-soft: 225 21% 74%;
-  --landing-footer-heading: 226 23% 20%;
-  --landing-footer-text: 225 14% 62%;
-  --landing-old-dot: 223 14% 78%;
-  --landing-shadow-rgb: 56 72 117;
-  --landing-media-border: 221 24% 86%;
-  --landing-media-gradient: radial-gradient(circle at 10% 20%, #6d7b87 0%, #2f3740 45%, #161c24 100%);
+  /* Layout spacing tokens */
+  --layout-space-inline: clamp(0.75rem, 0.6rem + 0.6vw, 1.5rem);
+  --layout-space-block: clamp(0.75rem, 0.65rem + 0.5vw, 1.25rem);
 }
 
+/* =========================
+   🌙 DARK MODE
+   ========================= */
 .dark {
-  color-scheme: dark;
-  --background: 228 22% 9%;
-  --foreground: 210 40% 98%;
-  --card: 227 18% 12%;
-  --card-foreground: 210 40% 98%;
-  --popover: 227 18% 12%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 241 88% 67%;
+  --background: 222 47% 6%;
+  --foreground: 210 20% 98%;
+
+  --card: 222 47% 8%;
+  --card-foreground: 210 20% 98%;
+
+  --popover: 222 47% 8%;
+  --popover-foreground: 210 20% 98%;
+
+  --primary: 24 90% 60%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 226 16% 18%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 226 16% 18%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 226 16% 20%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 226 15% 24%;
-  --input: 226 15% 24%;
-  --ring: 212.7 26.8% 83.9%;
 
-  --landing-bg: 220 25% 13%;
-  --landing-alt-bg: 223 24% 20%;
-  --landing-heading: 224 100% 96%;
-  --landing-subheading: 222 25% 74%;
-  --landing-card-bg: 223 25% 18%;
-  --landing-card-soft-bg: 224 25% 16%;
-  --landing-card-border: 221 26% 28%;
-  --landing-icon-bg: 223 30% 24%;
-  --landing-chip-bg: 222 27% 26%;
-  --landing-chip-bg-soft: 221 25% 24%;
-  --landing-rule: 221 25% 28%;
-  --landing-text-strong: 223 100% 95%;
-  --landing-text: 223 28% 78%;
-  --landing-text-muted: 223 24% 70%;
-  --landing-text-soft: 223 20% 67%;
-  --landing-footer-heading: 223 100% 95%;
-  --landing-footer-text: 223 24% 70%;
-  --landing-old-dot: 223 17% 45%;
-  --landing-shadow-rgb: 17 24 40;
-  --landing-media-border: 221 20% 30%;
-  --landing-media-gradient: radial-gradient(circle at 10% 20%, #51606b 0%, #242c36 45%, #0f141c 100%);
+  --secondary: 222 30% 12%;
+  --secondary-foreground: 210 20% 98%;
+
+  --muted: 217 19% 15%;
+  --muted-foreground: 215 20% 65%;
+
+  --accent: 142 60% 40%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 70% 50%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 217 19% 18%;
+  --input: 217 19% 18%;
+  --ring: 24 90% 60%;
+
+  /* Keep layout sizing stable in dark mode as well */
+  --layout-space-inline: clamp(0.75rem, 0.6rem + 0.6vw, 1.5rem);
+  --layout-space-block: clamp(0.75rem, 0.65rem + 0.5vw, 1.25rem);
 }
 
-* {
-  box-sizing: border-box;
-  border-color: hsl(var(--border));
-  -webkit-tap-highlight-color: transparent;
+/* Admin panel theme (route-level)
+  Include body:has(...) so Radix portal content mounted under <body> inherits admin tokens. */
+[data-app-theme="admin"],
+body:has([data-app-theme="admin"]) {
+  /* Main canvas and text */
+  --background: 214 20% 96%;
+  --foreground: 215 28% 17%;
+
+  /* Surfaces */
+  --card: 0 0% 100%;
+  --card-foreground: 215 28% 17%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 215 28% 17%;
+
+  /* Brand and interactions */
+  --primary: 193 64% 23%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 20% 95%;
+  --secondary-foreground: 215 28% 17%;
+  --accent: 115 52% 78%;
+  --accent-foreground: 193 64% 20%;
+  --muted: 210 20% 94%;
+  --muted-foreground: 215 16% 45%;
+
+  /* Utility */
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 215 22% 87%;
+  --input: 215 22% 87%;
+  --ring: 193 64% 32%;
+
+  /* Admin shell sizing */
+  --admin-sidebar-width: 16.5rem;
+  --admin-sidebar-collapsed-width: 4.75rem;
+  --admin-navbar-height: 4rem;
+  --admin-footer-height: 3.25rem;
+
+  /* Sidebar tokens moved here for admin scope */
+  --sidebar-background: 199 59% 21%;
+  --sidebar-foreground: 210 40% 96%;
+  --sidebar-primary: 115 52% 78%;
+  --sidebar-primary-foreground: 193 64% 20%;
+  --sidebar-accent: 198 52% 29%;
+  --sidebar-accent-foreground: 210 40% 98%;
+  --sidebar-border: 198 46% 31%;
+  --sidebar-ring: 115 52% 78%;
 }
 
-html {
-  scroll-behavior: smooth;
-  background: hsl(var(--background));
+.dark [data-app-theme="admin"],
+.dark body:has([data-app-theme="admin"]) {
+  /* Main canvas and text */
+  --background: 220 16% 12%;
+  --foreground: 210 33% 96%;
+
+  /* Surfaces */
+  --card: 218 16% 16%;
+  --card-foreground: 210 33% 96%;
+  --popover: 218 16% 16%;
+  --popover-foreground: 210 33% 96%;
+
+  /* Brand and interactions */
+  --primary: 191 63% 56%;
+  --primary-foreground: 214 36% 12%;
+  --secondary: 218 15% 19%;
+  --secondary-foreground: 210 33% 96%;
+  --accent: 145 45% 42%;
+  --accent-foreground: 210 33% 96%;
+  --muted: 219 14% 22%;
+  --muted-foreground: 214 20% 72%;
+
+  /* Utility */
+  --destructive: 0 70% 52%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 218 13% 26%;
+  --input: 218 13% 26%;
+  --ring: 191 63% 56%;
+
+  /* Sidebar tokens */
+  --sidebar-background: 201 55% 14%;
+  --sidebar-foreground: 210 33% 96%;
+  --sidebar-primary: 145 45% 52%;
+  --sidebar-primary-foreground: 201 55% 12%;
+  --sidebar-accent: 201 44% 20%;
+  --sidebar-accent-foreground: 210 33% 96%;
+  --sidebar-border: 202 34% 24%;
+  --sidebar-ring: 145 45% 52%;
 }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
+/* =========================
+   BASE STYLES
+   ========================= */
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    @apply antialiased;
+  }
 }

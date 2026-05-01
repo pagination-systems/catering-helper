@@ -1,0 +1,33 @@
+import type { IOptions } from "@rl/types";
+import type { ClientSession, FilterQuery } from "mongoose";
+
+// 1. Create a Mongoose-specific query type
+export type IMongooseQueryParams<T> = FilterQuery<T> & {
+  _id?: string | string[];
+};
+
+// 2. Create the robust backend Service interface
+export interface IServiceListParams<T> {
+  query: IMongooseQueryParams<T>;
+  options?: IOptions;
+  session?: ClientSession;
+}
+
+export interface IServiceGetParams<T> {
+  query: IMongooseQueryParams<T>;
+  session?: ClientSession;
+  options?: {
+    select?: string;
+  };
+}
+
+export interface IServiceUpdateParams<T> {
+  query: IMongooseQueryParams<T>;
+  payload: Partial<T>;
+  session?: ClientSession;
+}
+
+export interface IServiceCreateParams<T> {
+  payload: T;
+  session?: ClientSession;
+}

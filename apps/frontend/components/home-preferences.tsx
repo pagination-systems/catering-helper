@@ -1,9 +1,9 @@
 "use client";
 
 import { Languages } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/components/language-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
 import { siteNames } from "@/lib/i18n";
 
 export function HomePreferences() {

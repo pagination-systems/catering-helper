@@ -1,76 +1,63 @@
 import { Check } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import type { LandingCopy } from "@/lib/i18n";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import type { LandingContent } from "@/lib/i18n";
 
 type PricingProps = {
-  copy: LandingCopy["pricing"];
+  content: LandingContent["pricing"];
 };
 
-export function PricingSection({ copy }: PricingProps) {
+export function PricingSection({ content }: PricingProps) {
   return (
-    <section
-      id="pricing"
-      className="relative overflow-hidden border-t border-border/50 bg-[hsl(var(--landing-bg))] py-20 sm:py-24"
-    >
-      {/* Subtle Background Accents */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[linear-gradient(180deg,hsl(var(--landing-chip-bg-soft))_0%,transparent_100%)] opacity-70" />
-      <div className="pointer-events-none absolute left-1/2 top-20 h-[300px] w-[500px] -translate-x-1/2 rounded-full bg-primary/5 blur-[100px]" />
+    <section id="pricing" className="relative overflow-hidden border-t border-border/50 bg-background py-20 sm:py-24">
+      {/* Soft background */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-muted/40 to-transparent" />
+      <div className="pointer-events-none absolute left-1/2 top-20 h-[260px] w-[420px] -translate-x-1/2 rounded-full bg-primary/5 blur-[100px]" />
 
-      <div className="relative mx-auto w-full max-w-[1180px] px-4 sm:px-6 lg:px-8">
-        <Card className="mx-auto flex w-full max-w-[480px] flex-col overflow-hidden rounded-[24px] border border-[hsl(var(--landing-card-border))] bg-[hsl(var(--landing-card-bg))] shadow-xl sm:max-w-[520px]">
-          <CardHeader className="items-center px-8 pb-8 pt-10 text-center">
-            <span className="inline-flex rounded-full bg-primary/10 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-primary">
-              1 Month Launch Offer
+      <div className="relative mx-auto w-full max-w-[1100px] px-4 sm:px-6 lg:px-8">
+        {/* CENTERED SMALL CARD */}
+        <Card className="mx-auto w-full max-w-[420px] rounded-2xl border border-border bg-card shadow-sm">
+          {/* HEADER */}
+          <CardHeader className="items-center px-6 pb-6 pt-8 text-center">
+            <span className="inline-flex rounded-full bg-primary/10 px-3 py-1 text-[10px] font-medium uppercase tracking-wide text-primary">
+              {content.badge}
             </span>
 
-            <h2 className="mt-6 text-3xl font-bold tracking-tight text-[hsl(var(--landing-heading))] sm:text-4xl">
-              {copy.title}
-            </h2>
+            <h2 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">{content.title}</h2>
 
-            <p className="mt-3 max-w-[85%] text-sm leading-relaxed text-[hsl(var(--landing-text-muted))]">
-              {copy.description}
-            </p>
+            <p className="mt-2 text-sm text-muted-foreground">{content.description}</p>
 
-            <div className="mt-8 flex items-baseline gap-1.5">
-              <CardTitle className="text-5xl font-extrabold tracking-tight text-[hsl(var(--landing-heading))] sm:text-6xl">
-                {copy.price}
-              </CardTitle>
-              <p className="text-sm font-medium text-[hsl(var(--landing-text-muted))]">/ {copy.period}</p>
+            {/* PRICE */}
+            <div className="mt-6 flex items-end gap-1">
+              <span className="text-4xl font-semibold tracking-tight text-foreground">{content.price}</span>
+              <span className="pb-1 text-sm text-muted-foreground">/ {content.period}</span>
             </div>
           </CardHeader>
 
-          <CardContent className="px-8 py-6 sm:px-10">
-            <div className="mb-5 text-[12px] font-semibold uppercase tracking-wider text-[hsl(var(--landing-text-muted))]">
-              What&apos;s included
-            </div>
+          {/* FEATURES */}
+          <CardContent className="px-6 py-4">
+            <p className="mb-4 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Included</p>
 
-            {/* Vertical Line-by-Line Features */}
-            <ul className="flex flex-col space-y-4">
-              {copy.features.map((feature) => (
-                <li
-                  key={feature}
-                  className="flex items-start gap-3 text-sm text-[hsl(var(--landing-text-strong))] transition-colors hover:text-[hsl(var(--landing-heading))]"
-                >
-                  {/* Green Badge Tick */}
-                  <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/15">
-                    <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" strokeWidth={3} />
+            <ul className="space-y-3">
+              {content.features.map((feature) => (
+                <li key={feature} className="flex items-start gap-2 text-sm">
+                  <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/10">
+                    <Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={2.5} />
                   </div>
-                  <span className="leading-tight">{feature}</span>
+                  <span className="text-muted-foreground">{feature}</span>
                 </li>
               ))}
             </ul>
           </CardContent>
 
-          {/* Delineated Footer Area */}
-          <CardFooter className="flex-col items-center gap-4 bg-[hsl(var(--landing-chip-bg-soft))]/40 px-8 pb-10 pt-8 sm:px-10">
-            <Button className="h-12 w-full rounded-xl bg-primary text-[13px] font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/30 dark:bg-white dark:text-zinc-950 dark:shadow-none dark:hover:bg-zinc-200">
-              {copy.cta}
+          {/* FOOTER */}
+          <CardFooter className="flex-col gap-3 px-6 pb-7 pt-5">
+            <Button className="h-11 w-full rounded-xl bg-primary text-sm font-medium text-primary-foreground shadow-sm hover:bg-primary/90">
+              {content.cta}
             </Button>
-            <p className="text-center text-[11px] font-medium uppercase tracking-wider text-[hsl(var(--landing-text-muted))]">
-              {copy.subtext}
-            </p>
+
+            <p className="text-center text-[11px] text-muted-foreground">{content.subtext}</p>
           </CardFooter>
         </Card>
       </div>

@@ -1,0 +1,10 @@
+{
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "overrides": [
+    {
+      "files": ["**/*.{ts,tsx}"],
+      "excludedFiles": ["components/ui/**/*.{ts,tsx}"],
+      "rules": {}
+    }
+  ]
+}
