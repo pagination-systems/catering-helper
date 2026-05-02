@@ -9,8 +9,8 @@ export const useSession = (): ISession => {
       user: {
         id: "user-1",
         phone: "01790362665",
-        name: "Catering Admin",
-        role: USER_ROLE_ENUM.CATERING_ADMIN,
+        name: "Platform Admin",
+        role: USER_ROLE_ENUM.PLATFORM_ADMIN,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

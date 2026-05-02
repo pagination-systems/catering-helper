@@ -5,6 +5,7 @@ export const adminContent = {
     nav: {
       dashboard: "Dashboard",
       cateringHelper: "Catering Helper",
+      tenants: "Tenants",
       customers: "Customers",
       packages: "Packages",
       orders: "Orders",
@@ -91,6 +92,7 @@ export const adminContent = {
     nav: {
       dashboard: "ড্যাশবোর্ড",
       cateringHelper: "ক্যাটারিং সহকারী",
+      tenants: "টেনেন্টস",
       customers: "গ্রাহক",
       packages: "প্যাকেজ",
       orders: "অর্ডার",

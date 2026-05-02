@@ -24,3 +24,9 @@ export enum EXPENSE_CATEGORY_ENUM {
   SOFTWARE = "Software",
   OTHER = "Other",
 }
+
+export enum TENANT_STATUS_ENUM {
+  ACTIVE = "Active",
+  TERMINATED = "Terminated",
+  SUSPENDED = "Suspended",
+}
