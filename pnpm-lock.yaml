@@ -323,17 +323,10 @@ importers:
   packages/authz:
     dependencies:
       '@casl/ability':
-<<<<<<< HEAD
-        specifier: ^6.7.3
-        version: 6.8.1
-      '@catering/types':
-        specifier: workspace:*
-=======
         specifier: ^6.8.1
         version: 6.8.1
       '@catering/types':
         specifier: workspace:^
->>>>>>> e97f6df131394773e884aba048eaafe3cae0b690
         version: link:../types
     devDependencies:
       typescript:
@@ -343,11 +336,7 @@ importers:
   packages/types:
     dependencies:
       '@casl/ability':
-<<<<<<< HEAD
-        specifier: ^6.7.3
-=======
         specifier: ^6.8.1
->>>>>>> e97f6df131394773e884aba048eaafe3cae0b690
         version: 6.8.1
     devDependencies:
       typescript:
@@ -731,7 +720,6 @@ packages:
     cpu: [x64]
     os: [win32]
 
-<<<<<<< HEAD
   '@bull-board/api@6.21.3':
     resolution: {integrity: sha512-FoQO+0MgZsPrQX9WLZx0KpINamJY48FUU+OyMcZxx9mQWCwsdak45V/uBgQrTYB3GaF5oGA0SxPXEp4RHwj36A==}
     peerDependencies:
@@ -751,16 +739,12 @@ packages:
     peerDependencies:
       '@casl/ability': ^6.7.0
       mongoose: ^6.0.13 || ^7.0.0 || ^8.0.0 || ^9.0.0
-=======
-  '@casl/ability@6.8.1':
-    resolution: {integrity: sha512-VX5DD1JbSP/DdewZnNwXXaCzve+0pLe14mcUj2l93CdOFAQUT/ylAptNqxf3Wc/jlsuSanAgXza4Z1Iq23dzpQ==}
 
   '@casl/react@6.0.0':
     resolution: {integrity: sha512-XLjvUf/DLlS7AcRDXb3GtTrDGxQk09XDTWXs6tKdbeHqSWeydssngFJDFmf7MUtsza/BU+yXgS+C8j/RRx3MbA==}
     peerDependencies:
       '@casl/ability': ^4.0.0 || ^5.1.0 || ^6.0.0
       react: ^18.0.0 || ^19.0.0
->>>>>>> e97f6df131394773e884aba048eaafe3cae0b690
 
   '@colors/colors@1.6.0':
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
@@ -6949,7 +6933,6 @@ snapshots:
   '@biomejs/cli-win32-x64@2.4.12':
     optional: true
 
-<<<<<<< HEAD
   '@bull-board/api@6.21.3(@bull-board/ui@6.21.3)':
     dependencies:
       '@bull-board/ui': 6.21.3
@@ -6968,23 +6951,19 @@ snapshots:
     dependencies:
       '@bull-board/api': 6.21.3(@bull-board/ui@6.21.3)
 
-=======
->>>>>>> e97f6df131394773e884aba048eaafe3cae0b690
   '@casl/ability@6.8.1':
     dependencies:
       '@ucast/mongo2js': 1.4.1
 
-<<<<<<< HEAD
   '@casl/mongoose@8.0.5(@casl/ability@6.8.1)(mongoose@9.4.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7))':
     dependencies:
       '@casl/ability': 6.8.1
       mongoose: 9.4.1(@aws-sdk/credential-providers@3.1032.0)(socks@2.8.7)
-=======
+
   '@casl/react@6.0.0(@casl/ability@6.8.1)(react@19.0.0)':
     dependencies:
       '@casl/ability': 6.8.1
       react: 19.0.0
->>>>>>> e97f6df131394773e884aba048eaafe3cae0b690
 
   '@colors/colors@1.6.0': {}
 

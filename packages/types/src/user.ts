@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 export enum ACCOUNT_TYPE_ENUMS {
   ADMIN = "admin",
   CATERER = "caterer",
@@ -24,20 +23,14 @@ export enum EMAIL_VERIFICATION_STATUS_ENUMS {
 
 export interface IUser {
   _id: string;
+  id: string;
+  name: string;
+  phone: string;
   tenantId: string;
   email: string;
   type: ACCOUNT_TYPE_ENUMS;
   role?: USER_ROLE_ENUMS;
   emailVerificationStatus: EMAIL_VERIFICATION_STATUS_ENUMS;
-=======
-import type { USER_ROLE_ENUM } from "./enums";
-
-export interface IUser {
-  id: string;
-  name: string;
-  phone: string;
-  role: USER_ROLE_ENUM;
   createdAt: Date;
   updatedAt: Date;
->>>>>>> e97f6df131394773e884aba048eaafe3cae0b690
 }

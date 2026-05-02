@@ -8,5 +8,5 @@ export * from "./order.authz";
 export * from "./package.authz";
 export * from "./production-requirement.authz";
 export * from "./tenant.authz";
-export * from "./user";
-// export * from "./user.authz";
+// export * from "./user";
+export * from "./user.authz";

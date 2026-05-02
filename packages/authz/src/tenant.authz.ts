@@ -1,7 +1,7 @@
 import type { AbilityClass, AbilityTuple, AnyAbility, MongoQuery } from "@casl/ability";
 import { AbilityBuilder, buildMongoQueryMatcher, PureAbility } from "@casl/ability";
 import type { IAbilityBuilder, ISession } from "@catering/types";
-import { AbilityAction, USER_ROLE_ENUM } from "@catering/types";
+import { AbilityAction, ACCOUNT_TYPE_ENUMS, USER_ROLE_ENUM } from "@catering/types";
 
 type TenantAuthZEntityProps = {
   id?: string | null;
@@ -30,11 +30,11 @@ export class TenantAbilityBuilder implements IAbilityBuilder {
   getAbility(): AnyAbility {
     const builder = this.abilityBuilder;
 
-    if (this.session.user.role === USER_ROLE_ENUM.PLATFORM_ADMIN) {
+    if (this.session.user.type === ACCOUNT_TYPE_ENUMS.ADMIN) {
       builder.can(AbilityAction.MANAGE, TenantAuthZEntity);
     }
 
-    if (this.session.user.role === USER_ROLE_ENUM.CATERING_ADMIN) {
+    if (this.session.user.type === ACCOUNT_TYPE_ENUMS.CATERER) {
       builder.can(AbilityAction.MANAGE, TenantAuthZEntity, { _id: this.session.tenantId });
     }
 
