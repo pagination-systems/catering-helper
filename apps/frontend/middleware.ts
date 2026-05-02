@@ -40,7 +40,6 @@ export function middleware(request: NextRequest) {
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
     pathname.startsWith("/favicon") ||
-    pathname.startsWith("/client-portal") ||
     pathname.startsWith("/robots") ||
     pathname.startsWith("/sitemap")
   ) {
@@ -55,8 +54,16 @@ export function middleware(request: NextRequest) {
   }
 
   const url = request.nextUrl.clone();
-  url.pathname = "/client-portal";
-  url.searchParams.set("tenant", subdomain);
+  if (subdomain === "admin" || subdomain === "app") {
+    if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+      return NextResponse.next();
+    }
+
+    url.pathname = `/admin${pathname}`;
+    return NextResponse.rewrite(url);
+  }
+
+  url.pathname = `/${subdomain}${pathname}`;
 
   return NextResponse.rewrite(url);
 }
