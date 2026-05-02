@@ -1,7 +1,7 @@
 import type { AbilityClass, AbilityTuple, AnyAbility, MongoQuery } from "@casl/ability";
 import { AbilityBuilder, buildMongoQueryMatcher, PureAbility } from "@casl/ability";
 import type { IAbilityBuilder, ISession } from "@catering/types";
-import { AbilityAction, USER_ROLE_ENUM } from "@catering/types";
+import { AbilityAction, ACCOUNT_TYPE_ENUMS } from "@catering/types";
 
 type CustomerLedgerAuthZEntityProps = {
   tenantId?: string | null;
@@ -30,15 +30,15 @@ export class CustomerLedgerAbilityBuilder implements IAbilityBuilder {
   getAbility(): AnyAbility {
     const builder = this.abilityBuilder;
 
-    if (this.session.user.role === USER_ROLE_ENUM.PLATFORM_ADMIN) {
+    if (this.session.user.type === ACCOUNT_TYPE_ENUMS.ADMIN) {
       builder.can(AbilityAction.MANAGE, CustomerLedgerAuthZEntity);
     }
 
-    if (this.session.user.role === USER_ROLE_ENUM.CATERING_ADMIN) {
+    if (this.session.user.type === ACCOUNT_TYPE_ENUMS.CATERER) {
       builder.can(AbilityAction.MANAGE, CustomerLedgerAuthZEntity, { tenantId: this.session.tenantId });
     }
 
-    if (this.session.user.role === USER_ROLE_ENUM.CUSTOMER) {
+    if (this.session.user.type === ACCOUNT_TYPE_ENUMS.CUSTOMER) {
       builder.can(AbilityAction.READ, CustomerLedgerAuthZEntity);
     }
 

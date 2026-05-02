@@ -1,0 +1,12 @@
+import type { ACCOUNT_TYPE_ENUMS } from "@catering/types";
+import { Email } from "./core";
+
+export class AccountInvitaionEmail extends Email {
+  constructor(payload: { link: string; userType: ACCOUNT_TYPE_ENUMS }) {
+    super({
+      template: "account-invitation",
+      subject: "[Invitation] Join Recruit Local",
+      payload,
+    });
+  }
+}

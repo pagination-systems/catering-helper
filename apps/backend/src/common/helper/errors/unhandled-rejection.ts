@@ -1,4 +1,4 @@
-import type { Server } from "http";
+import type { Server } from "node:http";
 import { logger } from "../logger";
 
 const actionOnUnhandled = (server: Server): void => {

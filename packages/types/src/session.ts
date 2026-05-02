@@ -1,6 +1,8 @@
 import type { IUser } from "./user";
 
 export interface ISession {
-  user: IUser;
+  accessToken: string;
   tenantId?: string;
+  customerId?: string;
+  user: IUser;
 }

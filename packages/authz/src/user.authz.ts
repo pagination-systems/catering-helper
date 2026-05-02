@@ -1,19 +1,19 @@
 import type { AbilityClass, AbilityTuple, AnyAbility, MongoQuery } from "@casl/ability";
 import { AbilityBuilder, buildMongoQueryMatcher, PureAbility } from "@casl/ability";
 import type { IAbilityBuilder, ISession } from "@catering/types";
-import { AbilityAction, USER_ROLE_ENUM } from "@catering/types";
+import { AbilityAction, ACCOUNT_TYPE_ENUMS } from "@catering/types";
 
 type UserAuthZEntityProps = {
   id?: string | null;
-  role?: USER_ROLE_ENUM;
+  type?: ACCOUNT_TYPE_ENUMS;
 };
 
 export class UserAuthZEntity {
   public readonly _id: string | null;
-  public readonly role: USER_ROLE_ENUM | undefined;
-  constructor({ id, role }: UserAuthZEntityProps) {
+  public readonly type: ACCOUNT_TYPE_ENUMS | undefined;
+  constructor({ id, type }: UserAuthZEntityProps) {
     this._id = id ?? null;
-    this.role = role;
+    this.type = type;
   }
 }
 
@@ -33,16 +33,16 @@ export class UserAbilityBuilder implements IAbilityBuilder {
   getAbility(): AnyAbility {
     const builder = this.abilityBuilder;
 
-    if (this.session.user.role === USER_ROLE_ENUM.PLATFORM_ADMIN) {
+    if (this.session.user.type === ACCOUNT_TYPE_ENUMS.ADMIN) {
       builder.can(AbilityAction.MANAGE, UserAuthZEntity);
     }
 
-    if (this.session.user.role === USER_ROLE_ENUM.CATERING_ADMIN) {
+    if (this.session.user.type === ACCOUNT_TYPE_ENUMS.CATERER) {
       builder.can(AbilityAction.READ, UserAuthZEntity, { _id: this.session.user.id });
       builder.can(AbilityAction.UPDATE, UserAuthZEntity, { _id: this.session.user.id });
     }
 
-    if (this.session.user.role === USER_ROLE_ENUM.CUSTOMER) {
+    if (this.session.user.type === ACCOUNT_TYPE_ENUMS.CUSTOMER) {
       builder.can(AbilityAction.READ, UserAuthZEntity, { _id: this.session.user.id });
       builder.can(AbilityAction.UPDATE, UserAuthZEntity, { _id: this.session.user.id });
     }

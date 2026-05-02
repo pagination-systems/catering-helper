@@ -1,4 +1,6 @@
 import express, { type Express } from "express";
+import { deserializeUser } from "../../common/middlewares";
+import authRoutes from "../modules/authentication/auth.route";
 
 const router = express.Router();
 
@@ -10,5 +12,7 @@ const getApiRoutes = () => {
 };
 
 export const setupApiRoutes = (app: Express): void => {
+  router.use("/auth", authRoutes);
+  router.use(deserializeUser);
   app.use("/api/v1", getApiRoutes());
 };
