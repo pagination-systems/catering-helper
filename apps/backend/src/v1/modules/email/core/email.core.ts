@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { env } from "../../../../.config/env";
 import { EmailMissConfigException, validate } from "../../../../common/helper";
 import type { EmailOptions, EmailTemplateNames } from "./email.interface";
 import { emailQueue } from "./email.queue.js";
@@ -15,7 +16,7 @@ export class Email {
     this.template = template;
     this.subject = subject;
     this.payload = payload;
-    this.sender = process.env.EMAIL_SENDER || "default@example.com";
+    this.sender = env.EMAIL_SENDER;
   }
 
   public to(receiver: string) {

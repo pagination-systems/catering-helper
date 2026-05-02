@@ -1,12 +1,13 @@
 import { S3Client } from "@aws-sdk/client-s3";
 import { StatusCodes } from "http-status-codes";
+import { env } from "../../../.config/env";
 import { ApiResponse, type ControllerParams } from "../../../common/helper";
 import { FileManager } from "../../../common/helper/file-manager";
 
 const s3Client = new S3Client({
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY!,
-    secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET!,
+    accessKeyId: env.AWS_ACCESS_KEY!,
+    secretAccessKey: env.AWS_ACCESS_KEY_SECRET!,
   },
   region: "eu-west-2",
 });
@@ -14,12 +15,12 @@ const s3Client = new S3Client({
 export const getSignedUrlForUpload = async ({ req }: ControllerParams) => {
   const filename = req.header("x-file-name");
   const storageType = req.header("x-storage-type") as string;
-  let bucket = process.env.AWS_PRIVATE_MEDIA_BUCKET;
+  let bucket = env.AWS_PRIVATE_MEDIA_BUCKET;
   let baseUrl = null;
 
   if (storageType === "public") {
-    bucket = process.env.AWS_PUBLIC_MEDIA_BUCKET;
-    baseUrl = `${process.env.PUBLIC_MEDIA_BASE_URL}/`;
+    bucket = env.AWS_PUBLIC_MEDIA_BUCKET;
+    baseUrl = `${env.PUBLIC_MEDIA_BASE_URL}/`;
   }
 
   const fileManager = new FileManager(s3Client);
@@ -38,7 +39,7 @@ export const getSignedUrlForView = async ({ req }: ControllerParams) => {
   const fileManager = new FileManager(s3Client);
   const results = await fileManager.getSignedUrlForView({
     Key: filekey!,
-    Bucket: process.env.AWS_PRIVATE_MEDIA_BUCKET!,
+    Bucket: env.AWS_PRIVATE_MEDIA_BUCKET!,
   });
   return new ApiResponse({
     message: `URL signed for view: ${filekey}`,
@@ -54,7 +55,7 @@ export const deleteFile = async ({ req }: ControllerParams) => {
 
   await fileManager.deleteFile({
     Key: fileKey!,
-    Bucket: process.env.AWS_PRIVATE_MEDIA_BUCKET!,
+    Bucket: env.AWS_PRIVATE_MEDIA_BUCKET!,
   });
 
   return new ApiResponse({

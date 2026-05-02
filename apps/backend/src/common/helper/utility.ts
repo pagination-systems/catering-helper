@@ -1,4 +1,5 @@
 import NodeGeocoder, { type Options } from "node-geocoder";
+import { env } from "../../.config/env";
 import { logger } from "./logger";
 import { pick } from "./pick";
 
@@ -76,7 +77,7 @@ export const trimQuery = (queryData: QueryData): QueryData => {
 
 const options: Options = {
   provider: "google",
-  apiKey: process.env.GOOGLE_API_KEY,
+  apiKey: env.GOOGLE_API_KEY,
   formatter: null,
 };
 

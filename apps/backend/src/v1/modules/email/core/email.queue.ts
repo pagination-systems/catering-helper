@@ -4,13 +4,14 @@ import sgMail from "@sendgrid/mail";
 import type { Job } from "bullmq";
 import ejs from "ejs";
 import nodemailer from "nodemailer";
+import { env } from "../../../../.config/env";
 import { logger } from "../../../../common/helper";
 import { ReusableQueue } from "../../../../queue/Queue";
 import type { EmailConfiguration } from "./email.interface";
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
 
-if (process.env.NODE_ENV === "production") sgMail.setApiKey(process.env.SEND_GRID_API_KEY!);
+if (env.NODE_ENV === "production") sgMail.setApiKey(env.SEND_GRID_API_KEY!);
 
 const renderTemplate = async (template: string, data: any): Promise<string> => {
   const templatePath = path.join(currentDir, "..", "templates", `${template}.ejs`);
@@ -30,7 +31,7 @@ const processEmail = async (job: Job<EmailConfiguration>) => {
     payload,
   });
 
-  if (process.env.NODE_ENV === "production") {
+  if (env.NODE_ENV === "production") {
     await sgMail.send({
       from: {
         name: "Interface NRM",
@@ -55,11 +56,11 @@ const processEmail = async (job: Job<EmailConfiguration>) => {
 
   await nodemailer
     .createTransport({
-      host: process.env.EMAIL_HOST,
-      port: Number(process.env.EMAIL_PORT),
+      host: env.EMAIL_HOST,
+      port: env.EMAIL_PORT,
       auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD,
+        user: env.EMAIL_USERNAME,
+        pass: env.EMAIL_PASSWORD,
       },
     })
     .sendMail({

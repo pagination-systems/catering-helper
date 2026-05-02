@@ -1,3 +1,4 @@
+import { env } from "../../../.config/env";
 import { BadRequestException, logger, NotFoundException, SessionExpiredException } from "../../../common/helper";
 import type { IUserDoc } from "../../../models";
 import { EMAIL_VERIFICATION_STATUS_ENUMS, VERIFICATION_TOKEN_TYPE_ENUMS } from "../../../models/constants";
@@ -24,10 +25,10 @@ export const _generateSendAndStoreRegistrationToken = async ({
 
   const registrationToken = tokenService.generateToken({
     payload: { id: userId },
-    options: { expiresIn: process.env.REGISTRATION_TOKEN_EXPIRY! },
+    options: { expiresIn: env.REGISTRATION_TOKEN_EXPIRY },
   });
 
-  const verificationLink = `${process.env.CLIENT_URL}/accounts/registration-verification/?registration_token=${registrationToken}`;
+  const verificationLink = `${env.CLIENT_URL}/accounts/registration-verification/?registration_token=${registrationToken}`;
 
   const email = new AccountVerificationEmail({ link: verificationLink });
   email.to(receiver).send();
@@ -136,10 +137,10 @@ export const recoverAccount = async (email: string): Promise<IUserDoc> => {
 
   const recoveryToken = tokenService.generateToken({
     payload: { id: user._id!.toString() },
-    options: { expiresIn: process.env.RECOVERY_TOKEN_EXPIRY! },
+    options: { expiresIn: env.RECOVERY_TOKEN_EXPIRY },
   });
 
-  const recoveryLink = `${process.env.CLIENT_URL}/reset-password?recovery_token=${recoveryToken}`;
+  const recoveryLink = `${env.CLIENT_URL}/reset-password?recovery_token=${recoveryToken}`;
 
   const emailObj = new AccountRecoveryEmail({ link: recoveryLink });
   emailObj.to(email).send();
