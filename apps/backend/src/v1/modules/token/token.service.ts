@@ -64,7 +64,6 @@ export const removeTokensPair = async ({ accessToken, refreshToken }: TokensInpu
   return TokenPair.findOneAndUpdate(
     { accessTokens: { $in: accessToken }, refreshTokens: { $in: refreshToken } } as any,
     { $pull: { accessTokens: accessToken, refreshTokens: refreshToken } } as any,
-    { new: true } as any,
   );
 };
 

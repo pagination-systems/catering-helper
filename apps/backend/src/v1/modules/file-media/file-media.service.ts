@@ -87,7 +87,6 @@ export const update = async ({ query, payload }: IFileMediaUpdateParams) => {
     {
       $set: { ...payload },
     },
-    { new: true },
   );
 
   return updatedFileMedia;
