@@ -1,5 +1,6 @@
 export * from "./file-media";
 export * from "./session";
+export * from "./task";
 export * from "./tenant";
 export * from "./token-pair";
 export * from "./user";
