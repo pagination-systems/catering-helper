@@ -1,5 +1,6 @@
 export const modelNames = {
   USER: "users",
+  TASK: "tasks",
   FILE_MEDIA: "filemedias",
   TENANT: "tenants",
   TOKEN_PAIR: "tokenpairs",

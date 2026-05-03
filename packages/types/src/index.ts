@@ -6,6 +6,6 @@ export * from "./filemedia";
 export * from "./package";
 export * from "./pagination";
 export * from "./session";
-export * from "./session";
+export * from "./task";
 export * from "./tenant";
 export * from "./user";
