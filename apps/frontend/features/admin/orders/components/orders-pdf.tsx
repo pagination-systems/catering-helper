@@ -354,7 +354,7 @@ const OrdersPdfDocument = ({ orders, i18n }: OrdersPdfDocumentProps) => {
                 </View>
 
                 <View style={styles.colAddress}>
-                  <Text style={styles.tableCellText}>{order.address}</Text>
+                  <Text style={styles.tableCellText}>{order.deliveryAddress}</Text>
                 </View>
 
                 <View style={styles.colItems}>

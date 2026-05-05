@@ -1,58 +1,68 @@
 "use client";
 
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { SectionHeader } from "../components/section-header";
-import { type TenantDetailsTab, useTenantsStore } from "./store/useStore";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { Select } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
-const detailsTabs: Array<{ id: TenantDetailsTab; label: string }> = [
-  { id: "tab-1", label: "Tab 1" },
-  { id: "tab-2", label: "Tab 2" },
-  { id: "tab-3", label: "Tab 3" },
-  { id: "tab-4", label: "Tab 4" },
-  { id: "tab-5", label: "Tab 5" },
-  { id: "tab-6", label: "Tab 6" },
+const detailsTabs = [
+  { id: "orders", label: "Orders" },
+  { id: "packages", label: "Packages" },
+  { id: "production-requirements", label: "Production Requirements" },
+  { id: "customer-ledger", label: "Customer Ledger" },
+  { id: "expenses", label: "Expenses" },
+  { id: "settings", label: "Settings" },
 ];
 
-export const TenantDetails = () => {
-  const activeDetailsTab = useTenantsStore((state) => state.activeDetailsTab);
-  const setActiveDetailsTab = useTenantsStore((state) => state.setActiveDetailsTab);
-  const resetDetailsTab = useTenantsStore((state) => state.resetDetailsTab);
+const dummyTenants = [
+  { value: "uttara-catering", label: "Uttara Catering" },
+  { value: "nikunja-catering", label: "Nikunja Catering" },
+];
 
-  useEffect(() => {
-    resetDetailsTab();
-  }, [resetDetailsTab]);
+interface TenantDetailsLayoutProps {
+  id: string;
+  children: React.ReactNode;
+}
 
-  const activeTabLabel = detailsTabs.find((tab) => tab.id === activeDetailsTab)?.label ?? "Tab 1";
+export const TenantDetailsLayout = ({ id, children }: TenantDetailsLayoutProps) => {
+  const pathname = usePathname();
+  const [selectedTenant, setSelectedTenant] = useState<string>(dummyTenants[0].value);
 
   return (
     <section className="space-y-4" aria-labelledby="tenant-details-title">
-      <SectionHeader title="Tenant Details" description="View tenant details grouped by tabs." />
-
-      <Card>
-        <CardHeader className="space-y-3">
-          <div className="overflow-x-auto pb-1">
-            <div className="inline-flex min-w-full gap-2">
-              {detailsTabs.map((tab) => (
-                <Button
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b">
+        <div className="overflow-x-auto flex-1 hide-scrollbar">
+          <div className="flex w-fit whitespace-nowrap">
+            {detailsTabs.map((tab) => {
+              const href = `/admin/tenants/${id}/${tab.id}`;
+              const isActive = pathname.startsWith(href);
+              return (
+                <Link
                   key={tab.id}
-                  type="button"
-                  variant={activeDetailsTab === tab.id ? "default" : "outline"}
-                  className="h-auto rounded-full px-4 py-2"
-                  onClick={() => setActiveDetailsTab(tab.id)}
+                  href={href}
+                  className={cn(
+                    "px-4 py-3 text-sm font-medium border-b-2 transition-colors hover:text-primary",
+                    isActive ? "border-primary text-primary" : "border-transparent text-muted-foreground",
+                  )}
                 >
                   {tab.label}
-                </Button>
-              ))}
-            </div>
+                </Link>
+              );
+            })}
           </div>
-        </CardHeader>
-
-        <CardContent>
-          <h1 className="text-2xl font-semibold tracking-tight">{activeTabLabel}</h1>
-        </CardContent>
-      </Card>
+        </div>
+        <div className="w-full sm:w-[350px] shrink-0 pb-2 sm:pb-0 sm:self-end sm:mb-1">
+          <Select
+            options={dummyTenants}
+            value={selectedTenant}
+            onValueChange={setSelectedTenant}
+            isSearchable={false}
+            className="text-sm"
+          />
+        </div>
+      </div>
+      {children}
     </section>
   );
 };

@@ -30,3 +30,8 @@ export enum TENANT_STATUS_ENUM {
   TERMINATED = "Terminated",
   SUSPENDED = "Suspended",
 }
+
+export enum ORDER_SOURCE_ENUM {
+  CLIENT_PORTAL = "Client Portal",
+  ADMIN_PANEL = "Admin Panel",
+}

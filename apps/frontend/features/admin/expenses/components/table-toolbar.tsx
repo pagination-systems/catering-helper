@@ -74,7 +74,7 @@ export const TableToolbar = ({ filteredExpenses = [] }: TableToolbarProps) => {
               checked={categoryFilter === category}
               onCheckedChange={() => setCategoryFilter(category)}
             >
-              {category}
+              {i18n.categories[category] ?? category}
             </DropdownMenuCheckboxItem>
           ))}
 

@@ -12,14 +12,15 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { useUpdateOrder } from "../hooks";
 import { useOrdersI18n } from "../lib/orders-i18n";
-import { isOrderLocked } from "../schemas/order.schema";
+import { isOrderLocked } from "../lib/utils";
 import { useOrdersStore } from "../store/useStore";
 
 export const CancelConfirmation = () => {
   const [reason, setReason] = useState("");
   const i18n = useOrdersI18n();
-  const cancelOrder = useOrdersStore((state) => state.cancelOrder);
+  const { cancelOrder } = useUpdateOrder();
   const isCancelDialogOpen = useOrdersStore((state) => state.isCancelDialogOpen);
   const selectedCancelItem = useOrdersStore((state) => state.selectedCancelItem);
   const setCancelDialogOpen = useOrdersStore((state) => state.setCancelDialogOpen);
@@ -38,9 +39,10 @@ export const CancelConfirmation = () => {
   const onConfirmCancel = () => {
     if (!selectedCancelItem || !isCancelEnabled || isLocked) return;
 
-    cancelOrder(selectedCancelItem.id, trimmedReason);
-    setReason("");
-    closeCancelDialog();
+    cancelOrder(selectedCancelItem.id, () => {
+      setReason("");
+      closeCancelDialog();
+    });
   };
 
   return (

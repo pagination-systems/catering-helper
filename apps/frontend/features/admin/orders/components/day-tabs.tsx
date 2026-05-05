@@ -1,3 +1,4 @@
+import { If } from "@/components/if";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useOrdersI18n } from "../lib/orders-i18n";
@@ -7,7 +8,7 @@ import type { DaySlot } from "../store/useStore";
 type DayTabsProps = {
   upcomingDays: DaySlot[];
   activeDay: DayName | "all";
-  onChange: (day: DayName | "all") => void;
+  onChange: (daySlot: DaySlot | "all") => void;
   counts: Partial<Record<DayName, number>>;
 };
 
@@ -32,10 +33,12 @@ export const DayTabs = ({ upcomingDays, activeDay, onChange, counts }: DayTabsPr
             type="button"
             variant={activeDay === day.day ? "default" : "outline"}
             className="h-auto rounded-full px-4 py-2"
-            onClick={() => onChange(day.day)}
+            onClick={() => onChange(day)}
           >
             <span className="flex items-center gap-2 whitespace-nowrap">
-              <span>{day.isToday ? i18n.dayTabs.today : i18n.dayLabels[day.day]}</span>
+              <If expression={day.isToday} fallback={<span>{i18n.dayLabels[day.day]}</span>}>
+                <span>{i18n.dayTabs.today}</span>
+              </If>
               <span className="text-xs opacity-80">{day.dateLabel}</span>
               <Badge
                 variant="secondary"

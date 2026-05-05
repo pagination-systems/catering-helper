@@ -20,25 +20,24 @@ import { useOrdersStore } from "../store/useStore";
 import { downloadOrdersPdf } from "./orders-pdf";
 
 interface TableToolbarProps {
-  filteredOrders: IOrder[];
+  orders: IOrder[];
   activeDay: string;
+  onSearch: (value: string) => void;
 }
 
-export const TableToolbar = ({ filteredOrders, activeDay }: TableToolbarProps) => {
+export const TableToolbar = ({ orders, activeDay, onSearch }: TableToolbarProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const i18n = useOrdersI18n();
-  const query = useOrdersStore((state) => state.query);
   const statusFilter = useOrdersStore((state) => state.statusFilter);
-  const setQuery = useOrdersStore((state) => state.setQuery);
   const setStatusFilter = useOrdersStore((state) => state.setStatusFilter);
   const openCreate = useOrdersStore((state) => state.openCreate);
 
   const handleDownload = async () => {
-    if (!filteredOrders.length || isDownloading) return;
+    if (!orders.length || isDownloading) return;
 
     try {
       setIsDownloading(true);
-      await downloadOrdersPdf({ orders: filteredOrders, activeDay, i18n });
+      await downloadOrdersPdf({ orders, activeDay, i18n });
     } finally {
       setIsDownloading(false);
     }
@@ -49,8 +48,7 @@ export const TableToolbar = ({ filteredOrders, activeDay }: TableToolbarProps) =
       <div className="relative min-w-[14rem] flex-1">
         <SearchIcon className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => onSearch(event.target.value)}
           placeholder={i18n.toolbar.searchPlaceholder}
           className="pl-8"
         />
@@ -85,12 +83,7 @@ export const TableToolbar = ({ filteredOrders, activeDay }: TableToolbarProps) =
       </DropdownMenu>
 
       <Can I={AbilityAction.READ} a={OrderAuthZEntity}>
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={handleDownload}
-          disabled={!filteredOrders.length || isDownloading}
-        >
+        <Button type="button" variant="secondary" onClick={handleDownload} disabled={!orders.length || isDownloading}>
           <DownloadIcon className="size-4" />
           {isDownloading ? i18n.toolbar.downloadPreparing : i18n.toolbar.download}
         </Button>

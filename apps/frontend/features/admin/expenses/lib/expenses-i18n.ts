@@ -1,3 +1,4 @@
+import { EXPENSE_CATEGORY_ENUM } from "@catering/types";
 import type { Language } from "@/lib/i18n";
 import { useLanguage } from "@/providers/language-provider";
 
@@ -22,6 +23,7 @@ export type ExpensesContent = {
     downloadPreparing: string;
     addExpense: string;
   };
+  categories: Record<EXPENSE_CATEGORY_ENUM, string>;
   table: {
     label: string;
     category: string;
@@ -77,6 +79,8 @@ export type ExpensesContent = {
     amount: string;
     total: string;
     pageOf: string;
+    footerModule: string;
+    filePrefix: string;
   };
 };
 
@@ -101,6 +105,16 @@ const content: Record<Language, ExpensesContent> = {
       download: "Download",
       downloadPreparing: "Preparing...",
       addExpense: "Add Expense",
+    },
+    categories: {
+      [EXPENSE_CATEGORY_ENUM.FOOD_AND_RAW_MATERIALS]: "Food & Raw Materials",
+      [EXPENSE_CATEGORY_ENUM.LABOR]: "Labor",
+      [EXPENSE_CATEGORY_ENUM.TRANSPORT]: "Transport",
+      [EXPENSE_CATEGORY_ENUM.RENT]: "Rent",
+      [EXPENSE_CATEGORY_ENUM.UTILITIES]: "Utilities",
+      [EXPENSE_CATEGORY_ENUM.MARKETING_AND_SALES]: "Marketing & Sales",
+      [EXPENSE_CATEGORY_ENUM.SOFTWARE]: "Software",
+      [EXPENSE_CATEGORY_ENUM.OTHER]: "Other",
     },
     table: {
       label: "Label",
@@ -146,7 +160,7 @@ const content: Record<Language, ExpensesContent> = {
       openActionsFor: "Open actions for {{label}}",
     },
     pdf: {
-      title: "Expenses Report",
+      title: "Expenses",
       phone: "Phone",
       totalRecords: "Total Records",
       generated: "Generated",
@@ -157,41 +171,49 @@ const content: Record<Language, ExpensesContent> = {
       amount: "Amount",
       total: "Total",
       pageOf: "Page {{page}} of {{total}}",
+      footerModule: "Expenses",
+      filePrefix: "expenses",
     },
   },
   bn: {
-    title: "খরচ",
-    description: "অ্যাডমিনের সকল খরচ সংরক্ষণ ও পর্যালোচনা করুন।",
-
+    title: "খরচসমূহ",
+    description: "অ্যাডমিন খরচ লগ করুন এবং পর্যালোচনা করুন।",
     sheet: {
       createTitle: "খরচ যোগ করুন",
-      createDescription: "নতুন খরচের বিস্তারিত তথ্য দিন।",
+      createDescription: "নিচে খরচের বিস্তারিত তথ্য লিখুন।",
       editTitle: "খরচ সম্পাদনা করুন",
-      editDescription: "বিদ্যমান খরচের তথ্য আপডেট করুন।",
-      detailsTitle: "খরচের বিস্তারিত",
-      detailsDescription: "নির্বাচিত খরচের সম্পূর্ণ তথ্য দেখুন।",
+      editDescription: "নিচে খরচের তথ্য আপডেট করুন।",
+      detailsTitle: "খরচের বিবরণ",
+      detailsDescription: "নির্বাচিত খরচটি পর্যালোচনা করুন।",
       noExpenseSelected: "কোনো খরচ নির্বাচন করা হয়নি।",
     },
-
     toolbar: {
-      searchPlaceholder: "লেবেল, বিবরণ বা ক্যাটাগরি দিয়ে খুঁজুন",
+      searchPlaceholder: "লেবেল, বিবরণ, ক্যাটাগরি দিয়ে অনুসন্ধান করুন",
       filter: "ফিল্টার",
       category: "ক্যাটাগরি",
       resetFilters: "ফিল্টার রিসেট করুন",
       download: "ডাউনলোড",
-      downloadPreparing: "ফাইল প্রস্তুত হচ্ছে...",
+      downloadPreparing: "প্রস্তুত করছে...",
       addExpense: "খরচ যোগ করুন",
     },
-
+    categories: {
+      [EXPENSE_CATEGORY_ENUM.FOOD_AND_RAW_MATERIALS]: "খাদ্য ও কাঁচামাল",
+      [EXPENSE_CATEGORY_ENUM.LABOR]: "শ্রম",
+      [EXPENSE_CATEGORY_ENUM.TRANSPORT]: "পরিবহন",
+      [EXPENSE_CATEGORY_ENUM.RENT]: "ভাড়া",
+      [EXPENSE_CATEGORY_ENUM.UTILITIES]: "ইউটিলিটি",
+      [EXPENSE_CATEGORY_ENUM.MARKETING_AND_SALES]: "মার্কেটিং ও বিক্রয়",
+      [EXPENSE_CATEGORY_ENUM.SOFTWARE]: "সফটওয়্যার",
+      [EXPENSE_CATEGORY_ENUM.OTHER]: "অন্যান্য",
+    },
     table: {
       label: "লেবেল",
       category: "ক্যাটাগরি",
       amount: "পরিমাণ",
       date: "তারিখ",
-      actions: "অ্যাকশন",
-      noExpenses: "আপনার অনুসন্ধান অনুযায়ী কোনো খরচ পাওয়া যায়নি।",
+      actions: "ক্রিয়া",
+      noExpenses: "আপনার বর্তমান অনুসন্ধান এবং ফিল্টারের জন্য কোনো খরচ পাওয়া যায়নি।",
     },
-
     details: {
       label: "লেবেল",
       category: "ক্যাটাগরি",
@@ -199,40 +221,36 @@ const content: Record<Language, ExpensesContent> = {
       amount: "পরিমাণ",
       description: "বিবরণ",
     },
-
     form: {
       label: "লেবেল",
-      labelPlaceholder: "খরচের লেবেল লিখুন",
+      labelPlaceholder: "খরচের লেবেল",
       date: "তারিখ",
       datePlaceholder: "তারিখ নির্বাচন করুন",
       category: "ক্যাটাগরি",
       amount: "পরিমাণ",
       amountPlaceholder: "পরিমাণ লিখুন",
       description: "বিবরণ",
-      descriptionPlaceholder: "ঐচ্ছিক বিবরণ লিখুন",
+      descriptionPlaceholder: "ঐচ্ছিক বিবরণ",
       submitCreate: "খরচ যোগ করুন",
       submitSave: "পরিবর্তন সংরক্ষণ করুন",
     },
-
     delete: {
       title: "খরচ মুছবেন?",
-      confirmMessage: "{{label}} মুছতে চান কি? এই কাজটি আর ফেরত আনা যাবে না।",
-      confirmMessageGeneric: "এই খরচটি মুছতে চান কি? এই কাজটি আর ফেরত আনা যাবে না।",
-      confirmText: "নিশ্চিত করতে delete-expense লিখুন।",
+      confirmMessage: "আপনি কি নিশ্চিতভাবে {{label}} মুছতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।",
+      confirmMessageGeneric: "আপনি কি নিশ্চিতভাবে এই খরচ মুছতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।",
+      confirmText: "নিশ্চিত করতে delete-expense টাইপ করুন।",
       confirmKeyword: "delete-expense",
       cancel: "বাতিল",
-      confirm: "মুছে ফেলুন",
+      confirm: "হ্যাঁ, মুছুন",
     },
-
     actions: {
       view: "দেখুন",
       edit: "সম্পাদনা করুন",
       delete: "মুছুন",
-      openActionsFor: "{{label}} এর জন্য অ্যাকশন খুলুন",
+      openActionsFor: "{{label}} এর জন্য ক্রিয়া খুলুন",
     },
-
     pdf: {
-      title: "খরচ রিপোর্ট",
+      title: "খরচসমূহ",
       phone: "ফোন",
       totalRecords: "মোট রেকর্ড",
       generated: "তৈরি হয়েছে",
@@ -243,6 +261,8 @@ const content: Record<Language, ExpensesContent> = {
       amount: "পরিমাণ",
       total: "মোট",
       pageOf: "পৃষ্ঠা {{page}} / {{total}}",
+      footerModule: "খরচসমূহ",
+      filePrefix: "expenses",
     },
   },
 };

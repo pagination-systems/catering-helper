@@ -1,16 +1,9 @@
-import { ORDER_STATUS_ENUM } from "@catering/types";
+import type { ORDER_STATUS_ENUM } from "@catering/types";
 import { create } from "zustand";
 import { formatDate } from "@/lib/utils";
-import { getPriceByPackageName } from "../data/package-catalog";
-import {
-  type CreateOrderValues,
-  type DayName,
-  dayOrder,
-  type GetOrdersResponse,
-  type IOrder,
-  type IOrderItem,
-  isOrderLocked,
-} from "../schemas/order.schema";
+import { isOrderLocked } from "../lib/utils";
+import type { DayName, IOrder } from "../schemas/order.schema";
+import { dayOrder } from "../schemas/order.schema";
 
 export type DaySlot = {
   day: DayName;
@@ -24,8 +17,6 @@ type StatusFilter = "all" | ORDER_STATUS_ENUM;
 type DayFilter = "all" | DayName;
 
 type OrdersStoreState = {
-  list: GetOrdersResponse;
-  upcomingDays: DaySlot[];
   query: string;
   statusFilter: StatusFilter;
   dayFilter: DayFilter;
@@ -34,13 +25,14 @@ type OrdersStoreState = {
   isViewSheetOpen: boolean;
   isDeleteDialogOpen: boolean;
   isCancelDialogOpen: boolean;
-  selectedItem: IOrder | null;
+  selectedOrder: IOrder | null;
   selectedViewItem: IOrder | null;
   selectedDeleteItem: IOrder | null;
   selectedCancelItem: IOrder | null;
   setQuery: (query: string) => void;
   setStatusFilter: (status: StatusFilter) => void;
   setDayFilter: (day: DayFilter) => void;
+  resetOrdersState: () => void;
   setCreateSheetOpen: (open: boolean) => void;
   setEditSheetOpen: (open: boolean) => void;
   setViewSheetOpen: (open: boolean) => void;
@@ -56,15 +48,11 @@ type OrdersStoreState = {
   closeDeleteDialog: () => void;
   openCancelDialog: (item: IOrder) => void;
   closeCancelDialog: () => void;
-  cancelOrder: (orderId: IOrder["id"], reason: string) => void;
-  addItem: (item: IOrder) => void;
-  deleteOrder: (orderId: IOrder["id"]) => void;
-  updateOrder: (orderId: IOrder["id"], values: CreateOrderValues) => void;
 };
 
 const dayByJsIndex: DayName[] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-const getUpcomingDays = (): DaySlot[] => {
+export const getUpcomingDays = (): DaySlot[] => {
   const today = new Date();
 
   return Array.from({ length: 7 }).map((_, index) => {
@@ -84,275 +72,37 @@ const getUpcomingDays = (): DaySlot[] => {
   });
 };
 
-const upcomingDays = getUpcomingDays();
-
-const formatDateValue = (date: Date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-};
-
-const getDeliverySlotFromValue = (deliveryDate: string) => {
-  return upcomingDays.find((slot) => formatDateValue(slot.date) === deliveryDate) ?? upcomingDays[0];
-};
-
-const buildPagination = (totalDocs: number): GetOrdersResponse["meta"]["pagination"] => ({
-  totalDocs,
-  limit: 10,
-  hasPrevPage: false,
-  hasNextPage: false,
-  page: 1,
-  totalPages: Math.max(1, Math.ceil(totalDocs / 10)),
-  prevPage: null,
-  nextPage: null,
-  pagingCounter: 1,
-});
-
-const hydrateTotals = (order: Omit<IOrder, "subtotal" | "total" | "totalMeals">): IOrder => {
-  const subtotal = order.items.reduce((sum, item) => sum + item.subtotal, 0);
-  const totalMeals = order.items.reduce((sum, item) => sum + item.quantity, 0);
-
-  return {
-    ...order,
-    subtotal,
-    totalMeals,
-    total: subtotal + order.deliveryFee,
-  };
-};
-
-type SeedOrderInput = {
-  seed: number;
-  customerName: string;
-  customerPhone: string;
-  address: string;
-  notes?: string;
-  status: ORDER_STATUS_ENUM;
-  dayOffset: number;
-  createdHoursAgo: number;
-  items: Array<{
-    packageName: string;
-    variantName: string;
-    quantity: number;
-    pricePerMeal: number;
-    items: string[];
-  }>;
-};
-
-const buildSeedOrder = (input: SeedOrderInput): IOrder => {
-  const deliverySlot = upcomingDays[input.dayOffset] ?? upcomingDays[0];
-  const now = new Date();
-  const createdAt = new Date(now.getTime() - input.createdHoursAgo * 60 * 60 * 1000);
-
-  const seededItems: IOrderItem[] = input.items.map((item, index) => ({
-    id: `seed-item-${input.seed}-${index + 1}`,
-    packageName: item.packageName,
-    variantName: item.variantName,
-    quantity: item.quantity,
-    pricePerMeal: item.pricePerMeal,
-    items: item.items,
-    subtotal: item.quantity * item.pricePerMeal,
-    deliveryDate: deliverySlot.date,
-  }));
-
-  return hydrateTotals({
-    id: `seed-order-${input.seed}`,
-    orderNo: `ORD-${String(now.getFullYear()).slice(2)}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}-${2000 + input.seed}`,
-    customerName: input.customerName,
-    customerPhone: input.customerPhone,
-    address: input.address,
-    notes: input.notes ?? "",
-    source: "Client Portal",
-    status: input.status,
-    deliveryDay: deliverySlot.day,
-    deliveryDate: deliverySlot.date,
-    items: seededItems,
-    deliveryFee: 60,
-    createdAt,
-    updatedAt: createdAt,
-  });
-};
-
-const seedOrderBlueprints: Omit<SeedOrderInput, "seed">[] = [
-  {
-    customerName: "Rahim Uddin",
-    customerPhone: "01711000001",
-    address: "House 14, Road 7, Dhanmondi, Dhaka",
-    status: ORDER_STATUS_ENUM.CONFIRMED,
-    dayOffset: 0,
-    createdHoursAgo: 1,
-    items: [
-      {
-        packageName: "Daily Basic Package",
-        variantName: "Khichuri Set",
-        quantity: 8,
-        pricePerMeal: 120,
-        items: ["Khichuri", "Egg fry"],
-      },
-      {
-        packageName: "Standard Package",
-        variantName: "Chicken Bhuna Set",
-        quantity: 5,
-        pricePerMeal: 130,
-        items: ["Polao", "Chicken", "Salad"],
-      },
-    ],
-  },
-  {
-    customerName: "Nafisa Karim",
-    customerPhone: "01822000002",
-    address: "House 22, Gulshan 1, Dhaka",
-    notes: "Call before delivery",
-    status: ORDER_STATUS_ENUM.CONFIRMED,
-    dayOffset: 0,
-    createdHoursAgo: 3,
-    items: [
-      {
-        packageName: "Premium Package",
-        variantName: "Chicken Roast Set",
-        quantity: 12,
-        pricePerMeal: 150,
-        items: ["Polao", "Chicken roast", "Raita"],
-      },
-    ],
-  },
-  {
-    customerName: "Aman Group Ltd",
-    customerPhone: "01933000003",
-    address: "Tejgaon Industrial Area, Dhaka",
-    status: ORDER_STATUS_ENUM.CONFIRMED,
-    dayOffset: 1,
-    createdHoursAgo: 6,
-    items: [
-      {
-        packageName: "Standard Package",
-        variantName: "Fish Set",
-        quantity: 20,
-        pricePerMeal: 130,
-        items: ["Rice", "Fish curry", "Dal"],
-      },
-    ],
-  },
-  {
-    customerName: "Mehedi Hasan",
-    customerPhone: "01644000004",
-    address: "Mirpur DOHS, Dhaka",
-    status: ORDER_STATUS_ENUM.CANCELLED,
-    dayOffset: 2,
-    createdHoursAgo: 12,
-    items: [
-      {
-        packageName: "Daily Basic Package",
-        variantName: "Fish Rice Set",
-        quantity: 6,
-        pricePerMeal: 120,
-        items: ["Rice", "Tilapia fish", "Dal"],
-      },
-    ],
-  },
-  {
-    customerName: "Shamim Enterprise",
-    customerPhone: "01555000005",
-    address: "Banani, Dhaka",
-    status: ORDER_STATUS_ENUM.CONFIRMED,
-    dayOffset: 3,
-    createdHoursAgo: 28,
-    items: [
-      {
-        packageName: "Premium Package",
-        variantName: "Beef Bhuna Set",
-        quantity: 15,
-        pricePerMeal: 150,
-        items: ["Polao", "Beef bhuna", "Borhani"],
-      },
-    ],
-  },
-  {
-    customerName: "Arifa Sultana",
-    customerPhone: "01366000006",
-    address: "Uttara Sector 11, Dhaka",
-    status: ORDER_STATUS_ENUM.CANCELLED,
-    dayOffset: 4,
-    createdHoursAgo: 32,
-    items: [
-      {
-        packageName: "Daily Basic Package",
-        variantName: "Chicken Jhol Set",
-        quantity: 9,
-        pricePerMeal: 120,
-        items: ["Rice", "Chicken jhol", "Vegetable"],
-      },
-    ],
-  },
-  {
-    customerName: "Zaman Trading",
-    customerPhone: "01777000007",
-    address: "Moghbazar, Dhaka",
-    status: ORDER_STATUS_ENUM.CONFIRMED,
-    dayOffset: 5,
-    createdHoursAgo: 10,
-    items: [
-      {
-        packageName: "Standard Package",
-        variantName: "Egg Curry Set",
-        quantity: 18,
-        pricePerMeal: 130,
-        items: ["Rice", "Egg curry", "Dal"],
-      },
-    ],
-  },
-  {
-    customerName: "Rifat Chowdhury",
-    customerPhone: "01488000008",
-    address: "Badda, Dhaka",
-    status: ORDER_STATUS_ENUM.CONFIRMED,
-    dayOffset: 6,
-    createdHoursAgo: 2,
-    items: [
-      {
-        packageName: "Premium Package",
-        variantName: "Ilish Set",
-        quantity: 4,
-        pricePerMeal: 150,
-        items: ["Lebu rice", "Ilish", "Dal"],
-      },
-    ],
-  },
-];
-
-const initialOrders: IOrder[] = Array.from({ length: 50 }, (_, index) => {
-  const blueprint = seedOrderBlueprints[index % seedOrderBlueprints.length];
-
-  return buildSeedOrder({
-    seed: index + 1,
-    ...blueprint,
-  });
-});
-
 export const useOrdersStore = create<OrdersStoreState>((set) => ({
-  list: {
-    data: initialOrders,
-    meta: {
-      pagination: buildPagination(initialOrders.length),
-    },
-  },
-  upcomingDays,
   query: "",
   statusFilter: "all",
-  dayFilter: upcomingDays[0]?.day ?? "all",
+  dayFilter: "all",
   isCreateSheetOpen: false,
   isEditSheetOpen: false,
   isViewSheetOpen: false,
   isDeleteDialogOpen: false,
   isCancelDialogOpen: false,
-  selectedItem: null,
+  selectedOrder: null,
   selectedViewItem: null,
   selectedDeleteItem: null,
   selectedCancelItem: null,
   setQuery: (query) => set({ query }),
   setStatusFilter: (statusFilter) => set({ statusFilter }),
   setDayFilter: (dayFilter) => set({ dayFilter }),
+  resetOrdersState: () =>
+    set({
+      query: "",
+      statusFilter: "all",
+      dayFilter: "all",
+      isCreateSheetOpen: false,
+      isEditSheetOpen: false,
+      isViewSheetOpen: false,
+      isDeleteDialogOpen: false,
+      isCancelDialogOpen: false,
+      selectedOrder: null,
+      selectedViewItem: null,
+      selectedDeleteItem: null,
+      selectedCancelItem: null,
+    }),
   setCreateSheetOpen: (open) =>
     set({
       isCreateSheetOpen: open,
@@ -360,7 +110,7 @@ export const useOrdersStore = create<OrdersStoreState>((set) => ({
   setEditSheetOpen: (open) =>
     set((state) => ({
       isEditSheetOpen: open,
-      selectedItem: open ? state.selectedItem : null,
+      selectedOrder: open ? state.selectedOrder : null,
     })),
   setViewSheetOpen: (open) =>
     set((state) => ({
@@ -382,7 +132,7 @@ export const useOrdersStore = create<OrdersStoreState>((set) => ({
       isCreateSheetOpen: true,
       isEditSheetOpen: false,
       isViewSheetOpen: false,
-      selectedItem: null,
+      selectedOrder: null,
       selectedViewItem: null,
     }),
   closeCreateSheet: () => set({ isCreateSheetOpen: false }),
@@ -393,18 +143,18 @@ export const useOrdersStore = create<OrdersStoreState>((set) => ({
       isEditSheetOpen: true,
       isCreateSheetOpen: false,
       isViewSheetOpen: false,
-      selectedItem: item,
+      selectedOrder: item,
       selectedViewItem: null,
     });
   },
-  closeEditSheet: () => set({ isEditSheetOpen: false, selectedItem: null }),
+  closeEditSheet: () => set({ isEditSheetOpen: false, selectedOrder: null }),
   openView: (item) =>
     set({
       isViewSheetOpen: true,
       isCreateSheetOpen: false,
       isEditSheetOpen: false,
       selectedViewItem: item,
-      selectedItem: null,
+      selectedOrder: null,
     }),
   closeViewSheet: () => set({ isViewSheetOpen: false, selectedViewItem: null }),
   openDeleteDialog: (item) => {
@@ -419,116 +169,4 @@ export const useOrdersStore = create<OrdersStoreState>((set) => ({
     set({ isCancelDialogOpen: true, selectedCancelItem: item });
   },
   closeCancelDialog: () => set({ isCancelDialogOpen: false, selectedCancelItem: null }),
-  cancelOrder: (orderId, reason) =>
-    set((state) => {
-      const trimmedReason = reason.trim();
-
-      const nextData = state.list.data.map((order) => {
-        if (order.id !== orderId) return order;
-        if (isOrderLocked(order.status)) return order;
-
-        const cancelNote = trimmedReason ? `\n[Cancelled] ${trimmedReason}` : "";
-
-        return {
-          ...order,
-          status: ORDER_STATUS_ENUM.CANCELLED,
-          notes: `${order.notes}${cancelNote}`.trim(),
-          updatedAt: new Date(),
-        };
-      });
-
-      return {
-        list: {
-          ...state.list,
-          data: nextData,
-          meta: {
-            pagination: buildPagination(nextData.length),
-          },
-        },
-      };
-    }),
-  addItem: (item) =>
-    set((state) => {
-      const nextData = [item, ...state.list.data];
-
-      return {
-        list: {
-          ...state.list,
-          data: nextData,
-          meta: {
-            pagination: buildPagination(nextData.length),
-          },
-        },
-      };
-    }),
-  deleteOrder: (orderId) =>
-    set((state) => {
-      const current = state.list.data.find((order) => order.id === orderId);
-      if (!current || isOrderLocked(current.status)) return state;
-
-      const nextData = state.list.data.filter((order) => order.id !== orderId);
-
-      return {
-        list: {
-          ...state.list,
-          data: nextData,
-          meta: {
-            pagination: buildPagination(nextData.length),
-          },
-        },
-      };
-    }),
-  updateOrder: (orderId, values) =>
-    set((state) => {
-      const nextData = state.list.data.map((order) => {
-        if (order.id !== orderId) return order;
-        if (isOrderLocked(order.status)) return order;
-        const deliverySlot = getDeliverySlotFromValue(values.deliveryDate);
-
-        const nextItems = values.items.map((item, index) => {
-          const itemDeliverySlot = getDeliverySlotFromValue(item.deliveryDate);
-          const pricePerMeal = getPriceByPackageName(item.packageName);
-          const existingItem =
-            order.items.find(
-              (currentItem) =>
-                currentItem.packageName === item.packageName &&
-                currentItem.variantName === item.variantName &&
-                formatDateValue(currentItem.deliveryDate) === item.deliveryDate,
-            ) ?? order.items[index];
-
-          return {
-            id: existingItem?.id ?? crypto.randomUUID(),
-            packageName: item.packageName,
-            variantName: item.variantName,
-            quantity: item.quantity,
-            pricePerMeal,
-            subtotal: item.quantity * pricePerMeal,
-            items: existingItem?.items ?? ["Rice", "Dal", "Salad"],
-            deliveryDate: itemDeliverySlot?.date ?? deliverySlot?.date ?? order.deliveryDate,
-          };
-        });
-
-        return hydrateTotals({
-          ...order,
-          customerName: values.customerName,
-          customerPhone: values.customerPhone,
-          address: values.address,
-          notes: values.notes ?? "",
-          deliveryDay: deliverySlot?.day ?? order.deliveryDay,
-          deliveryDate: deliverySlot?.date ?? order.deliveryDate,
-          items: nextItems,
-          updatedAt: new Date(),
-        });
-      });
-
-      return {
-        list: {
-          ...state.list,
-          data: nextData,
-          meta: {
-            pagination: buildPagination(nextData.length),
-          },
-        },
-      };
-    }),
 }));

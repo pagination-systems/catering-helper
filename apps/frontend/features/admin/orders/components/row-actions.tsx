@@ -12,7 +12,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AbilityAction } from "../../../../../../packages/types/dist/ability-action";
 import { useOrdersI18n } from "../lib/orders-i18n";
-import { type IOrder, isOrderLocked } from "../schemas/order.schema";
+import { isOrderLocked } from "../lib/utils";
+import type { IOrder } from "../schemas/order.schema";
 import { useOrdersStore } from "../store/useStore";
 
 interface RowActionsProps {

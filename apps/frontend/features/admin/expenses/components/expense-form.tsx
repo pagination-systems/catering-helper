@@ -127,7 +127,7 @@ export const ExpenseForm = ({ onSubmit, initialValues, submitLabel }: ExpenseFor
                         <FormControl>
                           <Select
                             options={categories.map((category) => ({
-                              label: category,
+                              label: i18n.categories[category] ?? category,
                               value: category,
                             }))}
                             value={field.value}
