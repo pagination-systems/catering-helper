@@ -34,38 +34,39 @@ function getSubdomain(hostHeader: string): string | null {
 }
 
 export function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+  return NextResponse.next();
+  // const pathname = request.nextUrl.pathname;
 
-  if (
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/api") ||
-    pathname.startsWith("/favicon") ||
-    pathname.startsWith("/robots") ||
-    pathname.startsWith("/sitemap")
-  ) {
-    return NextResponse.next();
-  }
+  // if (
+  //   pathname.startsWith("/_next") ||
+  //   pathname.startsWith("/api") ||
+  //   pathname.startsWith("/favicon") ||
+  //   pathname.startsWith("/robots") ||
+  //   pathname.startsWith("/sitemap")
+  // ) {
+  //   return NextResponse.next();
+  // }
 
-  const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host") ?? "";
-  const subdomain = getSubdomain(host);
+  // const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host") ?? "";
+  // const subdomain = getSubdomain(host);
 
-  if (!subdomain) {
-    return NextResponse.next();
-  }
+  // if (!subdomain) {
+  //   return NextResponse.next();
+  // }
 
-  const url = request.nextUrl.clone();
-  if (subdomain === "admin" || subdomain === "app") {
-    if (pathname === "/admin" || pathname.startsWith("/admin/")) {
-      return NextResponse.next();
-    }
+  // const url = request.nextUrl.clone();
+  // if (subdomain === "admin" || subdomain === "app") {
+  //   if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+  //     return NextResponse.next();
+  //   }
 
-    url.pathname = `/admin${pathname}`;
-    return NextResponse.rewrite(url);
-  }
+  //   url.pathname = `/admin${pathname}`;
+  //   return NextResponse.rewrite(url);
+  // }
 
-  url.pathname = `/${subdomain}${pathname}`;
+  // url.pathname = `/${subdomain}${pathname}`;
 
-  return NextResponse.rewrite(url);
+  // return NextResponse.rewrite(url);
 }
 
 export const config = {
