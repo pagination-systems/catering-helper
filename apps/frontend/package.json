@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "prebuild": "pnpm --filter @catering/types build && pnpm --filter @catering/authz build  && pnpm --filter @catering/react-query-builder build && pnpm --filter",
     "start": "next start",
     "lint": "next lint"
   },
