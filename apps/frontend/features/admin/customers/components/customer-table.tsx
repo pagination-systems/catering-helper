@@ -13,7 +13,7 @@ import { RowActions } from "./row-actions";
 
 interface CustomerTableProps {
   data: GetUsersResponse;
-  handlePaginate?: (payload: { page: number; limit: number }) => void;
+  handlePaginate?: (page: number, limit: number) => void;
 }
 
 export const CustomerTable = ({ data, handlePaginate }: CustomerTableProps) => {

@@ -10,7 +10,7 @@ import { RowActions } from "./row-actions";
 
 interface TenantTableProps {
   data: GetTenantsResponse;
-  handlePaginate?: (payload: { page: number; limit: number }) => void;
+  handlePaginate?: (page: number, limit: number) => void;
 }
 
 export const TenantTable = ({ data, handlePaginate }: TenantTableProps) => {

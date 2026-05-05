@@ -12,7 +12,7 @@ import { RowActions } from "./row-actions";
 
 interface ExpenseTableProps {
   data: IExpense[];
-  handlePaginate?: (payload: { page: number; limit: number }) => void;
+  handlePaginate?: (page: number, limit: number) => void;
 }
 
 export const ExpenseTable = ({ data, handlePaginate }: ExpenseTableProps) => {

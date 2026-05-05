@@ -13,7 +13,7 @@ import { RowActions } from "./row-actions";
 
 interface UserTableProps {
   data: GetUsersResponse;
-  handlePaginate?: (payload: { page: number; limit: number }) => void;
+  handlePaginate?: (page: number, limit: number) => void;
 }
 
 export const UserTable = ({ data, handlePaginate }: UserTableProps) => {

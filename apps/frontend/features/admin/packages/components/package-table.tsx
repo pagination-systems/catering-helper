@@ -11,7 +11,7 @@ import { RowActions } from "./row-actions";
 
 interface PackageTableProps {
   data: GetPackagesResponse;
-  handlePaginate?: (payload: { page: number; limit: number }) => void;
+  handlePaginate?: (page: number, limit: number) => void;
 }
 
 export const PackageTable = ({ data, handlePaginate }: PackageTableProps) => {
