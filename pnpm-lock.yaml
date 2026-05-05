@@ -338,10 +338,10 @@ importers:
   packages/authz:
     dependencies:
       '@casl/ability':
-        specifier: ^6.8.1
+        specifier: ^6.7.3
         version: 6.8.1
       '@catering/types':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../types
     devDependencies:
       typescript:
@@ -369,7 +369,7 @@ importers:
   packages/types:
     dependencies:
       '@casl/ability':
-        specifier: ^6.8.1
+        specifier: ^6.7.3
         version: 6.8.1
     devDependencies:
       typescript:
@@ -2734,6 +2734,9 @@ packages:
 
   '@types/node@22.19.17':
     resolution: {integrity: sha512-wGdMcf+vPYM6jikpS/qhg6WiqSV/OhG+jeeHT/KlVqxYfD40iYJf9/AE1uQxVWFvU7MipKRkRv8NSHiCGgPr8Q==}
+
+  '@types/node@24.12.2':
+    resolution: {integrity: sha512-A1sre26ke7HDIuY/M23nd9gfB+nrmhtYyMINbjI1zHJxYteKR6qSMX56FsmjMcDb3SMcjJg5BiRRgOCC/yBD0g==}
 
   '@types/nodemailer@6.4.23':
     resolution: {integrity: sha512-aFV3/NsYFLSx9mbb5gtirBSXJnAlrusoKNuPbxsASWc7vrKLmIrTQRpdcxNcSFL3VW2A2XpeLEavwb2qMi6nlQ==}
@@ -9075,6 +9078,10 @@ snapshots:
   '@types/node@22.19.17':
     dependencies:
       undici-types: 6.21.0
+
+  '@types/node@24.12.2':
+    dependencies:
+      undici-types: 7.16.0
 
   '@types/nodemailer@6.4.23':
     dependencies:
