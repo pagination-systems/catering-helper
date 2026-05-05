@@ -13,7 +13,7 @@ import { RowActions } from "./row-actions";
 
 interface CustomerTableProps {
   data: GetUsersResponse;
-  handlePaginate?: (payload: { page: number; limit: number }) => void;
+  handlePaginate?: (page: number, limit: number) => void;
 }
 
 export const CustomerTable = ({ data, handlePaginate }: CustomerTableProps) => {
@@ -47,8 +47,8 @@ export const CustomerTable = ({ data, handlePaginate }: CustomerTableProps) => {
       accessorKey: "role",
       header: i18n.table.role,
       cell: (user) => (
-        <Badge variant="outline" className={getRoleBadgeStyles(user.role)}>
-          {user.role}
+        <Badge variant="outline" className={getRoleBadgeStyles(user.type)}>
+          {user.type}
         </Badge>
       ),
     },

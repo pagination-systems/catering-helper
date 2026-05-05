@@ -21,9 +21,5 @@
   },
   "devDependencies": {
     "typescript": "^5.6.3"
-  },
-  "dependencies": {
-    "@casl/ability": "^6.8.1",
-    "@catering/types": "workspace:^"
   }
 }

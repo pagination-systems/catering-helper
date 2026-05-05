@@ -19,6 +19,7 @@ import {
   Settings,
   Users,
   Utensils,
+  UtensilsCrossed,
 } from "lucide-react";
 import { getAdminContent } from "@/lib/admin-i18n";
 import type { Language } from "@/lib/i18n";
@@ -58,6 +59,12 @@ export function getNavigationItems(lang: Language): NavigationItem[] {
       href: "/admin/catering-helper",
       icon: Fingerprint,
       canView: (ability) => ability.can(AbilityAction.MANAGE, UserAuthZEntity),
+    },
+    {
+      label: t.tenants,
+      href: "/admin/tenants",
+      icon: UtensilsCrossed,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, TenantAuthZEntity),
     },
     {
       label: t.customers,

@@ -12,7 +12,7 @@ import { RowActions } from "./row-actions";
 
 interface ExpenseTableProps {
   data: IExpense[];
-  handlePaginate?: (payload: { page: number; limit: number }) => void;
+  handlePaginate?: (page: number, limit: number) => void;
 }
 
 export const ExpenseTable = ({ data, handlePaginate }: ExpenseTableProps) => {
@@ -38,7 +38,7 @@ export const ExpenseTable = ({ data, handlePaginate }: ExpenseTableProps) => {
       header: i18n.table.category,
       cell: (item) => (
         <Badge variant="outline" className={getCategoryBadgeStyles(item.category)}>
-          {item.category}
+          {i18n.categories[item.category] ?? item.category}
         </Badge>
       ),
     },
@@ -66,12 +66,12 @@ export const ExpenseTable = ({ data, handlePaginate }: ExpenseTableProps) => {
       pagination={{
         totalDocs: data.length,
         limit: 10,
+        hasPrevPage: false,
+        hasNextPage: false,
         page: 1,
         totalPages: Math.max(1, Math.ceil(data.length / 10)),
-        hasNextPage: false,
-        hasPrevPage: false,
-        nextPage: null,
         prevPage: null,
+        nextPage: null,
         pagingCounter: 1,
       }}
       handlePaginate={handlePaginate}

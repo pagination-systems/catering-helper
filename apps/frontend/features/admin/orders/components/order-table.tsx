@@ -1,20 +1,22 @@
 "use client";
 
+import type { PaginationMeta } from "@catering/types";
 import { ClipboardListIcon } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { DataTable, type DataTableColumn } from "../../components/data-table";
+import { getOrderStatusBadgeClassName } from "../lib/badge";
 import { useOrdersI18n } from "../lib/orders-i18n";
-import type { GetOrdersResponse, IOrder } from "../schemas/order.schema";
+import type { IOrder } from "../schemas/order.schema";
 import { useOrdersStore } from "../store/useStore";
-import { getOrderStatusBadgeClassName } from "../utils/badge";
 import { RowActions } from "./row-actions";
 
 interface OrderTableProps {
-  data: GetOrdersResponse;
-  handlePaginate?: (payload: { page: number; limit: number }) => void;
+  data: IOrder[];
+  pagination: PaginationMeta;
+  handlePaginate?: (page: number, limit: number) => void;
 }
 
-export const OrderTable = ({ data, handlePaginate }: OrderTableProps) => {
+export const OrderTable = ({ data, pagination, handlePaginate }: OrderTableProps) => {
   const i18n = useOrdersI18n();
   const openView = useOrdersStore((state) => state.openView);
 
@@ -95,9 +97,9 @@ export const OrderTable = ({ data, handlePaginate }: OrderTableProps) => {
 
   return (
     <DataTable
-      data={data.data}
+      data={data}
       columns={columns}
-      pagination={data.meta.pagination}
+      pagination={pagination}
       handlePaginate={handlePaginate}
       getRowId={(item) => item.id}
       emptyState={

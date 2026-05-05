@@ -10,7 +10,7 @@ import { RowActions } from "./row-actions";
 
 interface CustomerLedgerTableProps {
   data: GetCustomerLedgerResponse;
-  handlePaginate?: (payload: { page: number; limit: number }) => void;
+  handlePaginate?: (page: number, limit: number) => void;
 }
 
 export const CustomerLedgerTable = ({ data, handlePaginate }: CustomerLedgerTableProps) => {

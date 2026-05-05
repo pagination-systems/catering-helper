@@ -1,10 +1,10 @@
 "use client";
 
+import { ORDER_SOURCE_ENUM } from "@catering/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -18,37 +18,38 @@ import {
   getVariantsByPackageName,
 } from "../data/package-catalog";
 import { interpolate, useOrdersI18n } from "../lib/orders-i18n";
-import { type CreateOrderValues, createOrderSchema } from "../schemas/order.schema";
+import { type IOrder, type OrderFormInput, orderFormSchema } from "../schemas/order.schema";
 import type { DaySlot } from "../store/useStore";
 import { DayTab } from "./day-tab";
 
 interface OrderFormProps {
-  onSubmit: (data: CreateOrderValues) => void;
-  initialValues?: CreateOrderValues;
+  onSubmit: (data: OrderFormInput) => void;
+  initialData?: IOrder;
   submitLabel?: string;
   upcomingDays: DaySlot[];
 }
 
 const DELIVERY_FEE = 60;
 
-const getDefaultValues = (
-  initialValues: CreateOrderValues | undefined,
-  packageOptions: string[],
-  deliveryDateOptions: string[],
-): CreateOrderValues => ({
-  customerName: initialValues?.customerName ?? "",
-  customerPhone: initialValues?.customerPhone ?? "",
-  address: initialValues?.address ?? "",
-  notes: initialValues?.notes ?? "",
-  packageName: initialValues?.packageName ?? packageOptions[0] ?? "",
-  deliveryDate: initialValues?.deliveryDate ?? deliveryDateOptions[0] ?? "",
-  items: initialValues?.items ?? [],
+const getDefaultValues = (initialData: IOrder | undefined): OrderFormInput => ({
+  customerName: initialData?.customerName ?? "",
+  customerPhone: initialData?.customerPhone ?? "",
+  deliveryAddress: initialData?.deliveryAddress ?? "",
+  source: initialData?.source ?? ORDER_SOURCE_ENUM.ADMIN_PANEL,
+  notes: initialData?.notes ?? "",
+  packageName: initialData?.packageName ?? initialData?.items[0]?.packageName ?? "",
+  deliveryDate: initialData?.deliveryDate ? formatDateValue(new Date(initialData.deliveryDate)) : "",
+  items:
+    initialData?.items.map((item) => ({
+      packageName: item.packageName,
+      variantName: item.variantName,
+      quantity: item.quantity,
+    })) ?? [],
 });
 
-const lineItemKey = (packageName: string, deliveryDate: string, variantName: string) =>
-  `${packageName}::${deliveryDate}::${variantName}`;
+const lineItemKey = (packageName: string, variantName: string) => `${packageName}::${variantName}`;
 
-export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order", upcomingDays }: OrderFormProps) => {
+export const OrderForm = ({ onSubmit, initialData, submitLabel = "Create Order", upcomingDays }: OrderFormProps) => {
   const i18n = useOrdersI18n();
   const packageOptions = useMemo(() => adminPackageCatalog.map((pkg) => pkg.name), []);
 
@@ -64,33 +65,14 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
     [upcomingDays],
   );
 
-  const deliveryDateOptions = useMemo(
-    () =>
-      deliveryDateCards.map((day) => ({
-        value: day.value,
-        label: `${day.dayLabel} · ${day.dateLabel}`,
-      })),
-    [deliveryDateCards],
-  );
-
-  const form = useForm<CreateOrderValues>({
-    resolver: zodResolver(createOrderSchema),
-    defaultValues: getDefaultValues(
-      initialValues,
-      packageOptions,
-      deliveryDateOptions.map((option) => option.value),
-    ),
+  const form = useForm<OrderFormInput>({
+    resolver: zodResolver(orderFormSchema),
+    defaultValues: getDefaultValues(initialData),
   });
 
   useEffect(() => {
-    form.reset(
-      getDefaultValues(
-        initialValues,
-        packageOptions,
-        deliveryDateOptions.map((option) => option.value),
-      ),
-    );
-  }, [deliveryDateOptions, form, initialValues, packageOptions]);
+    form.reset(getDefaultValues(initialData));
+  }, [form, initialData]);
 
   const selectedPackageName = useWatch({ control: form.control, name: "packageName" });
   const selectedDeliveryDate = useWatch({ control: form.control, name: "deliveryDate" });
@@ -99,29 +81,22 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
   const activePackageName = selectedPackageName || packageOptions[0] || "";
   const variantOptions = useMemo(() => getVariantsByPackageName(activePackageName), [activePackageName]);
   const pricePerMeal = useMemo(() => getPackageByName(activePackageName)?.pricePerMeal ?? 0, [activePackageName]);
-  const activeDeliveryDate = selectedDeliveryDate || deliveryDateOptions[0]?.value || "";
+  const activeDeliveryDate = selectedDeliveryDate || deliveryDateCards[0]?.value || "";
   const activeDeliveryTab = deliveryDateCards.find((day) => day.value === activeDeliveryDate) ?? null;
   const activeDeliveryLabel = activeDeliveryTab
     ? `${activeDeliveryTab.dayLabel} · ${activeDeliveryTab.dateLabel}`
     : activeDeliveryDate;
 
   const selectedItemMap = useMemo(() => {
-    return new Map(
-      selectedItems.map((item) => [lineItemKey(item.packageName, item.deliveryDate, item.variantName), item.quantity]),
-    );
+    return new Map(selectedItems.map((item) => [lineItemKey(item.packageName, item.variantName), item.quantity]));
   }, [selectedItems]);
-
-  const deliveryLabelByValue = useMemo(
-    () => new Map(deliveryDateCards.map((day) => [day.value, `${day.dayLabel} · ${day.dateLabel}`])),
-    [deliveryDateCards],
-  );
 
   const activeDateSubtotal = useMemo(
     () =>
       selectedItems
-        .filter((item) => item.packageName === activePackageName && item.deliveryDate === activeDeliveryDate)
+        .filter((item) => item.packageName === activePackageName)
         .reduce((count, item) => count + item.quantity * pricePerMeal, 0),
-    [activeDeliveryDate, activePackageName, pricePerMeal, selectedItems],
+    [activePackageName, pricePerMeal, selectedItems],
   );
 
   const selectedVariants = useMemo(
@@ -129,16 +104,10 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
       selectedItems
         .map((item) => ({
           ...item,
-          deliveryLabel: deliveryLabelByValue.get(item.deliveryDate) ?? item.deliveryDate,
           subtotal: item.quantity * getPriceByPackageName(item.packageName),
         }))
-        .sort(
-          (left, right) =>
-            left.deliveryDate.localeCompare(right.deliveryDate) ||
-            left.packageName.localeCompare(right.packageName) ||
-            left.variantName.localeCompare(right.variantName),
-        ),
-    [deliveryLabelByValue, selectedItems],
+        .sort((left, right) => left.packageName.localeCompare(right.packageName) || left.variantName.localeCompare(right.variantName)),
+    [selectedItems],
   );
 
   const selectedSubtotal = useMemo(
@@ -168,26 +137,18 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
   const updateVariantQuantity = (variantName: string, nextQuantity: number) => {
     const safeQuantity = Math.max(0, Math.min(500, nextQuantity));
     const currentItems = form.getValues("items");
-    const key = lineItemKey(activePackageName, activeDeliveryDate, variantName);
-    const nextItems = currentItems.filter(
-      (item) => lineItemKey(item.packageName, item.deliveryDate, item.variantName) !== key,
-    );
+    const key = lineItemKey(activePackageName, variantName);
+    const nextItems = currentItems.filter((item) => lineItemKey(item.packageName, item.variantName) !== key);
 
     if (safeQuantity > 0) {
       nextItems.push({
         packageName: activePackageName,
         variantName,
         quantity: safeQuantity,
-        deliveryDate: activeDeliveryDate,
       });
     }
 
-    nextItems.sort(
-      (left, right) =>
-        left.deliveryDate.localeCompare(right.deliveryDate) ||
-        left.packageName.localeCompare(right.packageName) ||
-        left.variantName.localeCompare(right.variantName),
-    );
+    nextItems.sort((left, right) => left.packageName.localeCompare(right.packageName) || left.variantName.localeCompare(right.variantName));
 
     form.setValue("items", nextItems, {
       shouldDirty: true,
@@ -244,7 +205,7 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
 
                   <FormField
                     control={form.control}
-                    name="address"
+                    name="deliveryAddress"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>{i18n.form.deliveryAddressLabel}</FormLabel>
@@ -384,10 +345,7 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
 
                             <div className="divide-y divide-border/50">
                               {variantOptions.map((variantName) => {
-                                const quantity =
-                                  selectedItemMap.get(
-                                    lineItemKey(activePackageName, activeDeliveryDate, variantName),
-                                  ) ?? 0;
+                                const quantity = selectedItemMap.get(lineItemKey(activePackageName, variantName)) ?? 0;
 
                                 return (
                                   <div key={variantName} className="px-4 py-3">
@@ -465,16 +423,14 @@ export const OrderForm = ({ onSubmit, initialValues, submitLabel = "Create Order
                     <div className="space-y-2">
                       {selectedVariants.map((item) => (
                         <div
-                          key={lineItemKey(item.packageName, item.deliveryDate, item.variantName)}
+                          key={lineItemKey(item.packageName, item.variantName)}
                           className="flex flex-col gap-2 rounded-md border border-border/60 bg-background/70 px-3 py-2 sm:flex-row sm:items-start sm:justify-between"
                         >
                           <div className="min-w-0">
                             <p className="truncate text-sm font-medium text-foreground">
                               {item.packageName} - {item.variantName}
                             </p>
-                            <p className="text-xs text-muted-foreground">
-                              {item.deliveryLabel} · Qty {item.quantity}
-                            </p>
+                            <p className="text-xs text-muted-foreground">Qty {item.quantity}</p>
                           </div>
                           <p className="text-sm font-semibold text-foreground sm:ml-4 sm:text-right">
                             {formatCurrency(item.subtotal)}

@@ -1,9 +1,3 @@
-export enum USER_ROLE_ENUM {
-  PLATFORM_ADMIN = "platform-admin",
-  CATERING_ADMIN = "catering-admin",
-  CUSTOMER = "customer",
-}
-
 export enum PACKAGE_STATUS_ENUM {
   ACTIVE = "Active",
   INACTIVE = "Inactive",
@@ -23,4 +17,15 @@ export enum EXPENSE_CATEGORY_ENUM {
   MARKETING_AND_SALES = "Marketing & Sales",
   SOFTWARE = "Software",
   OTHER = "Other",
+}
+
+export enum TENANT_STATUS_ENUM {
+  ACTIVE = "Active",
+  TERMINATED = "Terminated",
+  SUSPENDED = "Suspended",
+}
+
+export enum ORDER_SOURCE_ENUM {
+  CLIENT_PORTAL = "Client Portal",
+  ADMIN_PANEL = "Admin Panel",
 }

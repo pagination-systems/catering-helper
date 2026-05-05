@@ -16,6 +16,7 @@ export const useSettingsStore = create<SettingsStoreState>((set) => ({
     description:
       "Premium corporate catering platform. Healthy, balanced, and perfectly on time for your team's success.",
     deliveryFee: 0,
+    lastOrderTime: "18:00",
     contactEmail: "info@uttaracatering.com",
     contactPhone: "+880 1711-000000",
     contactWhatsapp: "+880 1711-000000",
@@ -31,6 +32,7 @@ export const useSettingsStore = create<SettingsStoreState>((set) => ({
     set({
       tenant: {
         ...values,
+        lastOrderTime: values.lastOrderTime ?? "18:00",
         social: {
           ...values.social,
         },

@@ -1,4 +1,4 @@
-import { type IUser, USER_ROLE_ENUM } from "@catering/types";
+import { ACCOUNT_TYPE_ENUMS, EMAIL_VERIFICATION_STATUS_ENUMS, type IUser } from "@catering/types";
 import { create } from "zustand";
 import type { GetSentInvitationsResponse, GetUsersResponse, SentInvitation } from "../schemas/user.schema";
 
@@ -33,36 +33,16 @@ type UsersStoreState = {
 export const useUsersStore = create<UsersStoreState>((set) => {
   const seedUsers: IUser[] = [
     {
+      _id: "user-1",
       id: "1",
       name: "Harun Or Rashid",
       phone: "01790362665",
-      role: USER_ROLE_ENUM.PLATFORM_ADMIN,
+      type: ACCOUNT_TYPE_ENUMS.ADMIN,
+      email: "harun@example.com",
+      emailVerificationStatus: EMAIL_VERIFICATION_STATUS_ENUMS.VERIFIED,
+      tenantId: "tenant-1",
       createdAt: new Date("2024-01-15T10:00:00Z"),
       updatedAt: new Date("2024-06-01T12:00:00Z"),
-    },
-    {
-      id: "2",
-      name: "Khairul Bashar",
-      phone: "01790362666",
-      role: USER_ROLE_ENUM.PLATFORM_ADMIN,
-      createdAt: new Date("2024-02-20T14:30:00Z"),
-      updatedAt: new Date("2024-06-05T09:45:00Z"),
-    },
-    {
-      id: "3",
-      name: "Md. Jewel Rana",
-      phone: "01790362667",
-      role: USER_ROLE_ENUM.PLATFORM_ADMIN,
-      createdAt: new Date("2024-03-10T08:15:00Z"),
-      updatedAt: new Date("2024-06-10T16:20:00Z"),
-    },
-    {
-      id: "4",
-      name: "Sayem Abedin",
-      phone: "01790362668",
-      role: USER_ROLE_ENUM.PLATFORM_ADMIN,
-      createdAt: new Date("2024-04-02T09:00:00Z"),
-      updatedAt: new Date("2024-06-12T11:30:00Z"),
     },
   ];
 

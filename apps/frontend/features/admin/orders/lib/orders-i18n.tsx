@@ -50,6 +50,7 @@ export type OrdersContent = {
     noOrder: string;
   };
   form: {
+    loading: string;
     createTitle: string;
     createDescription: string;
     editTitle: string;
@@ -191,6 +192,7 @@ const content: Record<string, OrdersContent> = {
       noOrder: "No order found.",
     },
     form: {
+      loading: "Loading order details...",
       createTitle: "Create Order",
       createDescription: "Add an order for a client. Delivery day is restricted to today and the next 6 days.",
       editTitle: "Update Order",
@@ -330,6 +332,7 @@ const content: Record<string, OrdersContent> = {
       noOrder: "কোনো অর্ডার পাওয়া যায়নি।",
     },
     form: {
+      loading: "অর্ডারের বিস্তারিত লোড হচ্ছে...",
       createTitle: "অর্ডার তৈরি করুন",
       createDescription: "একজন গ্রাহকের জন্য অর্ডার তৈরি করুন। ডেলিভারি আজ থেকে পরবর্তী ৬ দিনের মধ্যে হতে হবে।",
       editTitle: "অর্ডার আপডেট করুন",

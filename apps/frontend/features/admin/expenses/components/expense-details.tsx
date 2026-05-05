@@ -30,7 +30,7 @@ export const ExpenseDetails = ({ item }: { item: IExpense }) => {
             </div>
             <div className="sm:text-right flex-1">
               <Badge variant="outline" className={getCategoryBadgeStyles(item.category)}>
-                {item.category}
+                {i18n.categories[item.category] ?? item.category}
               </Badge>
             </div>
           </div>

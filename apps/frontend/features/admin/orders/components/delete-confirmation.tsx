@@ -12,14 +12,15 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
+import { useHardDeleteOrder } from "../hooks";
 import { useOrdersI18n } from "../lib/orders-i18n";
-import { isOrderLocked } from "../schemas/order.schema";
+import { isOrderLocked } from "../lib/utils";
 import { useOrdersStore } from "../store/useStore";
 
 export const DeleteConfirmation = () => {
   const [confirmText, setConfirmText] = useState("");
   const i18n = useOrdersI18n();
-  const deleteOrder = useOrdersStore((state) => state.deleteOrder);
+  const { deleteOrder } = useHardDeleteOrder();
   const isDeleteDialogOpen = useOrdersStore((state) => state.isDeleteDialogOpen);
   const selectedDeleteItem = useOrdersStore((state) => state.selectedDeleteItem);
   const setDeleteDialogOpen = useOrdersStore((state) => state.setDeleteDialogOpen);
@@ -35,9 +36,11 @@ export const DeleteConfirmation = () => {
 
   const onConfirmDelete = () => {
     if (!selectedDeleteItem || !isDeleteEnabled || isLocked) return;
-    deleteOrder(selectedDeleteItem.id);
-    setConfirmText("");
-    closeDeleteDialog();
+
+    deleteOrder(selectedDeleteItem.id, () => {
+      setConfirmText("");
+      closeDeleteDialog();
+    });
   };
 
   return (

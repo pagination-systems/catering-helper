@@ -1,7 +1,7 @@
 import type { AbilityClass, AbilityTuple, AnyAbility, MongoQuery } from "@casl/ability";
 import { AbilityBuilder, buildMongoQueryMatcher, PureAbility } from "@casl/ability";
 import type { IAbilityBuilder, ISession } from "@catering/types";
-import { AbilityAction, ACCOUNT_TYPE_ENUMS, USER_ROLE_ENUM } from "@catering/types";
+import { AbilityAction, ACCOUNT_TYPE_ENUMS } from "@catering/types";
 
 type ProductionRequirementAuthZEntityProps = {
   tenantId?: string | null;

@@ -4,6 +4,7 @@ import type { PaginationMeta } from "@catering/types";
 import type { ReactNode } from "react";
 import { If } from "@/components/if";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useTableAutoAnimate } from "@/hooks/use-table-auto-animate";
 import { cn } from "@/lib/utils";
 import { TablePagination } from "./table-pagination";
 
@@ -21,7 +22,7 @@ interface DataTableProps<TData> {
   data: TData[];
   columns: DataTableColumn<TData>[];
   pagination: PaginationMeta;
-  handlePaginate?: (payload: { page: number; limit: number }) => void;
+  handlePaginate?: (page: number, limit: number) => void;
   getRowId: (row: TData, index: number) => string;
   emptyState?: ReactNode;
   tableClassName?: string;
@@ -53,6 +54,8 @@ export const DataTable = <TData,>({
   tableClassName,
   paginationClassName,
 }: DataTableProps<TData>) => {
+  const [tbodyRef] = useTableAutoAnimate();
+
   const rows = data.map((row, rowIndex) => (
     <TableRow key={getRowId(row, rowIndex)}>
       {columns.map((column, colIndex) => {
@@ -84,12 +87,12 @@ export const DataTable = <TData,>({
           </TableRow>
         </TableHeader>
 
-        <TableBody>
+        <TableBody ref={tbodyRef}>
           <If
             expression={data.length > 0}
             fallback={
               <TableRow>
-                <TableCell colSpan={columns.length} className="py-8 text-center text-muted-foreground">
+                <TableCell colSpan={columns.length} className="py-32 text-center text-muted-foreground">
                   {emptyState ?? "No records found."}
                 </TableCell>
               </TableRow>
@@ -100,16 +103,18 @@ export const DataTable = <TData,>({
         </TableBody>
       </Table>
 
-      <TablePagination
-        className={paginationClassName}
-        pagination={pagination}
-        onPageChange={(page) => {
-          handlePaginate?.({ page, limit: pagination.limit });
-        }}
-        onPageSizeChange={(limit) => {
-          handlePaginate?.({ page: 1, limit });
-        }}
-      />
+      <If expression={pagination.totalDocs > pagination.limit}>
+        <TablePagination
+          className={paginationClassName}
+          pagination={pagination}
+          onPageChange={(page) => {
+            handlePaginate?.(page, pagination.limit);
+          }}
+          onPageSizeChange={(limit) => {
+            handlePaginate?.(1, limit);
+          }}
+        />
+      </If>
     </>
   );
 };

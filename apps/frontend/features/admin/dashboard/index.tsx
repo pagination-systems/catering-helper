@@ -1,6 +1,6 @@
 "use client";
 
-import { USER_ROLE_ENUM } from "@catering/types";
+import { ACCOUNT_TYPE_ENUMS } from "@catering/types";
 import { useSession } from "@/authz/use-session";
 import { If } from "@/components/if";
 import { PlatformAdminDashboard } from "./platform-admin-dashboard";
@@ -11,10 +11,10 @@ export const Dashboard = () => {
 
   return (
     <div>
-      <If expression={session.user.role === USER_ROLE_ENUM.PLATFORM_ADMIN}>
+      <If expression={session.user.type === ACCOUNT_TYPE_ENUMS.ADMIN}>
         <PlatformAdminDashboard />
       </If>
-      <If expression={session.user.role === USER_ROLE_ENUM.CATERING_ADMIN}>
+      <If expression={session.user.type === ACCOUNT_TYPE_ENUMS.CATERER}>
         <TenantAdminDashboard />
       </If>
     </div>

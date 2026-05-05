@@ -1,0 +1,36 @@
+{
+  "name": "@catering/react-query-builder",
+  "version": "1.0.0",
+  "description": "React query builder hooks",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "echo \"No lint configured for @catering/react-query-builder\""
+  },
+  "keywords": [
+    "react",
+    "hooks",
+    "query-builder",
+    "react-query"
+  ],
+  "license": "ISC",
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.0.12",
+    "react": "^19.1.1",
+    "globals": "^16.3.0",
+    "typescript": "^5.6.3"
+  }
+}
