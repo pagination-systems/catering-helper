@@ -35,7 +35,10 @@ export class TenantAbilityBuilder implements IAbilityBuilder {
     }
 
     if (this.session.user.type === ACCOUNT_TYPE_ENUMS.CATERER) {
-      builder.can(AbilityAction.MANAGE, TenantAuthZEntity, { _id: this.session.tenantId });
+      builder.can(AbilityAction.READ, TenantAuthZEntity, { _id: this.session.tenantId });
+      builder.can(AbilityAction.CREATE, TenantAuthZEntity, { _id: this.session.tenantId });
+      builder.can(AbilityAction.UPDATE, TenantAuthZEntity, { _id: this.session.tenantId });
+      builder.can(AbilityAction.HARD_DELETE, TenantAuthZEntity, { _id: this.session.tenantId });
     }
 
     return builder.build({
