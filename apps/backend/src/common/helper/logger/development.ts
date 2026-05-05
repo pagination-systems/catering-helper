@@ -1,11 +1,12 @@
 import { createLogger, format, transports } from "winston";
+import { env } from "../../../.config/env";
 
 const customFormat = format.printf(({ level, message, timestamp }) => {
   return `${timestamp} [${level}]: ${message}`;
 });
 
 const developmentLogger = createLogger({
-  level: process.env.LOG_LEVEL || "info",
+  level: env.LOG_LEVEL,
   format: format.json(),
   transports: [
     new transports.Console({

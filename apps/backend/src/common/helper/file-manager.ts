@@ -1,7 +1,7 @@
+import * as fs from "node:fs";
+import type { Readable } from "node:stream";
 import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand, type S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import * as fs from "fs";
-import type { Readable } from "stream";
 import { v4 as uuidv4 } from "uuid";
 import { logger } from "./logger";
 export interface FileInformation {
@@ -106,6 +106,7 @@ class FileManager {
       return fileInformation;
     } catch (error) {
       logger.error("Error deleting file from S3:", error);
+      return fileInformation;
     }
   }
 
@@ -137,7 +138,7 @@ class FileManager {
           resolve();
         });
       });
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Failed to download file from S3: ${error.message}`);
     }
   }
@@ -165,7 +166,7 @@ class FileManager {
         Bucket: bucket,
         Name: fileKey.split("/").pop() || fileKey,
       };
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Failed to upload file to S3: ${error.message}`);
     }
   }

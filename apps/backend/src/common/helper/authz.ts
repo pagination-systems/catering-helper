@@ -9,11 +9,11 @@ import { ForbiddenException } from "./errors/api-error";
  */
 const getFlattenedKeys = (obj: Record<string, any>, prefix = ""): string[] => {
   return Object.keys(obj).reduce((acc: string[], key: string) => {
-    const pre = prefix.length ? prefix + "." : "";
+    const pre = prefix.length ? `${prefix}.` : "";
     if (typeof obj[key] === "object" && obj[key] !== null && !Array.isArray(obj[key])) {
-      acc.push(...getFlattenedKeys(obj[key], pre + key));
+      acc.push(...getFlattenedKeys(obj[key], `${pre}${key}`));
     } else {
-      acc.push(pre + key);
+      acc.push(`${pre}${key}`);
     }
     return acc;
   }, []);

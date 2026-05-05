@@ -1,0 +1,34 @@
+import type { ACCOUNT_TYPE_ENUMS, USER_ROLE_ENUMS } from "@catering/types";
+import type { JwtPayload } from "jsonwebtoken";
+
+export interface GenerateTokenOptions {
+  expiresIn: number;
+}
+
+export interface TokensInput {
+  accessToken: string;
+  refreshToken: string;
+  userId?: string;
+}
+
+export interface FindTokenInput {
+  token: string;
+  userId: string;
+}
+
+export interface CustomJwtPayload extends JwtPayload {
+  id?: string;
+  tenantId?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  role?: USER_ROLE_ENUMS;
+  type?: ACCOUNT_TYPE_ENUMS;
+}
+
+export interface QuotationTokenPayload extends JwtPayload {
+  quotationId: string;
+  userId: string;
+  fullName: string;
+  email: string;
+}
