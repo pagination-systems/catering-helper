@@ -1,9 +1,3 @@
-export enum USER_ROLE_ENUM {
-  PLATFORM_ADMIN = "platform-admin",
-  CATERING_ADMIN = "catering-admin",
-  CUSTOMER = "customer",
-}
-
 export enum PACKAGE_STATUS_ENUM {
   ACTIVE = "Active",
   INACTIVE = "Inactive",

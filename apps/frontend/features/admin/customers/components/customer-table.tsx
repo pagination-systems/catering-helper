@@ -47,8 +47,8 @@ export const CustomerTable = ({ data, handlePaginate }: CustomerTableProps) => {
       accessorKey: "role",
       header: i18n.table.role,
       cell: (user) => (
-        <Badge variant="outline" className={getRoleBadgeStyles(user.role)}>
-          {user.role}
+        <Badge variant="outline" className={getRoleBadgeStyles(user.type)}>
+          {user.type}
         </Badge>
       ),
     },

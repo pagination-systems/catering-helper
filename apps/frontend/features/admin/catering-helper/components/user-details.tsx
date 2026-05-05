@@ -65,8 +65,8 @@ export const UserDetails = ({ user }: UserDetailsProps) => {
                 <p className="mt-1 truncate text-sm text-muted-foreground">{user.phone}</p>
               </div>
               <div className="flex-shrink-0">
-                <Badge variant="outline" className={getRoleBadgeStyles(user.role)}>
-                  {user.role}
+                <Badge variant="outline" className={getRoleBadgeStyles(user.type)}>
+                  {user.type}
                 </Badge>
               </div>
             </div>
@@ -96,7 +96,7 @@ export const UserDetails = ({ user }: UserDetailsProps) => {
             <DetailField icon={Fingerprint} label={i18n.details.userId} value={user.id} mono />
           </div>
           <div className="rounded-lg border border-border/50 bg-card/50 p-5 backdrop-blur-sm transition-all hover:border-border hover:bg-card/80">
-            <DetailField icon={Users} label={i18n.details.roleLabel} value={user.role} />
+            <DetailField icon={Users} label={i18n.details.roleLabel} value={user.type} />
           </div>
         </div>
       </div>

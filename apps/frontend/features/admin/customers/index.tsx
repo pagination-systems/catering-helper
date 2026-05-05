@@ -1,6 +1,6 @@
 "use client";
 
-import { type IUser, USER_ROLE_ENUM } from "@catering/types";
+import { ACCOUNT_TYPE_ENUMS, EMAIL_VERIFICATION_STATUS_ENUMS, type IUser } from "@catering/types";
 import { If } from "@/components/if";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -35,10 +35,14 @@ export const Customers = () => {
 
   const onSubmitCreateUser = (values: CreateCustomerValues) => {
     const newUser: IUser = {
+      _id: crypto.randomUUID(),
       id: crypto.randomUUID(),
       name: values.name,
       phone: values.phone,
-      role: USER_ROLE_ENUM.CUSTOMER,
+      type: ACCOUNT_TYPE_ENUMS.CUSTOMER,
+      email: "",
+      emailVerificationStatus: EMAIL_VERIFICATION_STATUS_ENUMS.VERIFIED,
+      tenantId: "tenant-1",
       createdAt: new Date(),
       updatedAt: new Date(),
     };
