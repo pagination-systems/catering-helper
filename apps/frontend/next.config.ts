@@ -1,8 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
-  transpilePackages: ["@catering/types", "@catering/utils", "@catering/authz"],
+  transpilePackages: ["@catering/types", "@catering/utils", "@catering/authz", "@catering/react-query-builder"],
   images: {
     remotePatterns: [
       {
