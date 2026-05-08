@@ -1,24 +1,27 @@
 "use client";
 
+import type { PaginationMeta } from "@catering/types";
 import { PackageIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { DataTable, type DataTableColumn } from "../../components/data-table";
+import { getPackageStatusBadgeStyles } from "../lib/badge";
 import { usePackagesI18n } from "../lib/packages-i18n";
-import type { GetPackagesResponse, ICateringPackage } from "../schemas/package.schema";
+import type { IPackage } from "../schemas/package.schema";
 import { usePackagesStore } from "../store/useStore";
-import { getPackageStatusBadgeClassName } from "../utils/badge";
 import { RowActions } from "./row-actions";
 
 interface PackageTableProps {
-  data: GetPackagesResponse;
+  data: IPackage[];
+  pagination: PaginationMeta;
   handlePaginate?: (page: number, limit: number) => void;
 }
 
-export const PackageTable = ({ data, handlePaginate }: PackageTableProps) => {
+export const PackageTable = ({ data, pagination, handlePaginate }: PackageTableProps) => {
   const i18n = usePackagesI18n();
   const openView = usePackagesStore((state) => state.openView);
 
-  const columns: DataTableColumn<ICateringPackage>[] = [
+  const columns: DataTableColumn<IPackage>[] = [
     {
       accessorKey: "name",
       header: i18n.table.package,
@@ -52,11 +55,9 @@ export const PackageTable = ({ data, handlePaginate }: PackageTableProps) => {
       accessorKey: "status",
       header: i18n.table.status,
       cell: (item) => (
-        <span
-          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${getPackageStatusBadgeClassName(item.status)}`}
-        >
+        <Badge variant="outline" className={getPackageStatusBadgeStyles(item.status)}>
           {item.status}
-        </span>
+        </Badge>
       ),
     },
     {
@@ -73,9 +74,9 @@ export const PackageTable = ({ data, handlePaginate }: PackageTableProps) => {
 
   return (
     <DataTable
-      data={data.data}
+      data={data}
       columns={columns}
-      pagination={data.meta.pagination}
+      pagination={pagination}
       handlePaginate={handlePaginate}
       getRowId={(item) => item.id}
       emptyState={

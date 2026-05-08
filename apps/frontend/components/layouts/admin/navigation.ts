@@ -106,7 +106,7 @@ export function getNavigationItems(lang: Language): NavigationItem[] {
       label: t.settings,
       href: "/admin/settings",
       icon: Settings,
-      canView: (ability) => ability.can(AbilityAction.MANAGE, TenantAuthZEntity),
+      canView: (ability) => ability.can(AbilityAction.READ, TenantAuthZEntity),
     },
   ];
 }

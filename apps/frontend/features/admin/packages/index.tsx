@@ -10,73 +10,51 @@ import { PackageDetails } from "./components/package-details";
 import { PackageForm } from "./components/package-form";
 import { PackageTable } from "./components/package-table";
 import { TableToolbar } from "./components/table-toolbar";
+import { UpdatePackage } from "./components/update-package";
+import { useCreatePackage, usePackages } from "./hooks";
 import { usePackagesI18n } from "./lib/packages-i18n";
-import type { CreatePackageValues, ICateringPackage } from "./schemas/package.schema";
 import { usePackagesStore } from "./store/useStore";
 
-export const Packages = () => {
+interface PackagesProps {
+  title?: string;
+  description?: string;
+  tenantId?: string;
+}
+
+export const Packages = ({ title, description, tenantId }: PackagesProps) => {
   const i18n = usePackagesI18n();
   const { language } = useLanguage();
-  const data = usePackagesStore((state) => state.list);
-  const addItem = usePackagesStore((state) => state.addItem);
-  const updatePackage = usePackagesStore((state) => state.updatePackage);
+  const { packages, pagination, onSearch, handleFilter, handlePagination } = usePackages(tenantId);
   const isCreateSheetOpen = usePackagesStore((state) => state.isCreateSheetOpen);
   const isEditSheetOpen = usePackagesStore((state) => state.isEditSheetOpen);
   const isViewSheetOpen = usePackagesStore((state) => state.isViewSheetOpen);
   const selectedItem = usePackagesStore((state) => state.selectedItem);
   const selectedViewItem = usePackagesStore((state) => state.selectedViewItem);
+  const { createPackage } = useCreatePackage();
   const setCreateSheetOpen = usePackagesStore((state) => state.setCreateSheetOpen);
   const setEditSheetOpen = usePackagesStore((state) => state.setEditSheetOpen);
   const setViewSheetOpen = usePackagesStore((state) => state.setViewSheetOpen);
   const closeCreateSheet = usePackagesStore((state) => state.closeCreateSheet);
-  const closeEditSheet = usePackagesStore((state) => state.closeEditSheet);
   const closeViewSheet = usePackagesStore((state) => state.closeViewSheet);
-
-  const onSubmitCreatePackage = (values: CreatePackageValues) => {
-    const createdAt = new Date();
-    const normalizedDays = values.days.map((day) => ({
-      day: day.day,
-      variants: day.variants.map((variant) => ({
-        id: variant.id ?? crypto.randomUUID(),
-        name: variant.name,
-        note: variant.note,
-        items: variant.items,
-      })),
-    }));
-
-    const newPackage: ICateringPackage = {
-      id: crypto.randomUUID(),
-      name: values.name,
-      description: values.description,
-      pricePerMeal: values.pricePerMeal,
-      status: values.status,
-      days: normalizedDays,
-      createdAt,
-      updatedAt: createdAt,
-    };
-
-    addItem(newPackage);
-    closeCreateSheet();
-  };
-
-  const onSubmitEditPackage = (values: CreatePackageValues) => {
-    if (!selectedItem) return;
-
-    updatePackage(selectedItem.id, values);
-    closeEditSheet();
-  };
 
   return (
     <section className="space-y-4" aria-labelledby="packages-title">
-      <SectionHeader title={i18n.title} description={i18n.description} />
+      <If expression={!!title && !!description}>
+        <SectionHeader title={i18n.title} description={i18n.description} />
+      </If>
 
       <Card>
         <CardHeader className="space-y-3">
-          <TableToolbar />
+          <TableToolbar
+            onSearch={onSearch}
+            onFilterChange={(value) => {
+              handleFilter({ value });
+            }}
+          />
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <PackageTable data={data} />
+          <PackageTable data={packages} pagination={pagination} handlePaginate={handlePagination} />
         </CardContent>
       </Card>
 
@@ -89,7 +67,7 @@ export const Packages = () => {
 
           <PackageForm
             key={`${language}-create`}
-            onSubmit={onSubmitCreatePackage}
+            onSubmit={(values) => createPackage(values, closeCreateSheet)}
             submitLabel={i18n.form.submitCreate}
           />
         </SheetContent>
@@ -102,12 +80,7 @@ export const Packages = () => {
             <SheetDescription>{i18n.form.editDescription}</SheetDescription>
           </SheetHeader>
 
-          <PackageForm
-            key={`${language}-edit`}
-            onSubmit={onSubmitEditPackage}
-            initialValues={selectedItem ?? undefined}
-            submitLabel={i18n.form.submitSave}
-          />
+          {selectedItem && <UpdatePackage selectedItem={selectedItem} />}
         </SheetContent>
       </Sheet>
 
@@ -122,7 +95,7 @@ export const Packages = () => {
             expression={!!selectedViewItem}
             fallback={<p className="text-sm text-muted-foreground">{i18n.details.noPackage}</p>}
           >
-            {selectedViewItem && <PackageDetails item={selectedViewItem} />}
+            {selectedViewItem && <PackageDetails id={selectedViewItem.id} />}
           </If>
         </SheetContent>
       </Sheet>

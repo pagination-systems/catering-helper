@@ -1,4 +1,3 @@
-import { PACKAGE_STATUS_ENUM } from "@catering/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon, Trash2Icon } from "lucide-react";
 import { useEffect } from "react";
@@ -8,27 +7,33 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, type SelectOption } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { usePackagesI18n } from "../lib/packages-i18n";
-import { type CreatePackageValues, createPackageSchema, type DayName, dayOrder } from "../schemas/package.schema";
+import {
+  type DayName,
+  dayOrder,
+  type IDayPlan,
+  type IPackage,
+  type packageFormInput,
+  packageFormSchema,
+} from "../schemas/package.schema";
 
 interface PackageFormProps {
-  onSubmit: (data: CreatePackageValues) => void;
-  initialValues?: CreatePackageValues;
+  onSubmit: (data: packageFormInput) => void;
+  initialValues?: IPackage;
   submitLabel?: string;
 }
 
 interface DayPlanSectionProps {
-  form: UseFormReturn<CreatePackageValues>;
+  form: UseFormReturn<packageFormInput>;
   dayIndex: number;
   day: DayName;
 }
 
 interface VariantCardProps {
-  form: UseFormReturn<CreatePackageValues>;
+  form: UseFormReturn<packageFormInput>;
   dayIndex: number;
   variantIndex: number;
   canRemove: boolean;
@@ -43,7 +48,7 @@ const createEmptyVariant = () => ({
   available: true,
 });
 
-const normalizeDays = (days?: CreatePackageValues["days"]): CreatePackageValues["days"] => {
+const normalizeDays = (days?: IDayPlan[]): IDayPlan[] => {
   return dayOrder.map((day) => {
     const existing = days?.find((item) => item.day === day);
     if (existing && existing.variants.length > 0) {
@@ -59,11 +64,10 @@ const normalizeDays = (days?: CreatePackageValues["days"]): CreatePackageValues[
   });
 };
 
-const getDefaultValues = (initialValues?: CreatePackageValues): CreatePackageValues => ({
+const getDefaultValues = (initialValues?: IPackage | undefined): packageFormInput => ({
   name: initialValues?.name ?? "",
   description: initialValues?.description ?? "",
   pricePerMeal: initialValues?.pricePerMeal ?? 120,
-  status: initialValues?.status ?? PACKAGE_STATUS_ENUM.ACTIVE,
   days: normalizeDays(initialValues?.days),
 });
 
@@ -221,8 +225,8 @@ const DayPlanSection = ({ form, dayIndex, day }: DayPlanSectionProps) => {
 
 export const PackageForm = ({ onSubmit, initialValues, submitLabel }: PackageFormProps) => {
   const i18n = usePackagesI18n();
-  const form = useForm<CreatePackageValues>({
-    resolver: zodResolver(createPackageSchema(i18n.form.validation)),
+  const form = useForm<packageFormInput>({
+    resolver: zodResolver(packageFormSchema(i18n.form.validation)),
     defaultValues: getDefaultValues(initialValues),
   });
 
@@ -236,10 +240,6 @@ export const PackageForm = ({ onSubmit, initialValues, submitLabel }: PackageFor
   });
 
   const dayPlans = useWatch({ control: form.control, name: "days" }) || [];
-  const statusOptions: SelectOption<PACKAGE_STATUS_ENUM>[] = Object.values(PACKAGE_STATUS_ENUM).map((status) => ({
-    value: status,
-    label: status,
-  }));
   const resolvedSubmitLabel = submitLabel ?? i18n.form.submitCreate;
 
   return (
@@ -280,25 +280,6 @@ export const PackageForm = ({ onSubmit, initialValues, submitLabel }: PackageFor
                         step={1}
                         value={field.value}
                         onChange={(event) => field.onChange(Number(event.target.value))}
-                        onBlur={field.onBlur}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem className="md:col-span-2">
-                    <FormLabel>{i18n.form.statusLabel}</FormLabel>
-                    <FormControl>
-                      <Select
-                        options={statusOptions}
-                        value={field.value}
-                        onValueChange={field.onChange}
                         onBlur={field.onBlur}
                       />
                     </FormControl>
