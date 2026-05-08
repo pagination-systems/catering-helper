@@ -1,8 +1,7 @@
 "use client";
 
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { If } from "@/components/if";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -38,15 +37,18 @@ export function OrderSummary({ tenantSlug, readonly = false, showDeliveryFee = f
       </CardHeader>
 
       <CardContent className="space-y-4 pt-0">
-        <div className="max-h-[420px] space-y-3 overflow-y-auto pr-2">
-          <If
-            expression={groupedOrders.length > 0}
-            fallback={<p className="p-4 text-sm text-muted-foreground">{content.noItemsSelected}</p>}
-          >
-            {groupedOrders.map((group) => (
-              <Collapsible key={group.day} defaultOpen className="overflow-hidden rounded-sm border bg-background">
-                {/* FIXED: Added flex, w-full, justify-between, and padding for proper layout */}
-                <CollapsibleTrigger className="flex w-full items-center justify-between border-b bg-muted/40 p-3 text-sm transition-colors hover:bg-muted/60">
+        <div className="max-h-[420px] space-y-2 overflow-y-auto pr-1">
+          {groupedOrders.length === 0 ? (
+            <div className="flex flex-col items-center gap-3 py-8 text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+                <ShoppingCart className="h-5 w-5 text-muted-foreground" />
+              </div>
+              <p className="text-sm text-muted-foreground">{content.noItemsSelected}</p>
+            </div>
+          ) : (
+            groupedOrders.map((group) => (
+              <Collapsible key={group.day} defaultOpen className="overflow-hidden rounded-lg border bg-background">
+                <CollapsibleTrigger className="flex w-full items-center justify-between bg-muted/40 px-3 py-2.5 text-sm transition-colors hover:bg-muted/60">
                   <span className="font-semibold">
                     {content.dayShortLabel[group.day as keyof typeof content.dayShortLabel] || group.day},{" "}
                     {group.dateLabel}
@@ -54,24 +56,24 @@ export function OrderSummary({ tenantSlug, readonly = false, showDeliveryFee = f
                   <span className="font-bold">{formatCurrency(group.subTotal)}</span>
                 </CollapsibleTrigger>
 
-                <CollapsibleContent className="space-y-4 p-4">
+                <CollapsibleContent className="divide-y divide-border/50">
                   {group.items.map((row) => (
                     <div
                       key={row.key}
                       className={cn(
-                        "flex flex-col gap-1 transition-all",
-                        recentlyUpdatedKey === row.key && "rounded-md p-2 ring-1 ring-primary/40 bg-primary/5",
+                        "flex flex-col gap-1 px-3 py-3 transition-colors",
+                        recentlyUpdatedKey === row.key && "bg-primary/5 ring-1 ring-inset ring-primary/20",
                       )}
                     >
-                      <p className="text-sm font-medium">
-                        {row.packageName} - {row.label}
+                      <p className="text-sm font-medium leading-snug">
+                        {row.packageName} — {row.label}
                       </p>
                       <p className="text-xs text-muted-foreground">{row.items.join(", ")}</p>
 
-                      <div className="mt-1 flex items-center justify-between">
+                      <div className="mt-1.5 flex items-center justify-between">
                         {readonly ? (
-                          <span className="rounded-full border bg-muted px-3 py-1 text-xs font-medium">
-                            {row.quantity}x
+                          <span className="rounded-full border bg-muted px-3 py-0.5 text-xs font-semibold">
+                            {row.quantity}×
                           </span>
                         ) : (
                           <div className="flex items-center gap-2 rounded-full border px-1 py-1">
@@ -94,21 +96,21 @@ export function OrderSummary({ tenantSlug, readonly = false, showDeliveryFee = f
                             </Button>
                           </div>
                         )}
-                        <span className="text-sm font-medium">{formatCurrency(row.subtotal)}</span>
+                        <span className="text-sm font-semibold">{formatCurrency(row.subtotal)}</span>
                       </div>
                     </div>
                   ))}
                 </CollapsibleContent>
               </Collapsible>
-            ))}
-          </If>
+            ))
+          )}
         </div>
 
-        {/* Simplified Summary Box */}
-        <div className="space-y-3 rounded-xl bg-muted/50 p-4">
-          <div className="flex justify-between text-sm font-medium">
-            <p>{content.total}</p>
-            <p>{formatCurrency(subtotal)}</p>
+        {/* Totals */}
+        <div className="space-y-2.5 rounded-xl bg-muted/50 p-4">
+          <div className="flex justify-between text-sm">
+            <p className="text-muted-foreground">{content.total}</p>
+            <p className="font-medium">{formatCurrency(subtotal)}</p>
           </div>
 
           {showDeliveryFee && (
@@ -118,8 +120,8 @@ export function OrderSummary({ tenantSlug, readonly = false, showDeliveryFee = f
             </div>
           )}
 
-          <div className="flex items-end justify-between border-t pt-3">
-            <div className="space-y-1">
+          <div className="flex items-center justify-between border-t pt-2.5">
+            <div>
               <p className="text-sm font-semibold">{showDeliveryFee ? content.finalTotal : content.total}</p>
               <p className="text-xs text-muted-foreground">
                 {totalQuantity} {content.meals}

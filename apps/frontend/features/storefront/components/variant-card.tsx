@@ -1,4 +1,4 @@
-import { Minus, Plus } from "lucide-react";
+import { CheckCircle2, Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -37,7 +37,10 @@ export function VariantCard({
       )}
     >
       <div className="flex flex-1 flex-col min-w-0">
-        <h4 className="text-base sm:text-lg font-bold tracking-tight text-foreground truncate">{variant.name}</h4>
+        <div className="flex items-start gap-1.5">
+          <h4 className="flex-1 text-base sm:text-lg font-bold tracking-tight text-foreground truncate">{variant.name}</h4>
+          {active && <CheckCircle2 className="h-4 w-4 shrink-0 text-primary mt-0.5" />}
+        </div>
         <p className="mt-0.5 text-sm font-medium text-muted-foreground">
           <b>BDT {price}</b> {mealSuffix}
         </p>
