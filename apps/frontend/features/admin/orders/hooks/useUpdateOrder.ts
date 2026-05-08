@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/lib/toast";
 import * as orderApi from "../api/order.api";
 import { orderCache } from "../queries/order.cache";
-import type { OrderFormInput } from "../schemas/order.schema";
+import type { UpdateOrderInput } from "../schemas/order.schema";
 
 export const useUpdateOrder = () => {
   const queryClient = useQueryClient();
@@ -27,7 +27,7 @@ export const useUpdateOrder = () => {
     },
   });
 
-  const updateOrder = ({ id, payload }: { id: string; payload: Partial<OrderFormInput> }, callback?: () => void) => {
+  const updateOrder = ({ id, payload }: { id: string; payload: Partial<UpdateOrderInput> }, callback?: () => void) => {
     mutation.mutate(
       { id, payload },
       {

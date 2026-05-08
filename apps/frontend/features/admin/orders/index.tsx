@@ -27,7 +27,7 @@ interface OrdersProps {
 
 export const Orders = ({ title, description, tenantId }: OrdersProps = {}) => {
   const i18n = useOrdersI18n();
-  const { orders, pagination, onSearch, handleFilter, handlePagination } = useOrders({ tenantId });
+  const { orders, pagination, onSearch, handleFilter, handlePagination } = useOrders(tenantId);
   const upcomingDays = useMemo(() => getUpcomingDays(), []);
   const selectedOrder = useOrdersStore((state) => state.selectedOrder);
   const isCreateSheetOpen = useOrdersStore((state) => state.isCreateSheetOpen);

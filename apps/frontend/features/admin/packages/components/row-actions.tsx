@@ -11,11 +11,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { interpolate, usePackagesI18n } from "../lib/packages-i18n";
-import type { ICateringPackage } from "../schemas/package.schema";
+import type { IPackage } from "../schemas/package.schema";
 import { usePackagesStore } from "../store/useStore";
 
 interface RowActionsProps {
-  item: ICateringPackage;
+  item: IPackage;
 }
 
 export const RowActions = ({ item }: RowActionsProps) => {

@@ -12,13 +12,14 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
+import { useHardDeletePackage } from "../hooks";
 import { interpolate, usePackagesI18n } from "../lib/packages-i18n";
 import { usePackagesStore } from "../store/useStore";
 
 export const DeleteConfirmation = () => {
   const [confirmText, setConfirmText] = useState("");
   const i18n = usePackagesI18n();
-  const deletePackage = usePackagesStore((state) => state.deletePackage);
+  const { deletePackage } = useHardDeletePackage();
   const isDeleteDialogOpen = usePackagesStore((state) => state.isDeleteDialogOpen);
   const selectedDeleteItem = usePackagesStore((state) => state.selectedDeleteItem);
   const setDeleteDialogOpen = usePackagesStore((state) => state.setDeleteDialogOpen);
@@ -33,9 +34,11 @@ export const DeleteConfirmation = () => {
 
   const onConfirmDelete = () => {
     if (!selectedDeleteItem || !isDeleteEnabled) return;
-    deletePackage(selectedDeleteItem.id);
-    setConfirmText("");
-    closeDeleteDialog();
+
+    deletePackage(selectedDeleteItem.id, () => {
+      setConfirmText("");
+      closeDeleteDialog();
+    });
   };
 
   return (

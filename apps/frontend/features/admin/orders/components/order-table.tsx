@@ -2,9 +2,10 @@
 
 import type { PaginationMeta } from "@catering/types";
 import { ClipboardListIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { DataTable, type DataTableColumn } from "../../components/data-table";
-import { getOrderStatusBadgeClassName } from "../lib/badge";
+import { getOrderStatusBadgeStyles } from "../lib/badge";
 import { useOrdersI18n } from "../lib/orders-i18n";
 import type { IOrder } from "../schemas/order.schema";
 import { useOrdersStore } from "../store/useStore";
@@ -76,11 +77,9 @@ export const OrderTable = ({ data, pagination, handlePaginate }: OrderTableProps
       accessorKey: "status",
       header: i18n.table.status,
       cell: (item) => (
-        <span
-          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${getOrderStatusBadgeClassName(item.status)}`}
-        >
+        <Badge variant="outline" className={getOrderStatusBadgeStyles(item.status)}>
           {item.status}
-        </span>
+        </Badge>
       ),
     },
     {
