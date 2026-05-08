@@ -15,11 +15,14 @@ import { Input } from "@/components/ui/input";
 import { usePackagesI18n } from "../lib/packages-i18n";
 import { usePackagesStore } from "../store/useStore";
 
-export const TableToolbar = () => {
+interface TableToolbarProps {
+  onSearch: (value: string) => void;
+  onFilterChange: (value: Record<string, string>) => void;
+}
+
+export const TableToolbar = ({ onSearch, onFilterChange }: TableToolbarProps) => {
   const i18n = usePackagesI18n();
-  const query = usePackagesStore((state) => state.query);
   const statusFilter = usePackagesStore((state) => state.statusFilter);
-  const setQuery = usePackagesStore((state) => state.setQuery);
   const setStatusFilter = usePackagesStore((state) => state.setStatusFilter);
   const openCreate = usePackagesStore((state) => state.openCreate);
 
@@ -28,8 +31,7 @@ export const TableToolbar = () => {
       <div className="relative min-w-[14rem] flex-1">
         <SearchIcon className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => onSearch(event.target.value)}
           placeholder={i18n.toolbar.searchPlaceholder}
           className="pl-8"
         />
@@ -48,7 +50,10 @@ export const TableToolbar = () => {
             <DropdownMenuCheckboxItem
               key={status}
               checked={statusFilter === status}
-              onCheckedChange={() => setStatusFilter(status)}
+              onCheckedChange={() => {
+                setStatusFilter(status);
+                onFilterChange({ status });
+              }}
             >
               {status}
             </DropdownMenuCheckboxItem>
@@ -56,7 +61,16 @@ export const TableToolbar = () => {
 
           <DropdownMenuSeparator />
           <div className="p-1">
-            <Button type="button" variant="ghost" size="sm" className="w-full" onClick={() => setStatusFilter("all")}>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="w-full"
+              onClick={() => {
+                setStatusFilter("all");
+                onFilterChange({});
+              }}
+            >
               {i18n.toolbar.resetFilters}
             </Button>
           </div>

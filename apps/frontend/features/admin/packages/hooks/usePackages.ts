@@ -3,8 +3,8 @@ import type { PaginationMeta } from "@catering/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useDebounce } from "@/hooks";
-import * as orderApi from "../api/order.api";
-import { ORDER_KEYS } from "../queries/order.keys";
+import * as packageApi from "../api/package.api";
+import { PACKAGE_KEYS } from "../queries/package.keys";
 
 const DEFAULT_PAGINATION: PaginationMeta = {
   totalDocs: 0,
@@ -18,15 +18,15 @@ const DEFAULT_PAGINATION: PaginationMeta = {
   pagingCounter: 1,
 };
 
-export const useOrders = (tenantId?: string) => {
+export const usePackages = (tenantId?: string) => {
   const [search, setSearch] = useState("");
   const controller = useBuildQueryString(tenantId ? { required: { value: { tenantId } } } : undefined);
   const debouncedSearch = useDebounce(search, 500);
   const controllerRef = useRef(controller);
 
   const { data, isLoading } = useQuery({
-    queryKey: ORDER_KEYS.lists(controller.query),
-    queryFn: () => orderApi.getOrders(controller.getQueryString()),
+    queryKey: PACKAGE_KEYS.lists(controller.query),
+    queryFn: () => packageApi.getPackages(controller.getQueryString()),
   });
 
   useEffect(() => {
@@ -43,9 +43,9 @@ export const useOrders = (tenantId?: string) => {
 
   return {
     ...controller,
-    orders: data?.orders || [],
+    packages: data?.packages || [],
     pagination: data?.pagination ?? DEFAULT_PAGINATION,
-    isGettingOrders: isLoading,
+    isGettingPackages: isLoading,
     onSearch: setSearch,
   };
 };

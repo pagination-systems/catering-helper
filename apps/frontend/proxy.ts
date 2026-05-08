@@ -33,7 +33,7 @@ function getSubdomain(hostHeader: string): string | null {
   return subdomain;
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   if (

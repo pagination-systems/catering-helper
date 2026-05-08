@@ -1,9 +1,10 @@
 import { CalendarClockIcon, CookingPotIcon, MapPinIcon, PhoneIcon, ReceiptTextIcon, UserIcon } from "lucide-react";
 import { If } from "@/components/if";
+import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatDateTime } from "@/lib/utils";
 import { Loader } from "../../components/loader";
 import { useOrder } from "../hooks/useOrder";
-import { getOrderStatusBadgeClassName } from "../lib/badge";
+import { getOrderStatusBadgeStyles } from "../lib/badge";
 import { useOrdersI18n } from "../lib/orders-i18n";
 
 interface OrderDetailsProps {
@@ -13,8 +14,6 @@ interface OrderDetailsProps {
 export const OrderDetails = ({ id }: OrderDetailsProps) => {
   const i18n = useOrdersI18n();
   const { order: item, isGettingOrder } = useOrder(id);
-
-  const statusClassName = item ? getOrderStatusBadgeClassName(item.status) : "";
 
   return (
     <If expression={!isGettingOrder && item} fallback={<Loader />}>
@@ -31,9 +30,9 @@ export const OrderDetails = ({ id }: OrderDetailsProps) => {
               </div>
 
               <div className="flex flex-col items-start gap-2 sm:items-end">
-                <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${statusClassName}`}>
+                <Badge variant="outline" className={getOrderStatusBadgeStyles(item.status)}>
                   {item.status}
-                </span>
+                </Badge>
                 <p className="text-sm font-semibold text-foreground">{formatCurrency(item.total)}</p>
               </div>
             </div>
