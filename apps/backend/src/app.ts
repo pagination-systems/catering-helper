@@ -5,6 +5,7 @@ import mongoSanitize from "express-mongo-sanitize";
 import helmet from "helmet";
 import hpp from "hpp";
 import morgan from "morgan";
+import { initBullBoard } from "./.config/bull-board";
 import { env } from "./.config/env";
 import { setupAgenda } from "./agenda";
 import { CORS_ORIGIN } from "./common/constants";
@@ -29,7 +30,7 @@ app.use(cors(corsOptions));
 app.use(helmet());
 
 // Development Logging
-if (process.env.NODE_ENV === "development") {
+if (env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
@@ -60,6 +61,8 @@ app.get("/", (_req, res) => {
 
 // Load API routes
 setupSwaggerDocs(app);
+const { router: bullBoardRouter, path: bullBoardPath } = initBullBoard();
+app.use(bullBoardPath, bullBoardRouter);
 setupApiRoutes(app);
 setupAgenda(app);
 

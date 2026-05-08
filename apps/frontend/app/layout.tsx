@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Noto_Sans_Bengali } from "next/font/google";
-import { LanguageProvider } from "@/components/language-provider";
-import { ThemeProvider } from "@/components/theme-provider";
 import { siteName } from "@/lib/i18n";
+import { LanguageProvider } from "@/providers/language-provider";
+import { ThemeProvider } from "@/providers/theme-provider";
 import "./globals.css";
+import { AbilityProvider } from "@/authz/ability-provider";
+import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
+import QueryProvider from "@/providers/query-provider";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -28,9 +31,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={`${notoSansBengali.className} flex min-h-screen flex-col bg-background text-foreground antialiased`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <LanguageProvider>{children}</LanguageProvider>
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <LanguageProvider>
+              <AbilityProvider>{children}</AbilityProvider>
+              <Toaster richColors position="top-center" />
+            </LanguageProvider>
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );

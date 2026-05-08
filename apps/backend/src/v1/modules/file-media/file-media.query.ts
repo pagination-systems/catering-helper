@@ -1,6 +1,7 @@
 import { VISIBILITY_ENUM } from "@catering/types";
 import _ from "lodash";
 import type { PipelineStage } from "mongoose";
+import { env } from "../../../.config/env";
 import { projectQuery } from "../../../common/query";
 import { FileMedia, type IFileMediaDoc } from "../../../models";
 
@@ -14,7 +15,7 @@ export const fileMediaProjectionQuery = (): PipelineStage[] => {
 };
 
 export const fileMediaSrcQuery = (): PipelineStage[] => {
-  const baseUrl = process.env.PUBLIC_MEDIA_BASE_URL || "";
+  const baseUrl = env.PUBLIC_MEDIA_BASE_URL || "";
   return [
     {
       $addFields: {
@@ -24,6 +25,7 @@ export const fileMediaSrcQuery = (): PipelineStage[] => {
             if: { $eq: ["$visibility", VISIBILITY_ENUM.PUBLIC] },
 
             // If true, concatenate the S3 URL pieces
+            // biome-ignore lint/suspicious/noThenProperty: MongoDB $cond requires the then key
             then: {
               $concat: [baseUrl, "/", "$storageInformation.Key"],
             },
@@ -37,6 +39,7 @@ export const fileMediaSrcQuery = (): PipelineStage[] => {
             if: {
               $and: [{ $eq: ["$visibility", VISIBILITY_ENUM.PUBLIC] }, { $ifNull: ["$thumbnail.Key", false] }],
             },
+            // biome-ignore lint/suspicious/noThenProperty: MongoDB $cond requires the then key
             then: {
               $concat: [baseUrl, "/", "$thumbnail.Key"],
             },

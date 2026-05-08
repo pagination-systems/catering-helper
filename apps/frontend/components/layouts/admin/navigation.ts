@@ -1,0 +1,189 @@
+import type { AnyAbility } from "@casl/ability";
+import {
+  CustomerLedgerAuthZEntity,
+  ExpenseAuthZEntity,
+  OrderAuthZEntity,
+  PackageAuthZEntity,
+  ProductionRequirementAuthZEntity,
+  TenantAuthZEntity,
+  UserAuthZEntity,
+} from "@catering/authz";
+import { AbilityAction } from "@catering/types";
+import {
+  Fingerprint,
+  HandCoins,
+  LayoutDashboard,
+  ListOrdered,
+  type LucideIcon,
+  Package2,
+  Settings,
+  Users,
+  Utensils,
+  UtensilsCrossed,
+} from "lucide-react";
+import { getAdminContent } from "@/lib/admin-i18n";
+import type { Language } from "@/lib/i18n";
+
+/**
+ * Represents a single navigation item in the admin sidebar.
+ * Can have children for nested menu items.
+ */
+export type NavigationItem = {
+  /** Display label for the navigation item */
+  label: string;
+  /** Route href to navigate to */
+  href: string;
+  /** Lucide icon component */
+  icon: LucideIcon;
+  /** Optional function to determine if user can view this item based on abilities */
+  canView?: (ability: AnyAbility) => boolean;
+  /** Optional nested navigation items */
+  children?: NavigationItem[];
+};
+
+/**
+ * Main navigation items for the admin panel.
+ * Each item can have permission checks and nested children.
+ */
+export function getNavigationItems(lang: Language): NavigationItem[] {
+  const t = getAdminContent(lang).nav;
+
+  return [
+    {
+      label: t.dashboard,
+      href: "/admin/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      label: t.cateringHelper,
+      href: "/admin/catering-helper",
+      icon: Fingerprint,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, UserAuthZEntity),
+    },
+    {
+      label: t.tenants,
+      href: "/admin/tenants",
+      icon: UtensilsCrossed,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, TenantAuthZEntity),
+    },
+    {
+      label: t.customers,
+      href: "/admin/customers",
+      icon: Users,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, UserAuthZEntity),
+    },
+    {
+      label: t.packages,
+      href: "/admin/packages",
+      icon: Package2,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, PackageAuthZEntity),
+    },
+    {
+      label: t.orders,
+      href: "/admin/orders",
+      icon: ListOrdered,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, OrderAuthZEntity),
+    },
+    {
+      label: t.productionRequirements,
+      href: "/admin/production-requirements",
+      icon: Utensils,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, ProductionRequirementAuthZEntity),
+    },
+    {
+      label: t.customerLedger,
+      href: "/admin/customer-ledger",
+      icon: HandCoins,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, CustomerLedgerAuthZEntity),
+    },
+    {
+      label: t.expenses,
+      href: "/admin/expenses",
+      icon: HandCoins,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, ExpenseAuthZEntity),
+    },
+    {
+      label: t.settings,
+      href: "/admin/settings",
+      icon: Settings,
+      canView: (ability) => ability.can(AbilityAction.READ, TenantAuthZEntity),
+    },
+  ];
+}
+
+/**
+ * Recursively filters navigation items based on user permissions.
+ * Removes items the user cannot view, and removes parent items
+ * that have no visible children.
+ *
+ * @param items - Navigation items to filter
+ * @param ability - CASL ability instance for permission checking
+ * @returns Filtered navigation items with only accessible items
+ */
+export function filterNavigationByPermission(items: NavigationItem[], ability: AnyAbility): NavigationItem[] {
+  return items.flatMap((item) => {
+    const children = item.children ? filterNavigationByPermission(item.children, ability) : undefined;
+
+    const canView = item.canView?.(ability) ?? true;
+
+    // Hide item if user cannot view it and it has no visible children
+    if (!canView && (!children || children.length === 0)) {
+      return [];
+    }
+
+    return [
+      {
+        ...item,
+        children: children && children.length > 0 ? children : undefined,
+      },
+    ];
+  });
+}
+
+/**
+ * Determines if a navigation item is currently active based on the current pathname.
+ * Handles dashboard root path, exact matches, and child path matching.
+ * Recursively checks children for active state.
+ *
+ * @param item - Navigation item to check
+ * @param pathname - Current route pathname
+ * @returns True if the item or any of its children are active
+ */
+export function isItemActive(item: NavigationItem, pathname: string): boolean {
+  // Special case: dashboard routes
+  if (item.href === "/admin/dashboard") {
+    return pathname === "/admin" || pathname === "/admin/dashboard";
+  }
+
+  // Check if pathname matches item href or is a child route
+  if (pathname === item.href || pathname.startsWith(`${item.href}/`)) {
+    return true;
+  }
+
+  // Recursively check children
+  return Boolean(item.children?.some((child) => isItemActive(child, pathname)));
+}
+
+/**
+ * Finds the navigation item that best matches the current pathname.
+ * Returns the deepest matching item so route-level permission checks
+ * can reuse the same navigation definitions as the sidebar.
+ */
+export function getNavigationItemForPath(items: NavigationItem[], pathname: string): NavigationItem | undefined {
+  for (const item of items) {
+    if (item.href === "/admin/dashboard") {
+      if (pathname === "/admin" || pathname === "/admin/dashboard") {
+        return item;
+      }
+    } else if (pathname === item.href || pathname.startsWith(`${item.href}/`)) {
+      return item.children ? (getNavigationItemForPath(item.children, pathname) ?? item) : item;
+    }
+
+    const childMatch = item.children ? getNavigationItemForPath(item.children, pathname) : undefined;
+    if (childMatch) {
+      return childMatch;
+    }
+  }
+
+  return undefined;
+}

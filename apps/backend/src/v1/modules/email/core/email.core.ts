@@ -1,7 +1,8 @@
 import Joi from "joi";
+import { env } from "../../../../.config/env";
 import { EmailMissConfigException, validate } from "../../../../common/helper";
 import type { EmailOptions, EmailTemplateNames } from "./email.interface";
-import { emailQueue } from "./email.queue";
+import { emailQueue } from "./email.queue.js";
 
 export class Email {
   private receiver: string | undefined;
@@ -15,14 +16,14 @@ export class Email {
     this.template = template;
     this.subject = subject;
     this.payload = payload;
-    this.sender = process.env.EMAIL_SENDER || "default@example.com";
+    this.sender = env.EMAIL_SENDER;
   }
 
   public to(receiver: string) {
     this.receiver = receiver;
     return this;
   }
-  public withAttachments(attachments: any[]) {
+  public withAttachments(_attachments: any[]) {
     return this;
   }
   public schedule(date: Date) {
@@ -46,7 +47,8 @@ export class Email {
     }
     const delay = this.scheduleDate ? this.scheduleDate.getTime() - now.getTime() : 0;
 
-    emailQueue.add(
+    emailQueue.addJob(
+      "send-email",
       {
         receiver,
         sender,

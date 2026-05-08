@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { MongooseError } from "mongoose";
+import { env } from "../../../.config/env";
 import { logger } from "../logger";
 import { BadRequestException } from "./api-error";
 
@@ -52,7 +53,7 @@ const globalErrorHandler = (err: ErrorWithStatus, req: Request, res: Response, _
     err = handleDatabaseError(err);
   }
 
-  if (process.env.NODE_ENV === "development") {
+  if (env.NODE_ENV === "development") {
     sendErrorDev(err, req, res);
   } else {
     const error = { ...err, message: err.message, name: err.name };

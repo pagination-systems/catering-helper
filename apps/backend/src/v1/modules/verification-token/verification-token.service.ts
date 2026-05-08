@@ -1,3 +1,4 @@
+import type { DeleteResult } from "mongoose";
 import { type IVerificationTokenDoc, VerificationToken, type VerificationTokenInput } from "../../../models";
 
 interface VerificationInputWithId extends VerificationTokenInput {
@@ -28,6 +29,6 @@ export const remove = (filter: Partial<VerificationInputWithId>) => {
   return VerificationToken.findOneAndDelete(filter);
 };
 
-export const removeMany = (filter: Partial<VerificationInputWithId>) => {
+export const removeMany = (filter: Partial<VerificationInputWithId>): Promise<DeleteResult> => {
   return VerificationToken.deleteMany(filter);
 };

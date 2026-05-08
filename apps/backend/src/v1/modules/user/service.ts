@@ -100,7 +100,6 @@ export const update = async ({ query, payload, session }: IUserUpdateParams) => 
     { _id: user._id },
     { $set: payload },
     {
-      new: true,
       session,
     },
   );
@@ -188,7 +187,6 @@ export const updateUserProfileImage = async ({
     { _id: user._id },
     { $set: { profileImageId: fileMedia._id } },
     {
-      new: true,
       session,
     },
   );

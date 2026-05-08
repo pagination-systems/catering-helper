@@ -5,8 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-
-import { useLanguage } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -17,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { type LandingContent, landingContent } from "@/lib/i18n";
+import { useLanguage } from "@/providers/language-provider";
 
 const themeOrder = ["system", "light", "dark"] as const;
 

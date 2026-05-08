@@ -1,10 +1,10 @@
 import IORedis, { type RedisOptions } from "ioredis";
+import { env } from "./env";
 
 export const redisOptions: RedisOptions = {
-  // todo - import from env file
-  host: process.env.REDIS_HOST,
-  port: Number(process.env.REDIS_PORT!),
-  password: process.env.REDIS_PASSWORD,
+  host: env.REDIS_HOST,
+  port: env.REDIS_PORT,
+  password: env.REDIS_PASSWORD,
   maxRetriesPerRequest: null,
 };
 

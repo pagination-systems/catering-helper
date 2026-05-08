@@ -1,8 +1,8 @@
-import { JwtPayload } from "jsonwebtoken";
-import { ACCOUNT_TYPE_ENUMS, USER_ROLE_ENUMS } from "@rl/types";
+import type { ACCOUNT_TYPE_ENUMS, USER_ROLE_ENUMS } from "@catering/types";
+import type { JwtPayload } from "jsonwebtoken";
 
 export interface GenerateTokenOptions {
-  expiresIn: string | number;
+  expiresIn: number;
 }
 
 export interface TokensInput {

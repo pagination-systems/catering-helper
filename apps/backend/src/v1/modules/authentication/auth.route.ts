@@ -1,27 +1,27 @@
-import express from "express";
-import {
-  registration,
-  login,
-  logout,
-  verifyRegistration,
-  resendVerification,
-  recoverAccount,
-  verifyRecovery,
-  refreshAccessToken,
-} from "./auth.controller";
+import express, { type Router } from "express";
 import { handleController } from "../../../common/helper";
 import { validate } from "../../../common/middlewares";
 import {
-  registerBodySchema,
-  verifyRegistrationQuerySchema,
-  resendVerificationBodySchema,
-  recoverAccountBodySchema,
-  verifyRecoveryQuerySchema,
-  verifyRecoveryBodySchema,
+  login,
+  logout,
+  recoverAccount,
+  refreshAccessToken,
+  registration,
+  resendVerification,
+  verifyRecovery,
+  verifyRegistration,
+} from "./auth.controller";
+import {
   loginBodySchema,
+  recoverAccountBodySchema,
+  registerBodySchema,
+  resendVerificationBodySchema,
+  verifyRecoveryBodySchema,
+  verifyRecoveryQuerySchema,
+  verifyRegistrationQuerySchema,
 } from "./auth.validation";
 
-const router = express.Router();
+const router: Router = express.Router();
 
 const validateBody = validate("body");
 const validateQuery = validate("query");
@@ -31,19 +31,19 @@ router.post("/registration", validateBody(registerBodySchema), handleController(
 router.post(
   "/registration/verification",
   validateQuery(verifyRegistrationQuerySchema),
-  handleController(verifyRegistration)
+  handleController(verifyRegistration),
 );
 router.post(
   "/registration/verification/email",
   validateBody(resendVerificationBodySchema),
-  handleController(resendVerification)
+  handleController(resendVerification),
 );
 router.post("/recovery", validateBody(recoverAccountBodySchema), handleController(recoverAccount));
 router.post(
   "/recovery/verification",
   validateQuery(verifyRecoveryQuerySchema),
   validateBody(verifyRecoveryBodySchema),
-  handleController(verifyRecovery)
+  handleController(verifyRecovery),
 );
 // router.get(
 //   "/refresh-access-token",

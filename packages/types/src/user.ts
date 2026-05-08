@@ -23,9 +23,14 @@ export enum EMAIL_VERIFICATION_STATUS_ENUMS {
 
 export interface IUser {
   _id: string;
+  id: string;
+  name: string;
+  phone: string;
   tenantId: string;
   email: string;
   type: ACCOUNT_TYPE_ENUMS;
   role?: USER_ROLE_ENUMS;
   emailVerificationStatus: EMAIL_VERIFICATION_STATUS_ENUMS;
+  createdAt: Date;
+  updatedAt: Date;
 }

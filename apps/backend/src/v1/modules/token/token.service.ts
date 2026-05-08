@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { env } from "../../../.config/env";
 import { BadRequestException, UnauthorizedException } from "../../../common/helper";
 import { type ITokenPairDoc, type IUserDoc, TokenPair } from "../../../models";
 import type {
@@ -10,12 +11,12 @@ import type {
 } from "./token.interface";
 
 export const generateTokensPair = (payload: CustomJwtPayload) => {
-  const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET! as string, {
-    expiresIn: parseInt(process.env.ACCESS_TOKEN_EXPIRY as string),
+  const accessToken = jwt.sign(payload, env.ACCESS_TOKEN_SECRET, {
+    expiresIn: env.ACCESS_TOKEN_EXPIRY,
   });
 
-  const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET! as string, {
-    expiresIn: parseInt(process.env.REFRESH_TOKEN_EXPIRY as string),
+  const refreshToken = jwt.sign(payload, env.REFRESH_TOKEN_SECRET, {
+    expiresIn: env.REFRESH_TOKEN_EXPIRY,
   });
 
   return { accessToken, refreshToken };
@@ -64,7 +65,6 @@ export const removeTokensPair = async ({ accessToken, refreshToken }: TokensInpu
   return TokenPair.findOneAndUpdate(
     { accessTokens: { $in: accessToken }, refreshTokens: { $in: refreshToken } } as any,
     { $pull: { accessTokens: accessToken, refreshTokens: refreshToken } } as any,
-    { new: true } as any,
   );
 };
 
@@ -82,7 +82,7 @@ export const findAccessToken = async ({ token, userId }: FindTokenInput) => {
 
 export const verifyAccessToken = (accessToken: string): Promise<CustomJwtPayload | string> => {
   return new Promise((resolve, reject) => {
-    jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET as string, (err, decoded) => {
+    jwt.verify(accessToken, env.ACCESS_TOKEN_SECRET, (err, decoded) => {
       if (err) {
         return reject(new UnauthorizedException("Invalid or expired access token."));
       }
@@ -93,7 +93,7 @@ export const verifyAccessToken = (accessToken: string): Promise<CustomJwtPayload
 
 export const verifyRefreshToken = (refreshToken: string): Promise<CustomJwtPayload | string> => {
   return new Promise((resolve, reject) => {
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET as string, (err, decoded) => {
+    jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET, (err, decoded) => {
       if (err) {
         return reject(new UnauthorizedException("Invalid or expired refresh token."));
       }
@@ -103,14 +103,14 @@ export const verifyRefreshToken = (refreshToken: string): Promise<CustomJwtPaylo
 };
 
 export const generateToken = ({ payload, options }: { payload: CustomJwtPayload; options: GenerateTokenOptions }) => {
-  return jwt.sign(payload, process.env.JWT_KEY as string, {
-    expiresIn: parseInt(options.expiresIn as string),
+  return jwt.sign(payload, env.JWT_KEY, {
+    expiresIn: options.expiresIn,
   });
 };
 
 export const verifyToken = (token: string): Promise<CustomJwtPayload | string> => {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, process.env.JWT_KEY as string, (err, decoded) => {
+    jwt.verify(token, env.JWT_KEY, (err, decoded) => {
       if (err) {
         return reject(new BadRequestException("Invalid or expired token."));
       }
@@ -126,14 +126,14 @@ export const generateQuotationToken = ({
   payload: QuotationTokenPayload;
   options: GenerateTokenOptions;
 }) => {
-  return jwt.sign(payload, process.env.JWT_KEY as string, {
-    expiresIn: parseInt(options.expiresIn as string),
+  return jwt.sign(payload, env.JWT_KEY, {
+    expiresIn: options.expiresIn,
   });
 };
 
 export const verifyQuotationToken = (token: string): Promise<QuotationTokenPayload | string> => {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, process.env.JWT_KEY as string, (err, decoded) => {
+    jwt.verify(token, env.JWT_KEY, (err, decoded) => {
       if (err) {
         return reject(new BadRequestException("Invalid or expired token."));
       }
