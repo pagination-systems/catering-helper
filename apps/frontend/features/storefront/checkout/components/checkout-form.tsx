@@ -37,7 +37,7 @@ export function CheckoutForm() {
   const onSubmit = async (values: CheckoutFormValues) => {
     console.log("Checkout payload", values);
 
-    router.push("/order-success");
+    router.push("/client/order-success");
   };
 
   return (

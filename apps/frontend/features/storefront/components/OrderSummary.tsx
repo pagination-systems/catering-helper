@@ -133,7 +133,7 @@ export function OrderSummary({ readonly = false, showDeliveryFee = false }: Orde
             size="lg"
             className="w-full font-semibold"
             disabled={groupedOrders.length === 0}
-            onClick={() => router.push("/checkout")}
+            onClick={() => router.push("/client/checkout")}
           >
             {content.checkout}
           </Button>
