@@ -3,7 +3,8 @@
   "private": true,
   "packageManager": "pnpm@10.0.0",
   "scripts": {
-    "build": "pnpm -r run build",
+    "build": "pnpm --filter @catering/types build && pnpm --filter @catering/authz build  && pnpm --filter @catering/react-query-builder build && pnpm --filter @catering/frontend build",
+    "start": "pnpm --filter @catering/frontend start",
     "start:dev": "concurrently --kill-others \"pnpm --filter @catering/backend dev\" \"pnpm --filter @catering/frontend dev\"",
     "format": "biome format --write .",
     "lint": "biome lint --write .",

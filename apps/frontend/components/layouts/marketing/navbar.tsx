@@ -30,9 +30,8 @@ export function Navbar() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setMounted(true); }, []);
 
   const content = (landingContent[language] as LandingContent).nav;
 
@@ -50,7 +49,7 @@ export function Navbar() {
   };
 
   return (
-    <header className="border-b border-border/70 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
       <nav className="mx-auto flex h-16 w-full max-w-[1180px] items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2 text-[14px] font-medium tracking-tight text-foreground">
           <Image src="/logo.svg" alt="Catering Helper Logo" width={32} height={32} className="h-10 w-auto" />
@@ -60,6 +59,9 @@ export function Navbar() {
         <div className="hidden items-center gap-6 text-[11px] font-medium md:flex">
           <Link href="/#solution" className="text-primary underline-offset-4 hover:underline">
             {content.solution}
+          </Link>
+          <Link href="/#features" className="text-muted-foreground transition hover:text-foreground">
+            {content.features}
           </Link>
           <Link href="/#how-it-works" className="text-muted-foreground transition hover:text-foreground">
             {content.howItWorks}
@@ -125,10 +127,13 @@ export function Navbar() {
                 <Link href="/#solution">{content.solution}</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer">
-                <Link href="/#pricing">{content.pricing}</Link>
+                <Link href="/#features">{content.features}</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer">
                 <Link href="/#how-it-works">{content.howItWorks}</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <Link href="/#pricing">{content.pricing}</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => setTheme("light")}>{content.modes.light}</DropdownMenuItem>

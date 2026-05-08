@@ -7,7 +7,7 @@ It includes:
 - A Next.js frontend (App Router) with subdomain-based tenant routing.
 - An Express backend API.
 - Shared internal packages for types, utilities, and auth helpers.
-- Nginx reverse proxy + MongoDB via Docker Compose.
+- Nginx reverse proxy + MongoDB via Docker Compose..
 
 ## Monorepo Layout
 
