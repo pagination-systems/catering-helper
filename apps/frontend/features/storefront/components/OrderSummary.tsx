@@ -15,11 +15,12 @@ import { useStorefrontStore } from "../store/useStore";
 export const DELIVERY_FEE = 60;
 
 type OrderSummaryProps = {
+  tenantSlug: string;
   readonly?: boolean;
   showDeliveryFee?: boolean;
 };
 
-export function OrderSummary({ readonly = false, showDeliveryFee = false }: OrderSummaryProps) {
+export function OrderSummary({ tenantSlug, readonly = false, showDeliveryFee = false }: OrderSummaryProps) {
   const router = useRouter();
   const { language } = useLanguage();
   const content = clientPortalContent[language] as ClientPortalContent;
@@ -133,7 +134,7 @@ export function OrderSummary({ readonly = false, showDeliveryFee = false }: Orde
             size="lg"
             className="w-full font-semibold"
             disabled={groupedOrders.length === 0}
-            onClick={() => router.push("/client/checkout")}
+            onClick={() => router.push(`/${tenantSlug}/checkout`)}
           >
             {content.checkout}
           </Button>

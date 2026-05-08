@@ -21,7 +21,7 @@ export const Checkout = ({ tenant }: { tenant: string }) => {
           </section>
 
           <aside className="h-fit lg:sticky lg:top-6">
-            <OrderSummary readonly showDeliveryFee />
+            <OrderSummary tenantSlug={tenant} readonly showDeliveryFee />
           </aside>
         </div>
       </div>

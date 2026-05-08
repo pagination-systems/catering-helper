@@ -1,4 +1,5 @@
 export type TenantData = {
+  slug: string;
   name: string;
   title: string;
   logoUrl: string;
@@ -15,7 +16,9 @@ export type TenantData = {
   };
 };
 
-const defaultTenantData: TenantData = {
+type TenantRecord = Omit<TenantData, "slug">;
+
+const defaultTenantRecord: TenantRecord = {
   name: "Uttara Catering",
   title: "Premium Menus, Frictionless Customization",
   logoUrl:
@@ -33,16 +36,13 @@ const defaultTenantData: TenantData = {
   },
 };
 
-const tenants: Record<string, TenantData> = {
-  uttara: defaultTenantData,
+const tenants: Record<string, TenantRecord> = {
+  uttara: defaultTenantRecord,
 };
 
-export const tenantData = defaultTenantData;
+export const tenantData: TenantData = { slug: "uttara", ...defaultTenantRecord };
 
-export function resolveTenantData(tenant?: string): TenantData {
-  if (!tenant) {
-    return tenantData;
-  }
-
-  return tenants[tenant.toLowerCase()] ?? tenantData;
+export function resolveTenantData(tenant = "uttara"): TenantData {
+  const key = tenant.toLowerCase();
+  return { slug: key, ...(tenants[key] ?? defaultTenantRecord) };
 }

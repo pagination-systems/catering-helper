@@ -1,6 +1,5 @@
 import { Minus, Plus } from "lucide-react";
 import Image from "next/image";
-import { If } from "@/components/if";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { MenuVariant } from "../data";
@@ -48,11 +47,11 @@ export function VariantCard({
           ))}
         </div>
 
-        <If expression={!available}>
+        {!available && (
           <span className="inline-flex mt-2 items-center gap-1 rounded-full bg-red-500/12 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-red-700 w-fit">
             {unavailableLabel}
           </span>
-        </If>
+        )}
       </div>
 
       <div className="relative h-24 w-24 sm:h-28 sm:w-28 shrink-0 overflow-hidden rounded-xl bg-muted">
@@ -63,38 +62,9 @@ export function VariantCard({
           width={100}
           height={100}
         />
-        <If expression={available}>
+        {available && (
           <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2">
-            <If
-              expression={quantity === 0}
-              fallback={
-                <div className="flex h-7 sm:h-8 items-center gap-1 sm:gap-2 rounded-full px-1 bg-zinc-900 shadow-md shadow-black/10">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => onQuantityChange(quantity - 1)}
-                    className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white text-black hover:bg-zinc-100 transition"
-                  >
-                    <Minus className="h-3.5 w-3.5" />
-                  </Button>
-
-                  <span className="min-w-[12px] sm:min-w-[16px] text-center text-xs sm:text-sm font-semibold text-white">
-                    {quantity}
-                  </span>
-
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => onQuantityChange(quantity + 1)}
-                    className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white text-black hover:bg-zinc-100 transition"
-                  >
-                    <Plus className="h-3.5 w-3.5" />
-                  </Button>
-                </div>
-              }
-            >
+            {quantity === 0 ? (
               <Button
                 type="button"
                 variant="ghost"
@@ -104,9 +74,33 @@ export function VariantCard({
               >
                 <Plus className="h-4 w-4" />
               </Button>
-            </If>
+            ) : (
+              <div className="flex h-7 sm:h-8 items-center gap-1 sm:gap-2 rounded-full px-1 bg-zinc-900 shadow-md shadow-black/10">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onQuantityChange(quantity - 1)}
+                  className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white text-black hover:bg-zinc-100 transition"
+                >
+                  <Minus className="h-3.5 w-3.5" />
+                </Button>
+                <span className="min-w-[12px] sm:min-w-[16px] text-center text-xs sm:text-sm font-semibold text-white">
+                  {quantity}
+                </span>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onQuantityChange(quantity + 1)}
+                  className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white text-black hover:bg-zinc-100 transition"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            )}
           </div>
-        </If>
+        )}
       </div>
     </article>
   );
