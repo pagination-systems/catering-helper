@@ -1,7 +1,7 @@
 import { CheckCircle2, Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import type { MenuVariant } from "../data";
 import { MealItemPill } from "./meal-item-pill";
 
@@ -29,79 +29,81 @@ export function VariantCard({
     <article
       className={cn(
         "relative overflow-hidden rounded-xl border transition-all duration-200 flex gap-3 p-3 sm:p-4",
-        available
-          ? "hover:-translate-y-0.5 hover:shadow-md bg-card"
-          : "cursor-not-allowed border-dashed bg-muted/25 opacity-70 grayscale",
-        active ? "border-primary/40 ring-1 ring-primary/40" : "border-border/70",
+        available ? "bg-card hover:-translate-y-0.5 hover:shadow-md" : "cursor-not-allowed bg-muted/25 opacity-70 grayscale",
+        active ? "border-l-4 border-primary bg-primary/[0.03]" : "border-border/70",
         pulse && "animate-pulse",
       )}
     >
+      {/* Content column */}
       <div className="flex flex-1 flex-col min-w-0">
         <div className="flex items-start gap-1.5">
-          <h4 className="flex-1 text-base sm:text-lg font-bold tracking-tight text-foreground truncate">{variant.name}</h4>
+          <h4 className="flex-1 text-base font-bold tracking-tight text-foreground truncate">{variant.name}</h4>
           {active && <CheckCircle2 className="h-4 w-4 shrink-0 text-primary mt-0.5" />}
         </div>
-        <p className="mt-0.5 text-sm font-medium text-muted-foreground">
-          <b>BDT {price}</b> {mealSuffix}
+
+        <p className="mt-0.5 text-xs font-medium text-muted-foreground">
+          <strong>{formatCurrency(price)}</strong> {mealSuffix}
         </p>
-        <div className="mt-2 flex flex-wrap gap-1.5">
+
+        <div className="mt-2 flex flex-wrap gap-1">
           {variant.items.map((item) => (
             <MealItemPill key={item} label={item} />
           ))}
         </div>
 
-        {!available && (
-          <span className="inline-flex mt-2 items-center gap-1 rounded-full bg-red-500/12 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-red-700 w-fit">
-            {unavailableLabel}
-          </span>
-        )}
-      </div>
-
-      <div className="relative h-24 w-24 sm:h-28 sm:w-28 shrink-0 overflow-hidden rounded-xl bg-muted">
-        <Image
-          src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80"
-          alt={variant.name}
-          className="h-full w-full object-cover"
-          width={100}
-          height={100}
-        />
-        {available && (
-          <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2">
-            {quantity === 0 ? (
+        {/* Stepper — pushed to bottom of content column */}
+        <div className="mt-auto pt-3">
+          {available && (
+            quantity === 0 ? (
               <Button
                 type="button"
-                variant="ghost"
-                size="icon"
+                size="sm"
+                variant="outline"
+                className="h-7 gap-1 rounded-full text-xs font-semibold"
                 onClick={() => onQuantityChange(1)}
-                className="h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-white text-black shadow-md shadow-black/10 transition hover:bg-zinc-100"
               >
-                <Plus className="h-4 w-4" />
+                <Plus className="h-3 w-3" />
+                Add
               </Button>
             ) : (
-              <div className="flex h-7 sm:h-8 items-center gap-1 sm:gap-2 rounded-full px-1 bg-zinc-900 shadow-md shadow-black/10">
+              <div className="inline-flex h-7 items-center gap-1 rounded-full bg-foreground px-1 shadow-sm">
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
                   onClick={() => onQuantityChange(quantity - 1)}
-                  className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white text-black hover:bg-zinc-100 transition"
+                  className="h-5 w-5 rounded-full bg-background text-foreground hover:bg-muted"
                 >
-                  <Minus className="h-3.5 w-3.5" />
+                  <Minus className="h-3 w-3" />
                 </Button>
-                <span className="min-w-[12px] sm:min-w-[16px] text-center text-xs sm:text-sm font-semibold text-white">
-                  {quantity}
-                </span>
+                <span className="min-w-[20px] text-center text-xs font-bold text-background">{quantity}</span>
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
                   onClick={() => onQuantityChange(quantity + 1)}
-                  className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white text-black hover:bg-zinc-100 transition"
+                  className="h-5 w-5 rounded-full bg-background text-foreground hover:bg-muted"
                 >
-                  <Plus className="h-3.5 w-3.5" />
+                  <Plus className="h-3 w-3" />
                 </Button>
               </div>
-            )}
+            )
+          )}
+        </div>
+      </div>
+
+      {/* Image */}
+      <div className="relative h-24 w-24 sm:h-28 sm:w-28 shrink-0 overflow-hidden rounded-xl bg-muted">
+        <Image
+          src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80"
+          alt={variant.name}
+          className="h-full w-full object-cover"
+          width={112}
+          height={112}
+        />
+        {!available && (
+          <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/55">
+            <span className="text-[10px] font-bold uppercase tracking-wide text-white">{unavailableLabel}</span>
           </div>
         )}
       </div>

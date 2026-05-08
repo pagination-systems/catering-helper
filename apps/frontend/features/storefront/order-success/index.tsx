@@ -14,7 +14,7 @@ export function OrderSuccess({ tenant }: { tenant: string }) {
         <div className="absolute bottom-10 right-[-100px] h-64 w-64 rounded-full bg-accent/10 blur-3xl" />
       </div>
 
-      <div className="relative z-10 mx-auto flex min-h-[68vh] w-full max-w-[640px] items-center px-4 py-10 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-[640px] items-center px-4 py-10 sm:px-6 lg:px-8">
         <Card className="w-full border-border/70 bg-card/95 shadow-[0_24px_64px_-40px_hsl(var(--foreground)/0.45)] backdrop-blur-sm">
           <CardHeader className="px-6 pt-8 pb-4 text-center sm:px-8">
             <div className="mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-full bg-accent/10 ring-1 ring-accent/20">
@@ -37,12 +37,12 @@ export function OrderSuccess({ tenant }: { tenant: string }) {
           <div className="space-y-3 px-6 pb-8 sm:px-8">
             <Button asChild className="h-11 w-full font-semibold text-sm sm:text-base">
               <Link href={`/${tenant}`} className="inline-flex items-center justify-center gap-2">
-                Order More Meals
+                Order More
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
             <Button asChild variant="outline" className="h-10 w-full text-sm font-medium">
-              <Link href={`tel:`} className="inline-flex items-center justify-center gap-2">
+              <Link href="tel:" className="inline-flex items-center justify-center gap-2">
                 <Phone className="h-3.5 w-3.5" />
                 Contact Us
               </Link>

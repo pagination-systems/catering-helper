@@ -38,17 +38,18 @@ export function CheckoutForm({ tenant }: { tenant: string }) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5" noValidate>
+        {/* Contact info */}
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex items-center gap-1.5">
-                <User className="h-3.5 w-3.5 text-muted-foreground" />
-                Full Name
-              </FormLabel>
+              <FormLabel>Full Name</FormLabel>
               <FormControl>
-                <Input type="text" placeholder="e.g. Rahim Uddin" {...field} />
+                <div className="relative">
+                  <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input type="text" placeholder="e.g. Rahim Uddin" className="pl-9" {...field} />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -60,12 +61,12 @@ export function CheckoutForm({ tenant }: { tenant: string }) {
           name="phone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex items-center gap-1.5">
-                <Phone className="h-3.5 w-3.5 text-muted-foreground" />
-                Phone Number
-              </FormLabel>
+              <FormLabel>Phone Number</FormLabel>
               <FormControl>
-                <Input type="tel" placeholder="01XXXXXXXXX" inputMode="numeric" {...field} />
+                <div className="relative">
+                  <Phone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input type="tel" placeholder="01XXXXXXXXX" inputMode="numeric" className="pl-9" {...field} />
+                </div>
               </FormControl>
               <FormDescription className="text-xs">Bangladesh number — starts with 013–019</FormDescription>
               <FormMessage />
@@ -73,21 +74,25 @@ export function CheckoutForm({ tenant }: { tenant: string }) {
           )}
         />
 
+        {/* Divider */}
+        <div className="border-t border-border/40" />
+
+        {/* Delivery details */}
         <FormField
           control={form.control}
           name="address"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
-                Delivery Address
-              </FormLabel>
+              <FormLabel>Delivery Address</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Building, road, area, and any delivery instructions"
-                  className="min-h-[80px] resize-none"
-                  {...field}
-                />
+                <div className="relative">
+                  <MapPin className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Textarea
+                    placeholder="Building, road, area, and any delivery instructions"
+                    className="min-h-[80px] resize-none pl-9"
+                    {...field}
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -99,24 +104,26 @@ export function CheckoutForm({ tenant }: { tenant: string }) {
           name="notes"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex items-center gap-1.5">
-                <MessageSquare className="h-3.5 w-3.5 text-muted-foreground" />
-                Notes
+              <FormLabel>
+                Notes{" "}
                 <span className="ml-1 text-[10px] font-normal text-muted-foreground">(optional)</span>
               </FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Allergies, preferences, or any other notes"
-                  className="min-h-[64px] resize-none"
-                  {...field}
-                />
+                <div className="relative">
+                  <MessageSquare className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Textarea
+                    placeholder="Allergies, preferences, or any other notes"
+                    className="min-h-[64px] resize-none pl-9"
+                    {...field}
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button type="submit" className="h-11 w-full font-semibold" disabled={form.formState.isSubmitting}>
+        <Button type="submit" className="h-11 w-full rounded-xl text-base font-semibold" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

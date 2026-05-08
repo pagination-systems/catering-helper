@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ClipboardList, ShoppingCart } from "lucide-react";
+import { Check, ChevronLeft, ClipboardList, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { OrderSummary } from "../components/OrderSummary";
@@ -17,7 +17,7 @@ export const Checkout = ({ tenant }: { tenant: string }) => {
     <main className="bg-background" data-tenant={tenant}>
       <div className="mx-auto w-full max-w-[1260px] px-4 py-8 sm:px-6 lg:px-8">
         {/* Step indicator */}
-        <div className="mb-8 flex items-center justify-center gap-0">
+        <div className="mb-10 flex items-center justify-center">
           {steps.map((step, i) => {
             const Icon = step.icon;
             const done = i === 0;
@@ -45,28 +45,29 @@ export const Checkout = ({ tenant }: { tenant: string }) => {
                   </span>
                 </div>
                 {i < steps.length - 1 && (
-                  <div
-                    className={`mx-2 h-px w-12 sm:w-20 ${i === 0 ? "bg-primary" : "bg-border"}`}
-                  />
+                  <div className={`mx-3 mb-5 h-px w-16 sm:w-28 ${i === 0 ? "bg-primary" : "bg-border"}`} />
                 )}
               </div>
             );
           })}
         </div>
 
+        {/* Back link */}
+        <div className="mb-5">
+          <Link
+            href={`/${tenant}`}
+            className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Back to menu
+          </Link>
+        </div>
+
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <section>
-            <Card className="border-border/70 shadow-sm dark:bg-card">
+            <Card className="border-border/70 shadow-md dark:bg-card">
               <CardHeader className="pb-2">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-2xl font-semibold tracking-tight">Your Details</CardTitle>
-                  <Link
-                    href={`/${tenant}`}
-                    className="text-xs font-medium text-muted-foreground underline-offset-4 hover:underline"
-                  >
-                    ← Back to menu
-                  </Link>
-                </div>
+                <CardTitle className="text-2xl font-semibold tracking-tight">Your Details</CardTitle>
                 <p className="text-sm text-muted-foreground">Fill in your delivery information below.</p>
               </CardHeader>
               <CardContent className="pt-4">
