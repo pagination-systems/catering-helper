@@ -1,6 +1,7 @@
 import { EXPENSE_CATEGORY_ENUM } from "@catering/types";
 import type { Language } from "@/lib/i18n";
 import { useLanguage } from "@/providers/language-provider";
+import type { ExpenseValidationMessages } from "../schemas/expense.schema";
 
 export type ExpensesContent = {
   title: string;
@@ -51,6 +52,7 @@ export type ExpensesContent = {
     descriptionPlaceholder: string;
     submitCreate: string;
     submitSave: string;
+    validation: ExpenseValidationMessages;
   };
   delete: {
     title: string;
@@ -143,6 +145,14 @@ const content: Record<Language, ExpensesContent> = {
       descriptionPlaceholder: "Optional description",
       submitCreate: "Add Expense",
       submitSave: "Save Changes",
+      validation: {
+        labelRequired: "Label is required.",
+        dateRequired: "Date is required.",
+        dateFuture: "Date cannot be in the future.",
+        amountNumber: "Amount must be a number.",
+        amountFinite: "Amount must be a valid number.",
+        amountGtZero: "Amount must be greater than 0.",
+      },
     },
     delete: {
       title: "Delete expense?",
@@ -233,6 +243,14 @@ const content: Record<Language, ExpensesContent> = {
       descriptionPlaceholder: "ঐচ্ছিক বিবরণ",
       submitCreate: "খরচ যোগ করুন",
       submitSave: "পরিবর্তন সংরক্ষণ করুন",
+      validation: {
+        labelRequired: "লেবেল আবশ্যক।",
+        dateRequired: "তারিখ আবশ্যক।",
+        dateFuture: "তারিখ ভবিষ্যতে হতে পারবে না।",
+        amountNumber: "পরিমাণ অবশ্যই একটি সংখ্যা হতে হবে।",
+        amountFinite: "পরিমাণ একটি বৈধ সংখ্যা হতে হবে।",
+        amountGtZero: "পরিমাণ অবশ্যই ০ এর বেশি হতে হবে।",
+      },
     },
     delete: {
       title: "খরচ মুছবেন?",

@@ -1,5 +1,6 @@
 "use client";
 
+import type { PaginationMeta } from "@catering/types";
 import { ClipboardListIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
@@ -12,10 +13,11 @@ import { RowActions } from "./row-actions";
 
 interface ExpenseTableProps {
   data: IExpense[];
+  pagination: PaginationMeta;
   handlePaginate?: (page: number, limit: number) => void;
 }
 
-export const ExpenseTable = ({ data, handlePaginate }: ExpenseTableProps) => {
+export const ExpenseTable = ({ data, pagination, handlePaginate }: ExpenseTableProps) => {
   const openView = useExpensesStore((s) => s.openView);
   const i18n = useExpensesI18n();
 
@@ -63,17 +65,7 @@ export const ExpenseTable = ({ data, handlePaginate }: ExpenseTableProps) => {
     <DataTable
       data={data}
       columns={columns}
-      pagination={{
-        totalDocs: data.length,
-        limit: 10,
-        hasPrevPage: false,
-        hasNextPage: false,
-        page: 1,
-        totalPages: Math.max(1, Math.ceil(data.length / 10)),
-        prevPage: null,
-        nextPage: null,
-        pagingCounter: 1,
-      }}
+      pagination={pagination}
       handlePaginate={handlePaginate}
       getRowId={(item) => item.id}
       emptyState={

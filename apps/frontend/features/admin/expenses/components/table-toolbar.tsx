@@ -22,26 +22,25 @@ import { useExpensesStore } from "../store/useStore";
 import { downloadExpensesPdf } from "./expenses-pdf";
 
 interface TableToolbarProps {
-  filteredExpenses?: IExpense[];
+  expenses: IExpense[];
+  onSearch: (query: string) => void;
 }
 
-export const TableToolbar = ({ filteredExpenses = [] }: TableToolbarProps) => {
+export const TableToolbar = ({ expenses, onSearch }: TableToolbarProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const i18n = useExpensesI18n();
   const { language } = useLanguage();
 
-  const query = useExpensesStore((state) => state.query);
   const categoryFilter = useExpensesStore((state) => state.categoryFilter);
-  const setQuery = useExpensesStore((state) => state.setQuery);
   const setCategoryFilter = useExpensesStore((state) => state.setCategoryFilter);
   const openCreate = useExpensesStore((state) => state.openCreate);
 
   const handleDownload = async () => {
-    if (!filteredExpenses.length || isDownloading) return;
+    if (!expenses.length || isDownloading) return;
 
     try {
       setIsDownloading(true);
-      await downloadExpensesPdf({ entries: filteredExpenses, lang: language });
+      await downloadExpensesPdf({ entries: expenses, lang: language });
     } finally {
       setIsDownloading(false);
     }
@@ -52,8 +51,7 @@ export const TableToolbar = ({ filteredExpenses = [] }: TableToolbarProps) => {
       <div className="relative min-w-[14rem] flex-1">
         <SearchIcon className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => onSearch(event.target.value)}
           placeholder={i18n.toolbar.searchPlaceholder}
           className="pl-8"
         />
@@ -88,12 +86,7 @@ export const TableToolbar = ({ filteredExpenses = [] }: TableToolbarProps) => {
       </DropdownMenu>
 
       <Can I={AbilityAction.READ} a={ExpenseAuthZEntity}>
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={handleDownload}
-          disabled={!filteredExpenses.length || isDownloading}
-        >
+        <Button type="button" variant="secondary" onClick={handleDownload} disabled={isDownloading}>
           <DownloadIcon className="size-4" />
           {isDownloading ? i18n.toolbar.downloadPreparing : i18n.toolbar.download}
         </Button>
