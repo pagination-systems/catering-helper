@@ -33,6 +33,14 @@ export function Select<T extends string | number = string>({
     [options, value],
   );
 
+  // Render the menu in a portal so it escapes any `overflow-hidden`/stacking
+  // context from ancestors and always sits on top. Resolved after mount to
+  // avoid referencing `document` during SSR.
+  const [menuPortalTarget, setMenuPortalTarget] = React.useState<HTMLElement | null>(null);
+  React.useEffect(() => {
+    setMenuPortalTarget(document.body);
+  }, []);
+
   return (
     <ReactSelect<SelectOption<T>, false>
       unstyled
@@ -40,6 +48,9 @@ export function Select<T extends string | number = string>({
       inputId={props.inputId ?? reactSelectId}
       options={options}
       value={selectedOption}
+      menuPortalTarget={menuPortalTarget}
+      menuPosition="fixed"
+      styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
       onChange={(option) => {
         if (!option) {
           return;

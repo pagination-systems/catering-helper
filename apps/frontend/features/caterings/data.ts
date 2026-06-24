@@ -13,6 +13,8 @@ export type CateringListing = {
   /** Minimum number of meals required per order */
   minimumOrder: number;
   rating: number;
+  /** Number of customer ratings, shown next to the rating */
+  reviews: number;
   /** Short cuisine / specialty tags */
   cuisines: string[];
   popular?: boolean;
@@ -43,6 +45,7 @@ export const cateringListings: CateringListing[] = [
     startingPrice: 120,
     minimumOrder: 10,
     rating: 4.8,
+    reviews: 128,
     cuisines: ["Bengali", "Corporate"],
     popular: true,
   },
@@ -56,6 +59,7 @@ export const cateringListings: CateringListing[] = [
     startingPrice: 150,
     minimumOrder: 20,
     rating: 4.9,
+    reviews: 214,
     cuisines: ["Continental", "Premium"],
     popular: true,
   },
@@ -69,6 +73,7 @@ export const cateringListings: CateringListing[] = [
     startingPrice: 130,
     minimumOrder: 5,
     rating: 4.6,
+    reviews: 96,
     cuisines: ["Bengali", "Fast Casual"],
   },
   {
@@ -81,6 +86,7 @@ export const cateringListings: CateringListing[] = [
     startingPrice: 110,
     minimumOrder: 10,
     rating: 4.5,
+    reviews: 74,
     cuisines: ["Home Style", "Healthy"],
   },
   {
@@ -93,6 +99,7 @@ export const cateringListings: CateringListing[] = [
     startingPrice: 100,
     minimumOrder: 15,
     rating: 4.3,
+    reviews: 152,
     cuisines: ["Bengali", "Budget"],
   },
   {
@@ -105,6 +112,7 @@ export const cateringListings: CateringListing[] = [
     startingPrice: 160,
     minimumOrder: 30,
     rating: 4.7,
+    reviews: 88,
     cuisines: ["Events", "Premium"],
   },
   {
@@ -117,6 +125,7 @@ export const cateringListings: CateringListing[] = [
     startingPrice: 140,
     minimumOrder: 8,
     rating: 4.6,
+    reviews: 110,
     cuisines: ["Healthy", "Vegetarian"],
   },
   {
@@ -129,6 +138,7 @@ export const cateringListings: CateringListing[] = [
     startingPrice: 180,
     minimumOrder: 20,
     rating: 4.8,
+    reviews: 263,
     cuisines: ["Biryani", "Festive"],
   },
 ];
