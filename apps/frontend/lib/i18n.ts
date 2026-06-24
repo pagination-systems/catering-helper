@@ -325,5 +325,55 @@ export const clientPortalContent = {
   },
 } as const;
 
+export const cateringDirectoryContent = {
+  en: {
+    badge: "Order Meals",
+    title: "Find a Catering Service Near You",
+    subtitle: "Browse trusted caterers, compare packages, and order meals your whole team will love.",
+    searchPlaceholder: "Search caterings by name",
+    filtersLabel: "Filters",
+    locationLabel: "Location",
+    allLocations: "All locations",
+    priceLabel: "Max price per meal",
+    anyPrice: "Any price",
+    minOrderLabel: "Minimum order",
+    anyMinOrder: "Any quantity",
+    clearFilters: "Clear filters",
+    resultsLabel: "caterings available",
+    startingFrom: "From",
+    perMeal: "/ meal",
+    minOrderCardLabel: "Min. order",
+    mealsUnit: "meals",
+    viewMenu: "View Menu",
+    popular: "Popular",
+    emptyTitle: "No caterings match your filters",
+    emptyDescription: "Try adjusting or clearing your filters to see more options.",
+  },
+  bn: {
+    badge: "খাবার অর্ডার করুন",
+    title: "আপনার কাছাকাছি ক্যাটারিং সার্ভিস খুঁজুন",
+    subtitle: "বিশ্বস্ত ক্যাটারারদের দেখুন, প্যাকেজ তুলনা করুন এবং আপনার পুরো টিমের পছন্দের খাবার অর্ডার করুন।",
+    searchPlaceholder: "নাম দিয়ে ক্যাটারিং খুঁজুন",
+    filtersLabel: "ফিল্টার",
+    locationLabel: "অবস্থান",
+    allLocations: "সব অবস্থান",
+    priceLabel: "প্রতি মিল সর্বোচ্চ মূল্য",
+    anyPrice: "যেকোনো মূল্য",
+    minOrderLabel: "সর্বনিম্ন অর্ডার",
+    anyMinOrder: "যেকোনো পরিমাণ",
+    clearFilters: "ফিল্টার মুছুন",
+    resultsLabel: "টি ক্যাটারিং পাওয়া গেছে",
+    startingFrom: "শুরু",
+    perMeal: "/ মিল",
+    minOrderCardLabel: "সর্বনিম্ন অর্ডার",
+    mealsUnit: "টি মিল",
+    viewMenu: "মেনু দেখুন",
+    popular: "জনপ্রিয়",
+    emptyTitle: "আপনার ফিল্টারের সাথে কোনো ক্যাটারিং মেলেনি",
+    emptyDescription: "আরও অপশন দেখতে ফিল্টার পরিবর্তন করুন বা মুছে ফেলুন।",
+  },
+} as const;
+
 export type ClientPortalContent = (typeof clientPortalContent)[Language];
 export type LandingContent = (typeof landingContent)[Language];
+export type CateringDirectoryContent = (typeof cateringDirectoryContent)[Language];
