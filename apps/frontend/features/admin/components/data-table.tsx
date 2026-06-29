@@ -87,7 +87,7 @@ export const DataTable = <TData,>({
           </TableRow>
         </TableHeader>
 
-        <TableBody ref={tbodyRef}>
+        <TableBody ref={tbodyRef} key={pagination.page}>
           <If
             expression={data.length > 0}
             fallback={

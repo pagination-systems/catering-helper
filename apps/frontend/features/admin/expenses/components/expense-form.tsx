@@ -6,7 +6,6 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import type { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -14,38 +13,46 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { cn, formatDateValue } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { useExpensesI18n } from "../lib/expenses-i18n";
-import { type CreateExpenseValues, createExpenseSchema } from "../schemas/expense.schema";
+import { type ExpenseFormInput, expenseFormSchema, type IExpense } from "../schemas/expense.schema";
 
 const categories = Object.values(EXPENSE_CATEGORY_ENUM) as EXPENSE_CATEGORY_ENUM[];
 
+const toFormValues = (expense: IExpense): ExpenseFormInput => ({
+  label: expense.label,
+  description: expense.description ?? "",
+  date: new Date(expense.date),
+  category: expense.category,
+  amount: expense.amount,
+});
+
 interface ExpenseFormProps {
-  onSubmit: (values: CreateExpenseValues) => void;
-  initialValues?: CreateExpenseValues;
+  onSubmit: (values: ExpenseFormInput) => void;
+  initialValues?: IExpense;
   submitLabel?: string;
 }
-
-type ExpenseFormInputValues = z.input<typeof createExpenseSchema>;
 
 export const ExpenseForm = ({ onSubmit, initialValues, submitLabel }: ExpenseFormProps) => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const i18n = useExpensesI18n();
-  const resolvedSubmitLabel = submitLabel || i18n.form.submitCreate;
+  const resolvedSubmitLabel = submitLabel ?? i18n.form.submitCreate;
 
-  const form = useForm<ExpenseFormInputValues, unknown, CreateExpenseValues>({
-    resolver: zodResolver(createExpenseSchema),
-    defaultValues: initialValues ?? {
-      label: "",
-      description: "",
-      date: formatDateValue(new Date()),
-      category: EXPENSE_CATEGORY_ENUM.OTHER,
-      amount: 0,
-    },
+  const form = useForm<ExpenseFormInput>({
+    resolver: zodResolver(expenseFormSchema(i18n.form.validation)),
+    defaultValues: initialValues
+      ? toFormValues(initialValues)
+      : {
+          label: "",
+          description: "",
+          date: new Date(),
+          category: EXPENSE_CATEGORY_ENUM.OTHER,
+          amount: 0,
+        },
   });
 
   useEffect(() => {
-    if (initialValues) form.reset(initialValues);
+    if (initialValues) form.reset(toFormValues(initialValues));
   }, [initialValues, form]);
 
   return (
@@ -90,11 +97,7 @@ export const ExpenseForm = ({ onSubmit, initialValues, submitLabel }: ExpenseFor
                                   !field.value && "text-muted-foreground",
                                 )}
                               >
-                                {field.value ? (
-                                  format(new Date(field.value), "PPP")
-                                ) : (
-                                  <span>{i18n.form.datePlaceholder}</span>
-                                )}
+                                {field.value ? format(field.value, "PPP") : <span>{i18n.form.datePlaceholder}</span>}
                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                               </Button>
                             </FormControl>
@@ -102,9 +105,9 @@ export const ExpenseForm = ({ onSubmit, initialValues, submitLabel }: ExpenseFor
                           <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
                               mode="single"
-                              selected={field.value ? new Date(field.value) : undefined}
+                              selected={field.value}
                               onSelect={(date) => {
-                                field.onChange(date ? format(date, "yyyy-MM-dd") : "");
+                                field.onChange(date);
                                 setIsCalendarOpen(false);
                               }}
                               disabled={(date) => date > new Date() || date < new Date("1900-01-01")}

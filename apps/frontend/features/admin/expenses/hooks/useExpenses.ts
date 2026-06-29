@@ -3,8 +3,8 @@ import type { PaginationMeta } from "@catering/types";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useDebounce } from "@/hooks";
-import * as packageApi from "../api/package.api";
-import { PACKAGE_KEYS } from "../queries/package.keys";
+import * as expenseApi from "../api/expense.api";
+import { EXPENSE_KEYS } from "../queries/expense.keys";
 
 const DEFAULT_PAGINATION: PaginationMeta = {
   totalDocs: 0,
@@ -18,15 +18,15 @@ const DEFAULT_PAGINATION: PaginationMeta = {
   pagingCounter: 1,
 };
 
-export const usePackages = (tenantId?: string) => {
+export const useExpenses = (tenantId?: string) => {
   const [search, setSearch] = useState("");
   const controller = useBuildQueryString(tenantId ? { required: { value: { tenantId } } } : undefined);
   const debouncedSearch = useDebounce(search, 500);
   const controllerRef = useRef(controller);
 
   const { data, isLoading } = useQuery({
-    queryKey: PACKAGE_KEYS.lists(controller.query),
-    queryFn: () => packageApi.getPackages(controller.getQueryString()),
+    queryKey: EXPENSE_KEYS.lists(controller.query),
+    queryFn: () => expenseApi.getExpenses(controller.getQueryString()),
     placeholderData: keepPreviousData,
   });
 
@@ -36,17 +36,15 @@ export const usePackages = (tenantId?: string) => {
 
   useEffect(() => {
     if (debouncedSearch !== undefined) {
-      controllerRef.current.handleSearch({
-        value: { clientSearch: debouncedSearch },
-      });
+      controllerRef.current.handleSearch({ value: { clientSearch: debouncedSearch } });
     }
   }, [debouncedSearch]);
 
   return {
     ...controller,
-    packages: data?.packages || [],
+    expenses: data?.items ?? [],
     pagination: data?.pagination ?? DEFAULT_PAGINATION,
-    isGettingPackages: isLoading,
+    isLoading,
     onSearch: setSearch,
   };
 };

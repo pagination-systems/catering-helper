@@ -12,13 +12,14 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
+import { useHardDeleteExpense } from "../hooks/useHardDeleteExpense";
 import { interpolate, useExpensesI18n } from "../lib/expenses-i18n";
 import { useExpensesStore } from "../store/useStore";
 
 export const DeleteConfirmation = () => {
   const [confirmText, setConfirmText] = useState("");
   const i18n = useExpensesI18n();
-  const deleteExpense = useExpensesStore((state) => state.deleteExpense);
+  const { deleteItem, isDeleting } = useHardDeleteExpense();
   const isDeleteDialogOpen = useExpensesStore((state) => state.isDeleteDialogOpen);
   const selectedDeleteItem = useExpensesStore((state) => state.selectedDeleteItem);
   const setDeleteDialogOpen = useExpensesStore((state) => state.setDeleteDialogOpen);
@@ -33,9 +34,10 @@ export const DeleteConfirmation = () => {
 
   const onConfirmDelete = () => {
     if (!selectedDeleteItem || !isDeleteEnabled) return;
-    deleteExpense(selectedDeleteItem.id);
-    setConfirmText("");
-    closeDeleteDialog();
+    deleteItem(selectedDeleteItem.id, () => {
+      setConfirmText("");
+      closeDeleteDialog();
+    });
   };
 
   return (
@@ -61,7 +63,7 @@ export const DeleteConfirmation = () => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{i18n.delete.cancel}</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirmDelete} disabled={!isDeleteEnabled}>
+          <AlertDialogAction onClick={onConfirmDelete} disabled={!isDeleteEnabled || isDeleting}>
             {i18n.delete.confirm}
           </AlertDialogAction>
         </AlertDialogFooter>
