@@ -5,36 +5,51 @@ export function DayTab({
   dayLabel,
   dateLabel,
   active,
+  mealCount,
+  isToday,
   onClick,
 }: {
   dayLabel: string;
   dateLabel: string;
   active: boolean;
+  mealCount?: number;
+  isToday?: boolean;
   onClick: () => void;
 }) {
   return (
-    <Button
-      type="button"
-      variant="ghost"
-      onClick={onClick}
-      className={cn(
-        "group min-w-[74px] flex-1 sm:flex-none rounded-2xl border px-2.5 sm:px-3 py-2 text-left transition-all duration-200",
-        active
-          ? "border-primary bg-primary text-primary-foreground shadow-md ring-1 ring-primary hover:bg-primary hover:text-primary-foreground"
-          : "border-border/70 bg-background/70 hover:border-primary/40 hover:bg-muted",
-      )}
-    >
-      <p
+    <div className="relative inline-flex w-full">
+      <Button
+        type="button"
+        variant="ghost"
+        onClick={onClick}
         className={cn(
-          "text-[8px] sm:text-[10px] font-semibold uppercase tracking-[0.12em]",
-          active ? "text-primary-foreground/90" : "text-muted-foreground",
+          "w-full rounded-xl border px-3 py-2.5 text-left transition-all duration-200 flex flex-col items-start h-auto",
+          active
+            ? "border-primary bg-primary text-primary-foreground shadow-md hover:bg-primary hover:text-primary-foreground"
+            : "border-border/60 bg-background hover:border-primary/30 hover:bg-muted/50",
         )}
       >
-        {dateLabel}
-      </p>
-      <p className={cn("mt-0.5 text-xs sm:text-sm font-semibold", active ? "text-primary-foreground" : "")}>
-        {dayLabel}
-      </p>
-    </Button>
+        <p
+          className={cn(
+            "text-[9px] font-semibold uppercase tracking-widest leading-none",
+            active ? "text-primary-foreground/80" : "text-muted-foreground",
+          )}
+        >
+          {dateLabel}
+        </p>
+        <p className={cn("mt-1 text-sm font-semibold leading-none", active ? "text-primary-foreground" : "")}>
+          {dayLabel}
+        </p>
+        {isToday && !active && (
+          <p className="mt-0.5 text-[9px] font-semibold text-primary leading-none">Today</p>
+        )}
+      </Button>
+
+      {(mealCount ?? 0) > 0 && (
+        <span className="absolute -top-1.5 -right-1.5 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-primary-foreground ring-1 ring-background">
+          {mealCount}
+        </span>
+      )}
+    </div>
   );
 }

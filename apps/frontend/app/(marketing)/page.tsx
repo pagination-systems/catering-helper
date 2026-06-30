@@ -1,5 +1,11 @@
-import { Landing } from "@/features/marketing/landing";
+import type { Metadata } from "next";
+import { CateringDirectory } from "@/features/caterings";
 
-export default function LandingRoute() {
-  return <Landing />;
+export const metadata: Metadata = {
+  title: "Order Meals",
+  description: "Browse catering services, compare packages, and order meals for your team.",
+};
+
+export default function ClientDirectoryRoute() {
+  return <CateringDirectory />;
 }

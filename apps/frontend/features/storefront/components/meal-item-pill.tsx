@@ -1,12 +1,9 @@
-import { UtensilsCrossed } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export function MealItemPill({ label }: { label: string }) {
   return (
-    <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/80 px-2.5 py-1 text-xs text-foreground/90">
-      <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-muted text-primary">
-        <UtensilsCrossed className="h-3 w-3" />
-      </span>
-      <span>{label}</span>
-    </div>
+    <Badge variant="outline" className="text-xs font-normal">
+      {label}
+    </Badge>
   );
 }

@@ -56,7 +56,7 @@ export function Navbar() {
           Catering Helper
         </Link>
 
-        <div className="hidden items-center gap-6 text-[11px] font-medium md:flex">
+        {/* <div className="hidden items-center gap-6 text-[11px] font-medium md:flex">
           <Link href="/#solution" className="text-primary underline-offset-4 hover:underline">
             {content.solution}
           </Link>
@@ -69,7 +69,7 @@ export function Navbar() {
           <Link href="/#pricing" className="text-muted-foreground transition hover:text-foreground">
             {content.pricing}
           </Link>
-        </div>
+        </div> */}
 
         <div className="hidden items-center gap-2 md:flex">
           <DropdownMenu>
@@ -102,12 +102,12 @@ export function Navbar() {
           <Button variant="ghost" size="sm" className="h-8 px-2 text-[11px] font-medium text-foreground">
             {content.login}
           </Button>
-          <Button
+          {/* <Button
             size="sm"
             className="h-8 rounded-[4px] bg-primary px-3 text-[10px] font-semibold uppercase tracking-[0.04em] text-primary-foreground hover:bg-primary/90"
           >
             {content.startFreeTrial}
-          </Button>
+          </Button> */}
         </div>
 
         <div className="md:hidden">
