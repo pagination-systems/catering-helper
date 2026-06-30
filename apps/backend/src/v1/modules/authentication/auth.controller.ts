@@ -1,6 +1,7 @@
 import { StatusCodes } from "http-status-codes";
-import { ApiResponse, type ControllerParams, pick } from "../../../common/helper";
+import { ApiResponse, type AuthenticatedControllerParams, type ControllerParams, pick } from "../../../common/helper";
 import * as tokenService from "../token";
+import * as userService from "../user";
 import type { UserPayload } from "./auth.interface";
 import * as authService from "./auth.service";
 
@@ -223,6 +224,28 @@ export const verifyRecovery = async ({ req }: ControllerParams): Promise<ApiResp
         options: cookieOptions,
       },
     ],
+  });
+};
+
+export const me = async ({ req }: AuthenticatedControllerParams): Promise<ApiResponse> => {
+  const user = await userService.getUserById(req.session.user._id);
+
+  return new ApiResponse({
+    message: "Current user retrieved.",
+    statusCode: StatusCodes.OK,
+    data: pick(user, [
+      "id",
+      "firstName",
+      "lastName",
+      "fullName",
+      "email",
+      "emailVerificationStatus",
+      "type",
+      "role",
+      "tenantId",
+      "jobProfileId",
+    ]),
+    fieldName: "user",
   });
 };
 

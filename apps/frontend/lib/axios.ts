@@ -20,12 +20,14 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        await axios.post(`${API_BASE_URL}/auth/refresh`, {}, { withCredentials: true });
+        // Rotate tokens using the httpOnly refresh cookie, then replay the request.
+        // Uses a bare axios call so it doesn't recurse through this interceptor.
+        await axios.get(`${API_BASE_URL}/auth/refresh-access-token`, { withCredentials: true });
 
         return apiClient(originalRequest);
       } catch (refreshError) {
-        useAuthStore.getState().logout();
-        window.location.href = "/login";
+        // Session is gone — let the auth-aware UI redirect to the login screen.
+        useAuthStore.getState().clear();
         return Promise.reject(refreshError);
       }
     }

@@ -6,6 +6,7 @@ export const adminContent = {
       dashboard: "Dashboard",
       cateringHelper: "Catering Helper",
       tenants: "Tenants",
+      cateringOnboarding: "Catering Onboarding",
       customers: "Customers",
       packages: "Packages",
       orders: "Orders",
@@ -33,6 +34,9 @@ export const adminContent = {
         settings: "Settings",
         logout: "Logout",
       },
+    },
+    sidebar: {
+      exit: "Exit to site",
     },
     footer: {
       privacy: "Privacy",
@@ -87,12 +91,25 @@ export const adminContent = {
         terminatedCustomers: "Terminated Customers",
       },
     },
+    login: {
+      title: "Welcome back",
+      subtitle: "Sign in to your admin account to continue.",
+      emailLabel: "Email",
+      emailPlaceholder: "you@example.com",
+      passwordLabel: "Password",
+      passwordPlaceholder: "••••••••",
+      submit: "Sign in",
+    },
   },
   bn: {
+    sidebar: {
+      exit: "সাইটে ফিরে যান",
+    },
     nav: {
       dashboard: "ড্যাশবোর্ড",
       cateringHelper: "ক্যাটারিং সহকারী",
       tenants: "টেনেন্টস",
+      cateringOnboarding: "ক্যাটারিং অনবোর্ডিং",
       customers: "গ্রাহক",
       packages: "প্যাকেজ",
       orders: "অর্ডার",
@@ -173,6 +190,15 @@ export const adminContent = {
         totalCustomers: "মোট গ্রাহক",
         terminatedCustomers: "বন্ধ গ্রাহক",
       },
+    },
+    login: {
+      title: "স্বাগতম",
+      subtitle: "চালিয়ে যেতে আপনার অ্যাডমিন অ্যাকাউন্টে সাইন ইন করুন।",
+      emailLabel: "ইমেইল",
+      emailPlaceholder: "you@example.com",
+      passwordLabel: "পাসওয়ার্ড",
+      passwordPlaceholder: "••••••••",
+      submit: "সাইন ইন",
     },
   },
 } as const;

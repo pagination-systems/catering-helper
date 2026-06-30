@@ -24,23 +24,30 @@ import { type CateringDirectoryContent, cateringDirectoryContent } from "@/lib/i
 import { cn, formatCurrency } from "@/lib/utils";
 import { useLanguage } from "@/providers/language-provider";
 
-import { cateringAreas, cateringListings } from "./data";
+import { cateringAreas } from "./data";
+import { useCaterings } from "./hooks/useCaterings";
 
 type SortKey = "recommended" | "topRated" | "priceLow" | "priceHigh";
 
-// Stats are derived from the static directory data.
-const totalCaterers = cateringListings.length;
 const totalAreas = cateringAreas.length;
-const averageRating = (
-  cateringListings.reduce((sum, listing) => sum + listing.rating, 0) / cateringListings.length
-).toFixed(1);
-
-// Unique cuisine tags across all listings, used for the quick-filter chips.
-const cuisineOptions = Array.from(new Set(cateringListings.flatMap((listing) => listing.cuisines))).sort();
 
 export const CateringDirectory = () => {
   const { language } = useLanguage();
   const content = cateringDirectoryContent[language] as CateringDirectoryContent;
+
+  const { listings, isLoading } = useCaterings();
+
+  // Stats derived from the live directory data.
+  const totalCaterers = listings.length;
+  const averageRating = listings.length
+    ? (listings.reduce((sum, listing) => sum + listing.rating, 0) / listings.length).toFixed(1)
+    : "0.0";
+
+  // Unique cuisine tags across all listings, used for the quick-filter chips.
+  const cuisineOptions = useMemo(
+    () => Array.from(new Set(listings.flatMap((listing) => listing.cuisines))).sort(),
+    [listings],
+  );
 
   const [search, setSearch] = useState("");
   const [area, setArea] = useState("");
@@ -74,7 +81,7 @@ export const CateringDirectory = () => {
 
   const filtered = useMemo(() => {
     const query = appliedSearch.trim().toLowerCase();
-    const results = cateringListings.filter((listing) => {
+    const results = listings.filter((listing) => {
       if (query) {
         const haystack = [listing.name, ...listing.cuisines, listing.location].join(" ").toLowerCase();
         if (!haystack.includes(query)) return false;
@@ -98,7 +105,7 @@ export const CateringDirectory = () => {
           return Number(b.popular ?? false) - Number(a.popular ?? false) || b.rating - a.rating;
       }
     });
-  }, [appliedSearch, appliedArea, cuisine, maxPrice, minOrder, sort]);
+  }, [listings, appliedSearch, appliedArea, cuisine, maxPrice, minOrder, sort]);
 
   // Push the current name/location inputs into the applied state so the
   // listings re-filter. Triggered by the Search button / form submit.
@@ -322,7 +329,17 @@ export const CateringDirectory = () => {
         </div>
 
         {/* Results */}
-        {filtered.length > 0 ? (
+        {isLoading ? (
+          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div
+                // biome-ignore lint/suspicious/noArrayIndexKey: static skeleton placeholders
+                key={index}
+                className="h-72 animate-pulse rounded-2xl border border-border bg-card"
+              />
+            ))}
+          </div>
+        ) : filtered.length > 0 ? (
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((listing) => (
               <Link

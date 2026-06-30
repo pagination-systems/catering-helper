@@ -1,9 +1,10 @@
 import express, { type Router } from "express";
-import { handleController } from "../../../common/helper";
-import { validate } from "../../../common/middlewares";
+import { handleAuthenticatedController, handleController } from "../../../common/helper";
+import { deserializeUser, validate } from "../../../common/middlewares";
 import {
   login,
   logout,
+  me,
   recoverAccount,
   refreshAccessToken,
   registration,
@@ -52,6 +53,7 @@ router.post(
 // );
 // router.delete("/logout", validateCookies(logoutCookieSchema), handleController(logout));
 router.get("/refresh-access-token", handleController(refreshAccessToken));
+router.get("/me", deserializeUser, handleAuthenticatedController(me));
 router.delete("/logout", handleController(logout));
 
 export default router;

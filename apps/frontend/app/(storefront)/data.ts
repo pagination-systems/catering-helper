@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 export type TenantData = {
   slug: string;
   name: string;
@@ -36,13 +38,62 @@ const defaultTenantRecord: TenantRecord = {
   },
 };
 
-const tenants: Record<string, TenantRecord> = {
-  uttara: defaultTenantRecord,
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:9027/api/v1";
+
+/** Tenant document fields the storefront renders. */
+type RawTenant = {
+  slug: string;
+  name?: string;
+  headline?: string;
+  description?: string;
+  logoUrl?: string;
+  coverImageUrl?: string;
+  menuUrl?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  contactWhatsapp?: string;
+  contactAddress?: string;
+  socialFacebookUrl?: string;
+  socialInstagramUrl?: string;
+  socialYoutubeUrl?: string;
 };
 
-export const tenantData: TenantData = { slug: "uttara", ...defaultTenantRecord };
+const toTenantData = (raw: RawTenant): TenantData => ({
+  slug: raw.slug,
+  name: raw.name ?? "",
+  title: raw.headline || defaultTenantRecord.title,
+  logoUrl: raw.logoUrl || defaultTenantRecord.logoUrl,
+  // Hero image: prefer the cover, then the menu image, then a sensible default.
+  menuUrl: raw.coverImageUrl || raw.menuUrl || defaultTenantRecord.menuUrl,
+  description: raw.description || "",
+  contactEmail: raw.contactEmail ?? "",
+  contactPhone: raw.contactPhone ?? "",
+  contactWhatsapp: raw.contactWhatsapp ?? "",
+  address: raw.contactAddress ?? "",
+  social: {
+    facebook: raw.socialFacebookUrl ?? "",
+    instagram: raw.socialInstagramUrl ?? "",
+    youtube: raw.socialYoutubeUrl ?? "",
+  },
+});
 
-export function resolveTenantData(tenant = "uttara"): TenantData {
-  const key = tenant.toLowerCase();
-  return { slug: key, ...(tenants[key] ?? defaultTenantRecord) };
-}
+/**
+ * Fetch a tenant's public storefront data by slug. Memoized per request so the
+ * layout and page share a single backend call. Returns `null` when the tenant
+ * does not exist (callers should render a 404).
+ */
+export const getTenantData = cache(async (slug: string): Promise<TenantData | null> => {
+  try {
+    const response = await fetch(`${API_URL}/storefront/tenants/${slug.toLowerCase()}`, {
+      cache: "no-store",
+    });
+    if (!response.ok) return null;
+
+    const json = (await response.json()) as { tenant?: RawTenant };
+    if (!json.tenant) return null;
+
+    return toTenantData(json.tenant);
+  } catch {
+    return null;
+  }
+});

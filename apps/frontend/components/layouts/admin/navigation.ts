@@ -17,6 +17,7 @@ import {
   type LucideIcon,
   Package2,
   Settings,
+  Store,
   Users,
   Utensils,
   UtensilsCrossed,
@@ -65,6 +66,12 @@ export function getNavigationItems(lang: Language): NavigationItem[] {
       href: "/admin/tenants",
       icon: UtensilsCrossed,
       canView: (ability) => ability.can(AbilityAction.MANAGE, TenantAuthZEntity),
+    },
+    {
+      label: t.cateringOnboarding,
+      href: "/admin/catering-onboarding",
+      icon: Store,
+      canView: (ability) => ability.can(AbilityAction.CREATE, TenantAuthZEntity),
     },
     {
       label: t.customers,

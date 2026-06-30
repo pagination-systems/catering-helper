@@ -1,7 +1,8 @@
+import { notFound } from "next/navigation";
 import type React from "react";
 import { Footer } from "@/components/layouts/storefront/footer";
 import { Navbar } from "@/components/layouts/storefront/navbar";
-import { resolveTenantData } from "../data";
+import { getTenantData } from "../data";
 
 export default async function StorefrontLayout({
   children,
@@ -11,7 +12,11 @@ export default async function StorefrontLayout({
   params: Promise<{ tenant: string }>;
 }) {
   const { tenant } = await params;
-  const tenantData = resolveTenantData(tenant);
+  const tenantData = await getTenantData(tenant);
+
+  if (!tenantData) {
+    notFound();
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">

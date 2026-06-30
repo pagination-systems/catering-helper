@@ -44,7 +44,7 @@ export const TenantTable = ({ data, handlePaginate }: TenantTableProps) => {
       header: "Status",
       cell: (item) => (
         <span
-          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${getTenantStatusBadgeClassName(item.status)}`}
+          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium capitalize ${getTenantStatusBadgeClassName(item.status)}`}
         >
           {item.status}
         </span>

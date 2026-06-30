@@ -99,8 +99,8 @@ export function Navbar() {
             <ThemeIcon className="h-4 w-4" />
           </Button>
 
-          <Button variant="ghost" size="sm" className="h-8 px-2 text-[11px] font-medium text-foreground">
-            {content.login}
+          <Button asChild variant="ghost" size="sm" className="h-8 px-2 text-[11px] font-medium text-foreground">
+            <Link href="/admin/login">{content.login}</Link>
           </Button>
           {/* <Button
             size="sm"
@@ -143,7 +143,9 @@ export function Navbar() {
               <DropdownMenuItem onClick={() => setLanguage("en")}>EN</DropdownMenuItem>
               <DropdownMenuItem onClick={() => setLanguage("bn")}>BN</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>{content.login}</DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <Link href="/admin/login">{content.login}</Link>
+              </DropdownMenuItem>
               <DropdownMenuItem>{content.startFreeTrial}</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
