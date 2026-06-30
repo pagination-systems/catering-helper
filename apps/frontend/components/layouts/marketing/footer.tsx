@@ -32,7 +32,7 @@ export function Footer() {
             <Link href="/contact" className="text-muted-foreground transition hover:text-foreground">
               {content.contact}
             </Link>
-            <Link href="#" className="text-muted-foreground transition hover:text-foreground">
+            <Link href="/blog" className="text-muted-foreground transition hover:text-foreground">
               {content.blog}
             </Link>
           </div>

@@ -706,6 +706,381 @@ export const cateringDirectoryContent = {
   },
 } as const;
 
+export const marketingPagesContent = {
+  en: {
+    privacy: {
+      badge: "Legal",
+      title: "Privacy Policy",
+      subtitle: "How Catering Helper collects, uses, and protects your information.",
+      updated: "Last updated: June 30, 2026",
+      sections: [
+        {
+          heading: "Introduction",
+          paragraphs: [
+            'Catering Helper ("we", "us", or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our catering management platform.',
+            "By using Catering Helper, you agree to the practices described in this policy.",
+          ],
+        },
+        {
+          heading: "Information We Collect",
+          paragraphs: [
+            "Account information such as your name, business name, email address, and phone number when you register.",
+            "Order and payment details processed through the platform, including bKash and Nagad transaction references.",
+            "Usage data such as device information, browser type, and how you interact with our services.",
+          ],
+        },
+        {
+          heading: "How We Use Your Information",
+          paragraphs: [
+            "To provide, operate, and improve the Catering Helper platform.",
+            "To process orders, generate invoices, and reconcile payments.",
+            "To send important service updates, security alerts, and support messages.",
+            "To analyze usage and enhance features for the Bangladeshi catering market.",
+          ],
+        },
+        {
+          heading: "Sharing Your Information",
+          paragraphs: [
+            "We do not sell your personal information. We share data only with trusted service providers — such as payment processors and hosting partners — strictly to operate the platform, and only as required by law.",
+          ],
+        },
+        {
+          heading: "Data Security",
+          paragraphs: [
+            "We use industry-standard safeguards to protect your data. However, no method of transmission over the internet is completely secure, and we cannot guarantee absolute security.",
+          ],
+        },
+        {
+          heading: "Your Rights",
+          paragraphs: [
+            "You may access, update, or delete your account information at any time. To request data removal or ask questions about your data, contact us using the details on our Contact page.",
+          ],
+        },
+        {
+          heading: "Changes to This Policy",
+          paragraphs: [
+            "We may update this Privacy Policy from time to time. Material changes will be communicated through the platform or by email.",
+          ],
+        },
+        {
+          heading: "Contact Us",
+          paragraphs: [
+            "If you have questions about this Privacy Policy, reach us at support@cateringhelper.com.bd.",
+          ],
+        },
+      ],
+    },
+    terms: {
+      badge: "Legal",
+      title: "Terms of Service",
+      subtitle: "The terms that govern your use of Catering Helper.",
+      updated: "Last updated: June 30, 2026",
+      sections: [
+        {
+          heading: "Acceptance of Terms",
+          paragraphs: [
+            "By accessing or using Catering Helper, you agree to be bound by these Terms of Service. If you do not agree, please do not use the platform.",
+          ],
+        },
+        {
+          heading: "Use of the Service",
+          paragraphs: [
+            "You must be at least 18 years old and operate a legitimate catering or food business to use Catering Helper.",
+            "You are responsible for maintaining the confidentiality of your account credentials and for all activity under your account.",
+          ],
+        },
+        {
+          heading: "Subscriptions and Payments",
+          paragraphs: [
+            "Paid plans are billed monthly in Bangladeshi Taka (BDT). All plans include a one-month free trial unless stated otherwise.",
+            "You may cancel at any time; cancellation takes effect at the end of the current billing cycle. Fees already paid are non-refundable except where required by law.",
+          ],
+        },
+        {
+          heading: "Acceptable Use",
+          paragraphs: [
+            "You agree not to misuse the platform, including attempting to disrupt the service, access data without authorization, or use it for unlawful purposes.",
+          ],
+        },
+        {
+          heading: "Content and Data",
+          paragraphs: [
+            "You retain ownership of the menus, customer records, and other content you upload. You grant us a limited license to host and process this content solely to provide the service.",
+          ],
+        },
+        {
+          heading: "Service Availability",
+          paragraphs: [
+            "We strive to keep Catering Helper available at all times but do not guarantee uninterrupted access. We may modify or discontinue features with reasonable notice.",
+          ],
+        },
+        {
+          heading: "Limitation of Liability",
+          paragraphs: [
+            'Catering Helper is provided "as is". To the maximum extent permitted by law, we are not liable for indirect, incidental, or consequential damages arising from your use of the platform.',
+          ],
+        },
+        {
+          heading: "Termination",
+          paragraphs: [
+            "We may suspend or terminate your account if you violate these terms. You may stop using the service and close your account at any time.",
+          ],
+        },
+        {
+          heading: "Contact Us",
+          paragraphs: ["For questions about these Terms, contact us at support@cateringhelper.com.bd."],
+        },
+      ],
+    },
+    contact: {
+      badge: "Get in Touch",
+      title: "Contact Us",
+      subtitle: "Have a question or need a hand? Our team is here to help your catering business grow.",
+      infoTitle: "Reach us directly",
+      info: [
+        { label: "Email", value: "support@cateringhelper.com.bd" },
+        { label: "Phone", value: "+880 1700 000000" },
+        { label: "WhatsApp", value: "+880 1700 000000" },
+        { label: "Support Hours", value: "Sat – Thu, 9:00 AM – 9:00 PM (BST)" },
+        { label: "Office", value: "Gulshan, Dhaka, Bangladesh" },
+      ],
+      form: {
+        title: "Send us a message",
+        name: "Name",
+        namePlaceholder: "Your full name",
+        email: "Email",
+        emailPlaceholder: "you@example.com",
+        subject: "Subject",
+        subjectPlaceholder: "How can we help?",
+        message: "Message",
+        messagePlaceholder: "Write your message...",
+        submit: "Send Message",
+        success: "Opening your email app to send the message…",
+      },
+    },
+    blog: {
+      badge: "Blog",
+      title: "Catering Helper Blog",
+      subtitle: "Tips, guides, and stories to help you run a smarter catering business in Bangladesh.",
+      note: "Our blog is launching soon. Here's a preview of what we're cooking up.",
+      comingSoon: "Coming soon",
+      readMore: "Read more",
+      posts: [
+        {
+          category: "Growth",
+          title: "5 Ways to Handle the Eid Order Rush Without Burnout",
+          excerpt:
+            "Practical systems to manage the surge of orders during Eid and wedding season — without losing your evenings to WhatsApp.",
+          date: "Coming soon",
+          readTime: "6 min read",
+        },
+        {
+          category: "Payments",
+          title: "bKash & Nagad Reconciliation Made Simple",
+          excerpt:
+            "Stop chasing payment confirmations. Learn how to track and reconcile mobile payments automatically.",
+          date: "Coming soon",
+          readTime: "4 min read",
+        },
+        {
+          category: "Operations",
+          title: "Building the Perfect Bazar List in Seconds",
+          excerpt:
+            "How aggregated ingredient lists cut prep time and reduce waste for high-volume catering kitchens.",
+          date: "Coming soon",
+          readTime: "5 min read",
+        },
+      ],
+    },
+  },
+  bn: {
+    privacy: {
+      badge: "আইনগত",
+      title: "গোপনীয়তা নীতিমালা",
+      subtitle: "ক্যাটারিং হেল্পার কীভাবে আপনার তথ্য সংগ্রহ, ব্যবহার ও সুরক্ষা করে।",
+      updated: "সর্বশেষ হালনাগাদ: ৩০ জুন, ২০২৬",
+      sections: [
+        {
+          heading: "ভূমিকা",
+          paragraphs: [
+            "ক্যাটারিং হেল্পার আপনার গোপনীয়তা রক্ষায় প্রতিশ্রুতিবদ্ধ। এই নীতিমালায় ব্যাখ্যা করা হয়েছে আমাদের প্ল্যাটফর্ম ব্যবহারের সময় আমরা কীভাবে আপনার তথ্য সংগ্রহ, ব্যবহার ও সুরক্ষা করি।",
+            "ক্যাটারিং হেল্পার ব্যবহার করে আপনি এই নীতিমালায় বর্ণিত পদ্ধতিতে সম্মতি দিচ্ছেন।",
+          ],
+        },
+        {
+          heading: "আমরা যে তথ্য সংগ্রহ করি",
+          paragraphs: [
+            "রেজিস্ট্রেশনের সময় আপনার নাম, ব্যবসার নাম, ইমেইল ও ফোন নম্বরের মতো অ্যাকাউন্ট তথ্য।",
+            "প্ল্যাটফর্মে প্রক্রিয়াকৃত অর্ডার ও পেমেন্টের বিবরণ, বিকাশ ও নগদ ট্রান্জেকশন রেফারেন্সসহ।",
+            "ডিভাইস তথ্য, ব্রাউজারের ধরন এবং আপনি কীভাবে সেবা ব্যবহার করেন তার মতো ব্যবহারের তথ্য।",
+          ],
+        },
+        {
+          heading: "আমরা কীভাবে তথ্য ব্যবহার করি",
+          paragraphs: [
+            "ক্যাটারিং হেল্পার প্ল্যাটফর্ম পরিচালনা ও উন্নত করতে।",
+            "অর্ডার প্রক্রিয়া, ইনভয়েস তৈরি ও পেমেন্ট মেলাতে।",
+            "গুরুত্বপূর্ণ সেবা আপডেট, নিরাপত্তা সতর্কতা ও সহায়তা বার্তা পাঠাতে।",
+            "ব্যবহার বিশ্লেষণ করে বাংলাদেশের ক্যাটারিং বাজারের জন্য ফিচার উন্নত করতে।",
+          ],
+        },
+        {
+          heading: "তথ্য শেয়ারিং",
+          paragraphs: [
+            "আমরা আপনার ব্যক্তিগত তথ্য বিক্রি করি না। শুধুমাত্র প্ল্যাটফর্ম পরিচালনার জন্য বিশ্বস্ত সেবাদাতা — যেমন পেমেন্ট প্রসেসর ও হোস্টিং পার্টনার — এর সাথে এবং আইন অনুযায়ী প্রয়োজনে তথ্য শেয়ার করি।",
+          ],
+        },
+        {
+          heading: "তথ্য নিরাপত্তা",
+          paragraphs: [
+            "আমরা আপনার তথ্য সুরক্ষায় ইন্ডাস্ট্রি-স্ট্যান্ডার্ড নিরাপত্তা ব্যবস্থা ব্যবহার করি। তবে ইন্টারনেটে কোনো পদ্ধতিই সম্পূর্ণ নিরাপদ নয়, তাই পূর্ণ নিরাপত্তার নিশ্চয়তা দেওয়া সম্ভব নয়।",
+          ],
+        },
+        {
+          heading: "আপনার অধিকার",
+          paragraphs: [
+            "আপনি যেকোনো সময় আপনার অ্যাকাউন্ট তথ্য দেখতে, হালনাগাদ করতে বা মুছতে পারেন। তথ্য অপসারণের অনুরোধ বা প্রশ্নের জন্য আমাদের যোগাযোগ পেজে দেওয়া তথ্য ব্যবহার করুন।",
+          ],
+        },
+        {
+          heading: "নীতিমালার পরিবর্তন",
+          paragraphs: [
+            "আমরা সময়ে সময়ে এই নীতিমালা হালনাগাদ করতে পারি। গুরুত্বপূর্ণ পরিবর্তন প্ল্যাটফর্ম বা ইমেইলের মাধ্যমে জানানো হবে।",
+          ],
+        },
+        {
+          heading: "যোগাযোগ",
+          paragraphs: [
+            "এই গোপনীয়তা নীতিমালা সম্পর্কে প্রশ্ন থাকলে support@cateringhelper.com.bd এ যোগাযোগ করুন।",
+          ],
+        },
+      ],
+    },
+    terms: {
+      badge: "আইনগত",
+      title: "ব্যবহারের শর্তাবলী",
+      subtitle: "ক্যাটারিং হেল্পার ব্যবহারের শর্তসমূহ।",
+      updated: "সর্বশেষ হালনাগাদ: ৩০ জুন, ২০২৬",
+      sections: [
+        {
+          heading: "শর্ত গ্রহণ",
+          paragraphs: [
+            "ক্যাটারিং হেল্পার ব্যবহার করে আপনি এই শর্তাবলী মেনে নিতে সম্মত হচ্ছেন। সম্মত না হলে অনুগ্রহ করে প্ল্যাটফর্মটি ব্যবহার করবেন না।",
+          ],
+        },
+        {
+          heading: "সেবার ব্যবহার",
+          paragraphs: [
+            "ক্যাটারিং হেল্পার ব্যবহার করতে আপনাকে কমপক্ষে ১৮ বছর বয়সী হতে হবে এবং একটি বৈধ ক্যাটারিং বা খাদ্য ব্যবসা পরিচালনা করতে হবে।",
+            "আপনার অ্যাকাউন্টের তথ্যের গোপনীয়তা এবং অ্যাকাউন্টের অধীনে সকল কার্যকলাপের দায়িত্ব আপনার।",
+          ],
+        },
+        {
+          heading: "সাবস্ক্রিপশন ও পেমেন্ট",
+          paragraphs: [
+            "পেইড প্ল্যানগুলো বাংলাদেশী টাকায় মাসিক ভিত্তিতে বিল করা হয়। অন্যথায় উল্লেখ না থাকলে সব প্ল্যানে এক মাসের ফ্রি ট্রায়াল অন্তর্ভুক্ত।",
+            "আপনি যেকোনো সময় বাতিল করতে পারেন; বাতিল চলতি বিলিং চক্রের শেষে কার্যকর হয়। আইন দ্বারা প্রয়োজন না হলে পরিশোধিত ফি ফেরতযোগ্য নয়।",
+          ],
+        },
+        {
+          heading: "গ্রহণযোগ্য ব্যবহার",
+          paragraphs: [
+            "আপনি সেবা ব্যাহত করা, অনুমতি ছাড়া তথ্যে প্রবেশ করা বা বেআইনি উদ্দেশ্যে ব্যবহারসহ প্ল্যাটফর্মের অপব্যবহার না করতে সম্মত হচ্ছেন।",
+          ],
+        },
+        {
+          heading: "কন্টেন্ট ও ডেটা",
+          paragraphs: [
+            "আপনার আপলোড করা মেনু, গ্রাহক রেকর্ড ও অন্যান্য কন্টেন্টের মালিকানা আপনারই থাকে। সেবা প্রদানের জন্য আমরা এই কন্টেন্ট হোস্ট ও প্রক্রিয়া করার সীমিত অনুমতি পাই।",
+          ],
+        },
+        {
+          heading: "সেবার প্রাপ্যতা",
+          paragraphs: [
+            "আমরা সবসময় ক্যাটারিং হেল্পার সচল রাখার চেষ্টা করি, তবে নিরবচ্ছিন্ন প্রবেশের নিশ্চয়তা দিই না। যুক্তিসঙ্গত নোটিশসহ আমরা ফিচার পরিবর্তন বা বন্ধ করতে পারি।",
+          ],
+        },
+        {
+          heading: "দায়বদ্ধতার সীমা",
+          paragraphs: [
+            'ক্যাটারিং হেল্পার "যেমন আছে" ভিত্তিতে প্রদান করা হয়। আইন অনুমোদিত সর্বোচ্চ সীমা পর্যন্ত, প্ল্যাটফর্ম ব্যবহারজনিত পরোক্ষ বা আনুষঙ্গিক ক্ষতির জন্য আমরা দায়ী নই।',
+          ],
+        },
+        {
+          heading: "সমাপ্তি",
+          paragraphs: [
+            "শর্ত লঙ্ঘন করলে আমরা আপনার অ্যাকাউন্ট স্থগিত বা বন্ধ করতে পারি। আপনি যেকোনো সময় সেবা ব্যবহার বন্ধ করে অ্যাকাউন্ট বন্ধ করতে পারেন।",
+          ],
+        },
+        {
+          heading: "যোগাযোগ",
+          paragraphs: ["এই শর্তাবলী সম্পর্কে প্রশ্নের জন্য support@cateringhelper.com.bd এ যোগাযোগ করুন।"],
+        },
+      ],
+    },
+    contact: {
+      badge: "যোগাযোগ করুন",
+      title: "যোগাযোগ করুন",
+      subtitle: "প্রশ্ন আছে বা সাহায্য দরকার? আপনার ক্যাটারিং ব্যবসা বাড়াতে আমাদের টিম সবসময় পাশে আছে।",
+      infoTitle: "সরাসরি যোগাযোগ করুন",
+      info: [
+        { label: "ইমেইল", value: "support@cateringhelper.com.bd" },
+        { label: "ফোন", value: "+৮৮০ ১৭০০ ০০০০০০" },
+        { label: "হোয়াটসঅ্যাপ", value: "+৮৮০ ১৭০০ ০০০০০০" },
+        { label: "সহায়তা সময়", value: "শনি – বৃহস্পতি, সকাল ৯:০০ – রাত ৯:০০ (বাংলাদেশ সময়)" },
+        { label: "অফিস", value: "গুলশান, ঢাকা, বাংলাদেশ" },
+      ],
+      form: {
+        title: "আমাদের বার্তা পাঠান",
+        name: "নাম",
+        namePlaceholder: "আপনার পূর্ণ নাম",
+        email: "ইমেইল",
+        emailPlaceholder: "you@example.com",
+        subject: "বিষয়",
+        subjectPlaceholder: "আমরা কীভাবে সাহায্য করতে পারি?",
+        message: "বার্তা",
+        messagePlaceholder: "আপনার বার্তা লিখুন...",
+        submit: "বার্তা পাঠান",
+        success: "বার্তা পাঠাতে আপনার ইমেইল অ্যাপ খোলা হচ্ছে…",
+      },
+    },
+    blog: {
+      badge: "ব্লগ",
+      title: "ক্যাটারিং হেল্পার ব্লগ",
+      subtitle: "বাংলাদেশে স্মার্ট ক্যাটারিং ব্যবসা চালাতে টিপস, গাইড ও অভিজ্ঞতার গল্প।",
+      note: "আমাদের ব্লগ শীঘ্রই চালু হচ্ছে। যা আসছে তার একটি ঝলক দেখে নিন।",
+      comingSoon: "শীঘ্রই আসছে",
+      readMore: "আরও পড়ুন",
+      posts: [
+        {
+          category: "গ্রোথ",
+          title: "ক্লান্তি ছাড়াই ঈদের অর্ডারের চাপ সামলানোর ৫টি উপায়",
+          excerpt:
+            "ঈদ ও বিয়ের মৌসুমে অর্ডারের ঢল সামলানোর কার্যকর পদ্ধতি — সন্ধ্যাগুলো হোয়াটসঅ্যাপে নষ্ট না করে।",
+          date: "শীঘ্রই আসছে",
+          readTime: "৬ মিনিট পড়া",
+        },
+        {
+          category: "পেমেন্ট",
+          title: "বিকাশ ও নগদ রিকনসিলিয়েশন সহজভাবে",
+          excerpt:
+            "পেমেন্ট কনফার্মেশনের পেছনে ছোটা বন্ধ করুন। স্বয়ংক্রিয়ভাবে মোবাইল পেমেন্ট ট্র্যাক ও মেলানো শিখুন।",
+          date: "শীঘ্রই আসছে",
+          readTime: "৪ মিনিট পড়া",
+        },
+        {
+          category: "অপারেশন",
+          title: "কয়েক সেকেন্ডে নিখুঁত বাজার তালিকা তৈরি",
+          excerpt: "অ্যাগ্রিগেটেড উপকরণ তালিকা কীভাবে প্রস্তুতির সময় কমায় ও অপচয় রোধ করে।",
+          date: "শীঘ্রই আসছে",
+          readTime: "৫ মিনিট পড়া",
+        },
+      ],
+    },
+  },
+} as const;
+
 export type ClientPortalContent = (typeof clientPortalContent)[Language];
 export type LandingContent = (typeof landingContent)[Language];
 export type CateringDirectoryContent = (typeof cateringDirectoryContent)[Language];
+export type MarketingPagesContent = (typeof marketingPagesContent)[Language];
