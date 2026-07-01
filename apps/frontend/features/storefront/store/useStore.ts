@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { type CateringPackage, type DayName, packages } from "../data";
+import { type CateringPackage, type DayName, dayOrder } from "../data";
 
 export type PackageSelectionState = {
   activeDay: DayName;
@@ -7,6 +7,7 @@ export type PackageSelectionState = {
 };
 
 type ClientPortalState = {
+  packages: CateringPackage[];
   activePackageId: string;
   customizerOpen: boolean;
   mobileSummaryOpen: boolean;
@@ -14,6 +15,7 @@ type ClientPortalState = {
   packageSelections: Record<string, PackageSelectionState>;
 
   // Actions
+  initializePackages: (packages: CateringPackage[]) => void;
   setActivePackageId: (id: string) => void;
   setCustomizerOpen: (open: boolean) => void;
   setMobileSummaryOpen: (open: boolean) => void;
@@ -35,7 +37,7 @@ export function createQuantityKey(day: DayName, variantId: string): string {
 
 function createInitialSelection(menuPackage: CateringPackage): PackageSelectionState {
   const today = getTodayDayName();
-  const fallbackDay = menuPackage.days[0]?.day ?? "Saturday";
+  const fallbackDay = menuPackage.days[0]?.day ?? dayOrder[0];
 
   return {
     activeDay: menuPackage.days.some((day) => day.day === today) ? today : fallbackDay,
@@ -44,11 +46,29 @@ function createInitialSelection(menuPackage: CateringPackage): PackageSelectionS
 }
 
 export const useStorefrontStore = create<ClientPortalState>((set) => ({
-  activePackageId: packages.find((pkg) => pkg.popular)?.id ?? packages[0]?.id ?? "",
+  packages: [],
+  activePackageId: "",
   customizerOpen: true,
   mobileSummaryOpen: false,
   recentlyUpdatedKey: null,
-  packageSelections: Object.fromEntries(packages.map((pkg) => [pkg.id, createInitialSelection(pkg)])),
+  packageSelections: {},
+
+  // Hydrate the store with the tenant's real packages. Preserves any existing
+  // selections (by package id) so switching languages / remounting keeps the cart.
+  initializePackages: (packages) =>
+    set((state) => {
+      const packageSelections: Record<string, PackageSelectionState> = {};
+      packages.forEach((pkg) => {
+        packageSelections[pkg.id] = state.packageSelections[pkg.id] ?? createInitialSelection(pkg);
+      });
+
+      const activeStillValid = packages.some((pkg) => pkg.id === state.activePackageId);
+      const activePackageId = activeStillValid
+        ? state.activePackageId
+        : (packages.find((pkg) => pkg.popular)?.id ?? packages[0]?.id ?? "");
+
+      return { packages, packageSelections, activePackageId };
+    }),
 
   setActivePackageId: (id) => set({ activePackageId: id }),
   setCustomizerOpen: (open) => set({ customizerOpen: open }),
@@ -61,8 +81,9 @@ export const useStorefrontStore = create<ClientPortalState>((set) => ({
 
   setActiveDay: (pkgId, day) => {
     set((state) => {
+      const pkg = state.packages.find((p) => p.id === pkgId);
       const currentSelection =
-        state.packageSelections[pkgId] || createInitialSelection(packages.find((p) => p.id === pkgId)!);
+        state.packageSelections[pkgId] ?? (pkg ? createInitialSelection(pkg) : { activeDay: day, quantities: {} });
       return {
         packageSelections: {
           ...state.packageSelections,
@@ -80,7 +101,7 @@ export const useStorefrontStore = create<ClientPortalState>((set) => ({
     const key = createQuantityKey(day, variantId);
 
     set((state) => {
-      const pkgDefinition = packages.find((p) => p.id === pkgId);
+      const pkgDefinition = state.packages.find((p) => p.id === pkgId);
       if (!pkgDefinition) return state;
 
       const currentPkgSelection = state.packageSelections[pkgId] ?? createInitialSelection(pkgDefinition);

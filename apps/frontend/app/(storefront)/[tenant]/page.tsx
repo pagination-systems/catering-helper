@@ -1,14 +1,14 @@
 import { notFound } from "next/navigation";
 import { StoreFront } from "@/features/storefront";
-import { getTenantData } from "../data";
+import { getTenantData, getTenantPackages } from "../data";
 
 export default async function StoreFrontRoute({ params }: { params: Promise<{ tenant: string }> }) {
   const { tenant } = await params;
-  const tenantData = await getTenantData(tenant);
+  const [tenantData, packages] = await Promise.all([getTenantData(tenant), getTenantPackages(tenant)]);
 
   if (!tenantData) {
     notFound();
   }
 
-  return <StoreFront tenant={tenantData} />;
+  return <StoreFront tenant={tenantData} packages={packages} />;
 }

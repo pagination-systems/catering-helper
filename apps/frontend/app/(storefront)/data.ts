@@ -1,4 +1,5 @@
 import { cache } from "react";
+import type { CateringPackage, DayName, MenuVariant } from "@/features/storefront/data";
 
 export type TenantData = {
   slug: string;
@@ -95,5 +96,65 @@ export const getTenantData = cache(async (slug: string): Promise<TenantData | nu
     return toTenantData(json.tenant);
   } catch {
     return null;
+  }
+});
+
+/** Package document fields the storefront renders. */
+type RawVariant = {
+  id?: string;
+  name?: string;
+  note?: string;
+  items?: string[];
+  available?: boolean;
+};
+
+type RawDay = {
+  day: DayName;
+  variants?: RawVariant[];
+};
+
+type RawPackage = {
+  _id?: string;
+  id?: string;
+  name?: string;
+  description?: string;
+  pricePerMeal?: number;
+  days?: RawDay[];
+};
+
+const toMenuVariant = (raw: RawVariant): MenuVariant => ({
+  id: raw.id ?? "",
+  name: raw.name ?? "",
+  note: raw.note ?? "",
+  items: raw.items ?? [],
+  available: raw.available ?? true,
+});
+
+const toCateringPackage = (raw: RawPackage): CateringPackage => ({
+  id: raw._id ?? raw.id ?? "",
+  name: raw.name ?? "",
+  description: raw.description ?? "",
+  pricePerMeal: raw.pricePerMeal ?? 0,
+  days: (raw.days ?? []).map((day) => ({
+    day: day.day,
+    variants: (day.variants ?? []).map(toMenuVariant),
+  })),
+});
+
+/**
+ * Fetch a tenant's active storefront packages by slug. Memoized per request so
+ * the page can share the call. Returns an empty list on error / no packages.
+ */
+export const getTenantPackages = cache(async (slug: string): Promise<CateringPackage[]> => {
+  try {
+    const response = await fetch(`${API_URL}/storefront/tenants/${slug.toLowerCase()}/packages?limit=100`, {
+      cache: "no-store",
+    });
+    if (!response.ok) return [];
+
+    const json = (await response.json()) as { packages?: RawPackage[] };
+    return (json.packages ?? []).map(toCateringPackage);
+  } catch {
+    return [];
   }
 });

@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/lib/toast";
+import type { CreatePackageInput } from "../api/package.api";
 import * as packageApi from "../api/package.api";
 import { PACKAGE_KEYS } from "../queries/package.keys";
-import type { packageFormInput } from "../schemas/package.schema";
+// CreatePackageInput carries the tenantId alongside the validated form fields.
 
 export const useCreatePackage = () => {
   const queryClient = useQueryClient();
@@ -23,7 +24,7 @@ export const useCreatePackage = () => {
     },
   });
 
-  const createPackage = (packageData: packageFormInput, callback?: () => void) => {
+  const createPackage = (packageData: CreatePackageInput, callback?: () => void) => {
     mutation.mutate(packageData, {
       onSuccess: () => {
         callback?.();

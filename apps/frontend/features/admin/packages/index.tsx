@@ -15,6 +15,8 @@ import { useCreatePackage, usePackages } from "./hooks";
 import { usePackagesI18n } from "./lib/packages-i18n";
 import { usePackagesStore } from "./store/useStore";
 
+export { EditPackage } from "./components/edit-package";
+
 interface PackagesProps {
   title?: string;
   description?: string;
@@ -67,7 +69,10 @@ export const Packages = ({ title, description, tenantId }: PackagesProps) => {
 
           <PackageForm
             key={`${language}-create`}
-            onSubmit={(values) => createPackage(values, closeCreateSheet)}
+            onSubmit={(values) => {
+              if (!tenantId) return;
+              createPackage({ ...values, tenantId }, closeCreateSheet);
+            }}
             submitLabel={i18n.form.submitCreate}
           />
         </SheetContent>
@@ -95,7 +100,7 @@ export const Packages = ({ title, description, tenantId }: PackagesProps) => {
             expression={!!selectedViewItem}
             fallback={<p className="text-sm text-muted-foreground">{i18n.details.noPackage}</p>}
           >
-            {selectedViewItem && <PackageDetails id={selectedViewItem.id} />}
+            {selectedViewItem && <PackageDetails id={selectedViewItem.id} tenantId={tenantId} />}
           </If>
         </SheetContent>
       </Sheet>
