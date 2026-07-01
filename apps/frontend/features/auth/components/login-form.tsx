@@ -1,7 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -15,6 +17,7 @@ export function LoginForm() {
   const { language } = useLanguage();
   const t = getAdminContent(language).login;
   const { login, isSubmitting } = useLogin();
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
@@ -45,14 +48,33 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t.passwordLabel}</FormLabel>
+              <div className="flex items-center justify-between gap-2">
+                <FormLabel>{t.passwordLabel}</FormLabel>
+                <Link
+                  href="/admin/forgot-password"
+                  className="text-xs font-medium text-primary hover:underline"
+                >
+                  {t.forgotPassword}
+                </Link>
+              </div>
               <FormControl>
-                <Input
-                  type="password"
-                  autoComplete="current-password"
-                  placeholder={t.passwordPlaceholder}
-                  {...field}
-                />
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    autoComplete="current-password"
+                    placeholder={t.passwordPlaceholder}
+                    className="pr-9"
+                    {...field}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    aria-label={showPassword ? t.hidePassword : t.showPassword}
+                    className="absolute inset-y-0 right-0 flex items-center px-2.5 text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -13,6 +13,9 @@ import { Sidebar } from "./sidebar";
 
 const LOGIN_PATH = "/admin/login";
 
+/** Routes rendered without the admin chrome or auth guard. */
+const PUBLIC_PATHS = new Set<string>([LOGIN_PATH, "/admin/forgot-password"]);
+
 const FullScreenLoader = () => (
   <div className="flex min-h-screen items-center justify-center bg-background text-muted-foreground">
     <Loader2 className="h-6 w-6 animate-spin" />
@@ -49,14 +52,14 @@ const AuthenticatedShell = ({ children }: { children: ReactNode }) => {
  * Top-level gate for the `/admin` segment.
  *
  * - Bootstraps the session from the httpOnly cookie once on mount.
- * - Renders the public login route without the admin chrome.
+ * - Renders public routes (login, forgot password) without the admin chrome.
  * - Guards every other route behind authentication.
  */
 export function AdminShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   useAuthBootstrap();
 
-  if (pathname === LOGIN_PATH) return <>{children}</>;
+  if (PUBLIC_PATHS.has(pathname)) return <>{children}</>;
 
   return <AuthenticatedShell>{children}</AuthenticatedShell>;
 }
