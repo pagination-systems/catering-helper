@@ -3,6 +3,7 @@ export const modelNames = {
   FILE_MEDIA: "filemedias",
   TENANT: "tenants",
   PACKAGE: "packages",
+  ORDER: "orders",
   TOKEN_PAIR: "tokenpairs",
   VERIFICATION_TOKEN: "verificationtokens",
 };

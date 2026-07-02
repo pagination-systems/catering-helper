@@ -10,6 +10,26 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/lib/toast";
+import { formatDateValue } from "@/lib/utils";
+import { useLanguage } from "@/providers/language-provider";
+import { placeOrder } from "../../api/order.api";
+import type { DayName } from "../../data";
+import { useOrderSummaryData } from "../../order-summary-data";
+
+const DELIVERY_FEE = 60;
+const daysByJsIndex: DayName[] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+/** Earliest upcoming date (within a week) whose weekday is present in the cart. */
+const resolveDeliveryDate = (selectedDays: Set<DayName>): Date => {
+  const today = new Date();
+  for (let offset = 0; offset < 7; offset += 1) {
+    const candidate = new Date(today);
+    candidate.setDate(today.getDate() + offset);
+    if (selectedDays.has(daysByJsIndex[candidate.getDay()])) return candidate;
+  }
+  return today;
+};
 
 const bdPhoneRegex = /^01[3-9]\d{8}$/;
 
@@ -24,6 +44,8 @@ type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
 export function CheckoutForm({ tenant }: { tenant: string }) {
   const router = useRouter();
+  const { language } = useLanguage();
+  const { orderRows } = useOrderSummaryData(language);
 
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
@@ -31,8 +53,35 @@ export function CheckoutForm({ tenant }: { tenant: string }) {
   });
 
   const onSubmit = async (values: CheckoutFormValues) => {
-    console.log("Checkout payload", values);
-    router.push(`/${tenant}/order-success`);
+    if (orderRows.length === 0) {
+      toast.error("Your cart is empty. Please add meals before placing an order.");
+      return;
+    }
+
+    const deliveryDate = resolveDeliveryDate(new Set(orderRows.map((row) => row.day)));
+
+    try {
+      await placeOrder(tenant, {
+        customerName: values.name,
+        customerPhone: values.phone,
+        deliveryAddress: values.address,
+        notes: values.notes ?? "",
+        packageName: orderRows[0].packageName,
+        deliveryDate: formatDateValue(deliveryDate),
+        deliveryFee: DELIVERY_FEE,
+        items: orderRows.map((row) => ({
+          packageId: row.pkgId,
+          variantName: row.label,
+          quantity: row.quantity,
+          items: row.items,
+        })),
+      });
+
+      router.push(`/${tenant}/order-success`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to place order. Please try again.";
+      toast.error(message);
+    }
   };
 
   return (
@@ -105,8 +154,7 @@ export function CheckoutForm({ tenant }: { tenant: string }) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Notes{" "}
-                <span className="ml-1 text-[10px] font-normal text-muted-foreground">(optional)</span>
+                Notes <span className="ml-1 text-[10px] font-normal text-muted-foreground">(optional)</span>
               </FormLabel>
               <FormControl>
                 <div className="relative">
@@ -123,7 +171,11 @@ export function CheckoutForm({ tenant }: { tenant: string }) {
           )}
         />
 
-        <Button type="submit" className="h-11 w-full rounded-xl text-base font-semibold" disabled={form.formState.isSubmitting}>
+        <Button
+          type="submit"
+          className="h-11 w-full rounded-xl text-base font-semibold"
+          disabled={form.formState.isSubmitting}
+        >
           {form.formState.isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

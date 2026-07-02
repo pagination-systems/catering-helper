@@ -23,7 +23,7 @@ export const useCreateOrder = () => {
     },
   });
 
-  const createOrder = (orderData: OrderFormInput, callback?: () => void) => {
+  const createOrder = (orderData: OrderFormInput & { tenantId?: string }, callback?: () => void) => {
     mutation.mutate(orderData, {
       onSuccess: () => {
         callback?.();

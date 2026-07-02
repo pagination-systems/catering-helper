@@ -1,6 +1,8 @@
 import express, { type Express } from "express";
 import { deserializeUser } from "../../common/middlewares";
 import authRoutes from "../modules/authentication/auth.route";
+import orderPublicRoutes from "../modules/order/public.route";
+import orderRoutes from "../modules/order/route";
 import packagePublicRoutes from "../modules/package/public.route";
 import packageRoutes from "../modules/package/route";
 import tenantPublicRoutes from "../modules/tenant/public.route";
@@ -15,6 +17,7 @@ const getApiRoutes = () => {
   // Authenticated routes (registered after deserializeUser below)
   router.use("/tenants", tenantRoutes);
   router.use("/packages", packageRoutes);
+  router.use("/orders", orderRoutes);
   return router;
 };
 
@@ -23,6 +26,7 @@ export const setupApiRoutes = (app: Express): void => {
   // Public storefront endpoints — registered before deserializeUser so they stay unauthenticated.
   router.use("/storefront", tenantPublicRoutes);
   router.use("/storefront", packagePublicRoutes);
+  router.use("/storefront", orderPublicRoutes);
   router.use(deserializeUser);
   app.use("/api/v1", getApiRoutes());
 };

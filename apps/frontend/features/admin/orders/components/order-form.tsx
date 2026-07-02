@@ -11,12 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn, formatCurrency, formatDateValue } from "@/lib/utils";
-import {
-  adminPackageCatalog,
-  getPackageByName,
-  getPriceByPackageName,
-  getVariantsByPackageName,
-} from "../data/package-catalog";
+import { type OrderCatalogVariant, usePackageCatalog } from "../hooks/usePackageCatalog";
 import { interpolate, useOrdersI18n } from "../lib/orders-i18n";
 import { type IOrder, type OrderFormInput, orderFormSchema } from "../schemas/order.schema";
 import type { DaySlot } from "../store/useStore";
@@ -27,6 +22,7 @@ interface OrderFormProps {
   initialData?: IOrder;
   submitLabel?: string;
   upcomingDays: DaySlot[];
+  tenantId?: string;
 }
 
 const DELIVERY_FEE = 60;
@@ -41,17 +37,28 @@ const getDefaultValues = (initialData: IOrder | undefined): OrderFormInput => ({
   deliveryDate: initialData?.deliveryDate ? formatDateValue(new Date(initialData.deliveryDate)) : "",
   items:
     initialData?.items.map((item) => ({
+      packageId: item.packageId,
       packageName: item.packageName,
       variantName: item.variantName,
       quantity: item.quantity,
+      items: item.items,
     })) ?? [],
 });
 
-const lineItemKey = (packageName: string, variantName: string) => `${packageName}::${variantName}`;
+// Line items are keyed by package id + variant so identically named variants
+// across different packages never collide.
+const lineItemKey = (packageId: string, variantName: string) => `${packageId}::${variantName}`;
 
-export const OrderForm = ({ onSubmit, initialData, submitLabel = "Create Order", upcomingDays }: OrderFormProps) => {
+export const OrderForm = ({
+  onSubmit,
+  initialData,
+  submitLabel = "Create Order",
+  upcomingDays,
+  tenantId,
+}: OrderFormProps) => {
   const i18n = useOrdersI18n();
-  const packageOptions = useMemo(() => adminPackageCatalog.map((pkg) => pkg.name), []);
+  const { catalog } = usePackageCatalog(tenantId);
+  const priceByPackageId = useMemo(() => new Map(catalog.map((pkg) => [pkg.id, pkg.pricePerMeal])), [catalog]);
 
   const deliveryDateCards = useMemo(
     () =>
@@ -78,9 +85,13 @@ export const OrderForm = ({ onSubmit, initialData, submitLabel = "Create Order",
   const selectedDeliveryDate = useWatch({ control: form.control, name: "deliveryDate" });
   const selectedItems = useWatch({ control: form.control, name: "items" }) ?? [];
 
-  const activePackageName = selectedPackageName || packageOptions[0] || "";
-  const variantOptions = useMemo(() => getVariantsByPackageName(activePackageName), [activePackageName]);
-  const pricePerMeal = useMemo(() => getPackageByName(activePackageName)?.pricePerMeal ?? 0, [activePackageName]);
+  const activePackageName = selectedPackageName || catalog[0]?.name || "";
+  const activePackage = useMemo(
+    () => catalog.find((pkg) => pkg.name === activePackageName),
+    [catalog, activePackageName],
+  );
+  const variantOptions = activePackage?.variants ?? [];
+  const pricePerMeal = activePackage?.pricePerMeal ?? 0;
   const activeDeliveryDate = selectedDeliveryDate || deliveryDateCards[0]?.value || "";
   const activeDeliveryTab = deliveryDateCards.find((day) => day.value === activeDeliveryDate) ?? null;
   const activeDeliveryLabel = activeDeliveryTab
@@ -88,15 +99,15 @@ export const OrderForm = ({ onSubmit, initialData, submitLabel = "Create Order",
     : activeDeliveryDate;
 
   const selectedItemMap = useMemo(() => {
-    return new Map(selectedItems.map((item) => [lineItemKey(item.packageName, item.variantName), item.quantity]));
+    return new Map(selectedItems.map((item) => [lineItemKey(item.packageId, item.variantName), item.quantity]));
   }, [selectedItems]);
 
   const activeDateSubtotal = useMemo(
     () =>
       selectedItems
-        .filter((item) => item.packageName === activePackageName)
+        .filter((item) => item.packageId === activePackage?.id)
         .reduce((count, item) => count + item.quantity * pricePerMeal, 0),
-    [activePackageName, pricePerMeal, selectedItems],
+    [activePackage?.id, pricePerMeal, selectedItems],
   );
 
   const selectedVariants = useMemo(
@@ -104,15 +115,18 @@ export const OrderForm = ({ onSubmit, initialData, submitLabel = "Create Order",
       selectedItems
         .map((item) => ({
           ...item,
-          subtotal: item.quantity * getPriceByPackageName(item.packageName),
+          subtotal: item.quantity * (priceByPackageId.get(item.packageId) ?? 0),
         }))
-        .sort((left, right) => left.packageName.localeCompare(right.packageName) || left.variantName.localeCompare(right.variantName)),
-    [selectedItems],
+        .sort(
+          (left, right) =>
+            left.packageName.localeCompare(right.packageName) || left.variantName.localeCompare(right.variantName),
+        ),
+    [selectedItems, priceByPackageId],
   );
 
   const selectedSubtotal = useMemo(
-    () => selectedItems.reduce((count, item) => count + item.quantity * getPriceByPackageName(item.packageName), 0),
-    [selectedItems],
+    () => selectedItems.reduce((count, item) => count + item.quantity * (priceByPackageId.get(item.packageId) ?? 0), 0),
+    [selectedItems, priceByPackageId],
   );
   const totalPrice = selectedSubtotal + DELIVERY_FEE;
 
@@ -134,21 +148,28 @@ export const OrderForm = ({ onSubmit, initialData, submitLabel = "Create Order",
     });
   };
 
-  const updateVariantQuantity = (variantName: string, nextQuantity: number) => {
+  const updateVariantQuantity = (variant: OrderCatalogVariant, nextQuantity: number) => {
+    if (!activePackage) return;
+
     const safeQuantity = Math.max(0, Math.min(500, nextQuantity));
     const currentItems = form.getValues("items");
-    const key = lineItemKey(activePackageName, variantName);
-    const nextItems = currentItems.filter((item) => lineItemKey(item.packageName, item.variantName) !== key);
+    const key = lineItemKey(activePackage.id, variant.name);
+    const nextItems = currentItems.filter((item) => lineItemKey(item.packageId, item.variantName) !== key);
 
     if (safeQuantity > 0) {
       nextItems.push({
-        packageName: activePackageName,
-        variantName,
+        packageId: activePackage.id,
+        packageName: activePackage.name,
+        variantName: variant.name,
         quantity: safeQuantity,
+        items: variant.items,
       });
     }
 
-    nextItems.sort((left, right) => left.packageName.localeCompare(right.packageName) || left.variantName.localeCompare(right.variantName));
+    nextItems.sort(
+      (left, right) =>
+        left.packageName.localeCompare(right.packageName) || left.variantName.localeCompare(right.variantName),
+    );
 
     form.setValue("items", nextItems, {
       shouldDirty: true,
@@ -245,40 +266,43 @@ export const OrderForm = ({ onSubmit, initialData, submitLabel = "Create Order",
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                            {packageOptions.map((packageName) => {
-                              const item = getPackageByName(packageName) ?? adminPackageCatalog[0];
-                              const selected = field.value === packageName;
+                          {catalog.length === 0 ? (
+                            <div className="rounded-lg border border-dashed bg-muted/20 px-4 py-6 text-center text-sm text-muted-foreground">
+                              {i18n.form.noPackages}
+                            </div>
+                          ) : (
+                            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                              {catalog.map((pkg) => {
+                                const selected = field.value === pkg.name;
 
-                              return (
-                                <button
-                                  key={packageName}
-                                  type="button"
-                                  onClick={() => updatePackageName(packageName)}
-                                  className={cn(
-                                    "rounded-lg border p-3 text-left transition-all",
-                                    selected
-                                      ? "border-primary bg-primary/5 ring-1 ring-primary"
-                                      : "border-border/70 hover:border-primary/50",
-                                  )}
-                                >
-                                  <div className="flex items-start justify-between gap-2">
-                                    <div className="min-w-0">
-                                      <p className="truncate text-sm font-semibold text-foreground">
-                                        {item?.name ?? packageName}
-                                      </p>
-                                      <p className="mt-0.5 text-xs text-muted-foreground">
-                                        {item?.variants.length ?? 0} variants
+                                return (
+                                  <button
+                                    key={pkg.id}
+                                    type="button"
+                                    onClick={() => updatePackageName(pkg.name)}
+                                    className={cn(
+                                      "rounded-lg border p-3 text-left transition-all",
+                                      selected
+                                        ? "border-primary bg-primary/5 ring-1 ring-primary"
+                                        : "border-border/70 hover:border-primary/50",
+                                    )}
+                                  >
+                                    <div className="flex items-start justify-between gap-2">
+                                      <div className="min-w-0">
+                                        <p className="truncate text-sm font-semibold text-foreground">{pkg.name}</p>
+                                        <p className="mt-0.5 text-xs text-muted-foreground">
+                                          {pkg.variants.length} variants
+                                        </p>
+                                      </div>
+                                      <p className="shrink-0 text-sm font-bold text-primary">
+                                        {formatCurrency(pkg.pricePerMeal)}
                                       </p>
                                     </div>
-                                    <p className="shrink-0 text-sm font-bold text-primary">
-                                      {formatCurrency(item?.pricePerMeal ?? 0)}
-                                    </p>
-                                  </div>
-                                </button>
-                              );
-                            })}
-                          </div>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -344,14 +368,15 @@ export const OrderForm = ({ onSubmit, initialData, submitLabel = "Create Order",
                             </div>
 
                             <div className="divide-y divide-border/50">
-                              {variantOptions.map((variantName) => {
-                                const quantity = selectedItemMap.get(lineItemKey(activePackageName, variantName)) ?? 0;
+                              {variantOptions.map((variant) => {
+                                const quantity =
+                                  selectedItemMap.get(lineItemKey(activePackage?.id ?? "", variant.name)) ?? 0;
 
                                 return (
-                                  <div key={variantName} className="px-4 py-3">
+                                  <div key={variant.name} className="px-4 py-3">
                                     <div className="mb-2 min-w-0">
                                       <p className="truncate text-sm font-semibold text-foreground">
-                                        {activePackageName} - {variantName}
+                                        {activePackageName} - {variant.name}
                                       </p>
                                       <p className="mt-0.5 text-xs text-muted-foreground">
                                         {formatCurrency(pricePerMeal)} {i18n.form.pricePerMeal}
@@ -365,7 +390,7 @@ export const OrderForm = ({ onSubmit, initialData, submitLabel = "Create Order",
                                           variant="ghost"
                                           size="icon"
                                           className="h-7 w-7 rounded-full"
-                                          onClick={() => updateVariantQuantity(variantName, quantity - 1)}
+                                          onClick={() => updateVariantQuantity(variant, quantity - 1)}
                                           disabled={quantity <= 0}
                                         >
                                           <Minus className="h-4 w-4" />
@@ -380,7 +405,7 @@ export const OrderForm = ({ onSubmit, initialData, submitLabel = "Create Order",
                                           variant="ghost"
                                           size="icon"
                                           className="h-7 w-7 rounded-full"
-                                          onClick={() => updateVariantQuantity(variantName, quantity + 1)}
+                                          onClick={() => updateVariantQuantity(variant, quantity + 1)}
                                         >
                                           <Plus className="h-4 w-4" />
                                         </Button>
@@ -423,7 +448,7 @@ export const OrderForm = ({ onSubmit, initialData, submitLabel = "Create Order",
                     <div className="space-y-2">
                       {selectedVariants.map((item) => (
                         <div
-                          key={lineItemKey(item.packageName, item.variantName)}
+                          key={lineItemKey(item.packageId, item.variantName)}
                           className="flex flex-col gap-2 rounded-md border border-border/60 bg-background/70 px-3 py-2 sm:flex-row sm:items-start sm:justify-between"
                         >
                           <div className="min-w-0">

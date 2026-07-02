@@ -6,6 +6,7 @@ export type DayName = (typeof dayOrder)[number];
 
 export interface IOrderItem {
   id: string;
+  packageId: string;
   packageName: string;
   variantName: string;
   items: string[];
@@ -36,32 +37,6 @@ export interface IOrder {
   updatedAt: Date;
 }
 
-interface ApiEnvelope {
-  message: string;
-  statusCode: number;
-}
-
-export interface GetOrdersApiResponse extends ApiEnvelope {
-  orders: IOrder[];
-  meta: { pagination: PaginationMeta };
-}
-
-export interface GetOrderApiResponse extends ApiEnvelope {
-  order: IOrder;
-}
-
-export interface CreateOrderApiResponse extends ApiEnvelope {
-  order: IOrder;
-}
-
-export interface UpdateOrderApiResponse extends ApiEnvelope {
-  order: IOrder;
-}
-
-export interface DeleteOrderApiResponse extends ApiEnvelope {
-  order: null;
-}
-
 export interface OrdersCache {
   orders: IOrder[];
   pagination: PaginationMeta;
@@ -78,6 +53,18 @@ export interface OrderMutationResult {
 
 const bdPhoneRegex = /^01[3-9]\d{8}$/;
 
+// Line item captured by the form. `packageId` lets the backend resolve the
+// authoritative price; `items` is a food snapshot shown on the order.
+const orderItemInputSchema = z.object({
+  packageId: z.string().min(1, "Package is required."),
+  packageName: z.string().trim().min(2).max(100),
+  variantName: z.string().trim().min(2).max(100),
+  quantity: z.number().int().min(1).max(500),
+  items: z.array(z.string()),
+});
+
+const orderItemsSchema = z.array(orderItemInputSchema).min(1, "Select at least one meal variant.");
+
 export const orderFormSchema = z.object({
   customerName: z.string().trim().min(2, "Name must be at least 2 characters.").max(80),
   customerPhone: z.string().trim().regex(bdPhoneRegex, "Enter a valid Bangladesh phone number.").min(10).max(20),
@@ -86,15 +73,7 @@ export const orderFormSchema = z.object({
   source: z.nativeEnum(ORDER_SOURCE_ENUM),
   packageName: z.string().trim().min(2, "Package name is required.").max(100),
   deliveryDate: z.string().trim().min(1, "Delivery date is required."),
-  items: z
-    .array(
-      z.object({
-        packageName: z.string().trim().min(2).max(100),
-        variantName: z.string().trim().min(2).max(100),
-        quantity: z.number().int().min(1).max(500),
-      }),
-    )
-    .min(1, "Select at least one meal variant."),
+  items: orderItemsSchema,
 });
 
 export const UpdateOrderSchema = z.object({
@@ -106,15 +85,7 @@ export const UpdateOrderSchema = z.object({
   status: z.nativeEnum(ORDER_STATUS_ENUM),
   packageName: z.string().trim().min(2, "Package name is required.").max(100),
   deliveryDate: z.string().trim().min(1, "Delivery date is required."),
-  items: z
-    .array(
-      z.object({
-        packageName: z.string().trim().min(2).max(100),
-        variantName: z.string().trim().min(2).max(100),
-        quantity: z.number().int().min(1).max(500),
-      }),
-    )
-    .min(1, "Select at least one meal variant."),
+  items: orderItemsSchema,
 });
 
 export type OrderFormInput = z.infer<typeof orderFormSchema>;
