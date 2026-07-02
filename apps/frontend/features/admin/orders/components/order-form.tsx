@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn, formatCurrency, formatDateValue } from "@/lib/utils";
 import { type OrderCatalogVariant, usePackageCatalog } from "../hooks/usePackageCatalog";
+import { useTenantDeliveryFee } from "../hooks/useTenantDeliveryFee";
 import { interpolate, useOrdersI18n } from "../lib/orders-i18n";
 import { type IOrder, type OrderFormInput, orderFormSchema } from "../schemas/order.schema";
 import type { DaySlot } from "../store/useStore";
@@ -24,8 +25,6 @@ interface OrderFormProps {
   upcomingDays: DaySlot[];
   tenantId?: string;
 }
-
-const DELIVERY_FEE = 60;
 
 const getDefaultValues = (initialData: IOrder | undefined): OrderFormInput => ({
   customerName: initialData?.customerName ?? "",
@@ -58,6 +57,9 @@ export const OrderForm = ({
 }: OrderFormProps) => {
   const i18n = useOrdersI18n();
   const { catalog } = usePackageCatalog(tenantId);
+  const tenantDeliveryFee = useTenantDeliveryFee(tenantId);
+  // Prefer the fee already saved on the order (edit); otherwise the tenant's fee.
+  const deliveryFee = initialData?.deliveryFee ?? tenantDeliveryFee;
   const priceByPackageId = useMemo(() => new Map(catalog.map((pkg) => [pkg.id, pkg.pricePerMeal])), [catalog]);
 
   const deliveryDateCards = useMemo(
@@ -128,7 +130,7 @@ export const OrderForm = ({
     () => selectedItems.reduce((count, item) => count + item.quantity * (priceByPackageId.get(item.packageId) ?? 0), 0),
     [selectedItems, priceByPackageId],
   );
-  const totalPrice = selectedSubtotal + DELIVERY_FEE;
+  const totalPrice = selectedSubtotal + deliveryFee;
 
   const updatePackageName = (packageName: string) => {
     if (form.getValues("packageName") === packageName) return;
@@ -479,7 +481,7 @@ export const OrderForm = ({
                   </div>
                   <div className="flex items-center justify-between gap-3 text-sm text-muted-foreground">
                     <p>{i18n.form.deliveryFee}</p>
-                    <p className="font-medium text-foreground">{formatCurrency(DELIVERY_FEE)}</p>
+                    <p className="font-medium text-foreground">{formatCurrency(deliveryFee)}</p>
                   </div>
                 </CardContent>
                 <CardFooter className="flex flex-col items-start justify-between gap-2 border-t bg-muted/20 px-4 py-3 sm:flex-row sm:items-center">

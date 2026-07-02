@@ -17,7 +17,6 @@ import { placeOrder } from "../../api/order.api";
 import type { DayName } from "../../data";
 import { useOrderSummaryData } from "../../order-summary-data";
 
-const DELIVERY_FEE = 60;
 const daysByJsIndex: DayName[] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 /** Earliest upcoming date (within a week) whose weekday is present in the cart. */
@@ -68,7 +67,6 @@ export function CheckoutForm({ tenant }: { tenant: string }) {
         notes: values.notes ?? "",
         packageName: orderRows[0].packageName,
         deliveryDate: formatDateValue(deliveryDate),
-        deliveryFee: DELIVERY_FEE,
         items: orderRows.map((row) => ({
           packageId: row.pkgId,
           variantName: row.label,

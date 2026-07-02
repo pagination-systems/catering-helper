@@ -14,7 +14,6 @@ export type PlaceOrderPayload = {
   notes?: string;
   packageName: string;
   deliveryDate: string;
-  deliveryFee?: number;
   items: PublicOrderItem[];
 };
 

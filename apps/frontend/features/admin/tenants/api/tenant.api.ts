@@ -62,3 +62,8 @@ export const getTenants = async (query?: string): Promise<GetTenantsResponse> =>
     meta: { pagination: data.pagination },
   };
 };
+
+export const getTenant = async (id: string): Promise<ITenant> => {
+  const { data } = await apiClient.get<{ tenant: RawTenant }>(`/tenants/${id}`);
+  return toTenant(data.tenant);
+};

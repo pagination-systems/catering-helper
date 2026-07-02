@@ -11,9 +11,6 @@ import type {
   UpdateOrderInput,
 } from "../schemas/order.schema";
 
-/** Flat delivery fee applied to admin-created orders (mirrors the order form). */
-const DELIVERY_FEE = 60;
-
 /** Order payload as returned by the backend (Mongo `_id`, dates as ISO strings). */
 type RawOrderItem = Partial<IOrderItem> & { _id?: string };
 type RawOrder = {
@@ -128,7 +125,6 @@ export const createOrder = async (payload: OrderFormInput & { tenantId?: string 
   const { data } = await apiClient.post<OrderApiResponse>("/orders", {
     ...rest,
     ...(tenantId ? { tenantId } : {}),
-    deliveryFee: DELIVERY_FEE,
     items: buildItems(items),
   });
   return { order: toOrder(data.order as RawOrder), message: data.message };
@@ -145,7 +141,6 @@ export const updateOrder = async ({
   const body: Record<string, unknown> = { id, ...rest };
   if (items) {
     body.items = buildItems(items);
-    body.deliveryFee = DELIVERY_FEE;
   }
 
   const { data } = await apiClient.put<OrderApiResponse>("/orders", body);

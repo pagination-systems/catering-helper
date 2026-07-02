@@ -12,6 +12,7 @@ export type TenantData = {
   contactPhone: string;
   contactWhatsapp: string;
   address: string;
+  deliveryFee: number;
   social: {
     facebook: string;
     instagram: string;
@@ -32,6 +33,7 @@ const defaultTenantRecord: TenantRecord = {
   contactPhone: "+880 1711-000000",
   contactWhatsapp: "+880 1711-000000",
   address: "123 Corporate Area, Gulshan 1, Dhaka 1212, Bangladesh",
+  deliveryFee: 0,
   social: {
     facebook: "https://www.facebook.com/uttaracatering",
     instagram: "https://www.instagram.com/uttaracatering",
@@ -54,6 +56,7 @@ type RawTenant = {
   contactPhone?: string;
   contactWhatsapp?: string;
   contactAddress?: string;
+  deliveryFee?: number;
   socialFacebookUrl?: string;
   socialInstagramUrl?: string;
   socialYoutubeUrl?: string;
@@ -71,6 +74,7 @@ const toTenantData = (raw: RawTenant): TenantData => ({
   contactPhone: raw.contactPhone ?? "",
   contactWhatsapp: raw.contactWhatsapp ?? "",
   address: raw.contactAddress ?? "",
+  deliveryFee: raw.deliveryFee ?? 0,
   social: {
     facebook: raw.socialFacebookUrl ?? "",
     instagram: raw.socialInstagramUrl ?? "",

@@ -345,7 +345,7 @@ export const StoreFront = ({ tenant, packages }: { tenant: TenantData; packages:
 
             {/* Right: sticky desktop summary */}
             <aside className="hidden h-fit lg:sticky lg:top-6 lg:block">
-              <OrderSummary tenantSlug={tenant.slug} />
+              <OrderSummary tenantSlug={tenant.slug} deliveryFee={tenant.deliveryFee} />
             </aside>
           </div>
         )}
@@ -383,7 +383,7 @@ export const StoreFront = ({ tenant, packages }: { tenant: TenantData; packages:
                 <SheetTitle>{content.orderSummaryTitle}</SheetTitle>
               </SheetHeader>
               <div className="h-[calc(75vh-65px)] overflow-y-auto px-4 py-4">
-                <OrderSummary tenantSlug={tenant.slug} readonly naked />
+                <OrderSummary tenantSlug={tenant.slug} readonly naked deliveryFee={tenant.deliveryFee} />
               </div>
             </SheetContent>
           </Sheet>

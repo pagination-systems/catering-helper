@@ -29,7 +29,9 @@ export function VariantCard({
     <article
       className={cn(
         "relative overflow-hidden rounded-xl border transition-all duration-200 flex gap-3 p-3 sm:p-4",
-        available ? "bg-card hover:-translate-y-0.5 hover:shadow-md" : "cursor-not-allowed bg-muted/25 opacity-70 grayscale",
+        available
+          ? "bg-card hover:-translate-y-0.5 hover:shadow-md"
+          : "cursor-not-allowed bg-muted/25 opacity-70 grayscale",
         active ? "border-l-4 border-primary bg-primary/[0.03]" : "border-border/70",
         pulse && "animate-pulse",
       )}
@@ -53,8 +55,8 @@ export function VariantCard({
 
         {/* Stepper — pushed to bottom of content column */}
         <div className="mt-auto pt-3">
-          {available && (
-            quantity === 0 ? (
+          {available &&
+            (quantity === 0 ? (
               <Button
                 type="button"
                 size="sm"
@@ -87,8 +89,7 @@ export function VariantCard({
                   <Plus className="h-3 w-3" />
                 </Button>
               </div>
-            )
-          )}
+            ))}
         </div>
       </div>
 

@@ -33,7 +33,6 @@ const baseOrderFields = {
   packageName: Joi.string().trim().min(2).max(100).label("Package name"),
   // Accepts full ISO timestamps and `YYYY-MM-DD` (parsed as UTC midnight).
   deliveryDate: Joi.date().label("Delivery date"),
-  deliveryFee: Joi.number().min(0).max(100000).label("Delivery fee"),
   items: itemsSchema,
 };
 
@@ -78,6 +77,5 @@ export const createPublicOrderBodySchema = Joi.object({
   notes: baseOrderFields.notes,
   packageName: baseOrderFields.packageName.required(),
   deliveryDate: baseOrderFields.deliveryDate.required(),
-  deliveryFee: baseOrderFields.deliveryFee,
   items: itemsSchema,
 });

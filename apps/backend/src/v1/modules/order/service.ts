@@ -5,12 +5,20 @@ import { Types } from "mongoose";
 import { BadRequestException, NotFoundException } from "../../../common/helper";
 import { sanitizeQueryIds } from "../../../common/helper/sanitizeQueryIds";
 import { excludeDeletedQuery, matchQuery } from "../../../common/query";
-import { Order, Package } from "../../../models";
+import { Order, Package, Tenant } from "../../../models";
 import { type IOrderItem, ORDER_DAY_ENUMS, type OrderDay } from "../../../models/order";
 import type { IListOrderParams, IOrderCreateParams, IOrderGetParams, IOrderUpdateParams } from "./interface";
 import { orderProjectionQuery } from "./query";
 
-const DEFAULT_DELIVERY_FEE = 60;
+// Fallback only used when an order somehow has no resolvable tenant.
+const DEFAULT_DELIVERY_FEE = 0;
+
+/** Delivery fee is owned by the tenant, never the client. Falls back to 0. */
+const resolveDeliveryFee = async (tenantId: string | null, session?: ClientSession): Promise<number> => {
+  if (!tenantId) return DEFAULT_DELIVERY_FEE;
+  const tenant = await Tenant.findById(tenantId, "deliveryFee", { session });
+  return Number(tenant?.deliveryFee ?? DEFAULT_DELIVERY_FEE);
+};
 
 /** Derive the 3-letter delivery day from a delivery date (UTC to match ISO date input). */
 const deriveDeliveryDay = (deliveryDate: Date): OrderDay => ORDER_DAY_ENUMS[new Date(deliveryDate).getUTCDay()];
@@ -112,7 +120,7 @@ export const create = async ({ payload, session }: IOrderCreateParams) => {
   const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
   const totalMeals = items.reduce((sum, item) => sum + item.quantity, 0);
   const deliveryDate = new Date(raw.deliveryDate);
-  const deliveryFee = Number(raw.deliveryFee ?? DEFAULT_DELIVERY_FEE);
+  const deliveryFee = await resolveDeliveryFee(tenantId, session);
 
   const order = new Order({
     ...raw,

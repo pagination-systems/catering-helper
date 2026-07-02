@@ -11,13 +11,13 @@ import { useLanguage } from "@/providers/language-provider";
 import { useOrderSummaryData } from "../order-summary-data";
 import { useStorefrontStore } from "../store/useStore";
 
-export const DELIVERY_FEE = 60;
-
 type OrderSummaryProps = {
   tenantSlug: string;
   readonly?: boolean;
   showDeliveryFee?: boolean;
   naked?: boolean;
+  /** Tenant-owned delivery fee (authoritative; falls back to 0). */
+  deliveryFee?: number;
 };
 
 export function OrderSummary({
@@ -25,6 +25,7 @@ export function OrderSummary({
   readonly = false,
   showDeliveryFee = false,
   naked = false,
+  deliveryFee = 0,
 }: OrderSummaryProps) {
   const router = useRouter();
   const { language } = useLanguage();
@@ -34,7 +35,7 @@ export function OrderSummary({
   const updateQuantity = useStorefrontStore((state) => state.updateQuantity);
 
   const { groupedOrders, subtotal, totalQuantity } = useOrderSummaryData(language);
-  const total = subtotal + (showDeliveryFee ? DELIVERY_FEE : 0);
+  const total = subtotal + (showDeliveryFee ? deliveryFee : 0);
 
   const inner = (
     <div className="space-y-4">
@@ -119,7 +120,7 @@ export function OrderSummary({
         {showDeliveryFee && (
           <div className="flex justify-between text-sm text-muted-foreground">
             <p>{content.deliveryFee}</p>
-            <p>{formatCurrency(DELIVERY_FEE)}</p>
+            <p>{formatCurrency(deliveryFee)}</p>
           </div>
         )}
 
