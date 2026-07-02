@@ -13,6 +13,14 @@ const optionalPhone = z.union([
 ]);
 
 export const onboardCatererSchema = z.object({
+  // Owner login account — the caterer signs in to the admin panel with these.
+  owner: z.object({
+    firstName: z.string().trim().min(1, "First name is required.").max(20),
+    lastName: z.string().trim().min(1, "Last name is required.").max(20),
+    email: z.string().trim().email("Enter a valid email address."),
+    password: z.string().min(8, "Password must be at least 8 characters.").max(50),
+  }),
+
   // Profile
   name: z.string().trim().min(2, "Caterer name must be at least 2 characters.").max(80),
   slug: z

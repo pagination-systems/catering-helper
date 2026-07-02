@@ -29,6 +29,7 @@ const slugify = (value: string) =>
     .replace(/^-+|-+$/g, "");
 
 const getDefaultValues = (): OnboardCatererInput => ({
+  owner: { firstName: "", lastName: "", email: "", password: "" },
   name: "",
   slug: "",
   headline: "",
@@ -144,6 +145,13 @@ export const OnboardingForm = () => {
   return (
     <Form {...form}>
       <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)} noValidate>
+        <Section title={i18n.sections.account} hint={i18n.sections.accountHint}>
+          {textField("owner.firstName", i18n.fields.ownerFirstName)}
+          {textField("owner.lastName", i18n.fields.ownerLastName)}
+          {textField("owner.email", i18n.fields.ownerEmail, "email")}
+          {textField("owner.password", i18n.fields.ownerPassword, "password")}
+        </Section>
+
         <Section title={i18n.sections.profile} hint={i18n.sections.profileHint}>
           <FormField
             control={form.control}

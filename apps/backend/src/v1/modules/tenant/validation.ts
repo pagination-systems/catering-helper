@@ -20,6 +20,17 @@ export const slugParamsSchema = Joi.object({
 });
 
 export const createTenantBodySchema = Joi.object({
+  // Owner login account — provisioned alongside the tenant so the caterer can
+  // sign in to the admin panel scoped to this tenant.
+  owner: Joi.object({
+    firstName: Joi.string().trim().max(20).required().label("Owner first name"),
+    lastName: Joi.string().trim().max(20).required().label("Owner last name"),
+    email: Joi.string().trim().max(50).email().required().label("Owner email"),
+    password: Joi.string().min(8).max(50).required().label("Owner password"),
+  })
+    .required()
+    .label("Owner"),
+
   // Profile
   name: Joi.string().trim().min(2).max(80).required().label("Name"),
   slug: Joi.string().trim().lowercase().pattern(slugRegex).min(2).max(80).required().label("Slug").messages({

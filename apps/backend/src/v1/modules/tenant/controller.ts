@@ -61,14 +61,18 @@ export const getOne = async ({ req }: AuthenticatedControllerParams) => {
 export const create = async ({ req }: AuthenticatedControllerParams) => {
   const ability = new TenantAbilityBuilder(req.session).getAbility();
 
-  if (!ability.can(AbilityAction.CREATE, TenantAuthZEntity)) {
+  // Check against a concrete (id-less) entity so tenant-scoped CREATE grants
+  // (e.g. a caterer's own tenant) don't authorize creating brand-new tenants.
+  if (!ability.can(AbilityAction.CREATE, new TenantAuthZEntity({}))) {
     throw new UnauthorizedException("You are not authorized to create a tenant.");
   }
 
-  const tenant = await tenantService.create({ payload: req.body });
+  const { owner, ...payload } = req.body;
+
+  const tenant = await tenantService.onboardCaterer({ payload, owner });
 
   return new ApiResponse({
-    message: "Tenant created.",
+    message: "Caterer onboarded successfully.",
     statusCode: StatusCodes.CREATED,
     data: tenant,
     fieldName: "tenant",

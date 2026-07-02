@@ -3,6 +3,7 @@
 import { If } from "@/components/if";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { useAuthStore } from "@/features/auth/store/useStore";
 import { useLanguage } from "@/providers/language-provider";
 import { SectionHeader } from "../components/section-header";
 import { DeleteConfirmation } from "./components/delete-confirmation";
@@ -26,7 +27,12 @@ interface PackagesProps {
 export const Packages = ({ title, description, tenantId }: PackagesProps) => {
   const i18n = usePackagesI18n();
   const { language } = useLanguage();
-  const { packages, pagination, onSearch, handleFilter, handlePagination } = usePackages(tenantId);
+  // Admin per-tenant routes pass `tenantId` explicitly; on the caterer's own
+  // panel it falls back to the signed-in user's tenant so listing/creating are
+  // scoped to them.
+  const sessionTenantId = useAuthStore((state) => state.user?.tenantId);
+  const effectiveTenantId = tenantId ?? sessionTenantId ?? undefined;
+  const { packages, pagination, onSearch, handleFilter, handlePagination } = usePackages(effectiveTenantId);
   const isCreateSheetOpen = usePackagesStore((state) => state.isCreateSheetOpen);
   const isEditSheetOpen = usePackagesStore((state) => state.isEditSheetOpen);
   const isViewSheetOpen = usePackagesStore((state) => state.isViewSheetOpen);
@@ -70,8 +76,8 @@ export const Packages = ({ title, description, tenantId }: PackagesProps) => {
           <PackageForm
             key={`${language}-create`}
             onSubmit={(values) => {
-              if (!tenantId) return;
-              createPackage({ ...values, tenantId }, closeCreateSheet);
+              if (!effectiveTenantId) return;
+              createPackage({ ...values, tenantId: effectiveTenantId }, closeCreateSheet);
             }}
             submitLabel={i18n.form.submitCreate}
           />
@@ -100,7 +106,7 @@ export const Packages = ({ title, description, tenantId }: PackagesProps) => {
             expression={!!selectedViewItem}
             fallback={<p className="text-sm text-muted-foreground">{i18n.details.noPackage}</p>}
           >
-            {selectedViewItem && <PackageDetails id={selectedViewItem.id} tenantId={tenantId} />}
+            {selectedViewItem && <PackageDetails id={selectedViewItem.id} tenantId={effectiveTenantId} />}
           </If>
         </SheetContent>
       </Sheet>

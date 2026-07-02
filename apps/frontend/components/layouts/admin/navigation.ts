@@ -71,7 +71,11 @@ export function getNavigationItems(lang: Language): NavigationItem[] {
       label: t.cateringOnboarding,
       href: "/admin/catering-onboarding",
       icon: Store,
-      canView: (ability) => ability.can(AbilityAction.CREATE, TenantAuthZEntity),
+      // Onboarding provisions new tenants + owner accounts — admin-only. Use
+      // MANAGE (not CREATE) so a caterer's tenant-scoped CREATE grant, which
+      // makes the class-level `can(CREATE, Tenant)` check optimistically true,
+      // doesn't expose this page to them.
+      canView: (ability) => ability.can(AbilityAction.MANAGE, TenantAuthZEntity),
     },
     {
       label: t.customers,

@@ -7,6 +7,8 @@ type OnboardingContent = {
   title: string;
   description: string;
   sections: {
+    account: string;
+    accountHint: string;
     profile: string;
     profileHint: string;
     discovery: string;
@@ -19,6 +21,10 @@ type OnboardingContent = {
     socialHint: string;
   };
   fields: {
+    ownerFirstName: FieldText;
+    ownerLastName: FieldText;
+    ownerEmail: FieldText;
+    ownerPassword: FieldText;
     name: FieldText;
     slug: FieldText;
     headline: FieldText;
@@ -56,6 +62,8 @@ const content: Record<string, OnboardingContent> = {
     title: "Catering Onboarding",
     description: "Register a new caterer with everything needed for their directory listing and storefront.",
     sections: {
+      account: "Owner login",
+      accountHint: "Credentials the caterer uses to sign in to their admin panel.",
       profile: "Profile",
       profileHint: "Core identity and storefront URL.",
       discovery: "Discovery & listing",
@@ -68,6 +76,10 @@ const content: Record<string, OnboardingContent> = {
       socialHint: "Optional social profiles.",
     },
     fields: {
+      ownerFirstName: { label: "Owner first name", placeholder: "e.g. Karim" },
+      ownerLastName: { label: "Owner last name", placeholder: "e.g. Rahman" },
+      ownerEmail: { label: "Login email", placeholder: "owner@example.com" },
+      ownerPassword: { label: "Temporary password", placeholder: "At least 8 characters" },
       name: { label: "Caterer name", placeholder: "e.g. Uttara Catering" },
       slug: { label: "Storefront URL (slug)", placeholder: "uttara-catering" },
       headline: { label: "Headline", placeholder: "Premium menus, frictionless customization" },
@@ -107,6 +119,8 @@ const content: Record<string, OnboardingContent> = {
     title: "ক্যাটারিং অনবোর্ডিং",
     description: "ডিরেক্টরি লিস্টিং ও স্টোরফ্রন্টের জন্য প্রয়োজনীয় সব তথ্যসহ একজন নতুন ক্যাটারার নিবন্ধন করুন।",
     sections: {
+      account: "মালিকের লগইন",
+      accountHint: "ক্যাটারার যে তথ্য দিয়ে তার অ্যাডমিন প্যানেলে সাইন ইন করবেন।",
       profile: "প্রোফাইল",
       profileHint: "মূল পরিচিতি ও স্টোরফ্রন্ট URL।",
       discovery: "ডিসকভারি ও লিস্টিং",
@@ -119,6 +133,10 @@ const content: Record<string, OnboardingContent> = {
       socialHint: "ঐচ্ছিক সোশ্যাল প্রোফাইল।",
     },
     fields: {
+      ownerFirstName: { label: "মালিকের নামের প্রথম অংশ", placeholder: "যেমন করিম" },
+      ownerLastName: { label: "মালিকের নামের শেষ অংশ", placeholder: "যেমন রহমান" },
+      ownerEmail: { label: "লগইন ইমেইল", placeholder: "owner@example.com" },
+      ownerPassword: { label: "অস্থায়ী পাসওয়ার্ড", placeholder: "কমপক্ষে ৮ অক্ষর" },
       name: { label: "ক্যাটারারের নাম", placeholder: "যেমন উত্তরা ক্যাটারিং" },
       slug: { label: "স্টোরফ্রন্ট URL (slug)", placeholder: "uttara-catering" },
       headline: { label: "হেডলাইন", placeholder: "প্রিমিয়াম মেনু, সহজ কাস্টমাইজেশন" },
