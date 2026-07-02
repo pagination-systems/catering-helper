@@ -8,7 +8,7 @@ import { excludeDeletedQuery, matchQuery } from "../../../common/query";
 import { Order, Package, Tenant } from "../../../models";
 import { type IOrderItem, ORDER_DAY_ENUMS, type OrderDay } from "../../../models/order";
 import type { IListOrderParams, IOrderCreateParams, IOrderGetParams, IOrderUpdateParams } from "./interface";
-import { orderProjectionQuery } from "./query";
+import { orderProjectionQuery, tenantInfoLookup } from "./query";
 
 // Fallback only used when an order somehow has no resolvable tenant.
 const DEFAULT_DELIVERY_FEE = 0;
@@ -80,6 +80,7 @@ export const list = ({ query = {}, options, session }: IListOrderParams) => {
     ...matchQuery(sanitizeQueryIds(query)),
     ...excludeDeletedQuery(),
     ...orderProjectionQuery(),
+    ...tenantInfoLookup(),
   ]);
 
   if (session) aggregate.session(session);
@@ -92,6 +93,7 @@ export const getOne = async ({ query = {}, session }: IOrderGetParams) => {
     ...matchQuery(sanitizeQueryIds(query)),
     ...excludeDeletedQuery(),
     ...orderProjectionQuery(),
+    ...tenantInfoLookup(),
   ]);
 
   if (session) aggregate.session(session);

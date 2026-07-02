@@ -14,7 +14,7 @@ import { Sidebar } from "./sidebar";
 const LOGIN_PATH = "/admin/login";
 
 /** Routes rendered without the admin chrome or auth guard. */
-const PUBLIC_PATHS = new Set<string>([LOGIN_PATH, "/admin/forgot-password"]);
+const PUBLIC_PATHS = new Set<string>([LOGIN_PATH, "/admin/register", "/admin/forgot-password"]);
 
 const FullScreenLoader = () => (
   <div className="flex min-h-screen items-center justify-center bg-background text-muted-foreground">

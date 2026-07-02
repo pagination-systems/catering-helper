@@ -47,9 +47,7 @@ export function ForgotPasswordForm() {
         </div>
         <div className="space-y-1.5">
           <h2 className="text-lg font-semibold text-foreground">{t.successTitle}</h2>
-          <p className="text-sm text-muted-foreground">
-            {t.successSubtitle.replace("{email}", submittedEmail)}
-          </p>
+          <p className="text-sm text-muted-foreground">{t.successSubtitle.replace("{email}", submittedEmail)}</p>
         </div>
         <Button
           type="button"

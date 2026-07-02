@@ -50,10 +50,7 @@ export function LoginForm() {
             <FormItem>
               <div className="flex items-center justify-between gap-2">
                 <FormLabel>{t.passwordLabel}</FormLabel>
-                <Link
-                  href="/admin/forgot-password"
-                  className="text-xs font-medium text-primary hover:underline"
-                >
+                <Link href="/admin/forgot-password" className="text-xs font-medium text-primary hover:underline">
                   {t.forgotPassword}
                 </Link>
               </div>
@@ -85,6 +82,13 @@ export function LoginForm() {
           {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {t.submit}
         </Button>
+
+        <p className="text-center text-sm text-muted-foreground">
+          {t.noAccount}{" "}
+          <Link href="/admin/register" className="font-medium text-primary hover:underline">
+            {t.signUp}
+          </Link>
+        </p>
       </form>
     </Form>
   );

@@ -19,6 +19,13 @@ export const landingContent = {
       howItWorks: "How It Works",
       pricing: "Pricing",
       login: "Login",
+      signUp: "Sign Up",
+      myAccount: "My Account",
+      orders: "My Orders",
+      profile: "Profile",
+      settings: "Settings",
+      dashboard: "Dashboard",
+      logout: "Log out",
       startFreeTrial: "Start Free Trial",
       language: "Language",
       theme: "Theme",
@@ -90,8 +97,7 @@ export const landingContent = {
         },
         {
           title: "Invoice Generation",
-          description:
-            "Generate professional invoices instantly in Bangla and English. Share as PDF or WhatsApp link.",
+          description: "Generate professional invoices instantly in Bangla and English. Share as PDF or WhatsApp link.",
         },
         {
           title: "Customer Management",
@@ -131,8 +137,7 @@ export const landingContent = {
     testimonials: {
       badge: "Trusted by Local Businesses",
       title: "What Caterers Across Bangladesh Say",
-      subtitle:
-        "Join hundreds of catering businesses who have transformed their operations with Catering Helper.",
+      subtitle: "Join hundreds of catering businesses who have transformed their operations with Catering Helper.",
       items: [
         {
           quote:
@@ -175,13 +180,11 @@ export const landingContent = {
         },
         {
           title: "Receive Orders",
-          description:
-            "Share your portal link with clients. They order directly — no WhatsApp, no missed messages.",
+          description: "Share your portal link with clients. They order directly — no WhatsApp, no missed messages.",
         },
         {
           title: "Manage & Deliver",
-          description:
-            "View all orders in your dashboard, generate your bazar list, and track payments automatically.",
+          description: "View all orders in your dashboard, generate your bazar list, and track payments automatically.",
         },
       ],
     },
@@ -285,6 +288,13 @@ export const landingContent = {
       howItWorks: "কার্যপ্রণালী",
       pricing: "প্যাকেজ ও মূল্য",
       login: "লগ-ইন",
+      signUp: "সাইন আপ",
+      myAccount: "আমার অ্যাকাউন্ট",
+      orders: "আমার অর্ডার",
+      profile: "প্রোফাইল",
+      settings: "সেটিংস",
+      dashboard: "ড্যাশবোর্ড",
+      logout: "লগ আউট",
       startFreeTrial: "ফ্রি ট্রায়াল শুরু করুন",
       language: "ভাষা",
       theme: "থিম",
@@ -298,8 +308,7 @@ export const landingContent = {
     hero: {
       headlinePrimary: "ক্যাটারিং ব্যবসাকে সহজ করুন।",
       headlineAccent: "হোয়াটসঅ্যাপের বিশৃঙ্খলা দূর করুন।",
-      subheadline:
-        "বাংলাদেশী ক্যাটারারদের জন্য তৈরি সম্পূর্ণ প্ল্যাটফর্ম। অর্ডার, পেমেন্ট ও ডেলিভারি — সব একটিতে।",
+      subheadline: "বাংলাদেশী ক্যাটারারদের জন্য তৈরি সম্পূর্ণ প্ল্যাটফর্ম। অর্ডার, পেমেন্ট ও ডেলিভারি — সব একটিতে।",
       primaryCta: "বিনামূল্যে শুরু করুন",
       secondaryCta: "ডেমো বুক করুন",
       trustBadge: "বাংলাদেশের ৫০০+ ক্যাটারার বিশ্বাস করেন",
@@ -336,69 +345,57 @@ export const landingContent = {
       items: [
         {
           title: "অর্ডার ম্যানেজমেন্ট",
-          description:
-            "রিয়েল-টাইমে প্রতিটি অর্ডার ট্র্যাক করুন। ঈদ, বিয়ে ও কর্পোরেট অর্ডার সহজেই পরিচালনা করুন।",
+          description: "রিয়েল-টাইমে প্রতিটি অর্ডার ট্র্যাক করুন। ঈদ, বিয়ে ও কর্পোরেট অর্ডার সহজেই পরিচালনা করুন।",
         },
         {
           title: "বিকাশ ও নগদ পেমেন্ট",
-          description:
-            "স্থানীয় মোবাইল পেমেন্ট সহজে গ্রহণ করুন। বিকাশ ও নগদ ট্রান্জেকশন স্বয়ংক্রিয়ভাবে হিসাবভুক্ত হয়।",
+          description: "স্থানীয় মোবাইল পেমেন্ট সহজে গ্রহণ করুন। বিকাশ ও নগদ ট্রান্জেকশন স্বয়ংক্রিয়ভাবে হিসাবভুক্ত হয়।",
         },
         {
           title: "বিক্রয় বিশ্লেষণ",
-          description:
-            "দৈনিক আয়, সেরা বিক্রিত প্যাকেজ এবং প্রতি মিলের মুনাফার স্পষ্ট তথ্য পান।",
+          description: "দৈনিক আয়, সেরা বিক্রিত প্যাকেজ এবং প্রতি মিলের মুনাফার স্পষ্ট তথ্য পান।",
         },
         {
           title: "মোবাইল অ্যাডমিন প্যানেল",
-          description:
-            "ফোন থেকেই পুরো ক্যাটারিং অপারেশন পরিচালনা করুন। ধীর ইন্টারনেটেও মসৃণভাবে কাজ করে।",
+          description: "ফোন থেকেই পুরো ক্যাটারিং অপারেশন পরিচালনা করুন। ধীর ইন্টারনেটেও মসৃণভাবে কাজ করে।",
         },
         {
           title: "ইনভয়েস তৈরি",
-          description:
-            "তাৎক্ষণিকভাবে বাংলা ও ইংরেজিতে পেশাদার ইনভয়েস তৈরি করুন। পিডিএফ বা হোয়াটসঅ্যাপে শেয়ার করুন।",
+          description: "তাৎক্ষণিকভাবে বাংলা ও ইংরেজিতে পেশাদার ইনভয়েস তৈরি করুন। পিডিএফ বা হোয়াটসঅ্যাপে শেয়ার করুন।",
         },
         {
           title: "গ্রাহক ব্যবস্থাপনা",
-          description:
-            "সকল ক্লায়েন্টের সম্পূর্ণ রেকর্ড রাখুন — কর্পোরেট অ্যাকাউন্ট, ইভেন্ট প্ল্যানার ও নিয়মিত গ্রাহক।",
+          description: "সকল ক্লায়েন্টের সম্পূর্ণ রেকর্ড রাখুন — কর্পোরেট অ্যাকাউন্ট, ইভেন্ট প্ল্যানার ও নিয়মিত গ্রাহক।",
         },
       ],
     },
     localizedBenefits: {
       badge: "বাংলাদেশের জন্য তৈরি",
       title: "বাংলাদেশী ক্যাটারারদের জন্য বিশেষভাবে ডিজাইন করা",
-      subtitle:
-        "বাংলাদেশে ক্যাটারিং ব্যবসা চালানোর অনন্য চ্যালেঞ্জ আমরা বুঝি। তাই ক্যাটারিং হেল্পার বিশেষভাবে আপনার জন্য তৈরি।",
+      subtitle: "বাংলাদেশে ক্যাটারিং ব্যবসা চালানোর অনন্য চ্যালেঞ্জ আমরা বুঝি। তাই ক্যাটারিং হেল্পার বিশেষভাবে আপনার জন্য তৈরি।",
       items: [
         {
           title: "ঈদ ও বিয়ের ইভেন্ট সামলান",
-          description:
-            "ঈদ, বিয়ের মৌসুম ও কর্পোরেট ইভেন্টে অর্ডারের ঢল সহজেই পরিচালনা করুন।",
+          description: "ঈদ, বিয়ের মৌসুম ও কর্পোরেট ইভেন্টে অর্ডারের ঢল সহজেই পরিচালনা করুন।",
         },
         {
           title: "স্থানীয় পেমেন্ট পদ্ধতি",
-          description:
-            "সরাসরি বিকাশ, নগদ ও রকেট পেমেন্ট গ্রহণ করুন। ম্যানুয়াল ট্র্যাকিং বা বিভ্রান্তি আর নয়।",
+          description: "সরাসরি বিকাশ, নগদ ও রকেট পেমেন্ট গ্রহণ করুন। ম্যানুয়াল ট্র্যাকিং বা বিভ্রান্তি আর নয়।",
         },
         {
           title: "ধীর ইন্টারনেটেও কাজ করে",
-          description:
-            "বাংলাদেশের নেটওয়ার্ক পরিস্থিতির জন্য অপ্টিমাইজড। ৩জি বা ধীর সংযোগেও মসৃণভাবে চলে।",
+          description: "বাংলাদেশের নেটওয়ার্ক পরিস্থিতির জন্য অপ্টিমাইজড। ৩জি বা ধীর সংযোগেও মসৃণভাবে চলে।",
         },
         {
           title: "বাংলা ও ইংরেজি সাপোর্ট",
-          description:
-            "পুরো প্ল্যাটফর্মে সম্পূর্ণ বাংলা ভাষা সাপোর্ট। ইনভয়েস, মেনু ও যোগাযোগ উভয় ভাষায়।",
+          description: "পুরো প্ল্যাটফর্মে সম্পূর্ণ বাংলা ভাষা সাপোর্ট। ইনভয়েস, মেনু ও যোগাযোগ উভয় ভাষায়।",
         },
       ],
     },
     testimonials: {
       badge: "স্থানীয় ব্যবসার আস্থা",
       title: "সারা বাংলাদেশের ক্যাটারাররা কী বলছেন",
-      subtitle:
-        "শত শত ক্যাটারিং ব্যবসার সাথে যোগ দিন যারা ক্যাটারিং হেল্পার দিয়ে তাদের কার্যক্রম পরিবর্তন করেছেন।",
+      subtitle: "শত শত ক্যাটারিং ব্যবসার সাথে যোগ দিন যারা ক্যাটারিং হেল্পার দিয়ে তাদের কার্যক্রম পরিবর্তন করেছেন।",
       items: [
         {
           quote:
@@ -417,8 +414,7 @@ export const landingContent = {
           rating: 5,
         },
         {
-          quote:
-            "সিলেটে ৫টি অফিসের কর্পোরেট লাঞ্চ পরিচালনা করি। অর্ডার ম্যানেজমেন্ট ফিচার সব কিছু ট্র্যাক রাখা অনেক সহজ করে দিয়েছে।",
+          quote: "সিলেটে ৫টি অফিসের কর্পোরেট লাঞ্চ পরিচালনা করি। অর্ডার ম্যানেজমেন্ট ফিচার সব কিছু ট্র্যাক রাখা অনেক সহজ করে দিয়েছে।",
           author: "মোহাম্মদ করিম",
           business: "সিলেট কর্পোরেট মিলস",
           location: "সিলেট",
@@ -436,18 +432,15 @@ export const landingContent = {
         },
         {
           title: "মেনু যোগ করুন",
-          description:
-            "ক্যাটারিং প্যাকেজ, রেসিপি ও মূল্য আপলোড করুন। দৈনিক খাবার, ইভেন্ট ও বিয়ের জন্য কাজ করে।",
+          description: "ক্যাটারিং প্যাকেজ, রেসিপি ও মূল্য আপলোড করুন। দৈনিক খাবার, ইভেন্ট ও বিয়ের জন্য কাজ করে।",
         },
         {
           title: "অর্ডার পান",
-          description:
-            "ক্লায়েন্টদের পোর্টাল লিংক শেয়ার করুন। তারা সরাসরি অর্ডার করবেন।",
+          description: "ক্লায়েন্টদের পোর্টাল লিংক শেয়ার করুন। তারা সরাসরি অর্ডার করবেন।",
         },
         {
           title: "পরিচালনা ও ডেলিভারি",
-          description:
-            "ড্যাশবোর্ডে সব অর্ডার দেখুন, বাজারের তালিকা তৈরি করুন এবং পেমেন্ট ট্র্যাক করুন।",
+          description: "ড্যাশবোর্ডে সব অর্ডার দেখুন, বাজারের তালিকা তৈরি করুন এবং পেমেন্ট ট্র্যাক করুন।",
         },
       ],
     },
@@ -516,16 +509,14 @@ export const landingContent = {
     ctaSection: {
       badge: "আজই শুরু করুন",
       title: "আজই আপনার ক্যাটারিং ব্যবসা বাড়ানো শুরু করুন",
-      subtitle:
-        "বাংলাদেশের ৫০০+ ক্যাটারিং ব্যবসার সাথে যোগ দিন যারা ক্যাটারিং হেল্পার বিশ্বাস করেন। ১ মাস বিনামূল্যে।",
+      subtitle: "বাংলাদেশের ৫০০+ ক্যাটারিং ব্যবসার সাথে যোগ দিন যারা ক্যাটারিং হেল্পার বিশ্বাস করেন। ১ মাস বিনামূল্যে।",
       primaryCta: "বিনামূল্যে শুরু করুন",
       secondaryCta: "হোয়াটসঅ্যাপে সেলসের সাথে কথা বলুন",
       whatsappNumber: "+8801700000000",
     },
     footer: {
       brand: "Catering Helper",
-      description:
-        "বাংলাদেশি ক্যাটারারদের জন্য তৈরি অল-ইন-ওয়ান প্ল্যাটফর্ম — অর্ডার, পেমেন্ট ও ডেলিভারি একই জায়গা থেকে পরিচালনা করুন।",
+      description: "বাংলাদেশি ক্যাটারারদের জন্য তৈরি অল-ইন-ওয়ান প্ল্যাটফর্ম — অর্ডার, পেমেন্ট ও ডেলিভারি একই জায়গা থেকে পরিচালনা করুন।",
       productTitle: "প্রোডাক্ট",
       companyTitle: "কোম্পানি",
       supportTitle: "সাপোর্ট",
@@ -651,7 +642,8 @@ export const cateringDirectoryContent = {
   en: {
     badge: "Order Meals in Dhaka",
     title: "Order Fresh Meals from Caterers Near You",
-    subtitle: "Browse trusted home-style and corporate caterers across Dhaka, compare packages, and order meals your whole team will love.",
+    subtitle:
+      "Browse trusted home-style and corporate caterers across Dhaka, compare packages, and order meals your whole team will love.",
     searchPlaceholder: "Search by caterer or cuisine",
     searchCta: "Search",
     statCaterers: "Verified caterers",
@@ -780,9 +772,7 @@ export const marketingPagesContent = {
         },
         {
           heading: "Contact Us",
-          paragraphs: [
-            "If you have questions about this Privacy Policy, reach us at support@cateringhelper.com.bd.",
-          ],
+          paragraphs: ["If you have questions about this Privacy Policy, reach us at support@cateringhelper.com.bd."],
         },
       ],
     },
@@ -901,8 +891,7 @@ export const marketingPagesContent = {
         {
           category: "Operations",
           title: "Building the Perfect Bazar List in Seconds",
-          excerpt:
-            "How aggregated ingredient lists cut prep time and reduce waste for high-volume catering kitchens.",
+          excerpt: "How aggregated ingredient lists cut prep time and reduce waste for high-volume catering kitchens.",
           date: "Coming soon",
           readTime: "5 min read",
         },
@@ -960,15 +949,11 @@ export const marketingPagesContent = {
         },
         {
           heading: "নীতিমালার পরিবর্তন",
-          paragraphs: [
-            "আমরা সময়ে সময়ে এই নীতিমালা হালনাগাদ করতে পারি। গুরুত্বপূর্ণ পরিবর্তন প্ল্যাটফর্ম বা ইমেইলের মাধ্যমে জানানো হবে।",
-          ],
+          paragraphs: ["আমরা সময়ে সময়ে এই নীতিমালা হালনাগাদ করতে পারি। গুরুত্বপূর্ণ পরিবর্তন প্ল্যাটফর্ম বা ইমেইলের মাধ্যমে জানানো হবে।"],
         },
         {
           heading: "যোগাযোগ",
-          paragraphs: [
-            "এই গোপনীয়তা নীতিমালা সম্পর্কে প্রশ্ন থাকলে support@cateringhelper.com.bd এ যোগাযোগ করুন।",
-          ],
+          paragraphs: ["এই গোপনীয়তা নীতিমালা সম্পর্কে প্রশ্ন থাকলে support@cateringhelper.com.bd এ যোগাযোগ করুন।"],
         },
       ],
     },
@@ -1071,16 +1056,14 @@ export const marketingPagesContent = {
         {
           category: "গ্রোথ",
           title: "ক্লান্তি ছাড়াই ঈদের অর্ডারের চাপ সামলানোর ৫টি উপায়",
-          excerpt:
-            "ঈদ ও বিয়ের মৌসুমে অর্ডারের ঢল সামলানোর কার্যকর পদ্ধতি — সন্ধ্যাগুলো হোয়াটসঅ্যাপে নষ্ট না করে।",
+          excerpt: "ঈদ ও বিয়ের মৌসুমে অর্ডারের ঢল সামলানোর কার্যকর পদ্ধতি — সন্ধ্যাগুলো হোয়াটসঅ্যাপে নষ্ট না করে।",
           date: "শীঘ্রই আসছে",
           readTime: "৬ মিনিট পড়া",
         },
         {
           category: "পেমেন্ট",
           title: "বিকাশ ও নগদ রিকনসিলিয়েশন সহজভাবে",
-          excerpt:
-            "পেমেন্ট কনফার্মেশনের পেছনে ছোটা বন্ধ করুন। স্বয়ংক্রিয়ভাবে মোবাইল পেমেন্ট ট্র্যাক ও মেলানো শিখুন।",
+          excerpt: "পেমেন্ট কনফার্মেশনের পেছনে ছোটা বন্ধ করুন। স্বয়ংক্রিয়ভাবে মোবাইল পেমেন্ট ট্র্যাক ও মেলানো শিখুন।",
           date: "শীঘ্রই আসছে",
           readTime: "৪ মিনিট পড়া",
         },

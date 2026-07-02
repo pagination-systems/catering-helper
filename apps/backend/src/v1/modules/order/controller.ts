@@ -158,9 +158,14 @@ export const createPublicByTenantSlug = async ({ req }: ControllerParams) => {
     query: { slug: req.params.slug, status: TENANT_STATUS_ENUMS.ACTIVE },
   });
 
+  // Link the order to the signed-in customer when a session is present, so it
+  // surfaces in their account order history. Guest checkouts stay unlinked.
+  const userId = req.session?.user?.id ?? null;
+
   const order = await orderService.create({
     payload: {
       ...req.body,
+      userId,
       tenantId: tenant._id,
       source: ORDER_SOURCE_ENUM.CLIENT_PORTAL,
       status: ORDER_STATUS_ENUM.CONFIRMED,

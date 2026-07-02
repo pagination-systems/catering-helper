@@ -249,6 +249,41 @@ export const me = async ({ req }: AuthenticatedControllerParams): Promise<ApiRes
   });
 };
 
+export const updateMe = async ({ req }: AuthenticatedControllerParams): Promise<ApiResponse> => {
+  const { firstName, lastName } = req.body;
+
+  const user = await authService.updateProfile(req.session.user._id, { firstName, lastName });
+
+  return new ApiResponse({
+    message: "Profile updated successfully.",
+    statusCode: StatusCodes.OK,
+    data: pick(user, [
+      "id",
+      "firstName",
+      "lastName",
+      "fullName",
+      "email",
+      "emailVerificationStatus",
+      "type",
+      "role",
+      "tenantId",
+      "jobProfileId",
+    ]),
+    fieldName: "user",
+  });
+};
+
+export const changeMyPassword = async ({ req }: AuthenticatedControllerParams): Promise<ApiResponse> => {
+  const { currentPassword, newPassword } = req.body;
+
+  await authService.changePassword(req.session.user._id, { currentPassword, newPassword });
+
+  return new ApiResponse({
+    message: "Password updated successfully.",
+    statusCode: StatusCodes.OK,
+  });
+};
+
 export const refreshAccessToken = async ({ req }: ControllerParams): Promise<ApiResponse> => {
   // get the tokens from the cookies
   const refreshToken = req.cookies?.__imsrt__ || req.header("x-auth-refresh-token");
