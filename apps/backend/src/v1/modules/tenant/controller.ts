@@ -7,6 +7,7 @@ import {
   type AuthenticatedControllerParams,
   type ControllerParams,
   formatListResponse,
+  NotFoundException,
   UnauthorizedException,
 } from "../../../common/helper";
 import { roleScopedSecurityQuery } from "./query";
@@ -114,5 +115,36 @@ export const getBySlug = async ({ req }: ControllerParams) => {
     statusCode: StatusCodes.OK,
     data: tenant,
     fieldName: "tenant",
+  });
+};
+
+// Reserved labels that belong to the platform itself, not to any tenant. They
+// have their own Caddy site blocks, but allow-list them here too so on-demand
+// TLS never blocks a legitimate platform host.
+const RESERVED_HOST_LABELS = new Set(["www", "api", "app", "admin"]);
+
+/**
+ * On-demand TLS gate for Caddy. Caddy calls this (`?domain=<host>`) before
+ * minting a certificate for a tenant subdomain: a 2xx allows issuance, anything
+ * else denies it — which stops random hostnames pointed at the server from
+ * exhausting the ACME issuer's rate limits.
+ */
+export const checkDomain = async ({ req }: ControllerParams) => {
+  const host = String(req.query.domain ?? "")
+    .split(":")[0]
+    .toLowerCase();
+  const label = host.split(".")[0];
+
+  const allowed =
+    RESERVED_HOST_LABELS.has(label) ||
+    Boolean(await tenantService.getOne({ query: { slug: label, status: TENANT_STATUS_ENUMS.ACTIVE } }));
+
+  if (!allowed) throw new NotFoundException(`No active tenant for host "${host}".`);
+
+  return new ApiResponse({
+    message: "ok",
+    statusCode: StatusCodes.OK,
+    data: null,
+    fieldName: "domain",
   });
 };

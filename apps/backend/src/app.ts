@@ -8,7 +8,7 @@ import morgan from "morgan";
 import { initBullBoard } from "./.config/bull-board";
 import { env } from "./.config/env";
 import { setupAgenda } from "./agenda";
-import { CORS_ORIGIN } from "./common/constants";
+import { corsOrigin } from "./common/constants";
 import { globalErrorHandler, NotFoundException } from "./common/helper";
 import { customQueryParser, globalRateLimiter } from "./common/middlewares";
 import { setupSwaggerDocs } from "./docs/swagger";
@@ -16,15 +16,12 @@ import { setupApiRoutes } from "./v1/routes/api-routes";
 
 export const app: Express = express();
 
-const corsEnv: keyof typeof CORS_ORIGIN = env.NODE_ENV === "production" ? "production" : "development";
-
-const corsOptions = {
-  origin: CORS_ORIGIN[corsEnv],
-  credentials: true,
-};
+// Behind Caddy: trust the first proxy hop so req.ip / rate-limiting use the real
+// client IP from X-Forwarded-For instead of Caddy's address.
+app.set("trust proxy", 1);
 
 // Enable CORS request
-app.use(cors(corsOptions));
+app.use(cors({ origin: corsOrigin, credentials: true }));
 
 // Set security HTTP headers
 app.use(helmet());
