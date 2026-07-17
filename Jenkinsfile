@@ -33,7 +33,9 @@ pipeline {
       steps {
         sshagent(['hostinger-vps']) {
           // Ship the checked-out source to the VPS (tar over ssh; no rsync dependency).
-          sh 'tar czf - --exclude=node_modules --exclude=.git . | ssh -o StrictHostKeyChecking=no $HOST "rm -rf $DIR/src && mkdir -p $DIR/src && tar xzf - -C $DIR/src"'
+          // Remove old src via a root container: the Seed stage's pnpm writes
+          // .pnpm-store as root, which the deploy user can't rm directly.
+          sh 'tar czf - --exclude=node_modules --exclude=.git . | ssh -o StrictHostKeyChecking=no $HOST "docker run --rm -v $DIR:/work alpine rm -rf /work/src && mkdir -p $DIR/src && tar xzf - -C $DIR/src"'
           // Build both images natively on the VPS (amd64).
           sh '''ssh -o StrictHostKeyChecking=no $HOST \
             "cd $DIR/src \
