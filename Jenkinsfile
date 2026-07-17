@@ -11,9 +11,6 @@
 //     importing ~/caddy/conf.d/*.caddy (mounted at /etc/caddy/conf.d). The
 //     pipeline drops catering's routes there and reloads it.
 //   - Create the network once:  docker network create caddy_net
-//   - Add catering's on-demand TLS gate to caddy_master's GLOBAL Caddyfile block
-//     (global options can't live in a conf.d snippet):
-//         on_demand_tls { ask http://catering-backend:5000/api/v1/storefront/domain-check }
 //   - In $DIR: create `backend.env` (see backend.env.prod.example).
 // No docker compose: each container is a plain `docker run` (like the reference
 // pipeline). MongoDB (Atlas) and Redis are external services — backend reaches
@@ -92,8 +89,6 @@ pipeline {
         sshagent(['hostinger-vps']) {
           // Drop catering's routes into the shared caddy_master and hot-reload it.
           // caddy_master reaches backend/frontend by container name over caddy_net.
-          // NOTE: the *.$ROOT_DOMAIN on_demand gate needs on_demand_tls in the
-          // master's GLOBAL block (see header) — a conf.d snippet can't set it.
           sh """
             ssh -o StrictHostKeyChecking=no ${HOST} 'mkdir -p ~/caddy/conf.d && cat << "EOF" > ~/caddy/conf.d/catering.caddy
 ${ROOT_DOMAIN}, www.${ROOT_DOMAIN}, app.${ROOT_DOMAIN} {
@@ -104,14 +99,6 @@ ${ROOT_DOMAIN}, www.${ROOT_DOMAIN}, app.${ROOT_DOMAIN} {
 api.${ROOT_DOMAIN} {
     encode zstd gzip
     reverse_proxy catering-backend:5000
-}
-
-*.${ROOT_DOMAIN} {
-    encode zstd gzip
-    tls {
-        on_demand
-    }
-    reverse_proxy catering-frontend:3000
 }
 EOF
             docker exec caddy_master caddy reload -c /etc/caddy/Caddyfile'
