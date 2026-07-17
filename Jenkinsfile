@@ -20,10 +20,10 @@ pipeline {
   agent any
   environment {
     IMAGE          = 'sayemabedin/catering-helper'          // one repo; images split by tag prefix (backend-* / frontend-*)
-    ROOT_DOMAIN    = 'catering.paginationsystems.com'
+    ROOT_DOMAIN    = 'catering-helper.paginationsystems.com'
     // NEXT_PUBLIC_* are baked into the frontend bundle at build time.
-    API_URL        = 'https://api.catering.paginationsystems.com/api/v1'  // matches api.$ROOT_DOMAIN
-    SITE_URL       = 'https://app.catering.paginationsystems.com'
+    API_URL        = 'https://api.catering-helper.paginationsystems.com/api/v1'  // matches api.$ROOT_DOMAIN
+    SITE_URL       = 'https://catering-helper.paginationsystems.com'
     TAG            = "${env.GIT_COMMIT.take(7)}"
     HOST           = 'deploy@187.127.123.52'                // same VPS as the shared caddy_master
     DIR            = '/home/deploy/catering-helper'          // home path = no sudo; holds src/ (build+seed) and backend.env
