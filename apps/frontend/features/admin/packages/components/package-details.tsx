@@ -1,6 +1,17 @@
-import { CalendarDaysIcon, CircleDollarSignIcon, PackageIcon, UtensilsCrossedIcon } from "lucide-react";
+import { PackageAuthZEntity } from "@catering/authz";
+import { AbilityAction } from "@catering/types";
+import {
+  CalendarDaysIcon,
+  CircleDollarSignIcon,
+  PackageIcon,
+  PencilIcon,
+  UtensilsCrossedIcon,
+} from "lucide-react";
+import Link from "next/link";
+import { Can } from "@/authz/ability-context";
 import { If } from "@/components/if";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { formatCurrency, formatDateTime } from "@/lib/utils";
 import { Loader } from "../../components/loader";
 import { usePackage } from "../hooks";
@@ -8,13 +19,16 @@ import { getPackageStatusBadgeStyles } from "../lib/badge";
 import { usePackagesI18n } from "../lib/packages-i18n";
 import { getTotalFoodItems, getTotalVariants } from "../lib/utils";
 import type { DayName } from "../schemas/package.schema";
+import { usePackagesStore } from "../store/useStore";
 
 interface PackageDetailsProps {
   id: string;
+  tenantId?: string;
 }
 
-export const PackageDetails = ({ id }: PackageDetailsProps) => {
+export const PackageDetails = ({ id, tenantId }: PackageDetailsProps) => {
   const i18n = usePackagesI18n();
+  const closeViewSheet = usePackagesStore((state) => state.closeViewSheet);
   const { package: item, isGettingPackage } = usePackage(id);
   const totalVariants = getTotalVariants(item);
   const totalFoodItems = getTotalFoodItems(item);
@@ -48,6 +62,22 @@ export const PackageDetails = ({ id }: PackageDetailsProps) => {
     <If expression={!isGettingPackage && item} fallback={<Loader />}>
       {item && (
         <div className="space-y-5">
+          {tenantId && (
+            <Can I={AbilityAction.UPDATE} a={PackageAuthZEntity}>
+              <div className="flex justify-end">
+                <Button size="sm" asChild>
+                  <Link
+                    href={`/admin/tenants/${tenantId}/packages/${item.id}/edit`}
+                    onClick={() => closeViewSheet()}
+                  >
+                    <PencilIcon className="size-4" />
+                    {i18n.actions.edit}
+                  </Link>
+                </Button>
+              </div>
+            </Can>
+          )}
+
           <section className="rounded-md border border-border/70 bg-muted/15 p-4 md:p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0 space-y-1">

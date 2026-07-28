@@ -1,8 +1,10 @@
 "use client";
 
+import { DoorOpen } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
 import { useAbility } from "@/authz/ability-context";
+import { getAdminContent } from "@/lib/admin-i18n";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/providers/language-provider";
 import { NavItem } from "./nav-item";
@@ -59,6 +61,40 @@ function SidebarMenu({ items }: SidebarContentProps) {
 }
 
 /**
+ * Footer section of the sidebar with an exit link back to the public site.
+ */
+function SidebarFooter() {
+  const { isSidebarCollapsed, closeMobileSidebar, isMobileSidebarOpen } = useAdminLayout();
+  const { language } = useLanguage();
+  const t = getAdminContent(language);
+
+  return (
+    <div className="border-t border-sidebar-border p-2">
+      <Link
+        href="/"
+        onClick={() => {
+          if (isMobileSidebarOpen) {
+            closeMobileSidebar();
+          }
+        }}
+        title={isSidebarCollapsed ? t.sidebar.exit : undefined}
+        className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+      >
+        <DoorOpen className="h-4 w-4 shrink-0" aria-hidden="true" />
+        <span
+          className={cn(
+            "truncate transition-[opacity,max-width] duration-200",
+            isSidebarCollapsed ? "max-w-0 opacity-0" : "max-w-[12rem] opacity-100",
+          )}
+        >
+          {t.sidebar.exit}
+        </span>
+      </Link>
+    </div>
+  );
+}
+
+/**
  * Main sidebar content component that combines header and navigation menu.
  * Filters navigation items based on user permissions.
  */
@@ -71,6 +107,7 @@ export function SidebarContent() {
     <>
       <SidebarHeader />
       <SidebarMenu items={items} />
+      <SidebarFooter />
     </>
   );
 }

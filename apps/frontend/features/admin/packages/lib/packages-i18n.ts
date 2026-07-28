@@ -80,6 +80,9 @@ type PackagesContent = {
     addVariant: string;
     submitCreate: string;
     submitSave: string;
+    backToPackages: string;
+    editPageDescription: string;
+    packageNotFound: string;
     validation: {
       packageNameMin: string;
       packageNameMax: string;
@@ -195,6 +198,9 @@ const content: Record<string, PackagesContent> = {
       addVariant: "Add Variant",
       submitCreate: "Create Package",
       submitSave: "Save Changes",
+      backToPackages: "Back to packages",
+      editPageDescription: "Update package details, day plans, variants, and food items.",
+      packageNotFound: "Package not found.",
       validation: {
         packageNameMin: "Package name must be at least 2 characters.",
         packageNameMax: "Package name must be 100 characters or less.",
@@ -308,6 +314,9 @@ const content: Record<string, PackagesContent> = {
       addVariant: "ভ্যারিয়েন্ট যোগ করুন",
       submitCreate: "প্যাকেজ তৈরি করুন",
       submitSave: "পরিবর্তন সংরক্ষণ করুন",
+      backToPackages: "প্যাকেজ তালিকায় ফিরে যান",
+      editPageDescription: "প্যাকেজের তথ্য, দিনভিত্তিক পরিকল্পনা, ভ্যারিয়েন্ট এবং খাবারের আইটেম আপডেট করুন।",
+      packageNotFound: "প্যাকেজ পাওয়া যায়নি।",
       validation: {
         packageNameMin: "প্যাকেজের নাম কমপক্ষে ২ অক্ষরের হতে হবে।",
         packageNameMax: "প্যাকেজের নাম ১০০ অক্ষরের মধ্যে হতে হবে।",

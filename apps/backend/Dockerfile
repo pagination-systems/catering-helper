@@ -35,4 +35,4 @@ COPY --from=builder /repo/packages/utils/dist packages/utils/dist
 COPY --from=builder /repo/packages/authz/dist packages/authz/dist
 RUN pnpm install --prod --frozen-lockfile=false --filter @catering/backend...
 EXPOSE 5000
-CMD ["node", "apps/backend/dist/index.js"]
+CMD ["node", "apps/backend/dist/server.js"]

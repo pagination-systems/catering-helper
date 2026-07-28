@@ -17,6 +17,7 @@ import {
   type LucideIcon,
   Package2,
   Settings,
+  Store,
   Users,
   Utensils,
   UtensilsCrossed,
@@ -64,6 +65,16 @@ export function getNavigationItems(lang: Language): NavigationItem[] {
       label: t.tenants,
       href: "/admin/tenants",
       icon: UtensilsCrossed,
+      canView: (ability) => ability.can(AbilityAction.MANAGE, TenantAuthZEntity),
+    },
+    {
+      label: t.cateringOnboarding,
+      href: "/admin/catering-onboarding",
+      icon: Store,
+      // Onboarding provisions new tenants + owner accounts — admin-only. Use
+      // MANAGE (not CREATE) so a caterer's tenant-scoped CREATE grant, which
+      // makes the class-level `can(CREATE, Tenant)` check optimistically true,
+      // doesn't expose this page to them.
       canView: (ability) => ability.can(AbilityAction.MANAGE, TenantAuthZEntity),
     },
     {

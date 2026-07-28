@@ -6,9 +6,11 @@ export const registerBodySchema = Joi.object({
   lastName: Joi.string().max(20).required().label("Last Name"),
   email: Joi.string().max(50).email().required().label("Email"),
   password: Joi.string().min(8).max(50).required().label("Password"),
+  // Direct sign-ups are always customers (forced server-side). `type` only
+  // matters for invitation-based registration, where the token dictates it.
   type: Joi.string()
     .valid(...Object.values(ACCOUNT_TYPE_ENUMS))
-    .required()
+    .optional()
     .label("Type"),
   invitationToken: Joi.string().optional().label("Invitation Token"),
 });
@@ -36,6 +38,16 @@ export const verifyRecoveryBodySchema = Joi.object({
 export const loginBodySchema = Joi.object({
   email: Joi.string().max(50).email().required().label("Email"),
   password: Joi.string().min(8).max(50).required().label("Password"),
+});
+
+export const updateMeBodySchema = Joi.object({
+  firstName: Joi.string().trim().max(20).required().label("First Name"),
+  lastName: Joi.string().trim().max(20).required().label("Last Name"),
+});
+
+export const changePasswordBodySchema = Joi.object({
+  currentPassword: Joi.string().required().label("Current Password"),
+  newPassword: Joi.string().min(8).max(50).required().label("New Password"),
 });
 
 export const logoutCookieSchema = Joi.object({

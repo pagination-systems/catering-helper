@@ -1,7 +1,7 @@
-import { TENANT_STATUS_ENUM } from "@catering/types";
+import { TENANT_STATUS_ENUMS } from "@catering/types";
 import { create } from "zustand";
 
-export type TenantListTab = TENANT_STATUS_ENUM.ACTIVE | TENANT_STATUS_ENUM.TERMINATED | TENANT_STATUS_ENUM.SUSPENDED;
+export type TenantListTab = TENANT_STATUS_ENUMS.ACTIVE | TENANT_STATUS_ENUMS.TERMINATED | TENANT_STATUS_ENUMS.SUSPENDED;
 
 export type TenantDetailsTab = "tab-1" | "tab-2" | "tab-3" | "tab-4" | "tab-5" | "tab-6";
 
@@ -17,7 +17,7 @@ type TenantsStoreState = {
 
 export const useTenantsStore = create<TenantsStoreState>((set) => ({
   query: "",
-  activeTab: TENANT_STATUS_ENUM.ACTIVE,
+  activeTab: TENANT_STATUS_ENUMS.ACTIVE,
   activeDetailsTab: "tab-1",
   setQuery: (query) => set({ query }),
   setActiveTab: (activeTab) => set({ activeTab }),

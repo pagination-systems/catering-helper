@@ -1,4 +1,4 @@
-import { UserInput } from "../../../models";
+import type { UserInput } from "../../../models";
 
 export interface GenerateSendAndStoreRegistrationTokenInput {
   userId: string;

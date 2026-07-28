@@ -9,6 +9,8 @@ import { TenantAdminDashboard } from "./tenant-admin-dashboard";
 export const Dashboard = () => {
   const session = useSession();
 
+  if (!session) return null;
+
   return (
     <div>
       <If expression={session.user.type === ACCOUNT_TYPE_ENUMS.ADMIN}>

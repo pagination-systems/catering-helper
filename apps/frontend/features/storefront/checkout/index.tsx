@@ -12,7 +12,7 @@ const steps = [
   { icon: Check, label: "Confirmed" },
 ];
 
-export const Checkout = ({ tenant }: { tenant: string }) => {
+export const Checkout = ({ tenant, deliveryFee = 0 }: { tenant: string; deliveryFee?: number }) => {
   return (
     <main className="bg-background" data-tenant={tenant}>
       <div className="mx-auto w-full max-w-[1260px] px-4 py-8 sm:px-6 lg:px-8">
@@ -77,7 +77,7 @@ export const Checkout = ({ tenant }: { tenant: string }) => {
           </section>
 
           <aside className="h-fit lg:sticky lg:top-6">
-            <OrderSummary tenantSlug={tenant} readonly showDeliveryFee />
+            <OrderSummary tenantSlug={tenant} readonly showDeliveryFee deliveryFee={deliveryFee} />
           </aside>
         </div>
       </div>

@@ -1,6 +1,7 @@
 export enum TENANT_STATUS_ENUMS {
   ACTIVE = "active",
   TERMINATED = "terminated",
+  SUSPENDED = "suspended",
 }
 
 export enum TENANT_TYPE {

@@ -1,3 +1,6 @@
+import { cache } from "react";
+import type { CateringPackage, DayName, MenuVariant } from "@/features/storefront/data";
+
 export type TenantData = {
   slug: string;
   name: string;
@@ -9,6 +12,7 @@ export type TenantData = {
   contactPhone: string;
   contactWhatsapp: string;
   address: string;
+  deliveryFee: number;
   social: {
     facebook: string;
     instagram: string;
@@ -29,6 +33,7 @@ const defaultTenantRecord: TenantRecord = {
   contactPhone: "+880 1711-000000",
   contactWhatsapp: "+880 1711-000000",
   address: "123 Corporate Area, Gulshan 1, Dhaka 1212, Bangladesh",
+  deliveryFee: 0,
   social: {
     facebook: "https://www.facebook.com/uttaracatering",
     instagram: "https://www.instagram.com/uttaracatering",
@@ -36,13 +41,124 @@ const defaultTenantRecord: TenantRecord = {
   },
 };
 
-const tenants: Record<string, TenantRecord> = {
-  uttara: defaultTenantRecord,
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:9027/api/v1";
+
+/** Tenant document fields the storefront renders. */
+type RawTenant = {
+  slug: string;
+  name?: string;
+  headline?: string;
+  description?: string;
+  logoUrl?: string;
+  coverImageUrl?: string;
+  menuUrl?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  contactWhatsapp?: string;
+  contactAddress?: string;
+  deliveryFee?: number;
+  socialFacebookUrl?: string;
+  socialInstagramUrl?: string;
+  socialYoutubeUrl?: string;
 };
 
-export const tenantData: TenantData = { slug: "uttara", ...defaultTenantRecord };
+const toTenantData = (raw: RawTenant): TenantData => ({
+  slug: raw.slug,
+  name: raw.name ?? "",
+  title: raw.headline || defaultTenantRecord.title,
+  logoUrl: raw.logoUrl || defaultTenantRecord.logoUrl,
+  // Hero image: prefer the cover, then the menu image, then a sensible default.
+  menuUrl: raw.coverImageUrl || raw.menuUrl || defaultTenantRecord.menuUrl,
+  description: raw.description || "",
+  contactEmail: raw.contactEmail ?? "",
+  contactPhone: raw.contactPhone ?? "",
+  contactWhatsapp: raw.contactWhatsapp ?? "",
+  address: raw.contactAddress ?? "",
+  deliveryFee: raw.deliveryFee ?? 0,
+  social: {
+    facebook: raw.socialFacebookUrl ?? "",
+    instagram: raw.socialInstagramUrl ?? "",
+    youtube: raw.socialYoutubeUrl ?? "",
+  },
+});
 
-export function resolveTenantData(tenant = "uttara"): TenantData {
-  const key = tenant.toLowerCase();
-  return { slug: key, ...(tenants[key] ?? defaultTenantRecord) };
-}
+/**
+ * Fetch a tenant's public storefront data by slug. Memoized per request so the
+ * layout and page share a single backend call. Returns `null` when the tenant
+ * does not exist (callers should render a 404).
+ */
+export const getTenantData = cache(async (slug: string): Promise<TenantData | null> => {
+  try {
+    const response = await fetch(`${API_URL}/storefront/tenants/${slug.toLowerCase()}`, {
+      cache: "no-store",
+    });
+    if (!response.ok) return null;
+
+    const json = (await response.json()) as { tenant?: RawTenant };
+    if (!json.tenant) return null;
+
+    return toTenantData(json.tenant);
+  } catch {
+    return null;
+  }
+});
+
+/** Package document fields the storefront renders. */
+type RawVariant = {
+  id?: string;
+  name?: string;
+  note?: string;
+  items?: string[];
+  available?: boolean;
+};
+
+type RawDay = {
+  day: DayName;
+  variants?: RawVariant[];
+};
+
+type RawPackage = {
+  _id?: string;
+  id?: string;
+  name?: string;
+  description?: string;
+  pricePerMeal?: number;
+  days?: RawDay[];
+};
+
+const toMenuVariant = (raw: RawVariant): MenuVariant => ({
+  id: raw.id ?? "",
+  name: raw.name ?? "",
+  note: raw.note ?? "",
+  items: raw.items ?? [],
+  available: raw.available ?? true,
+});
+
+const toCateringPackage = (raw: RawPackage): CateringPackage => ({
+  id: raw._id ?? raw.id ?? "",
+  name: raw.name ?? "",
+  description: raw.description ?? "",
+  pricePerMeal: raw.pricePerMeal ?? 0,
+  days: (raw.days ?? []).map((day) => ({
+    day: day.day,
+    variants: (day.variants ?? []).map(toMenuVariant),
+  })),
+});
+
+/**
+ * Fetch a tenant's active storefront packages by slug. Memoized per request so
+ * the page can share the call. Returns an empty list on error / no packages.
+ */
+export const getTenantPackages = cache(async (slug: string): Promise<CateringPackage[]> => {
+  try {
+    const response = await fetch(`${API_URL}/storefront/tenants/${slug.toLowerCase()}/packages?limit=100`, {
+      cache: "no-store",
+    });
+    if (!response.ok) return [];
+
+    const json = (await response.json()) as { packages?: RawPackage[] };
+    return (json.packages ?? []).map(toCateringPackage);
+  } catch {
+    return [];
+  }
+});

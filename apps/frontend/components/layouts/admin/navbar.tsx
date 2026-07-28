@@ -27,9 +27,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { useLogout } from "@/features/auth/hooks/useAuth";
+import { useAuthStore } from "@/features/auth/store/useStore";
 import { getAdminContent } from "@/lib/admin-i18n";
 import { useLanguage } from "@/providers/language-provider";
 import { useAdminLayout } from "./store/useStore";
+
+const getInitials = (name: string): string =>
+  name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("") || "?";
 
 const themeOrder = ["system", "light", "dark"] as const;
 
@@ -48,6 +58,14 @@ export function Navbar({ onSearch }: NavbarProps) {
   const { theme, setTheme } = useTheme();
   const { language, setLanguage } = useLanguage();
   const t = getAdminContent(language);
+  const user = useAuthStore((s) => s.user);
+  const { logout, isLoggingOut } = useLogout();
+
+  const displayName =
+    user?.fullName?.trim() ||
+    [user?.firstName, user?.lastName].filter(Boolean).join(" ").trim() ||
+    user?.email ||
+    "Admin";
   const [query, setQuery] = useState("");
   const [mounted, setMounted] = useState(false);
 
@@ -148,9 +166,9 @@ export function Navbar({ onSearch }: NavbarProps) {
                 aria-label={t.navbar.aria.userMenu}
               >
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/15 text-xs font-semibold text-primary">
-                  AH
+                  {getInitials(displayName)}
                 </span>
-                <span className="hidden text-sm font-medium text-foreground sm:inline">Admin</span>
+                <span className="hidden text-sm font-medium text-foreground sm:inline">{displayName}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
@@ -169,7 +187,14 @@ export function Navbar({ onSearch }: NavbarProps) {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive">
+              <DropdownMenuItem
+                className="cursor-pointer text-destructive focus:text-destructive"
+                disabled={isLoggingOut}
+                onSelect={(event) => {
+                  event.preventDefault();
+                  logout();
+                }}
+              >
                 <LogOut className="mr-2 h-4 w-4" />
                 {t.navbar.userMenu.logout}
               </DropdownMenuItem>

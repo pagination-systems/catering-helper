@@ -1,21 +1,26 @@
 import express, { type Router } from "express";
-import { handleController } from "../../../common/helper";
-import { validate } from "../../../common/middlewares";
+import { handleAuthenticatedController, handleController } from "../../../common/helper";
+import { deserializeUser, validate } from "../../../common/middlewares";
 import {
+  changeMyPassword,
   login,
   logout,
+  me,
   recoverAccount,
   refreshAccessToken,
   registration,
   resendVerification,
+  updateMe,
   verifyRecovery,
   verifyRegistration,
 } from "./auth.controller";
 import {
+  changePasswordBodySchema,
   loginBodySchema,
   recoverAccountBodySchema,
   registerBodySchema,
   resendVerificationBodySchema,
+  updateMeBodySchema,
   verifyRecoveryBodySchema,
   verifyRecoveryQuerySchema,
   verifyRegistrationQuerySchema,
@@ -52,6 +57,14 @@ router.post(
 // );
 // router.delete("/logout", validateCookies(logoutCookieSchema), handleController(logout));
 router.get("/refresh-access-token", handleController(refreshAccessToken));
+router.get("/me", deserializeUser, handleAuthenticatedController(me));
+router.put("/me", deserializeUser, validateBody(updateMeBodySchema), handleAuthenticatedController(updateMe));
+router.put(
+  "/me/password",
+  deserializeUser,
+  validateBody(changePasswordBodySchema),
+  handleAuthenticatedController(changeMyPassword),
+);
 router.delete("/logout", handleController(logout));
 
 export default router;

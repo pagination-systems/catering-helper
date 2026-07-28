@@ -1,12 +1,12 @@
-import { TENANT_STATUS_ENUM } from "@catering/types";
+import { TENANT_STATUS_ENUMS } from "@catering/types";
 
-export const getTenantStatusBadgeClassName = (status: TENANT_STATUS_ENUM) => {
+export const getTenantStatusBadgeClassName = (status: TENANT_STATUS_ENUMS) => {
   switch (status) {
-    case TENANT_STATUS_ENUM.ACTIVE:
+    case TENANT_STATUS_ENUMS.ACTIVE:
       return "bg-blue-100 text-blue-700";
-    case TENANT_STATUS_ENUM.TERMINATED:
+    case TENANT_STATUS_ENUMS.TERMINATED:
       return "bg-rose-100 text-rose-700";
-    case TENANT_STATUS_ENUM.SUSPENDED:
+    case TENANT_STATUS_ENUMS.SUSPENDED:
       return "bg-yellow-100 text-yellow-700";
     default:
       return "bg-muted text-muted-foreground";

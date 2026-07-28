@@ -1,6 +1,7 @@
 import { StatusCodes } from "http-status-codes";
-import { ApiResponse, type ControllerParams, pick } from "../../../common/helper";
+import { ApiResponse, type AuthenticatedControllerParams, type ControllerParams, pick } from "../../../common/helper";
 import * as tokenService from "../token";
+import * as userService from "../user";
 import type { UserPayload } from "./auth.interface";
 import * as authService from "./auth.service";
 
@@ -223,6 +224,63 @@ export const verifyRecovery = async ({ req }: ControllerParams): Promise<ApiResp
         options: cookieOptions,
       },
     ],
+  });
+};
+
+export const me = async ({ req }: AuthenticatedControllerParams): Promise<ApiResponse> => {
+  const user = await userService.getUserById(req.session.user._id);
+
+  return new ApiResponse({
+    message: "Current user retrieved.",
+    statusCode: StatusCodes.OK,
+    data: pick(user, [
+      "id",
+      "firstName",
+      "lastName",
+      "fullName",
+      "email",
+      "emailVerificationStatus",
+      "type",
+      "role",
+      "tenantId",
+      "jobProfileId",
+    ]),
+    fieldName: "user",
+  });
+};
+
+export const updateMe = async ({ req }: AuthenticatedControllerParams): Promise<ApiResponse> => {
+  const { firstName, lastName } = req.body;
+
+  const user = await authService.updateProfile(req.session.user._id, { firstName, lastName });
+
+  return new ApiResponse({
+    message: "Profile updated successfully.",
+    statusCode: StatusCodes.OK,
+    data: pick(user, [
+      "id",
+      "firstName",
+      "lastName",
+      "fullName",
+      "email",
+      "emailVerificationStatus",
+      "type",
+      "role",
+      "tenantId",
+      "jobProfileId",
+    ]),
+    fieldName: "user",
+  });
+};
+
+export const changeMyPassword = async ({ req }: AuthenticatedControllerParams): Promise<ApiResponse> => {
+  const { currentPassword, newPassword } = req.body;
+
+  await authService.changePassword(req.session.user._id, { currentPassword, newPassword });
+
+  return new ApiResponse({
+    message: "Password updated successfully.",
+    statusCode: StatusCodes.OK,
   });
 };
 

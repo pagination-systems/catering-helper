@@ -1,6 +1,6 @@
 "use client";
 
-import { TENANT_STATUS_ENUM } from "@catering/types";
+import { TENANT_STATUS_ENUMS } from "@catering/types";
 import { useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,17 +8,13 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SectionHeader } from "../components/section-header";
 import { TableToolbar } from "./components/table-toolbar";
 import { TenantTable } from "./components/tenant-table";
-import type { GetTenantsResponse } from "./schemas/tenant.schema";
+import { useTenants } from "./hooks/useTenants";
 import { type TenantListTab, useTenantsStore } from "./store/useStore";
 
-interface TenantsProps {
-  data: GetTenantsResponse;
-}
-
 const tabOptions: TenantListTab[] = [
-  TENANT_STATUS_ENUM.ACTIVE,
-  TENANT_STATUS_ENUM.TERMINATED,
-  TENANT_STATUS_ENUM.SUSPENDED,
+  TENANT_STATUS_ENUMS.ACTIVE,
+  TENANT_STATUS_ENUMS.TERMINATED,
+  TENANT_STATUS_ENUMS.SUSPENDED,
 ];
 
 const StatusTabs = ({ counts }: { counts: Partial<Record<TenantListTab, number>> }) => {
@@ -37,7 +33,7 @@ const StatusTabs = ({ counts }: { counts: Partial<Record<TenantListTab, number>>
             onClick={() => setActiveTab(tab)}
           >
             <span className="flex items-center gap-2 whitespace-nowrap">
-              <span>{tab}</span>
+              <span className="capitalize">{tab}</span>
               <Badge
                 variant="secondary"
                 className="grid h-5 min-w-5 place-items-center rounded-full px-1.5 text-[11px] leading-none tabular-nums"
@@ -52,7 +48,8 @@ const StatusTabs = ({ counts }: { counts: Partial<Record<TenantListTab, number>>
   );
 };
 
-export const Tenants = ({ data }: TenantsProps) => {
+export const Tenants = () => {
+  const { data, isLoading } = useTenants();
   const query = useTenantsStore((state) => state.query);
   const activeTab = useTenantsStore((state) => state.activeTab);
 
@@ -127,7 +124,11 @@ export const Tenants = ({ data }: TenantsProps) => {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <TenantTable data={filteredData} handlePaginate={() => {}} />
+          {isLoading ? (
+            <div className="py-10 text-center text-sm text-muted-foreground">Loading tenants...</div>
+          ) : (
+            <TenantTable data={filteredData} handlePaginate={() => {}} />
+          )}
         </CardContent>
       </Card>
     </section>

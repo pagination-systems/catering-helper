@@ -1,11 +1,11 @@
-import { type PaginationMeta, TENANT_STATUS_ENUM } from "@catering/types";
+import { type PaginationMeta, TENANT_STATUS_ENUMS } from "@catering/types";
 import { z } from "zod";
 
 export interface ITenant {
   id: string;
   name: string;
   phone: string;
-  status: TENANT_STATUS_ENUM;
+  status: TENANT_STATUS_ENUMS;
   description: string;
   headline: string;
   logoUrl: string;
@@ -40,7 +40,7 @@ export const createTenantSchema = z.object({
     .regex(bdPhoneRegex, "Enter a valid Bangladesh phone number.")
     .min(10, "Phone number must be at least 10 digits.")
     .max(20, "Phone number is too long."),
-  status: z.nativeEnum(TENANT_STATUS_ENUM),
+  status: z.nativeEnum(TENANT_STATUS_ENUMS),
   description: z.string().trim().max(240),
   headline: z.string().trim().max(100),
   logoUrl: z.string().trim().url("Enter a valid logo URL."),

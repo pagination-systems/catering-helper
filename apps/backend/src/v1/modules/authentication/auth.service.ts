@@ -1,6 +1,7 @@
+import { ACCOUNT_TYPE_ENUMS } from "@catering/types";
 import { env } from "../../../.config/env";
 import { BadRequestException, logger, NotFoundException, SessionExpiredException } from "../../../common/helper";
-import type { IUserDoc } from "../../../models";
+import { type IUserDoc, User } from "../../../models";
 import { EMAIL_VERIFICATION_STATUS_ENUMS, VERIFICATION_TOKEN_TYPE_ENUMS } from "../../../models/constants";
 import { AccountRecoveryEmail, AccountVerificationEmail } from "../email";
 import type { CustomJwtPayload } from "../token";
@@ -67,6 +68,11 @@ const handleDirectRegistration = async (payload: UserPayload): Promise<IUserDoc>
   const isExists = await userService.getUserByEmail(payload.email);
   if (isExists) throw new BadRequestException("Email already exists.");
 
+  // Public sign-ups are always tenant-less customers, regardless of any client
+  // supplied `type`/`tenantId`. Elevated accounts come through invitations only.
+  payload.type = ACCOUNT_TYPE_ENUMS.CUSTOMER;
+  payload.tenantId = null;
+
   const user = await userService.create({ payload });
   await _generateSendAndStoreRegistrationToken({ userId: user._id.toString(), receiver: user.email });
 
@@ -95,6 +101,37 @@ export const login = async ({ email, password, accessToken, refreshToken }: Logi
 
 export const logout = async ({ accessToken, refreshToken }: LogoutInput): Promise<void> => {
   await tokenService.removeTokensPair({ accessToken, refreshToken });
+};
+
+/** Update the signed-in user's own basic profile fields. */
+export const updateProfile = async (
+  userId: string,
+  { firstName, lastName }: { firstName: string; lastName: string },
+): Promise<IUserDoc> => {
+  await userService.update({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    query: { _id: userId } as any,
+    payload: { firstName, lastName },
+  });
+
+  return userService.getUserById(userId);
+};
+
+/** Change the signed-in user's password after verifying the current one. */
+export const changePassword = async (
+  userId: string,
+  { currentPassword, newPassword }: { currentPassword: string; newPassword: string },
+): Promise<IUserDoc> => {
+  const user = await User.findById(userId).select("+password");
+  if (!user) throw new NotFoundException("User not found.");
+
+  const isMatch = await user.correctPassword(currentPassword);
+  if (!isMatch) throw new BadRequestException("Current password is incorrect.");
+
+  user.password = newPassword;
+  await user.save();
+
+  return user;
 };
 
 export const verifyRegistration = async (token: string): Promise<IUserDoc> => {

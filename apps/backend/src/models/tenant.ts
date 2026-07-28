@@ -29,6 +29,45 @@ export interface TenantInput {
 
   coreProducts?: string;
   coreServices?: string;
+
+  // --- Catering storefront / directory listing fields ---
+  /** Unique storefront URL segment, e.g. "uttara-catering" -> /uttara-catering */
+  slug: string;
+  /** Storefront hero title */
+  headline?: string;
+  /** Listing card cover image */
+  coverImageUrl?: string;
+  /** Storefront logo */
+  logoUrl?: string;
+  /** Public menu image / PDF URL */
+  menuUrl?: string;
+  /** Human readable location, e.g. "Gulshan, Dhaka" */
+  location?: string;
+  /** Location filter key, e.g. "gulshan" */
+  area?: string;
+  /** Cuisine / specialty tags */
+  cuisines?: string[];
+  /** Lowest package price per meal */
+  startingPrice?: number;
+  /** Minimum number of meals per order */
+  minimumOrder?: number;
+  /** Flat delivery fee */
+  deliveryFee?: number;
+  /** Highlighted on the directory */
+  popular?: boolean;
+  /** Average customer rating (derived, starts at 0) */
+  rating?: number;
+  /** Number of customer reviews (derived, starts at 0) */
+  reviews?: number;
+
+  contactEmail?: string;
+  contactPhone?: string;
+  contactWhatsapp?: string;
+  contactAddress?: string;
+
+  socialFacebookUrl?: string;
+  socialInstagramUrl?: string;
+  socialYoutubeUrl?: string;
 }
 
 // Define an interface for Tenant document
@@ -118,6 +157,83 @@ const tenantSchema = new Schema<ITenantDoc>(
       type: String,
     },
     coreServices: {
+      type: String,
+    },
+
+    // --- Catering storefront / directory listing fields ---
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+      lowercase: true,
+      trim: true,
+    },
+    headline: {
+      type: String,
+    },
+    coverImageUrl: {
+      type: String,
+    },
+    logoUrl: {
+      type: String,
+    },
+    menuUrl: {
+      type: String,
+    },
+    location: {
+      type: String,
+    },
+    area: {
+      type: String,
+    },
+    cuisines: {
+      type: [String],
+      default: [],
+    },
+    startingPrice: {
+      type: Number,
+      default: 0,
+    },
+    minimumOrder: {
+      type: Number,
+      default: 0,
+    },
+    deliveryFee: {
+      type: Number,
+      default: 0,
+    },
+    popular: {
+      type: Boolean,
+      default: false,
+    },
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    reviews: {
+      type: Number,
+      default: 0,
+    },
+    contactEmail: {
+      type: String,
+    },
+    contactPhone: {
+      type: String,
+    },
+    contactWhatsapp: {
+      type: String,
+    },
+    contactAddress: {
+      type: String,
+    },
+    socialFacebookUrl: {
+      type: String,
+    },
+    socialInstagramUrl: {
+      type: String,
+    },
+    socialYoutubeUrl: {
       type: String,
     },
   },

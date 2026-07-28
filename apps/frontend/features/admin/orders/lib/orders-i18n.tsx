@@ -67,6 +67,7 @@ export type OrdersContent = {
     notePlaceholder: string;
     packageSelectionTitle: string;
     packageSelectionDescription: string;
+    noPackages: string;
     deliveryDateSelectionTitle: string;
     deliveryDateSelectionDescription: string;
     activeVariantsTitle: string;
@@ -209,6 +210,7 @@ const content: Record<string, OrdersContent> = {
       notePlaceholder: "Optional notes for kitchen or rider",
       packageSelectionTitle: "Package Selection",
       packageSelectionDescription: "Select a package to view and add meal variants.",
+      noPackages: "No active packages available for this tenant.",
       deliveryDateSelectionTitle: "Delivery Date Selection",
       deliveryDateSelectionDescription: "Choose the delivery date for this order.",
       activeVariantsTitle: "Selected Variants",
@@ -349,6 +351,7 @@ const content: Record<string, OrdersContent> = {
       notePlaceholder: "রান্নাঘর বা ডেলিভারি কর্মীর জন্য নোট (ঐচ্ছিক)",
       packageSelectionTitle: "প্যাকেজ নির্বাচন",
       packageSelectionDescription: "প্যাকেজ নির্বাচন করে ভ্যারিয়েন্ট যোগ করুন।",
+      noPackages: "এই টেন্যান্টের জন্য কোনো সক্রিয় প্যাকেজ নেই।",
       deliveryDateSelectionTitle: "ডেলিভারি তারিখ নির্বাচন",
       deliveryDateSelectionDescription: "এই অর্ডারের ডেলিভারি তারিখ নির্ধারণ করুন।",
       activeVariantsTitle: "নির্বাচিত ভ্যারিয়েন্ট",

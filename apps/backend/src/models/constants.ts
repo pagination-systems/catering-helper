@@ -2,6 +2,8 @@ export const modelNames = {
   USER: "users",
   FILE_MEDIA: "filemedias",
   TENANT: "tenants",
+  PACKAGE: "packages",
+  ORDER: "orders",
   TOKEN_PAIR: "tokenpairs",
   VERIFICATION_TOKEN: "verificationtokens",
 };

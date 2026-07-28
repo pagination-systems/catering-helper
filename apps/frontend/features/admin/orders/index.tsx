@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { If } from "@/components/if";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { formatDateValue } from "@/lib/utils";
 import { SectionHeader } from "../components/section-header";
 import { CancelConfirmation } from "./components/cancel-confirmation";
 import { DayTabs } from "./components/day-tabs";
@@ -61,10 +62,9 @@ export const Orders = ({ title, description, tenantId }: OrdersProps = {}) => {
           }
 
           setDayFilter(daySlot.day);
-          console.log("Filtering by date:", daySlot.date);
           handleFilter({
             value: {
-              deliveryDate: daySlot.date,
+              deliveryDate: formatDateValue(daySlot.date),
             },
           });
         }}
@@ -90,9 +90,10 @@ export const Orders = ({ title, description, tenantId }: OrdersProps = {}) => {
           </SheetHeader>
 
           <OrderForm
-            onSubmit={(values) => createOrder(values, closeCreateSheet)}
+            onSubmit={(values) => createOrder({ ...values, tenantId }, closeCreateSheet)}
             submitLabel={i18n.form.submitCreate}
             upcomingDays={upcomingDays}
+            tenantId={tenantId}
           />
         </SheetContent>
       </Sheet>

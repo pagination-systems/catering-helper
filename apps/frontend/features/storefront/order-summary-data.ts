@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import type { Language } from "@/lib/i18n";
 
 import { getUpcomingDays } from "./components/utils";
-import { type DayName, dayOrder, packages } from "./data";
+import { type DayName, dayOrder } from "./data";
 import { createQuantityKey, useStorefrontStore } from "./store/useStore";
 
 export type OrderRow = {
@@ -26,6 +26,7 @@ export type GroupedOrder = {
 
 export function useOrderSummaryData(language: Language) {
   const packageSelections = useStorefrontStore((state) => state.packageSelections);
+  const packages = useStorefrontStore((state) => state.packages);
 
   const upcomingDays = useMemo(() => getUpcomingDays(language), [language]);
 
@@ -59,7 +60,7 @@ export function useOrderSummaryData(language: Language) {
     return rows.sort(
       (a, b) => a.packageName.localeCompare(b.packageName) || dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day),
     );
-  }, [packageSelections]);
+  }, [packageSelections, packages]);
 
   const groupedOrders = useMemo<GroupedOrder[]>(() => {
     const grouped: Record<DayName, GroupedOrder> = {} as Record<DayName, GroupedOrder>;

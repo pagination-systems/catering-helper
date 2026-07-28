@@ -7,6 +7,7 @@ import { Select } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
 const detailsTabs = [
+  { id: "", label: "Statistics" },
   { id: "orders", label: "Orders" },
   { id: "packages", label: "Packages" },
   { id: "production-requirements", label: "Production Requirements" },
@@ -35,8 +36,8 @@ export const TenantDetailsLayout = ({ id, children }: TenantDetailsLayoutProps) 
         <div className="overflow-x-auto flex-1 hide-scrollbar">
           <div className="flex w-fit whitespace-nowrap">
             {detailsTabs.map((tab) => {
-              const href = `/admin/tenants/${id}/${tab.id}`;
-              const isActive = pathname.startsWith(href);
+              const href = tab.id ? `/admin/tenants/${id}/${tab.id}` : `/admin/tenants/${id}`;
+              const isActive = tab.id ? pathname.startsWith(href) : pathname === href;
               return (
                 <Link
                   key={tab.id}

@@ -40,9 +40,7 @@ export function DayTab({
         <p className={cn("mt-1 text-sm font-semibold leading-none", active ? "text-primary-foreground" : "")}>
           {dayLabel}
         </p>
-        {isToday && !active && (
-          <p className="mt-0.5 text-[9px] font-semibold text-primary leading-none">Today</p>
-        )}
+        {isToday && !active && <p className="mt-0.5 text-[9px] font-semibold text-primary leading-none">Today</p>}
       </Button>
 
       {(mealCount ?? 0) > 0 && (

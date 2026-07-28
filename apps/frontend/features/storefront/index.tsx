@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef } from "react";
 import type { TenantData } from "@/app/(storefront)/data";
-import { If } from "@/components/if";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,7 +16,7 @@ import { DayTab } from "./components/day-tab";
 import { OrderSummary } from "./components/OrderSummary";
 import { getUpcomingDays } from "./components/utils";
 import { VariantCard } from "./components/variant-card";
-import { packages } from "./data";
+import type { CateringPackage } from "./data";
 import { useOrderSummaryData } from "./order-summary-data";
 import { createQuantityKey, useStorefrontStore } from "./store/useStore";
 
@@ -27,13 +26,7 @@ const packageFeatures: Record<string, string[]> = {
   premium: ["Restaurant-quality meals", "Premium ingredients", "Perfect for meetings & events"],
 };
 
-const heroStats = [
-  { value: "3", label: "Packages" },
-  { value: "Daily", label: "Fresh" },
-  { value: "On-Time", label: "Delivery" },
-];
-
-export const StoreFront = ({ tenant }: { tenant: TenantData }) => {
+export const StoreFront = ({ tenant, packages }: { tenant: TenantData; packages: CateringPackage[] }) => {
   const router = useRouter();
   const customizerRef = useRef<HTMLElement | null>(null);
   const packagesRef = useRef<HTMLElement | null>(null);
@@ -46,6 +39,7 @@ export const StoreFront = ({ tenant }: { tenant: TenantData }) => {
     mobileSummaryOpen,
     recentlyUpdatedKey,
     packageSelections,
+    initializePackages,
     pickPackage,
     setActiveDay,
     updateQuantity,
@@ -53,17 +47,29 @@ export const StoreFront = ({ tenant }: { tenant: TenantData }) => {
     setMobileSummaryOpen,
   } = useStorefrontStore();
 
+  // Hydrate the client store with the tenant's real packages.
+  useEffect(() => {
+    initializePackages(packages);
+  }, [packages, initializePackages]);
+
   useEffect(() => {
     if (!recentlyUpdatedKey) return;
     const t = setTimeout(() => setRecentlyUpdatedKey(null), 450);
     return () => clearTimeout(t);
   }, [recentlyUpdatedKey, setRecentlyUpdatedKey]);
 
+  const hasPackages = packages.length > 0;
   const activePackage = packages.find((pkg) => pkg.id === activePackageId) ?? packages[0];
-  const activeSelection = packageSelections[activePackage.id];
-  const activeDayName = activeSelection?.activeDay || activePackage.days[0]?.day;
-  const activeDay = activePackage.days.find((d) => d.day === activeDayName) ?? activePackage.days[0];
+  const activeSelection = activePackage ? packageSelections[activePackage.id] : undefined;
+  const activeDayName = activeSelection?.activeDay || activePackage?.days[0]?.day;
+  const activeDay = activePackage?.days.find((d) => d.day === activeDayName) ?? activePackage?.days[0];
   const upcomingDays = useMemo(() => getUpcomingDays(language), [language]);
+
+  const heroStats = [
+    { value: String(packages.length), label: "Packages" },
+    { value: "Daily", label: "Fresh" },
+    { value: "On-Time", label: "Delivery" },
+  ];
 
   const packageSelectionTotals = useMemo(() => {
     return Object.fromEntries(
@@ -73,9 +79,10 @@ export const StoreFront = ({ tenant }: { tenant: TenantData }) => {
         return [pkg.id, selected];
       }),
     );
-  }, [packageSelections]);
+  }, [packageSelections, packages]);
 
   const activeDayMealCounts = useMemo(() => {
+    if (!activePackage) return {} as Record<string, number>;
     const selection = packageSelections[activePackage.id] || { quantities: {} };
     return Object.fromEntries(
       activePackage.days.map(({ day, variants }) => [
@@ -98,14 +105,7 @@ export const StoreFront = ({ tenant }: { tenant: TenantData }) => {
         {/* ── Hero ── */}
         <section className="relative -mx-4 sm:-mx-6 lg:-mx-8 mb-24 mt-0">
           <div className="relative h-[480px] sm:h-[540px] overflow-hidden">
-            <Image
-              src={tenant.menuUrl}
-              alt={tenant.name}
-              fill
-              className="object-cover"
-              priority
-              sizes="100vw"
-            />
+            <Image src={tenant.menuUrl} alt={tenant.name} fill className="object-cover" priority sizes="100vw" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/75" />
             <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center">
               <Badge className="mb-5 rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-white backdrop-blur-sm">
@@ -114,9 +114,7 @@ export const StoreFront = ({ tenant }: { tenant: TenantData }) => {
               <h1 className="max-w-3xl text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white">
                 {tenant.title}
               </h1>
-              <p className="mt-4 max-w-xl text-sm sm:text-base leading-relaxed text-white/80">
-                {tenant.description}
-              </p>
+              <p className="mt-4 max-w-xl text-sm sm:text-base leading-relaxed text-white/80">{tenant.description}</p>
               <button
                 type="button"
                 onClick={() => packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
@@ -148,101 +146,134 @@ export const StoreFront = ({ tenant }: { tenant: TenantData }) => {
             <p className="mt-1.5 text-sm text-muted-foreground">{content.packageDescription}</p>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-3">
-            {packages.map((pkg) => {
-              const active = pkg.id === activePackageId;
-              const selectedCount = packageSelectionTotals[pkg.id];
-              return (
-                <Card
-                  key={pkg.id}
-                  className={cn(
-                    "relative overflow-hidden transition-all duration-200 flex flex-col cursor-pointer",
-                    active
-                      ? "border-primary bg-primary text-primary-foreground shadow-[0_20px_40px_-20px_hsl(var(--primary)/0.5)] ring-1 ring-primary"
-                      : "border-border/60 bg-card hover:-translate-y-1 hover:shadow-lg hover:border-primary/30",
-                  )}
-                  onClick={() => handlePickPackage(pkg.id)}
-                >
-                  {pkg.popular && (
-                    <div
-                      className={cn(
-                        "absolute top-0 left-1/2 -translate-x-1/2 rounded-b-xl px-5 py-1 text-[9px] font-bold uppercase tracking-[0.14em]",
-                        active ? "bg-primary-foreground/20 text-primary-foreground" : "bg-amber-400 text-amber-900",
-                      )}
-                    >
-                      {content.mostPopular}
-                    </div>
-                  )}
-
-                  <CardHeader className={cn("p-6 flex-1 space-y-4", pkg.popular && "pt-8")}>
-                    <div className="flex items-start justify-between gap-2">
-                      <CardTitle
-                        className={cn("text-xl font-semibold leading-tight", active ? "text-primary-foreground" : "text-foreground")}
-                      >
-                        {pkg.name}
-                      </CardTitle>
-                      {active && <CheckCircle2 className="h-5 w-5 shrink-0 text-primary-foreground mt-0.5" />}
-                    </div>
-
-                    <div className="flex items-baseline gap-1.5">
-                      <span className={cn("text-4xl font-extrabold tracking-tight", active ? "text-primary-foreground" : "text-foreground")}>
-                        {formatCurrency(pkg.pricePerMeal)}
-                      </span>
-                      <span className={cn("text-xs font-semibold uppercase", active ? "text-primary-foreground/70" : "text-muted-foreground")}>
-                        {content.mealSuffix}
-                      </span>
-                    </div>
-
-                    <ul className="space-y-2">
-                      {(packageFeatures[pkg.id] ?? []).map((feature) => (
-                        <li key={feature} className="flex items-center gap-2 text-sm">
-                          <span className={cn("flex h-4 w-4 shrink-0 items-center justify-center rounded-full", active ? "bg-primary-foreground/20" : "bg-accent/15")}>
-                            <CheckCircle2 className={cn("h-3 w-3", active ? "text-primary-foreground" : "text-accent")} />
-                          </span>
-                          <span className={active ? "text-primary-foreground/90" : "text-muted-foreground"}>
-                            {feature}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardHeader>
-
-                  <CardContent className="p-6 pt-0 space-y-2">
-                    <Button
-                      className={cn(
-                        "h-10 w-full rounded-xl font-semibold text-sm",
-                        active && "bg-primary-foreground text-primary hover:bg-primary-foreground/90",
-                      )}
-                      variant={active ? "outline" : "default"}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handlePickPackage(pkg.id);
-                      }}
-                    >
-                      {active ? content.selectedPackage : content.viewPackage}
-                    </Button>
-                    {selectedCount > 0 && (
-                      <p className={cn("text-center text-xs font-semibold", active ? "text-primary-foreground/80" : "text-primary")}>
-                        {selectedCount} {content.mealSelected}
-                      </p>
+          {hasPackages ? (
+            <div className="grid gap-5 md:grid-cols-3">
+              {packages.map((pkg) => {
+                const active = pkg.id === activePackageId;
+                const selectedCount = packageSelectionTotals[pkg.id];
+                const features = packageFeatures[pkg.id] ?? (pkg.description ? [pkg.description] : []);
+                return (
+                  <Card
+                    key={pkg.id}
+                    className={cn(
+                      "relative overflow-hidden transition-all duration-200 flex flex-col cursor-pointer",
+                      active
+                        ? "border-primary bg-primary text-primary-foreground shadow-[0_20px_40px_-20px_hsl(var(--primary)/0.5)] ring-1 ring-primary"
+                        : "border-border/60 bg-card hover:-translate-y-1 hover:shadow-lg hover:border-primary/30",
                     )}
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+                    onClick={() => handlePickPackage(pkg.id)}
+                  >
+                    {pkg.popular && (
+                      <div
+                        className={cn(
+                          "absolute top-0 left-1/2 -translate-x-1/2 rounded-b-xl px-5 py-1 text-[9px] font-bold uppercase tracking-[0.14em]",
+                          active ? "bg-primary-foreground/20 text-primary-foreground" : "bg-amber-400 text-amber-900",
+                        )}
+                      >
+                        {content.mostPopular}
+                      </div>
+                    )}
+
+                    <CardHeader className={cn("p-6 flex-1 space-y-4", pkg.popular && "pt-8")}>
+                      <div className="flex items-start justify-between gap-2">
+                        <CardTitle
+                          className={cn(
+                            "text-xl font-semibold leading-tight",
+                            active ? "text-primary-foreground" : "text-foreground",
+                          )}
+                        >
+                          {pkg.name}
+                        </CardTitle>
+                        {active && <CheckCircle2 className="h-5 w-5 shrink-0 text-primary-foreground mt-0.5" />}
+                      </div>
+
+                      <div className="flex items-baseline gap-1.5">
+                        <span
+                          className={cn(
+                            "text-4xl font-extrabold tracking-tight",
+                            active ? "text-primary-foreground" : "text-foreground",
+                          )}
+                        >
+                          {formatCurrency(pkg.pricePerMeal)}
+                        </span>
+                        <span
+                          className={cn(
+                            "text-xs font-semibold uppercase",
+                            active ? "text-primary-foreground/70" : "text-muted-foreground",
+                          )}
+                        >
+                          {content.mealSuffix}
+                        </span>
+                      </div>
+
+                      <ul className="space-y-2">
+                        {features.map((feature) => (
+                          <li key={feature} className="flex items-center gap-2 text-sm">
+                            <span
+                              className={cn(
+                                "flex h-4 w-4 shrink-0 items-center justify-center rounded-full",
+                                active ? "bg-primary-foreground/20" : "bg-accent/15",
+                              )}
+                            >
+                              <CheckCircle2
+                                className={cn("h-3 w-3", active ? "text-primary-foreground" : "text-accent")}
+                              />
+                            </span>
+                            <span className={active ? "text-primary-foreground/90" : "text-muted-foreground"}>
+                              {feature}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardHeader>
+
+                    <CardContent className="p-6 pt-0 space-y-2">
+                      <Button
+                        className={cn(
+                          "h-10 w-full rounded-xl font-semibold text-sm",
+                          active && "bg-primary-foreground text-primary hover:bg-primary-foreground/90",
+                        )}
+                        variant={active ? "outline" : "default"}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handlePickPackage(pkg.id);
+                        }}
+                      >
+                        {active ? content.selectedPackage : content.viewPackage}
+                      </Button>
+                      {selectedCount > 0 && (
+                        <p
+                          className={cn(
+                            "text-center text-xs font-semibold",
+                            active ? "text-primary-foreground/80" : "text-primary",
+                          )}
+                        >
+                          {selectedCount} {content.mealSelected}
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-dashed border-border/70 bg-muted/20 px-6 py-16 text-center">
+              <p className="text-sm font-medium text-foreground">{content.noItemsSelected}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                This caterer hasn&apos;t published any packages yet. Please check back soon.
+              </p>
+            </div>
+          )}
         </section>
 
         {/* ── Customizer + Summary ── */}
-        <If expression={customizerOpen}>
+        {customizerOpen && activePackage && (
           <div className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:pb-10 pb-4">
             {/* Left: customizer */}
             <section ref={customizerRef} className="space-y-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h2 className="text-2xl font-semibold tracking-tight text-foreground">
-                    {content.customizeTitle}
-                  </h2>
+                  <h2 className="text-2xl font-semibold tracking-tight text-foreground">{content.customizeTitle}</h2>
                   <p className="mt-1 text-sm text-muted-foreground">
                     {activePackage.name} &mdash; <strong>{formatCurrency(activePackage.pricePerMeal)}</strong>{" "}
                     {content.perMealSuffix}
@@ -289,7 +320,7 @@ export const StoreFront = ({ tenant }: { tenant: TenantData }) => {
                 </div>
 
                 {/* Variants grid */}
-                <If expression={activeDay}>
+                {activeDay && (
                   <div className="animate-in fade-in-0 duration-300 lg:col-start-2">
                     <div className="grid gap-4 sm:grid-cols-2">
                       {activeDay.variants.map((v) => (
@@ -308,20 +339,20 @@ export const StoreFront = ({ tenant }: { tenant: TenantData }) => {
                       ))}
                     </div>
                   </div>
-                </If>
+                )}
               </div>
             </section>
 
             {/* Right: sticky desktop summary */}
             <aside className="hidden h-fit lg:sticky lg:top-6 lg:block">
-              <OrderSummary tenantSlug={tenant.slug} />
+              <OrderSummary tenantSlug={tenant.slug} deliveryFee={tenant.deliveryFee} />
             </aside>
           </div>
-        </If>
+        )}
       </div>
 
       {/* ── Mobile sticky bar ── */}
-      <If expression={customizerOpen}>
+      {customizerOpen && activePackage && (
         <div className="fixed inset-x-0 bottom-0 z-30 border-t bg-background/95 backdrop-blur-sm px-4 py-3 lg:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
           <Sheet open={mobileSummaryOpen} onOpenChange={setMobileSummaryOpen}>
             <div className="flex items-center gap-2">
@@ -352,12 +383,12 @@ export const StoreFront = ({ tenant }: { tenant: TenantData }) => {
                 <SheetTitle>{content.orderSummaryTitle}</SheetTitle>
               </SheetHeader>
               <div className="h-[calc(75vh-65px)] overflow-y-auto px-4 py-4">
-                <OrderSummary tenantSlug={tenant.slug} readonly naked />
+                <OrderSummary tenantSlug={tenant.slug} readonly naked deliveryFee={tenant.deliveryFee} />
               </div>
             </SheetContent>
           </Sheet>
         </div>
-      </If>
+      )}
     </main>
   );
 };

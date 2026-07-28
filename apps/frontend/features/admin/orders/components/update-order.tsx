@@ -29,6 +29,7 @@ export const UpdateOrder = ({ selectedOrder }: UpdateOrderProps) => {
         initialData={order}
         submitLabel={i18n.form.submitSave}
         upcomingDays={upcomingDays}
+        tenantId={selectedOrder.tenantId}
       />
     </If>
   );
